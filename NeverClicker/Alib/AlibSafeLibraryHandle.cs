@@ -9,33 +9,29 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alib.Interop
-{
-    [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-    internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
-    {
-        #region Native Calls
+namespace Alib {
+	[SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
+	internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid {
+		#region Native Calls
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern SafeLibraryHandle LoadLibrary(string lpFileName);
+		[DllImport("kernel32.dll", SetLastError = true)]
+		public static extern SafeLibraryHandle LoadLibrary(string lpFileName);
 
-        [SuppressUnmanagedCodeSecurity]
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool FreeLibrary(IntPtr hModule);
+		[SuppressUnmanagedCodeSecurity]
+		[ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern bool FreeLibrary(IntPtr hModule);
 
-        #endregion
+		#endregion
 
-        private SafeLibraryHandle() : base(true) { }
+		private SafeLibraryHandle() : base(true) { }
 
-        protected override bool ReleaseHandle()
-        {
-            return FreeLibrary(handle);
-        }
+		protected override bool ReleaseHandle() {
+			return FreeLibrary(handle);
+		}
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
-    }
+		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+		}
+	}
 }

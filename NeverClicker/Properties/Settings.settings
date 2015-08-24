@@ -2,11 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NeverClicker.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ImportantSetting" Type="System.String" Scope="User">
-      <Value Profile="(Default)">doggies</Value>
+    <Setting Name="ScriptRootPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DumbSetting" Type="System.String" Scope="User">
-      <Value Profile="(Default)">kitties</Value>
+    <Setting Name="NeverwinterExeLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

@@ -25,25 +25,25 @@ namespace NeverClicker.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("doggies")]
-        public string ImportantSetting {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ScriptRootPath {
             get {
-                return ((string)(this["ImportantSetting"]));
+                return ((string)(this["ScriptRootPath"]));
             }
             set {
-                this["ImportantSetting"] = value;
+                this["ScriptRootPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("kitties")]
-        public string DumbSetting {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string NeverwinterExeLocation {
             get {
-                return ((string)(this["DumbSetting"]));
+                return ((string)(this["NeverwinterExeLocation"]));
             }
             set {
-                this["DumbSetting"] = value;
+                this["NeverwinterExeLocation"] = value;
             }
         }
     }
