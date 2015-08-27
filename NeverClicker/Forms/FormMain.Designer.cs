@@ -49,20 +49,37 @@
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.buttonOptions = new System.Windows.Forms.Button();
 			this.tabControlPrimary = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.tabPageStatus = new System.Windows.Forms.TabPage();
+			this.listBoxTaskQueue = new System.Windows.Forms.ListBox();
+			this.labelTaskQueue = new System.Windows.Forms.Label();
+			this.labelStatusBar = new System.Windows.Forms.Label();
+			this.progressBar1 = new System.Windows.Forms.ProgressBar();
+			this.tabPageRaw = new System.Windows.Forms.TabPage();
+			this.labelFunctionParensClose = new System.Windows.Forms.Label();
+			this.labelFunctionParensOpen = new System.Windows.Forms.Label();
 			this.textBoxExecuteStatement = new System.Windows.Forms.TextBox();
 			this.buttonExecuteStatement = new System.Windows.Forms.Button();
 			this.labelExecuteStatement = new System.Windows.Forms.Label();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.buttonLoadOldScript = new System.Windows.Forms.Button();
+			this.tabPageWindow = new System.Windows.Forms.TabPage();
 			this.textBoxDetectWindow = new System.Windows.Forms.TextBox();
 			this.labelDetectWindow = new System.Windows.Forms.Label();
 			this.buttonDetectWindow = new System.Windows.Forms.Button();
-			this.labelFunctionParensOpen = new System.Windows.Forms.Label();
-			this.labelFunctionParensClose = new System.Windows.Forms.Label();
+			this.tabPageQueue = new System.Windows.Forms.TabPage();
+			this.labelDelaySec = new System.Windows.Forms.Label();
+			this.textBoxDelaySec = new System.Windows.Forms.TextBox();
+			this.labelCharacterIdx = new System.Windows.Forms.Label();
+			this.buttonNextTask = new System.Windows.Forms.Button();
+			this.buttonAddCharIdx = new System.Windows.Forms.Button();
+			this.textBoxAddCharIdx = new System.Windows.Forms.TextBox();
+			this.tabPageOther = new System.Windows.Forms.TabPage();
+			this.buttonLoadOldScript = new System.Windows.Forms.Button();
+			this.buttonAutoCycle = new System.Windows.Forms.Button();
 			this.tabControlPrimary.SuspendLayout();
-			this.tabPage1.SuspendLayout();
-			this.tabPage2.SuspendLayout();
+			this.tabPageStatus.SuspendLayout();
+			this.tabPageRaw.SuspendLayout();
+			this.tabPageWindow.SuspendLayout();
+			this.tabPageQueue.SuspendLayout();
+			this.tabPageOther.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// buttonAutoInvokeAsync
@@ -70,22 +87,22 @@
 			this.buttonAutoInvokeAsync.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.buttonAutoInvokeAsync.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.buttonAutoInvokeAsync.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonAutoInvokeAsync.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonAutoInvokeAsync.Location = new System.Drawing.Point(46, 32);
+			this.buttonAutoInvokeAsync.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonAutoInvokeAsync.Location = new System.Drawing.Point(16, 6);
 			this.buttonAutoInvokeAsync.Name = "buttonAutoInvokeAsync";
-			this.buttonAutoInvokeAsync.Size = new System.Drawing.Size(342, 33);
+			this.buttonAutoInvokeAsync.Size = new System.Drawing.Size(136, 23);
 			this.buttonAutoInvokeAsync.TabIndex = 0;
-			this.buttonAutoInvokeAsync.Text = "Begin Auto-Cycle";
+			this.buttonAutoInvokeAsync.Text = "Begin AutoInvoke (old)";
 			this.buttonAutoInvokeAsync.UseVisualStyleBackColor = false;
 			this.buttonAutoInvokeAsync.Click += new System.EventHandler(this.buttonAutoInvokeAsync_Click);
 			// 
 			// textBox1
 			// 
-			this.textBox1.Location = new System.Drawing.Point(12, 355);
+			this.textBox1.Location = new System.Drawing.Point(12, 346);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(407, 170);
+			this.textBox1.Size = new System.Drawing.Size(405, 200);
 			this.textBox1.TabIndex = 1;
 			// 
 			// button3
@@ -107,7 +124,7 @@
 			// 
 			// buttonMoveMouse
 			// 
-			this.buttonMoveMouse.Location = new System.Drawing.Point(314, 531);
+			this.buttonMoveMouse.Location = new System.Drawing.Point(158, 6);
 			this.buttonMoveMouse.Name = "buttonMoveMouse";
 			this.buttonMoveMouse.Size = new System.Drawing.Size(105, 23);
 			this.buttonMoveMouse.TabIndex = 5;
@@ -118,17 +135,19 @@
 			// buttonPause
 			// 
 			this.buttonPause.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonPause.Location = new System.Drawing.Point(93, 586);
+			this.buttonPause.Enabled = false;
+			this.buttonPause.Location = new System.Drawing.Point(174, 592);
 			this.buttonPause.Name = "buttonPause";
 			this.buttonPause.Size = new System.Drawing.Size(75, 23);
 			this.buttonPause.TabIndex = 6;
 			this.buttonPause.Text = "Pause";
 			this.buttonPause.UseVisualStyleBackColor = true;
+			this.buttonPause.Visible = false;
 			this.buttonPause.Click += new System.EventHandler(this.buttonSuspend_Click);
 			// 
 			// buttonReload
 			// 
-			this.buttonReload.Location = new System.Drawing.Point(174, 586);
+			this.buttonReload.Location = new System.Drawing.Point(93, 592);
 			this.buttonReload.Name = "buttonReload";
 			this.buttonReload.Size = new System.Drawing.Size(75, 23);
 			this.buttonReload.TabIndex = 7;
@@ -138,7 +157,8 @@
 			// 
 			// buttonStop
 			// 
-			this.buttonStop.Location = new System.Drawing.Point(12, 586);
+			this.buttonStop.Enabled = false;
+			this.buttonStop.Location = new System.Drawing.Point(12, 592);
 			this.buttonStop.Name = "buttonStop";
 			this.buttonStop.Size = new System.Drawing.Size(75, 23);
 			this.buttonStop.TabIndex = 8;
@@ -148,7 +168,7 @@
 			// 
 			// buttonExit
 			// 
-			this.buttonExit.Location = new System.Drawing.Point(344, 586);
+			this.buttonExit.Location = new System.Drawing.Point(342, 592);
 			this.buttonExit.Name = "buttonExit";
 			this.buttonExit.Size = new System.Drawing.Size(75, 23);
 			this.buttonExit.TabIndex = 11;
@@ -224,7 +244,7 @@
 			// labelLog
 			// 
 			this.labelLog.AutoSize = true;
-			this.labelLog.Location = new System.Drawing.Point(12, 341);
+			this.labelLog.Location = new System.Drawing.Point(12, 330);
 			this.labelLog.Name = "labelLog";
 			this.labelLog.Size = new System.Drawing.Size(28, 13);
 			this.labelLog.TabIndex = 14;
@@ -234,54 +254,124 @@
 			// 
 			this.splitter1.Location = new System.Drawing.Point(0, 0);
 			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(3, 621);
+			this.splitter1.Size = new System.Drawing.Size(3, 627);
 			this.splitter1.TabIndex = 15;
 			this.splitter1.TabStop = false;
 			// 
 			// buttonOptions
 			// 
-			this.buttonOptions.Location = new System.Drawing.Point(12, 531);
+			this.buttonOptions.Location = new System.Drawing.Point(12, 552);
 			this.buttonOptions.Name = "buttonOptions";
-			this.buttonOptions.Size = new System.Drawing.Size(75, 23);
+			this.buttonOptions.Size = new System.Drawing.Size(156, 23);
 			this.buttonOptions.TabIndex = 16;
-			this.buttonOptions.Text = "Options";
+			this.buttonOptions.Text = "Settings";
 			this.buttonOptions.UseVisualStyleBackColor = true;
 			this.buttonOptions.Click += new System.EventHandler(this.buttonOptions_Click);
 			// 
 			// tabControlPrimary
 			// 
-			this.tabControlPrimary.Controls.Add(this.tabPage1);
-			this.tabControlPrimary.Controls.Add(this.tabPage2);
-			this.tabControlPrimary.Location = new System.Drawing.Point(12, 100);
+			this.tabControlPrimary.Controls.Add(this.tabPageStatus);
+			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
+			this.tabControlPrimary.Controls.Add(this.tabPageWindow);
+			this.tabControlPrimary.Controls.Add(this.tabPageQueue);
+			this.tabControlPrimary.Controls.Add(this.tabPageOther);
+			this.tabControlPrimary.Location = new System.Drawing.Point(12, 101);
 			this.tabControlPrimary.Name = "tabControlPrimary";
 			this.tabControlPrimary.SelectedIndex = 0;
-			this.tabControlPrimary.Size = new System.Drawing.Size(411, 221);
+			this.tabControlPrimary.Size = new System.Drawing.Size(405, 226);
 			this.tabControlPrimary.TabIndex = 17;
 			// 
-			// tabPage1
+			// tabPageStatus
 			// 
-			this.tabPage1.BackColor = System.Drawing.Color.Transparent;
-			this.tabPage1.Controls.Add(this.labelFunctionParensClose);
-			this.tabPage1.Controls.Add(this.labelFunctionParensOpen);
-			this.tabPage1.Controls.Add(this.textBoxExecuteStatement);
-			this.tabPage1.Controls.Add(this.buttonExecuteStatement);
-			this.tabPage1.Controls.Add(this.labelExecuteStatement);
-			this.tabPage1.Controls.Add(this.labelFunctionParameters);
-			this.tabPage1.Controls.Add(this.textBox_var);
-			this.tabPage1.Controls.Add(this.labelFunctionName);
-			this.tabPage1.Controls.Add(this.button3);
-			this.tabPage1.Controls.Add(this.textBoxExecuteFunction);
-			this.tabPage1.Controls.Add(this.labelEvaluateVariable);
-			this.tabPage1.Controls.Add(this.buttonExecuteFunction);
-			this.tabPage1.Controls.Add(this.textBoxExecuteFunctionP1);
-			this.tabPage1.Controls.Add(this.textBoxExecuteFunctionP2);
-			this.tabPage1.Controls.Add(this.textBoxExecuteFunctionP3);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(403, 195);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "Raw Commands";
+			this.tabPageStatus.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageStatus.Controls.Add(this.listBoxTaskQueue);
+			this.tabPageStatus.Controls.Add(this.labelTaskQueue);
+			this.tabPageStatus.Controls.Add(this.labelStatusBar);
+			this.tabPageStatus.Controls.Add(this.progressBar1);
+			this.tabPageStatus.Location = new System.Drawing.Point(4, 22);
+			this.tabPageStatus.Name = "tabPageStatus";
+			this.tabPageStatus.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageStatus.Size = new System.Drawing.Size(397, 200);
+			this.tabPageStatus.TabIndex = 4;
+			this.tabPageStatus.Text = "Status";
+			// 
+			// listBoxTaskQueue
+			// 
+			this.listBoxTaskQueue.FormattingEnabled = true;
+			this.listBoxTaskQueue.Location = new System.Drawing.Point(36, 119);
+			this.listBoxTaskQueue.Name = "listBoxTaskQueue";
+			this.listBoxTaskQueue.Size = new System.Drawing.Size(325, 69);
+			this.listBoxTaskQueue.TabIndex = 3;
+			// 
+			// labelTaskQueue
+			// 
+			this.labelTaskQueue.AutoSize = true;
+			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTaskQueue.Location = new System.Drawing.Point(149, 91);
+			this.labelTaskQueue.Name = "labelTaskQueue";
+			this.labelTaskQueue.Size = new System.Drawing.Size(99, 20);
+			this.labelTaskQueue.TabIndex = 2;
+			this.labelTaskQueue.Text = "Task Queue:";
+			// 
+			// labelStatusBar
+			// 
+			this.labelStatusBar.AutoSize = true;
+			this.labelStatusBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelStatusBar.Location = new System.Drawing.Point(76, 19);
+			this.labelStatusBar.Name = "labelStatusBar";
+			this.labelStatusBar.Size = new System.Drawing.Size(242, 20);
+			this.labelStatusBar.TabIndex = 1;
+			this.labelStatusBar.Text = "Status Bar (not yet implemented)";
+			// 
+			// progressBar1
+			// 
+			this.progressBar1.Location = new System.Drawing.Point(36, 47);
+			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.Size = new System.Drawing.Size(325, 23);
+			this.progressBar1.TabIndex = 0;
+			// 
+			// tabPageRaw
+			// 
+			this.tabPageRaw.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageRaw.Controls.Add(this.labelFunctionParensClose);
+			this.tabPageRaw.Controls.Add(this.labelFunctionParensOpen);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteStatement);
+			this.tabPageRaw.Controls.Add(this.buttonExecuteStatement);
+			this.tabPageRaw.Controls.Add(this.labelExecuteStatement);
+			this.tabPageRaw.Controls.Add(this.labelFunctionParameters);
+			this.tabPageRaw.Controls.Add(this.textBox_var);
+			this.tabPageRaw.Controls.Add(this.labelFunctionName);
+			this.tabPageRaw.Controls.Add(this.button3);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunction);
+			this.tabPageRaw.Controls.Add(this.labelEvaluateVariable);
+			this.tabPageRaw.Controls.Add(this.buttonExecuteFunction);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP1);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP2);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP3);
+			this.tabPageRaw.Location = new System.Drawing.Point(4, 22);
+			this.tabPageRaw.Name = "tabPageRaw";
+			this.tabPageRaw.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageRaw.Size = new System.Drawing.Size(397, 200);
+			this.tabPageRaw.TabIndex = 0;
+			this.tabPageRaw.Text = "Raw";
+			// 
+			// labelFunctionParensClose
+			// 
+			this.labelFunctionParensClose.AutoSize = true;
+			this.labelFunctionParensClose.Location = new System.Drawing.Point(242, 62);
+			this.labelFunctionParensClose.Name = "labelFunctionParensClose";
+			this.labelFunctionParensClose.Size = new System.Drawing.Size(10, 13);
+			this.labelFunctionParensClose.TabIndex = 21;
+			this.labelFunctionParensClose.Text = ")";
+			// 
+			// labelFunctionParensOpen
+			// 
+			this.labelFunctionParensOpen.AutoSize = true;
+			this.labelFunctionParensOpen.Location = new System.Drawing.Point(239, 10);
+			this.labelFunctionParensOpen.Name = "labelFunctionParensOpen";
+			this.labelFunctionParensOpen.Size = new System.Drawing.Size(10, 13);
+			this.labelFunctionParensOpen.TabIndex = 20;
+			this.labelFunctionParensOpen.Text = "(";
 			// 
 			// textBoxExecuteStatement
 			// 
@@ -309,28 +399,18 @@
 			this.labelExecuteStatement.TabIndex = 19;
 			this.labelExecuteStatement.Text = "Statement:";
 			// 
-			// tabPage2
+			// tabPageWindow
 			// 
-			this.tabPage2.BackColor = System.Drawing.Color.Transparent;
-			this.tabPage2.Controls.Add(this.textBoxDetectWindow);
-			this.tabPage2.Controls.Add(this.labelDetectWindow);
-			this.tabPage2.Controls.Add(this.buttonDetectWindow);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(403, 229);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "Window Detection";
-			// 
-			// buttonLoadOldScript
-			// 
-			this.buttonLoadOldScript.Location = new System.Drawing.Point(93, 531);
-			this.buttonLoadOldScript.Name = "buttonLoadOldScript";
-			this.buttonLoadOldScript.Size = new System.Drawing.Size(124, 23);
-			this.buttonLoadOldScript.TabIndex = 3;
-			this.buttonLoadOldScript.Text = "Load Old Script";
-			this.buttonLoadOldScript.UseVisualStyleBackColor = true;
-			this.buttonLoadOldScript.Click += new System.EventHandler(this.buttonLoadOldScript_Click);
+			this.tabPageWindow.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageWindow.Controls.Add(this.textBoxDetectWindow);
+			this.tabPageWindow.Controls.Add(this.labelDetectWindow);
+			this.tabPageWindow.Controls.Add(this.buttonDetectWindow);
+			this.tabPageWindow.Location = new System.Drawing.Point(4, 22);
+			this.tabPageWindow.Name = "tabPageWindow";
+			this.tabPageWindow.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageWindow.Size = new System.Drawing.Size(397, 200);
+			this.tabPageWindow.TabIndex = 1;
+			this.tabPageWindow.Text = "Window";
 			// 
 			// textBoxDetectWindow
 			// 
@@ -360,49 +440,136 @@
 			this.buttonDetectWindow.UseVisualStyleBackColor = true;
 			this.buttonDetectWindow.Click += new System.EventHandler(this.buttonDetectWindow_Click);
 			// 
-			// labelFunctionParensOpen
+			// tabPageQueue
 			// 
-			this.labelFunctionParensOpen.AutoSize = true;
-			this.labelFunctionParensOpen.Location = new System.Drawing.Point(239, 10);
-			this.labelFunctionParensOpen.Name = "labelFunctionParensOpen";
-			this.labelFunctionParensOpen.Size = new System.Drawing.Size(10, 13);
-			this.labelFunctionParensOpen.TabIndex = 20;
-			this.labelFunctionParensOpen.Text = "(";
+			this.tabPageQueue.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageQueue.Controls.Add(this.labelDelaySec);
+			this.tabPageQueue.Controls.Add(this.textBoxDelaySec);
+			this.tabPageQueue.Controls.Add(this.labelCharacterIdx);
+			this.tabPageQueue.Controls.Add(this.buttonNextTask);
+			this.tabPageQueue.Controls.Add(this.buttonAddCharIdx);
+			this.tabPageQueue.Controls.Add(this.textBoxAddCharIdx);
+			this.tabPageQueue.Location = new System.Drawing.Point(4, 22);
+			this.tabPageQueue.Name = "tabPageQueue";
+			this.tabPageQueue.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageQueue.Size = new System.Drawing.Size(397, 200);
+			this.tabPageQueue.TabIndex = 2;
+			this.tabPageQueue.Text = "Queue";
 			// 
-			// labelFunctionParensClose
+			// labelDelaySec
 			// 
-			this.labelFunctionParensClose.AutoSize = true;
-			this.labelFunctionParensClose.Location = new System.Drawing.Point(242, 62);
-			this.labelFunctionParensClose.Name = "labelFunctionParensClose";
-			this.labelFunctionParensClose.Size = new System.Drawing.Size(10, 13);
-			this.labelFunctionParensClose.TabIndex = 21;
-			this.labelFunctionParensClose.Text = ")";
+			this.labelDelaySec.AutoSize = true;
+			this.labelDelaySec.Location = new System.Drawing.Point(3, 35);
+			this.labelDelaySec.Name = "labelDelaySec";
+			this.labelDelaySec.Size = new System.Drawing.Size(63, 13);
+			this.labelDelaySec.TabIndex = 5;
+			this.labelDelaySec.Text = "Delay (sec):";
+			// 
+			// textBoxDelaySec
+			// 
+			this.textBoxDelaySec.Location = new System.Drawing.Point(77, 32);
+			this.textBoxDelaySec.Name = "textBoxDelaySec";
+			this.textBoxDelaySec.Size = new System.Drawing.Size(100, 20);
+			this.textBoxDelaySec.TabIndex = 4;
+			// 
+			// labelCharacterIdx
+			// 
+			this.labelCharacterIdx.AutoSize = true;
+			this.labelCharacterIdx.Location = new System.Drawing.Point(6, 9);
+			this.labelCharacterIdx.Name = "labelCharacterIdx";
+			this.labelCharacterIdx.Size = new System.Drawing.Size(56, 13);
+			this.labelCharacterIdx.TabIndex = 3;
+			this.labelCharacterIdx.Text = "Character:";
+			// 
+			// buttonNextTask
+			// 
+			this.buttonNextTask.Location = new System.Drawing.Point(183, 58);
+			this.buttonNextTask.Name = "buttonNextTask";
+			this.buttonNextTask.Size = new System.Drawing.Size(75, 23);
+			this.buttonNextTask.TabIndex = 2;
+			this.buttonNextTask.Text = "Pop Next Task";
+			this.buttonNextTask.UseVisualStyleBackColor = true;
+			this.buttonNextTask.Click += new System.EventHandler(this.buttonNextTask_Click);
+			// 
+			// buttonAddCharIdx
+			// 
+			this.buttonAddCharIdx.Location = new System.Drawing.Point(6, 58);
+			this.buttonAddCharIdx.Name = "buttonAddCharIdx";
+			this.buttonAddCharIdx.Size = new System.Drawing.Size(171, 23);
+			this.buttonAddCharIdx.TabIndex = 1;
+			this.buttonAddCharIdx.Text = "Queue Task";
+			this.buttonAddCharIdx.UseVisualStyleBackColor = true;
+			this.buttonAddCharIdx.Click += new System.EventHandler(this.buttonAddCharIdx_Click);
+			// 
+			// textBoxAddCharIdx
+			// 
+			this.textBoxAddCharIdx.Location = new System.Drawing.Point(77, 6);
+			this.textBoxAddCharIdx.Name = "textBoxAddCharIdx";
+			this.textBoxAddCharIdx.Size = new System.Drawing.Size(100, 20);
+			this.textBoxAddCharIdx.TabIndex = 0;
+			// 
+			// tabPageOther
+			// 
+			this.tabPageOther.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageOther.Controls.Add(this.buttonAutoInvokeAsync);
+			this.tabPageOther.Controls.Add(this.buttonLoadOldScript);
+			this.tabPageOther.Controls.Add(this.buttonMoveMouse);
+			this.tabPageOther.Location = new System.Drawing.Point(4, 22);
+			this.tabPageOther.Name = "tabPageOther";
+			this.tabPageOther.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageOther.Size = new System.Drawing.Size(397, 200);
+			this.tabPageOther.TabIndex = 3;
+			this.tabPageOther.Text = "Other";
+			// 
+			// buttonLoadOldScript
+			// 
+			this.buttonLoadOldScript.Location = new System.Drawing.Point(16, 166);
+			this.buttonLoadOldScript.Name = "buttonLoadOldScript";
+			this.buttonLoadOldScript.Size = new System.Drawing.Size(124, 23);
+			this.buttonLoadOldScript.TabIndex = 3;
+			this.buttonLoadOldScript.Text = "Load Old Script";
+			this.buttonLoadOldScript.UseVisualStyleBackColor = true;
+			this.buttonLoadOldScript.Click += new System.EventHandler(this.buttonLoadOldScript_Click);
+			// 
+			// buttonAutoCycle
+			// 
+			this.buttonAutoCycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonAutoCycle.Location = new System.Drawing.Point(54, 31);
+			this.buttonAutoCycle.Name = "buttonAutoCycle";
+			this.buttonAutoCycle.Size = new System.Drawing.Size(325, 37);
+			this.buttonAutoCycle.TabIndex = 18;
+			this.buttonAutoCycle.Text = "Begin AutoCycle";
+			this.buttonAutoCycle.UseVisualStyleBackColor = true;
+			this.buttonAutoCycle.Click += new System.EventHandler(this.buttonAutoCycle_Click);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(429, 621);
-			this.Controls.Add(this.buttonLoadOldScript);
+			this.ClientSize = new System.Drawing.Size(429, 627);
+			this.Controls.Add(this.buttonAutoCycle);
 			this.Controls.Add(this.tabControlPrimary);
 			this.Controls.Add(this.buttonOptions);
 			this.Controls.Add(this.splitter1);
-			this.Controls.Add(this.buttonMoveMouse);
 			this.Controls.Add(this.labelLog);
 			this.Controls.Add(this.buttonExit);
 			this.Controls.Add(this.buttonStop);
 			this.Controls.Add(this.buttonReload);
 			this.Controls.Add(this.buttonPause);
 			this.Controls.Add(this.textBox1);
-			this.Controls.Add(this.buttonAutoInvokeAsync);
 			this.Name = "MainForm";
 			this.Text = "NeverClicker";
-			this.Load += new System.EventHandler(this.MainForm_Load);
+			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControlPrimary.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage1.PerformLayout();
-			this.tabPage2.ResumeLayout(false);
-			this.tabPage2.PerformLayout();
+			this.tabPageStatus.ResumeLayout(false);
+			this.tabPageStatus.PerformLayout();
+			this.tabPageRaw.ResumeLayout(false);
+			this.tabPageRaw.PerformLayout();
+			this.tabPageWindow.ResumeLayout(false);
+			this.tabPageWindow.PerformLayout();
+			this.tabPageQueue.ResumeLayout(false);
+			this.tabPageQueue.PerformLayout();
+			this.tabPageOther.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -431,8 +598,8 @@
         private System.Windows.Forms.Label labelFunctionName;
         private System.Windows.Forms.Button buttonOptions;
         private System.Windows.Forms.TabControl tabControlPrimary;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPageRaw;
+        private System.Windows.Forms.TabPage tabPageWindow;
         private System.Windows.Forms.TextBox textBoxDetectWindow;
         private System.Windows.Forms.Label labelDetectWindow;
         private System.Windows.Forms.Button buttonDetectWindow;
@@ -442,5 +609,19 @@
         private System.Windows.Forms.Label labelExecuteStatement;
 		private System.Windows.Forms.Label labelFunctionParensClose;
 		private System.Windows.Forms.Label labelFunctionParensOpen;
+		private System.Windows.Forms.Button buttonAutoCycle;
+		private System.Windows.Forms.TabPage tabPageQueue;
+		private System.Windows.Forms.Button buttonNextTask;
+		private System.Windows.Forms.Button buttonAddCharIdx;
+		private System.Windows.Forms.TextBox textBoxAddCharIdx;
+		private System.Windows.Forms.Label labelDelaySec;
+		private System.Windows.Forms.TextBox textBoxDelaySec;
+		private System.Windows.Forms.Label labelCharacterIdx;
+		private System.Windows.Forms.TabPage tabPageOther;
+		private System.Windows.Forms.TabPage tabPageStatus;
+		private System.Windows.Forms.Label labelStatusBar;
+		private System.Windows.Forms.ProgressBar progressBar1;
+		private System.Windows.Forms.ListBox listBoxTaskQueue;
+		private System.Windows.Forms.Label labelTaskQueue;
 	}
 }

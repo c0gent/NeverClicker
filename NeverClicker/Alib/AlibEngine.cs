@@ -15,7 +15,7 @@ namespace Alib {
 			Util.EnsureAlibLoaded();
 
 			//ensure that a thread is started
-			AlibDll.ahktextdll("", "", "");
+			UnsafeNativeMethods.ahktextdll("", "", "");
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace Alib {
 		/// <param name="variableName">Name of the variable.</param>
 		/// <returns>Returns the value of the variable, or an empty string if the variable does not exist.</returns>
 		public string GetVar(string variableName) {
-			var p = AlibDll.ahkgetvar(variableName, 0);
+			var p = UnsafeNativeMethods.ahkgetvar(variableName, 0);
 			return Marshal.PtrToStringUni(p);
 		}
 
@@ -37,7 +37,7 @@ namespace Alib {
 			if (value == null)
 				value = "";
 
-			AlibDll.ahkassign(variableName, value);
+			UnsafeNativeMethods.ahkassign(variableName, value);
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Alib {
 			//uint successPtr = 0;
 			//bool failure = false;
 
-			AlibDll.addFile(filePath, 0, 0);
+			UnsafeNativeMethods.addFile(filePath, 0, 0);
 
 			//try
 			//{
@@ -94,35 +94,35 @@ namespace Alib {
 		/// </summary>
 		/// <param name="code">The code to execute</param>
 		public void Exec(string code) {
-			AlibDll.ahkExec(code);
+			UnsafeNativeMethods.ahkExec(code);
 		}
 
 		/// <summary>
 		/// Terminates the running scripts
 		/// </summary>
 		public void Terminate() {
-			AlibDll.ahkTerminate(1000);
+				UnsafeNativeMethods.ahkTerminate(1000);
 		}
 
 		/// <summary>
 		/// Suspends the scripts
 		/// </summary>
-		public void Suspend() {
-			Exec("Suspend, On");
-		}
+		//public void Suspend() {
+		//	Exec("Suspend, On");
+		//}
 
 		/// <summary>
 		/// Unsuspends the scripts
 		/// </summary>
-		public void UnSuspend() {
-			Exec("Suspend, Off");
-		}
+		//public void UnSuspend() {
+		//	Exec("Suspend, Off");
+		//}
 
 		/// <summary>
 		/// Reloads the running scripts
 		/// </summary>
 		public void Reload() {
-			AlibDll.ahkReload();
+			UnsafeNativeMethods.ahkReload();
 		}
 
 		/// <summary>
@@ -135,7 +135,7 @@ namespace Alib {
 			for (int i = 0; i < argsGiven.Length; i++) {
 				args[i] = argsGiven[i];
 			}
-			IntPtr ret = AlibDll.ahkFunction(functionName, args[0], args[1],
+			IntPtr ret = UnsafeNativeMethods.ahkFunction(functionName, args[0], args[1],
 				args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
 
 			if (ret == IntPtr.Zero)
@@ -151,7 +151,7 @@ namespace Alib {
 		/// <param name="functionName">Name of the function.</param>
 		/// <returns>Returns true if the function exists, otherwise false.</returns>
 		public bool FunctionExists(string functionName) {
-			IntPtr funcptr = AlibDll.ahkFindFunc(functionName);
+			IntPtr funcptr = UnsafeNativeMethods.ahkFindFunc(functionName);
 			return funcptr != IntPtr.Zero;
 		}
 
@@ -160,7 +160,7 @@ namespace Alib {
 		/// </summary>
 		/// <param name="labelName">Name of the label.</param>
 		public void ExecLabel(string labelName) {
-			AlibDll.ahkLabel(labelName, false);
+			UnsafeNativeMethods.ahkLabel(labelName, false);
 		}
 
 		/// <summary>
@@ -169,7 +169,7 @@ namespace Alib {
 		/// <param name="labelName">Name of the label.</param>
 		/// <returns>Returns true if the label exists, otherwise false</returns>
 		public bool LabelExists(string labelName) {
-			IntPtr labelptr = AlibDll.ahkFindLabel(labelName);
+			IntPtr labelptr = UnsafeNativeMethods.ahkFindLabel(labelName);
 			return labelptr != IntPtr.Zero;
 		}
 	}

@@ -26,24 +26,72 @@ namespace NeverClicker.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ScriptRootPath {
+        public string SettingsRootPath {
             get {
-                return ((string)(this["ScriptRootPath"]));
+                return ((string)(this["SettingsRootPath"]));
             }
             set {
-                this["ScriptRootPath"] = value;
+                this["SettingsRootPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string NeverwinterExeLocation {
+        public string NeverwinterExePath {
             get {
-                return ((string)(this["NeverwinterExeLocation"]));
+                return ((string)(this["NeverwinterExePath"]));
             }
             set {
-                this["NeverwinterExeLocation"] = value;
+                this["NeverwinterExePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImagesFolderPath {
+            get {
+                return ((string)(this["ImagesFolderPath"]));
+            }
+            set {
+                this["ImagesFolderPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GameAccountIniPath {
+            get {
+                return ((string)(this["GameAccountIniPath"]));
+            }
+            set {
+                this["GameAccountIniPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GameClientIniPath {
+            get {
+                return ((string)(this["GameClientIniPath"]));
+            }
+            set {
+                this["GameClientIniPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogFilePath {
+            get {
+                return ((string)(this["LogFilePath"]));
+            }
+            set {
+                this["LogFilePath"] = value;
             }
         }
     }

@@ -11,7 +11,7 @@ namespace Alib {
 	/// They assume Alib.dll is in the same directory as your
 	/// executable.
 	/// </summary>
-	internal class AlibDll {
+	internal class UnsafeNativeMethods {
 		private const string DLLPATH = "Alib.dll";
 
 		#region Create Thread
@@ -243,9 +243,9 @@ namespace Alib {
 		/// </summary>
 		/// <param name="Variable">the name of the variable</param>
 		/// <returns>The pointer to the variable.</returns>
-		[DllImport(DLLPATH, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "getVar")]
-		public static extern IntPtr GetVar(
-			[MarshalAs(UnmanagedType.LPWStr)] string Variable);
+		//[DllImport(DLLPATH, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "getVar")]
+		//public static extern IntPtr GetVar(
+		//	[MarshalAs(UnmanagedType.LPWStr)] string Variable);
 
 		#endregion
 	}
