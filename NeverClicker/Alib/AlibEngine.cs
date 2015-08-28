@@ -131,7 +131,8 @@ namespace Alib {
 		/// <param name="functionName">The name of the function to execute.</param>
 		/// <param name="params">Paramaters</param>
 		public string ExecFunction(string functionName, params string[] argsGiven) {
-			var args = new List<string>() { null, null, null, null, null, null, null, null, null, null, };
+			//var args = new List<string>() { "", "", "", "", "", "", "", "", "", "", };
+			string[] args = { "", "", "", "", "", "", "", "", "", "" };
 			for (int i = 0; i < argsGiven.Length; i++) {
 				args[i] = argsGiven[i];
 			}

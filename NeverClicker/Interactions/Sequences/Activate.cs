@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void Activate(Interactions.Interactor interactor, IProgress<string> log, CancellationToken cancelToken) {
+		public static void Activate(Interactions.Interactor itr, IProgress<string> log, CancellationToken cancelToken) {
 
 
 		}

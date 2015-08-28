@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void MouseMoveTest(Interactor interactor) {
+		public static void MouseMoveTest(Interactor itr) {
 			int sleepDuration = 3000;
 			int loopIterations = 3;
 
@@ -19,14 +19,14 @@ namespace NeverClicker.Interactions {
 
 			for (uint i = 0; i < loopIterations; i++) {
 				foreach (var p in coordinateList) {
-					if (interactor.CancelSource.Token.IsCancellationRequested) {
-						interactor.ProgressLog.Report("Attempting to cancel mouse movement test.");
+					if (itr.CancelSource.Token.IsCancellationRequested) {
+						itr.Log("Attempting to cancel mouse movement test.");
 						break;
 					}
 					//WriteTextBox("Moving to (1, 1).");
-					interactor.ProgressLog.Report(String.Format("Moving to ({0}, {1}).", p.X, p.Y));
+					itr.Log(String.Format("Moving to ({0}, {1}).", p.X, p.Y));
 
-					interactor.MoveMouseCursor(p, false);
+					itr.MoveMouseCursor(p, false);
 					//alibEng.Exec("SendEvent {Click 1, 1, 0}");
 					//alibEng.Exec("Sleep 3000");
 					//Thread.Sleep(2000);
@@ -46,7 +46,7 @@ namespace NeverClicker.Interactions {
 				//if (cancelToken.IsCancellationRequested) { break; }
 			}
 
-			interactor.ProgressLog.Report("Mouse movement complete.");
+			itr.Log("Mouse movement complete.");
 
 		}
 	}

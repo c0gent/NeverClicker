@@ -7,15 +7,35 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void ProcessCharacter(
-					Interactor interactor,
-					//NeverClicker.GameClient. gameClient,
+
+		public static bool ProcessCharacter(
+					Interactor itr,
 					int charIdx
 		) {
-			//LOAD VAULT PURCHASE OPTION (make this global): LoadSetting("VaultPurchase", 7, char_label, as_ini)
-			//gameClient
+			itr.Log("ProcessCharacter(): Processing character: " + charIdx + ".", LogType.Detail);
+			if (Game.ProduceClientState(itr, ClientState.CharSelect)) {
 
-        }
+				// FIX THIS LATER!
+				var temporaryBullshitCharNum = (charIdx + 1).ToString();
+
+				itr.Log("ProcessCharacter(): Invoking character: " + charIdx + ".", LogType.Detail);
+
+				var cmdString = "EnterWorldInvoke(1, 0, " + temporaryBullshitCharNum + ", 0, 0, 5)";
+                itr.Log(cmdString);
+
+				//var result = itr.EvaluateFunction("EnterWorldInvoke", "1", "0", temporaryBullshitCharNum, "0", "0", "5");
+				itr.ExecuteStatement(cmdString);
+
+				itr.Wait(1000);
+
+				itr.Log("ProcessCharacter(): Invocation complete", LogType.Normal);
+
+				return true;
+
+			}
+
+			return false;
+		}
 
 	}
 }

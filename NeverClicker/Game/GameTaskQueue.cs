@@ -47,15 +47,19 @@ namespace NeverClicker {
 		public int NextTaskCharacterIdx() {
             var nextTask = TaskList.First();
 			return nextTask.Value.CharacterIdx;
-	}
+		}
 
-		public void Populate(int charCount) {
-			for(int i = 0; i < charCount; i++) {
+		public void Populate(int charZ, int charN) {
+			for (int i = charZ; i < charN; i++) {
 				Add(new GameTask(
-					DateTime.Now.AddSeconds(i), i, TaskKind.Invocation
+					DateTime.Now.AddMilliseconds(i), i, TaskKind.Invocation
 				));
 			}
 
+		}
+
+		public void Populate(int charCount) {
+			Populate(0, charCount);
 		}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context) {

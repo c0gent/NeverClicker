@@ -96,6 +96,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutomationEngine.Tests.cs" />
+    <Compile Include="Interactions\Screen\WindowDetect.cs" />
+    <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
+    <Compile Include="LogMessage.cs" />
     <Compile Include="Game\GameTask.cs" />
     <Compile Include="Game\GameTaskQueue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -105,11 +109,12 @@
     <Compile Include="Alib\AlibEngine.cs" />
     <Compile Include="Alib\AlibSafeLibraryHandle.cs" />
     <Compile Include="Alib\AlibUtil.cs" />
-    <Compile Include="AutomationEngine.cs" />
+    <Compile Include="AutomationEngine.Main.cs" />
+    <Compile Include="Interactions\Screen\ImageSearch.cs" />
     <Compile Include="Interactions\Sequences\Activate.cs" />
     <Compile Include="Interactions\Sequences\AutoCycle.cs" />
     <Compile Include="Interactions\Sequences\MouseMoveTest.cs" />
-    <Compile Include="Game\State.cs" />
+    <Compile Include="Game\GameState.cs" />
     <Compile Include="Forms\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,7 +189,6 @@
   <ItemGroup>
     <Folder Include="Interactions\Keyboard\" />
     <Folder Include="Interactions\Mouse\" />
-    <Folder Include="Interactions\Screen\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,6 +12,8 @@ using NeverClicker.Properties;
 
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
+		const bool SHOW_DETAILED_LOG_MESSAGES = false;
+
 		AutomationEngine AutomationEngine;
 		private void buttonExit_Click(object sender, EventArgs e) => Close();
 		
@@ -25,13 +27,18 @@ namespace NeverClicker.Forms {
 			this.AutomationEngine = new AutomationEngine(this);
 		}
 
-		public void Log(string message, params string[] args) {
-			textBox1.AppendText(string.Format(message, args));
-			textBox1.AppendText("\r\n");
+		public void Log(string message) {
+			//textBox1.AppendText(message);
+			Log(new LogMessage(message));
 		}
 
-		public Progress<string> GetTextBoxCallback() {
-			return new Progress<string>(s => Log(s));
+		public void Log(LogMessage logMessage) {
+			Console.WriteLine(logMessage.Text);
+			if (logMessage.Type == LogType.Normal) {
+				textBox1.AppendText(logMessage.Text + "\r\n");
+			} else if (SHOW_DETAILED_LOG_MESSAGES) {
+				textBox1.AppendText("DETAIL: " + logMessage.Text + "\r\n");
+			}
 		}
 
 		public void SettingsNotSet() {
@@ -57,8 +64,8 @@ namespace NeverClicker.Forms {
 			AutomationEngine.InitOldScript();
 		}
 
-		private async void buttonExecuteStatement_Click(object sender, EventArgs e) {
-			Log(await AutomationEngine.EvaluateStatementAsync(textBoxExecuteStatement.Text));
+		private void buttonExecuteStatement_Click(object sender, EventArgs e) {
+			AutomationEngine.ExecuteStatementAsync(textBoxExecuteStatement.Text);
 		}
 
 		private void buttonCheckVar_Click(object sender, EventArgs e) {
@@ -181,6 +188,11 @@ namespace NeverClicker.Forms {
 
 		private void buttonNextTask_Click(object sender, EventArgs e) {
 			AutomationEngine.ProcessNextGameTask();
+		}
+
+		private void buttonFindImage_Click(object sender, EventArgs e) {
+			AutomationEngine.ImageSearch(textBoxFindImage.Text);
+			Log("Test1");
 		}
 	}
 }
