@@ -61,9 +61,16 @@
 			this.buttonExecuteStatement = new System.Windows.Forms.Button();
 			this.labelExecuteStatement = new System.Windows.Forms.Label();
 			this.tabPageWindow = new System.Windows.Forms.TabPage();
+			this.buttonWindowActivate = new System.Windows.Forms.Button();
+			this.buttonWindowKill = new System.Windows.Forms.Button();
+			this.buttonWindowMinimize = new System.Windows.Forms.Button();
+			this.labelFindImage1 = new System.Windows.Forms.Label();
+			this.textBoxFindImage = new System.Windows.Forms.TextBox();
+			this.buttonFindImage = new System.Windows.Forms.Button();
+			this.labelFindImage2 = new System.Windows.Forms.Label();
 			this.textBoxDetectWindow = new System.Windows.Forms.TextBox();
 			this.labelDetectWindow = new System.Windows.Forms.Label();
-			this.buttonDetectWindow = new System.Windows.Forms.Button();
+			this.buttonWindowDetect = new System.Windows.Forms.Button();
 			this.tabPageQueue = new System.Windows.Forms.TabPage();
 			this.labelDelaySec = new System.Windows.Forms.Label();
 			this.textBoxDelaySec = new System.Windows.Forms.TextBox();
@@ -74,10 +81,6 @@
 			this.tabPageOther = new System.Windows.Forms.TabPage();
 			this.buttonLoadOldScript = new System.Windows.Forms.Button();
 			this.buttonAutoCycle = new System.Windows.Forms.Button();
-			this.labelFindImage2 = new System.Windows.Forms.Label();
-			this.buttonFindImage = new System.Windows.Forms.Button();
-			this.textBoxFindImage = new System.Windows.Forms.TextBox();
-			this.labelFindImage1 = new System.Windows.Forms.Label();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.tabPageRaw.SuspendLayout();
@@ -106,6 +109,7 @@
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
+			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox1.Size = new System.Drawing.Size(405, 200);
 			this.textBox1.TabIndex = 1;
 			// 
@@ -406,13 +410,16 @@
 			// tabPageWindow
 			// 
 			this.tabPageWindow.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageWindow.Controls.Add(this.buttonWindowActivate);
+			this.tabPageWindow.Controls.Add(this.buttonWindowKill);
+			this.tabPageWindow.Controls.Add(this.buttonWindowMinimize);
 			this.tabPageWindow.Controls.Add(this.labelFindImage1);
 			this.tabPageWindow.Controls.Add(this.textBoxFindImage);
 			this.tabPageWindow.Controls.Add(this.buttonFindImage);
 			this.tabPageWindow.Controls.Add(this.labelFindImage2);
 			this.tabPageWindow.Controls.Add(this.textBoxDetectWindow);
 			this.tabPageWindow.Controls.Add(this.labelDetectWindow);
-			this.tabPageWindow.Controls.Add(this.buttonDetectWindow);
+			this.tabPageWindow.Controls.Add(this.buttonWindowDetect);
 			this.tabPageWindow.Location = new System.Drawing.Point(4, 22);
 			this.tabPageWindow.Name = "tabPageWindow";
 			this.tabPageWindow.Padding = new System.Windows.Forms.Padding(3);
@@ -420,11 +427,76 @@
 			this.tabPageWindow.TabIndex = 1;
 			this.tabPageWindow.Text = "Window";
 			// 
+			// buttonWindowActivate
+			// 
+			this.buttonWindowActivate.Location = new System.Drawing.Point(150, 77);
+			this.buttonWindowActivate.Name = "buttonWindowActivate";
+			this.buttonWindowActivate.Size = new System.Drawing.Size(75, 23);
+			this.buttonWindowActivate.TabIndex = 9;
+			this.buttonWindowActivate.Text = "Activate";
+			this.buttonWindowActivate.UseVisualStyleBackColor = true;
+			this.buttonWindowActivate.Click += new System.EventHandler(this.buttonWindowActivate_Click);
+			// 
+			// buttonWindowKill
+			// 
+			this.buttonWindowKill.Location = new System.Drawing.Point(312, 77);
+			this.buttonWindowKill.Name = "buttonWindowKill";
+			this.buttonWindowKill.Size = new System.Drawing.Size(75, 23);
+			this.buttonWindowKill.TabIndex = 8;
+			this.buttonWindowKill.Text = "Kill";
+			this.buttonWindowKill.UseVisualStyleBackColor = true;
+			this.buttonWindowKill.Click += new System.EventHandler(this.buttonWindowKill_Click);
+			// 
+			// buttonWindowMinimize
+			// 
+			this.buttonWindowMinimize.Location = new System.Drawing.Point(231, 77);
+			this.buttonWindowMinimize.Name = "buttonWindowMinimize";
+			this.buttonWindowMinimize.Size = new System.Drawing.Size(75, 23);
+			this.buttonWindowMinimize.TabIndex = 7;
+			this.buttonWindowMinimize.Text = "Minimize";
+			this.buttonWindowMinimize.UseVisualStyleBackColor = true;
+			this.buttonWindowMinimize.Click += new System.EventHandler(this.buttonWindowInactivate_Click);
+			// 
+			// labelFindImage1
+			// 
+			this.labelFindImage1.AutoSize = true;
+			this.labelFindImage1.Location = new System.Drawing.Point(8, 16);
+			this.labelFindImage1.Name = "labelFindImage1";
+			this.labelFindImage1.Size = new System.Drawing.Size(84, 13);
+			this.labelFindImage1.TabIndex = 6;
+			this.labelFindImage1.Text = "INI Image Code:";
+			// 
+			// textBoxFindImage
+			// 
+			this.textBoxFindImage.Location = new System.Drawing.Point(98, 13);
+			this.textBoxFindImage.Name = "textBoxFindImage";
+			this.textBoxFindImage.Size = new System.Drawing.Size(144, 20);
+			this.textBoxFindImage.TabIndex = 5;
+			// 
+			// buttonFindImage
+			// 
+			this.buttonFindImage.Location = new System.Drawing.Point(312, 11);
+			this.buttonFindImage.Name = "buttonFindImage";
+			this.buttonFindImage.Size = new System.Drawing.Size(75, 23);
+			this.buttonFindImage.TabIndex = 4;
+			this.buttonFindImage.Text = "Find";
+			this.buttonFindImage.UseVisualStyleBackColor = true;
+			this.buttonFindImage.Click += new System.EventHandler(this.buttonFindImage_Click);
+			// 
+			// labelFindImage2
+			// 
+			this.labelFindImage2.AutoSize = true;
+			this.labelFindImage2.Location = new System.Drawing.Point(248, 16);
+			this.labelFindImage2.Name = "labelFindImage2";
+			this.labelFindImage2.Size = new System.Drawing.Size(58, 13);
+			this.labelFindImage2.TabIndex = 3;
+			this.labelFindImage2.Text = "_ImageFile";
+			// 
 			// textBoxDetectWindow
 			// 
-			this.textBoxDetectWindow.Location = new System.Drawing.Point(98, 13);
+			this.textBoxDetectWindow.Location = new System.Drawing.Point(98, 51);
 			this.textBoxDetectWindow.Name = "textBoxDetectWindow";
-			this.textBoxDetectWindow.Size = new System.Drawing.Size(208, 20);
+			this.textBoxDetectWindow.Size = new System.Drawing.Size(289, 20);
 			this.textBoxDetectWindow.TabIndex = 2;
 			this.textBoxDetectWindow.TextChanged += new System.EventHandler(this.textBoxDetectWindow_TextChanged);
 			this.textBoxDetectWindow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDetectWindow_KeyPress);
@@ -432,21 +504,21 @@
 			// labelDetectWindow
 			// 
 			this.labelDetectWindow.AutoSize = true;
-			this.labelDetectWindow.Location = new System.Drawing.Point(6, 16);
+			this.labelDetectWindow.Location = new System.Drawing.Point(6, 54);
 			this.labelDetectWindow.Name = "labelDetectWindow";
 			this.labelDetectWindow.Size = new System.Drawing.Size(80, 13);
 			this.labelDetectWindow.TabIndex = 1;
 			this.labelDetectWindow.Text = "Window Name:";
 			// 
-			// buttonDetectWindow
+			// buttonWindowDetect
 			// 
-			this.buttonDetectWindow.Location = new System.Drawing.Point(312, 11);
-			this.buttonDetectWindow.Name = "buttonDetectWindow";
-			this.buttonDetectWindow.Size = new System.Drawing.Size(75, 23);
-			this.buttonDetectWindow.TabIndex = 0;
-			this.buttonDetectWindow.Text = "Detect";
-			this.buttonDetectWindow.UseVisualStyleBackColor = true;
-			this.buttonDetectWindow.Click += new System.EventHandler(this.buttonDetectWindow_Click);
+			this.buttonWindowDetect.Location = new System.Drawing.Point(69, 77);
+			this.buttonWindowDetect.Name = "buttonWindowDetect";
+			this.buttonWindowDetect.Size = new System.Drawing.Size(75, 23);
+			this.buttonWindowDetect.TabIndex = 0;
+			this.buttonWindowDetect.Text = "Detect";
+			this.buttonWindowDetect.UseVisualStyleBackColor = true;
+			this.buttonWindowDetect.Click += new System.EventHandler(this.buttonWindowDetect_Click);
 			// 
 			// tabPageQueue
 			// 
@@ -550,41 +622,6 @@
 			this.buttonAutoCycle.UseVisualStyleBackColor = true;
 			this.buttonAutoCycle.Click += new System.EventHandler(this.buttonAutoCycle_Click);
 			// 
-			// labelFindImage2
-			// 
-			this.labelFindImage2.AutoSize = true;
-			this.labelFindImage2.Location = new System.Drawing.Point(248, 45);
-			this.labelFindImage2.Name = "labelFindImage2";
-			this.labelFindImage2.Size = new System.Drawing.Size(58, 13);
-			this.labelFindImage2.TabIndex = 3;
-			this.labelFindImage2.Text = "_ImageFile";
-			// 
-			// buttonFindImage
-			// 
-			this.buttonFindImage.Location = new System.Drawing.Point(312, 40);
-			this.buttonFindImage.Name = "buttonFindImage";
-			this.buttonFindImage.Size = new System.Drawing.Size(75, 23);
-			this.buttonFindImage.TabIndex = 4;
-			this.buttonFindImage.Text = "Find";
-			this.buttonFindImage.UseVisualStyleBackColor = true;
-			this.buttonFindImage.Click += new System.EventHandler(this.buttonFindImage_Click);
-			// 
-			// textBoxFindImage
-			// 
-			this.textBoxFindImage.Location = new System.Drawing.Point(98, 42);
-			this.textBoxFindImage.Name = "textBoxFindImage";
-			this.textBoxFindImage.Size = new System.Drawing.Size(144, 20);
-			this.textBoxFindImage.TabIndex = 5;
-			// 
-			// labelFindImage1
-			// 
-			this.labelFindImage1.AutoSize = true;
-			this.labelFindImage1.Location = new System.Drawing.Point(8, 45);
-			this.labelFindImage1.Name = "labelFindImage1";
-			this.labelFindImage1.Size = new System.Drawing.Size(84, 13);
-			this.labelFindImage1.TabIndex = 6;
-			this.labelFindImage1.Text = "INI Image Code:";
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -645,7 +682,7 @@
         private System.Windows.Forms.TabPage tabPageWindow;
         private System.Windows.Forms.TextBox textBoxDetectWindow;
         private System.Windows.Forms.Label labelDetectWindow;
-        private System.Windows.Forms.Button buttonDetectWindow;
+        private System.Windows.Forms.Button buttonWindowDetect;
         private System.Windows.Forms.Button buttonLoadOldScript;
         private System.Windows.Forms.TextBox textBoxExecuteStatement;
         private System.Windows.Forms.Button buttonExecuteStatement;
@@ -670,5 +707,8 @@
 		private System.Windows.Forms.TextBox textBoxFindImage;
 		private System.Windows.Forms.Button buttonFindImage;
 		private System.Windows.Forms.Label labelFindImage2;
+		private System.Windows.Forms.Button buttonWindowActivate;
+		private System.Windows.Forms.Button buttonWindowKill;
+		private System.Windows.Forms.Button buttonWindowMinimize;
 	}
 }

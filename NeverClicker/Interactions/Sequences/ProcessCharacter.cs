@@ -10,25 +10,21 @@ namespace NeverClicker.Interactions {
 
 		public static bool ProcessCharacter(
 					Interactor itr,
-					int charIdx
+					int charZeroIdx
 		) {
-			itr.Log("ProcessCharacter(): Processing character: " + charIdx + ".", LogType.Detail);
+			itr.Log("ProcessCharacter(): Processing character: " + charZeroIdx + ".", LogType.Detail);
 			if (Game.ProduceClientState(itr, ClientState.CharSelect)) {
 
 				// FIX THIS LATER!
-				var temporaryBullshitCharNum = (charIdx + 1).ToString();
+				var charOneIdx = (charZeroIdx + 1).ToString();
+				itr.Log("ProcessCharacter(): Invoking character: " + charZeroIdx + ".", LogType.Detail);
 
-				itr.Log("ProcessCharacter(): Invoking character: " + charIdx + ".", LogType.Detail);
-
-				var cmdString = "EnterWorldInvoke(1, 0, " + temporaryBullshitCharNum + ", 0, 0, 5)";
-                itr.Log(cmdString);
-
-				//var result = itr.EvaluateFunction("EnterWorldInvoke", "1", "0", temporaryBullshitCharNum, "0", "0", "5");
+				var cmdString = "EnterWorldInvoke(1, 0, " + charOneIdx + ", 0, 0, 5)";
+                itr.Log(cmdString, LogType.Detail);
 				itr.ExecuteStatement(cmdString);
 
 				itr.Wait(1000);
-
-				itr.Log("ProcessCharacter(): Invocation complete", LogType.Normal);
+				itr.Log("ProcessCharacter(): Invocation complete", LogType.Detail);
 
 				return true;
 

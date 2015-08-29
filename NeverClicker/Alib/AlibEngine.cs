@@ -15,7 +15,7 @@ namespace Alib {
 			Util.EnsureAlibLoaded();
 
 			//ensure that a thread is started
-			UnsafeNativeMethods.ahktextdll("", "", "");
+			AlibDll.ahktextdll("", "", "");
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace Alib {
 		/// <param name="variableName">Name of the variable.</param>
 		/// <returns>Returns the value of the variable, or an empty string if the variable does not exist.</returns>
 		public string GetVar(string variableName) {
-			var p = UnsafeNativeMethods.ahkgetvar(variableName, 0);
+			var p = AlibDll.ahkgetvar(variableName, 0);
 			return Marshal.PtrToStringUni(p);
 		}
 
@@ -37,7 +37,7 @@ namespace Alib {
 			if (value == null)
 				value = "";
 
-			UnsafeNativeMethods.ahkassign(variableName, value);
+			AlibDll.ahkassign(variableName, value);
 		}
 
 		/// <summary>
@@ -45,11 +45,10 @@ namespace Alib {
 		/// </summary>
 		/// <param name="code">The code to execute</param>
 		/// <returns>Returns the result of an expression</returns>
-		//public string Eval(string code)
-		//{
-		//    var codeToRun = "A__EVAL := " + code;
-		//    AlibDll.ahkExec(codeToRun);
-		//    return GetVar("A__EVAL");
+		//public string Eval(string code) {
+		//	var codeToRun = "A__EVAL := " + code;
+		//	AlibDll.ahkExec(codeToRun);
+		//	return GetVar("A__EVAL");
 		//}
 
 		/// <summary>
@@ -68,7 +67,7 @@ namespace Alib {
 			//uint successPtr = 0;
 			//bool failure = false;
 
-			UnsafeNativeMethods.addFile(filePath, 0, 0);
+			AlibDll.addFile(filePath, 0, 0);
 
 			//try
 			//{
@@ -94,14 +93,14 @@ namespace Alib {
 		/// </summary>
 		/// <param name="code">The code to execute</param>
 		public void Exec(string code) {
-			UnsafeNativeMethods.ahkExec(code);
+			AlibDll.ahkExec(code);
 		}
 
 		/// <summary>
 		/// Terminates the running scripts
 		/// </summary>
 		public void Terminate() {
-				UnsafeNativeMethods.ahkTerminate(1000);
+				AlibDll.ahkTerminate(1000);
 		}
 
 		/// <summary>
@@ -122,8 +121,42 @@ namespace Alib {
 		/// Reloads the running scripts
 		/// </summary>
 		public void Reload() {
-			UnsafeNativeMethods.ahkReload();
+			AlibDll.ahkReload();
 		}
+
+		/// <summary>
+		/// Executes an already defined function.
+		/// </summary>
+		/// <param name="functionName">The name of the function to execute.</param>
+		/// <param name="param1">The 1st parameter</param>
+		/// <param name="param2">The 2nd parameter</param>
+		/// <param name="param3">The 3rd parameter</param>
+		/// <param name="param4">The 4th parameter</param>
+		/// <param name="param5">The 5th parameter</param>
+		/// <param name="param6">The 6th parameter</param>
+		/// <param name="param7">The 7th parameter</param>
+		/// <param name="param8">The 8th parameter</param>
+		/// <param name="param9">The 9th parameter</param>
+		/// <param name="param10">The 10 parameter</param>
+		//public string ExecFunction(string functionName,
+		//	string param1 = null,
+		//	string param2 = null,
+		//	string param3 = null,
+		//	string param4 = null,
+		//	string param5 = null,
+		//	string param6 = null,
+		//	string param7 = null,
+		//	string param8 = null,
+		//	string param9 = null,
+		//	string param10 = null) {
+		//	IntPtr ret = UnsafeNativeMethods.ahkFunction(functionName, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+
+		//	if (ret == IntPtr.Zero)
+		//		return null;
+		//	else
+		//		return Marshal.PtrToStringUni(ret);
+		//}
+
 
 		/// <summary>
 		/// Executes an already defined function.
@@ -132,11 +165,11 @@ namespace Alib {
 		/// <param name="params">Paramaters</param>
 		public string ExecFunction(string functionName, params string[] argsGiven) {
 			//var args = new List<string>() { "", "", "", "", "", "", "", "", "", "", };
-			string[] args = { "", "", "", "", "", "", "", "", "", "" };
+			string[] args = { null, null, null, null, null, null, null, null, null, null };
 			for (int i = 0; i < argsGiven.Length; i++) {
 				args[i] = argsGiven[i];
 			}
-			IntPtr ret = UnsafeNativeMethods.ahkFunction(functionName, args[0], args[1],
+			IntPtr ret = AlibDll.ahkFunction(functionName, args[0], args[1],
 				args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
 
 			if (ret == IntPtr.Zero)
@@ -152,7 +185,7 @@ namespace Alib {
 		/// <param name="functionName">Name of the function.</param>
 		/// <returns>Returns true if the function exists, otherwise false.</returns>
 		public bool FunctionExists(string functionName) {
-			IntPtr funcptr = UnsafeNativeMethods.ahkFindFunc(functionName);
+			IntPtr funcptr = AlibDll.ahkFindFunc(functionName);
 			return funcptr != IntPtr.Zero;
 		}
 
@@ -161,7 +194,7 @@ namespace Alib {
 		/// </summary>
 		/// <param name="labelName">Name of the label.</param>
 		public void ExecLabel(string labelName) {
-			UnsafeNativeMethods.ahkLabel(labelName, false);
+			AlibDll.ahkLabel(labelName, false);
 		}
 
 		/// <summary>
@@ -170,7 +203,7 @@ namespace Alib {
 		/// <param name="labelName">Name of the label.</param>
 		/// <returns>Returns true if the label exists, otherwise false</returns>
 		public bool LabelExists(string labelName) {
-			IntPtr labelptr = UnsafeNativeMethods.ahkFindLabel(labelName);
+			IntPtr labelptr = AlibDll.ahkFindLabel(labelName);
 			return labelptr != IntPtr.Zero;
 		}
 	}

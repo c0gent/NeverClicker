@@ -11,9 +11,11 @@ namespace NeverClicker {
 		//Interactions.Interactor Interactor;
 		//private GameClientState State;
 
+		// STORE THESE IN A FILE
 		public const string GAMEPATCHEREXE = "Neverwinter.exe";
 		public const string GAMECLIENTEXE = "GameClient.exe";
 
+		// <<<<< TODO: MAKE RECURSIVE CALLS >>>>>
 		public static bool ProduceClientState(Interactor itr, ClientState desiredState) {
 			itr.Log("Attempting to produce client state: " + desiredState.ToString());
 
@@ -21,44 +23,58 @@ namespace NeverClicker {
 
 			if (desiredState == currentState) {
 				return true;
+			} else if (desiredState == ClientState.Inactive) {
+				Screen.WindowMinimize(itr, GAMECLIENTEXE);
+			} else if (desiredState == ClientState.None) {
+				CloseAll(itr);
 			} else if (desiredState == ClientState.CharSelect) {
 				switch (currentState) {
-					case ClientState.Inactive:
+					case ClientState.Inactive:						
+						itr.Log("Client inactive, activating.");
 						itr.ExecuteStatement("ActivateNeverwinter()");
-						if (itr.WaitUntil(300, () => { return GetClientState(itr) == ClientState.CharSelect; })) {
+
+						if (itr.WaitUntil(15, () => { return GetClientState(itr) == ClientState.CharSelect; })) {
 							return true;
 						} else {
 							//throw new NotImplementedException("ProduceClientState(): Waited too long to become active.");
 							itr.Log("ProduceClientState(): Task cancelled or waited too long to become active.");
 							break;
-						}						
+						}
+											
                     case ClientState.InWorld:
-						LogOut(itr);
+						itr.Log("Client in world, logging out.");
+						LogOut(itr);						
 						if (itr.WaitUntil(30, () => { return GetClientState(itr) == ClientState.CharSelect; })) {
 							return true;
 						} else {
 							//throw new NotImplementedException("ProduceClientState(): Waited too long to log out.");
 							itr.Log("ProduceClientState(): Task cancelled or waited too long to log out.");
 							break;
-						}						
+						}	
+											
 					case ClientState.SignIn:
 						ClientSignIn(itr);
+						itr.ExecuteStatement("ActivateNeverwinter()");
 						//throw new NotImplementedException("ProduceClientState(): ClientSignIn.");
-						itr.Log("ProduceClientState(): ClientSignIn (IMPLEMENT ME :).");				
+						//itr.Log("ProduceClientState(): ClientSignIn (IMPLEMENT ME :).");				
 						break;
+
 					default:
 						switch (GetGameState(itr)) {
 							case GameState.Closed:
 								itr.ExecuteStatement("ActivateNeverwinter()");
 								return true;
+
 							case GameState.Patcher:
 								itr.ExecuteStatement("ActivateNeverwinter()");
 								return true;
+
 							default:
 								//throw new NotImplementedException("ProduceClientState(): Unable to produce desired client state.");
 								itr.Log("ProduceClientState(): Unable to produce desired client state.");
 								break;
 						}
+
 						break;
 				}
 			}
@@ -66,19 +82,26 @@ namespace NeverClicker {
 			return false;
 		}
 
-		public static void LogOut(Interactor itr) {
-			itr.Log("Logging out. ***NOT YET IMPLEMENTED***");
+		public static void LogOut(Interactor itr) {			
+			itr.Log("Logging out.");
+			itr.ExecuteStatement("ActivateNeverwinter()");
 		}
 
 		public static void ClientSignIn(Interactor itr) {
-			itr.Log("Signing in Client. ***NOT YET IMPLEMENTED***");
+			itr.Log("Signing in Client.");
+			itr.ExecuteStatement("ActivateNeverwinter()");
+		}
+
+		public static void CloseAll(Interactor itr) {
+			itr.Log("Closing Neverwinter.");
+			itr.ExecuteStatement("VigilantlyCloseClientAndExit()");
 		}
 
 
 		public static GameState GetGameState(Interactor itr) {
-			if (Screen.WindowDetectExists(itr, GAMEPATCHEREXE)) {
+			if (Screen.WindowDetectExist(itr, GAMEPATCHEREXE)) {
 				return GameState.Patcher;
-			} else if (Screen.WindowDetectExists(itr, GAMECLIENTEXE)) {
+			} else if (Screen.WindowDetectExist(itr, GAMECLIENTEXE)) {
 				if (Screen.WindowDetectActive(itr, GAMECLIENTEXE)) {
 					return GameState.ClientActive;
 				} else {
@@ -91,7 +114,7 @@ namespace NeverClicker {
 		}
 
 		public static ClientState GetClientState(Interactor itr) {
-			if (Screen.WindowDetectExists(itr, GAMECLIENTEXE)) {
+			if (Screen.WindowDetectExist(itr, GAMECLIENTEXE)) {
 				if (Screen.WindowDetectActive(itr, GAMECLIENTEXE)) {
 					if (Screen.ImageSearch(itr, "EnterWorldButton").Found) {
 						return ClientState.CharSelect;

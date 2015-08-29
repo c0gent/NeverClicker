@@ -28,7 +28,7 @@ namespace NeverClicker {
 
 		// Specify what you want to happen when the Elapsed event is raised.
 		private void OnTimedEvent(object source, ElapsedEventArgs e) {
-			MainForm.Log("Hello World!");
+			Log("Hello World!");
 		}
 		
 
@@ -41,10 +41,10 @@ namespace NeverClicker {
 			);
 
 			try {
-				MainForm.Log(String.Format("Adding task with charIdx: {0}, dateTime: {1}, taskKind: {2}", charIdx, dateTime, taskKind));
+				Log(String.Format("Adding task with charIdx: {0}, dateTime: {1}, taskKind: {2}", charIdx, dateTime, taskKind));
 				Queue.Add(gameTask);
 			} catch (Exception exc) {
-				MainForm.Log(exc.ToString());
+				Log(exc.ToString());
 			}
 		}
 
@@ -54,9 +54,9 @@ namespace NeverClicker {
 
 			if (!Queue.IsEmpty()) {
 				nextTask = Queue.Pop();
-				MainForm.Log(string.Format("Processing next character: {0}.", nextTask.CharacterIdx.ToString()));
+				Log(string.Format("Processing next character: {0}.", nextTask.CharacterIdx.ToString()));
 			} else {
-				MainForm.Log("Task queue is empty.");
+				Log("Task queue is empty.");
 			}
 
 			//EXECUTE TASK
@@ -74,7 +74,7 @@ namespace NeverClicker {
 			try {
 				//CancelToken = new CancellationTokenSource();
 				//Progress<string> log = GetLogProgress();
-				MainForm.Log("Mouse movement activated.");
+				Log("Mouse movement activated.");
 				Itr.Run(GetLogProgress());
 
 				await Task.Factory.StartNew(
@@ -82,11 +82,11 @@ namespace NeverClicker {
 					TaskCreationOptions.LongRunning
 				);
 			} catch {
-				MainForm.Log("Mouse movement cancelled.");
+				Log("Mouse movement cancelled.");
 			}
 
 			//} else {
-			//	MainForm.Log("Mouse movement resumed.");
+			//	Log("Mouse movement resumed.");
 			//	return;
 			//}
 		}
@@ -130,7 +130,7 @@ namespace NeverClicker {
 
 			Itr.Stop();
 			//Interactor.State = AutomationState.Stopped;
-			MainForm.Log(String.Format("'{0}()' returns: '{1}'", functionName, result));
+			Log(String.Format("'{0}()' returns: '{1}'", functionName, result));
 		}
 
 
@@ -139,7 +139,7 @@ namespace NeverClicker {
 			//Interactor.State = AutomationState.Running;
 			//CancelSource = new CancellationTokenSource();
 
-			MainForm.Log(String.Format("Evaluating '{0}'()...", statement));
+			Log(String.Format("Evaluating '{0}'()...", statement));
 			Itr.Run(GetLogProgress());
 
 			try {
@@ -154,26 +154,30 @@ namespace NeverClicker {
 
 			//Interactor.State = AutomationState.Stopped;
 			Itr.Stop();
-			MainForm.Log(string.Format("'{0}' complete.", statement));
+			Log(string.Format("'{0}' complete.", statement));
 
 		}
 
 
 		public async Task<bool> DetectWindowAsync(string windowExe) {
-			//string detectionParam = String.Format("ahk_exe {0}", windowExe);
-			//CancelToken = new CancellationTokenSource();
-			//Progress<string> log = GetLogProgress();
-
-			MainForm.Log(String.Format("Detecting: '{0}'...", windowExe));
-			Itr.Run(GetLogProgress());
-
-			var result = await Task.Factory.StartNew(
-				() => Interactions.Screen.WindowDetectExists(Itr, windowExe),
-				TaskCreationOptions.LongRunning
-			);
-
-			Itr.Stop();
+			Log(string.Format("Detecting: '{0}'...", windowExe));
+			var result = await Run(() => Screen.WindowDetectExist(Itr, windowExe));
 			return result;
+		}
+
+		public async void WindowMinimize(string windowExe) {
+			Log(string.Format("Minimizing: '{0}'...", windowExe));
+			await Run(() => Screen.WindowMinimize(Itr, windowExe));
+		}
+
+		public async void WindowActivate(string windowExe) {
+			Log(string.Format("Activating: '{0}'...", windowExe));
+			await Run(() => Screen.WindowActivate(Itr, windowExe));
+		}
+
+		public async void WindowKill(string windowExe) {
+			Log(string.Format("Activating: '{0}'...", windowExe));
+			await Run(() => Screen.WindowKill(Itr, windowExe));
 		}
 
 		public async void ImageSearch(string imgCode) {
@@ -187,9 +191,9 @@ namespace NeverClicker {
 			);
 
 			if (searchResult.Found) {
-				MainForm.Log("Image found at: " + searchResult.Point.ToString());
+				Log("Image found at: " + searchResult.Point.ToString());
 			} else {
-				MainForm.Log("Image not found.");
+				Log("Image not found.");
 			}
 
 			Itr.Stop();
@@ -197,7 +201,7 @@ namespace NeverClicker {
 
 
 		public void AutoInvokeOld() {
-			MainForm.Log("Depricated.");
+			Log("Depricated.");
 			//CancelToken = new CancellationTokenSource();
 			//Progress<string> log = GetLogProgress();
 
@@ -209,7 +213,7 @@ namespace NeverClicker {
 			//);
 
 			//Interactor.State = AutomationState.Stopped;
-			//MainForm.Log("Depricated.");
+			//Log("Depricated.");
 		}
 
 

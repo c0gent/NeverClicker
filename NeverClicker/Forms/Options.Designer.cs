@@ -71,16 +71,16 @@
 			// labelAhkRootPath
 			// 
 			this.labelAhkRootPath.AutoSize = true;
-			this.labelAhkRootPath.Location = new System.Drawing.Point(6, 11);
+			this.labelAhkRootPath.Location = new System.Drawing.Point(6, 40);
 			this.labelAhkRootPath.Name = "labelAhkRootPath";
 			this.labelAhkRootPath.Size = new System.Drawing.Size(80, 13);
 			this.labelAhkRootPath.TabIndex = 0;
 			this.labelAhkRootPath.Text = "Settings Folder:";
 			// 
-			// textBoxAhkRootPath
+			// textBoxSettingsRootPath
 			// 
-			this.textBoxSettingsRootPath.Location = new System.Drawing.Point(125, 8);
-			this.textBoxSettingsRootPath.Name = "textBoxAhkRootPath";
+			this.textBoxSettingsRootPath.Location = new System.Drawing.Point(125, 37);
+			this.textBoxSettingsRootPath.Name = "textBoxSettingsRootPath";
 			this.textBoxSettingsRootPath.Size = new System.Drawing.Size(622, 20);
 			this.textBoxSettingsRootPath.TabIndex = 1;
 			// 
@@ -106,7 +106,7 @@
 			// 
 			// textBoxNwRootPath
 			// 
-			this.textBoxNwRootPath.Location = new System.Drawing.Point(125, 37);
+			this.textBoxNwRootPath.Location = new System.Drawing.Point(125, 8);
 			this.textBoxNwRootPath.Name = "textBoxNwRootPath";
 			this.textBoxNwRootPath.Size = new System.Drawing.Size(622, 20);
 			this.textBoxNwRootPath.TabIndex = 5;
@@ -114,7 +114,7 @@
 			// labelNwRootPath
 			// 
 			this.labelNwRootPath.AutoSize = true;
-			this.labelNwRootPath.Location = new System.Drawing.Point(6, 40);
+			this.labelNwRootPath.Location = new System.Drawing.Point(6, 11);
 			this.labelNwRootPath.Name = "labelNwRootPath";
 			this.labelNwRootPath.Size = new System.Drawing.Size(87, 13);
 			this.labelNwRootPath.TabIndex = 4;
@@ -122,7 +122,7 @@
 			// 
 			// buttonChooseAhkRootPath
 			// 
-			this.buttonChooseAhkRootPath.Location = new System.Drawing.Point(753, 6);
+			this.buttonChooseAhkRootPath.Location = new System.Drawing.Point(753, 35);
 			this.buttonChooseAhkRootPath.Name = "buttonChooseAhkRootPath";
 			this.buttonChooseAhkRootPath.Size = new System.Drawing.Size(68, 23);
 			this.buttonChooseAhkRootPath.TabIndex = 6;
@@ -132,7 +132,7 @@
 			// 
 			// buttonChooseNWGameRootPath
 			// 
-			this.buttonChooseNWGameRootPath.Location = new System.Drawing.Point(753, 35);
+			this.buttonChooseNWGameRootPath.Location = new System.Drawing.Point(753, 6);
 			this.buttonChooseNWGameRootPath.Name = "buttonChooseNWGameRootPath";
 			this.buttonChooseNWGameRootPath.Size = new System.Drawing.Size(68, 23);
 			this.buttonChooseNWGameRootPath.TabIndex = 7;

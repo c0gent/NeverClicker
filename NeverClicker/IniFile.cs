@@ -18,12 +18,23 @@ namespace NeverClicker {
 
 		public string GetSetting(string settingName, string sectionName) {
 			var data = ReadFile();
-			return data[sectionName][settingName];
+
+			if (data[sectionName][settingName] == null) {
+				throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
+			} else {
+				return data[sectionName][settingName];
+			}		
 		}
 
 		public int GetSettingOrZero(string settingName, string sectionName) {
 			var data = ReadFile();
 			int number;
+			string settingString = data[sectionName][settingName];
+
+			if (settingString == null) {
+				return 0;
+			}
+			
 
 			if (int.TryParse(data[sectionName][settingName], out number)) {
 				return number;
@@ -32,14 +43,28 @@ namespace NeverClicker {
 			}				
 		}
 
-		public void SaveSetting(string settingName, string sectionName) {
+		public void SaveSetting(string settingVal, string settingName, string sectionName) {
 			var data = ReadFile();
-			data[sectionName][settingName] = "true";
+			data[sectionName][settingName] = settingVal;
 			Parser.WriteFile(IniFileName, data);
+
+			//if (data[sectionName][settingName] == null) {
+			//	data[sectionName][settingName] = settingVal;
+			//	//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
+			//} else {
+			//	data[sectionName][settingName] = settingVal;
+			//	Parser.WriteFile(IniFileName, data);
+			//}
 		}
 
 		private IniData ReadFile() {
 			return Parser.ReadFile(IniFileName);
 		}
+	}
+
+	class InvalidIniSettingSectionException : Exception {
+		public InvalidIniSettingSectionException() : base("Invalid setting or section designation.") { }
+		public InvalidIniSettingSectionException(string message) : base("Invalid setting or section designation: " + message) { }
+		public InvalidIniSettingSectionException(string message, Exception inner) : base(message, inner) { }
 	}
 }

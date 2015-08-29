@@ -11,7 +11,7 @@ namespace Alib {
 	/// They assume Alib.dll is in the same directory as your
 	/// executable.
 	/// </summary>
-	internal class UnsafeNativeMethods {
+	internal class AlibDll {
 		private const string DLLPATH = "Alib.dll";
 
 		#region Create Thread

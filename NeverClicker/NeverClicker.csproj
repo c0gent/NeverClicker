@@ -45,7 +45,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>A:\NeverClickerRelease\</OutputPath>
@@ -97,19 +97,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomationEngine.Tests.cs" />
-    <Compile Include="Interactions\Screen\WindowDetect.cs" />
+    <Compile Include="Interactions\Screen\Window.cs" />
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
-    <Compile Include="LogMessage.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="Game\GameTask.cs" />
     <Compile Include="Game\GameTaskQueue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="Interactions\Interactor.cs" />
-    <Compile Include="Alib\UnsafeNativeMethods.cs" />
+    <Compile Include="Alib\AlibDll.cs" />
     <Compile Include="Alib\AlibEngine.cs" />
     <Compile Include="Alib\AlibSafeLibraryHandle.cs" />
     <Compile Include="Alib\AlibUtil.cs" />
-    <Compile Include="AutomationEngine.Main.cs" />
+    <Compile Include="AutomationEngine.cs" />
     <Compile Include="Interactions\Screen\ImageSearch.cs" />
     <Compile Include="Interactions\Sequences\Activate.cs" />
     <Compile Include="Interactions\Sequences\AutoCycle.cs" />

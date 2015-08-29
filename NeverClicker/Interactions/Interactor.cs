@@ -53,11 +53,15 @@ namespace NeverClicker.Interactions {
 		//}
 
 		public void Log(string message) {
-			ProgressLog.Report(new LogMessage(message));
+			Log(message, LogType.Normal);
 		}
 
 		public void Log(string message, LogType lt) {
-			ProgressLog.Report(new LogMessage(message, lt));
+			if (message != null) {
+				ProgressLog.Report(new LogMessage(message, lt));
+			} else {
+				ProgressLog.Report(new LogMessage("Interactor::Log(): null log message passed!"));
+			}	
 		}
 
 		public void Log(LogMessage logMessage) {
@@ -127,7 +131,7 @@ namespace NeverClicker.Interactions {
 			Log("Old script initialized.");
 		}
 
-		public void Run(IProgress<LogMessage> log) {
+		public CancellationToken Run(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = log;
 				CancelSource = new CancellationTokenSource();
@@ -136,6 +140,7 @@ namespace NeverClicker.Interactions {
 				throw new AlreadyRunningException();
 			}
 
+			return CancelSource.Token;
 		}
 
 		//public void Run(IProgress<string> log) {			
@@ -272,14 +277,40 @@ namespace NeverClicker.Interactions {
 			}));
 		}
 
+		//public string EvaluateFunction(
+		//			string functionName,
+		//			string param1 = null,
+		//			string param2 = null,
+		//			string param3 = null,
+		//			string param4 = null,
+		//			string param5 = null,
+		//			string param6 = null,
+		//			string param7 = null,
+		//			string param8 = null,
+		//			string param9 = null,
+		//			string param10 = null
+		//) {
+		//	try {
+		//		var result = AlibEng.ExecFunction(functionName, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+		//		return result;
+		//	} catch (Exception ex) {
+		//		Log(ex.ToString());
+		//		System.Windows.Forms.MessageBox.Show(ex.ToString());
+		//		//return null;
+		//		throw ex;
+		//	}
+		//}
+
+
+
 		public string EvaluateFunction(string functionName, params string[] args) {
 			//return AlibInterface(new Func<string>(() => {
 			//	return AlibEng.ExecFunction(functionName, args);
 			//}));
 
-			//System.Windows.Forms.MessageBox.Show("test0");
-			VerifyRunning();
-			//System.Windows.Forms.MessageBox.Show("test1");
+			////System.Windows.Forms.MessageBox.Show("test0");
+			//VerifyRunning();
+			////System.Windows.Forms.MessageBox.Show("test1");
 
 			try {
 				var result = AlibEng.ExecFunction(functionName, args);
@@ -299,7 +330,9 @@ namespace NeverClicker.Interactions {
 			}));			
 		}
 
-
+		//public string EvaluateStatement(string statement) {
+		//	return AlibEng.Eval(statement);
+		//}
 
 		private string AlibInterface(Func<string> alibAction) {
 			VerifyRunning();

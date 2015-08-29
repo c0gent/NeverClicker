@@ -12,8 +12,6 @@ using NeverClicker.Properties;
 
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
-		const bool SHOW_DETAILED_LOG_MESSAGES = false;
-
 		AutomationEngine AutomationEngine;
 		private void buttonExit_Click(object sender, EventArgs e) => Close();
 		
@@ -27,19 +25,9 @@ namespace NeverClicker.Forms {
 			this.AutomationEngine = new AutomationEngine(this);
 		}
 
-		public void Log(string message) {
-			//textBox1.AppendText(message);
-			Log(new LogMessage(message));
-		}
-
-		public void Log(LogMessage logMessage) {
-			Console.WriteLine(logMessage.Text);
-			if (logMessage.Type == LogType.Normal) {
-				textBox1.AppendText(logMessage.Text + "\r\n");
-			} else if (SHOW_DETAILED_LOG_MESSAGES) {
-				textBox1.AppendText("DETAIL: " + logMessage.Text + "\r\n");
-			}
-		}
+		public void WriteLine(string message) {
+			textBox1.AppendText(message + "\r\n");
+		}		
 
 		public void SettingsNotSet() {
 			MessageBox.Show("Settings not configured. Opening settings menu.");
@@ -69,7 +57,7 @@ namespace NeverClicker.Forms {
 		}
 
 		private void buttonCheckVar_Click(object sender, EventArgs e) {
-			Log(textBox_var.Text + ": " + this.AutomationEngine.GetVar(textBox_var.Text) + "\r\n");
+			WriteLine(textBox_var.Text + ": " + this.AutomationEngine.GetVar(textBox_var.Text) + "\r\n");
 		}
 
 		private void buttonExecuteFunction_Click(object sender, EventArgs e) {
@@ -82,9 +70,9 @@ namespace NeverClicker.Forms {
 		}
 
 		private void buttonReload_Click(object sender, EventArgs e) {
-			Log("Reloading Interactor...");
+			WriteLine("Reloading Interactor...");
 			AutomationEngine.Reload();
-			Log("Interactor reloaded.");
+			WriteLine("Interactor reloaded.");
 		}
 
 		private void buttonSuspend_Click(object sender, EventArgs e) {
@@ -106,11 +94,11 @@ namespace NeverClicker.Forms {
 
 		private void textBoxDetectWindow_KeyPress(object sender, KeyPressEventArgs e) {
 			if (e.KeyChar == (char)Keys.Enter) {
-				buttonDetectWindow_Click(this, new EventArgs());
+				buttonWindowDetect_Click(this, new EventArgs());
 			}
 		}
 
-		private async void buttonDetectWindow_Click(object sender, EventArgs e) {
+		private async void buttonWindowDetect_Click(object sender, EventArgs e) {
 			string resultText;
 			if (await AutomationEngine.DetectWindowAsync(textBoxDetectWindow.Text)) {
 				resultText = "Found!";
@@ -118,12 +106,12 @@ namespace NeverClicker.Forms {
 				resultText = "Not Found";
 			}
 
-			Log(String.Format("'{0}': {1}", textBoxDetectWindow.Text, resultText));
-			buttonDetectWindow.Text = resultText;
+			WriteLine(String.Format("'{0}': {1}", textBoxDetectWindow.Text, resultText));
+			buttonWindowDetect.Text = resultText;
 		}
 
 		private void textBoxDetectWindow_TextChanged(object sender, EventArgs e) {
-			buttonDetectWindow.Text = "Detect";
+			buttonWindowDetect.Text = "Detect";
 		}
 
 		private void buttonAutoCycle_Click(object sender, EventArgs e) {
@@ -135,7 +123,7 @@ namespace NeverClicker.Forms {
 			//switch (AutomationEngine.EvaluateStatementAsync) {
 			//	case 
 			//}
-			Log("UpdateButtonState(): not yet implemented.");
+			WriteLine("UpdateButtonState(): not yet implemented.");
 		}
 
 		public void SetButtonStatePaused() {
@@ -172,14 +160,14 @@ namespace NeverClicker.Forms {
 			try {
 				charIdx = int.Parse(this.textBoxAddCharIdx.Text);
 			} catch (FormatException) {
-				Log("Error converting character index.");
+				WriteLine("Error converting character index.");
 				return;
 			}
 
 			try {
 				delaySec = int.Parse(this.textBoxDelaySec.Text);
 			} catch (FormatException) {
-				Log("Error converting delay.");
+				WriteLine("Error converting delay.");
 				return;
 			}
 
@@ -192,7 +180,19 @@ namespace NeverClicker.Forms {
 
 		private void buttonFindImage_Click(object sender, EventArgs e) {
 			AutomationEngine.ImageSearch(textBoxFindImage.Text);
-			Log("Test1");
+			WriteLine("Test1");
+		}
+
+		private void buttonWindowInactivate_Click(object sender, EventArgs e) {
+			AutomationEngine.WindowMinimize(textBoxDetectWindow.Text);
+		}
+
+		private void buttonWindowActivate_Click(object sender, EventArgs e) {
+			AutomationEngine.WindowActivate(textBoxDetectWindow.Text);
+		}
+
+		private void buttonWindowKill_Click(object sender, EventArgs e) {
+			AutomationEngine.WindowKill(textBoxDetectWindow.Text);
 		}
 	}
 }
