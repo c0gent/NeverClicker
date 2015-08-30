@@ -30,7 +30,7 @@ namespace NeverClicker.Interactions {
 			itr.Log(new LogMessage("Searching for image: '" + imageFilePath
 				+ "' [ScreenWidth:" + itr.GetVar("A_ScreenWidth")
 				+ " ScreenHeight:" + itr.GetVar("A_ScreenHeight") + "]",
-				LogType.Detail			
+				LogEntryType.Detail			
 			));
 
 			int outX = 0;
@@ -43,7 +43,7 @@ namespace NeverClicker.Interactions {
 			var statement = string.Format("ImageSearch, {0}, {1}, {2}, {3}, {4}, {5}, {6} {7}",
 				 OUTPUT_VAR_X, OUTPUT_VAR_Y, "0", "0", "A_ScreenWidth", "A_ScreenHeight", OPTIONS, imageFilePath);
 
-			itr.Log(new LogMessage("Executing: '" + statement + "'", LogType.Detail));
+			itr.Log(new LogMessage("Executing: '" + statement + "'", LogEntryType.Detail));
 
 			itr.ExecuteStatement(statement);
 
@@ -56,7 +56,7 @@ namespace NeverClicker.Interactions {
 					+ " OutputVarX:" + itr.GetVar(OUTPUT_VAR_X)
 					+ " OutputVarY:" + itr.GetVar(OUTPUT_VAR_Y)
 					+ " ErrorLevel:" + itr.GetVar(ERROR_LEVEL),
-					LogType.Detail					
+					LogEntryType.Detail					
 			));
 
 			//try {

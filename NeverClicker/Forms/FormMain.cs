@@ -45,7 +45,7 @@ namespace NeverClicker.Forms {
 		}
 
 		private void buttonStop_Click(object sender, EventArgs e) {
-			this.AutomationEngine.Stop(this);
+			this.AutomationEngine.Stop();
 		}
 
 		private void buttonLoadOldScript_Click(object sender, EventArgs e) {
@@ -171,7 +171,7 @@ namespace NeverClicker.Forms {
 				return;
 			}
 
-			AutomationEngine.AddGameTask(charIdx, delaySec);
+			AutomationEngine.AddGameTask((uint)charIdx, delaySec);
 		}
 
 		private void buttonNextTask_Click(object sender, EventArgs e) {

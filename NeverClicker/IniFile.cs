@@ -29,12 +29,17 @@ namespace NeverClicker {
 		public int GetSettingOrZero(string settingName, string sectionName) {
 			var data = ReadFile();
 			int number;
-			string settingString = data[sectionName][settingName];
+			string settingString = null;
+
+			try {
+				settingString = data[sectionName][settingName];
+			} catch (NullReferenceException) {
+				settingString = null;
+			}
 
 			if (settingString == null) {
 				return 0;
-			}
-			
+			}			
 
 			if (int.TryParse(data[sectionName][settingName], out number)) {
 				return number;

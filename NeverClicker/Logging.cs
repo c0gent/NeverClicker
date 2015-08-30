@@ -10,20 +10,20 @@ using System.Xml;
 namespace NeverClicker {
 	public struct LogMessage {
 		public string Text;
-		public LogType Type;
+		public LogEntryType Type;
 
 		public LogMessage(string message) {
 			Text = message;
-			Type = LogType.Normal;
+			Type = LogEntryType.Normal;
 		}
 
-		public LogMessage(string message, LogType type) {
+		public LogMessage(string message, LogEntryType type) {
 			Text = message;
 			Type = type;
 		}
 	}
 
-	public enum LogType {
+	public enum LogEntryType {
 		Normal,
 		Detail,
 		Critical

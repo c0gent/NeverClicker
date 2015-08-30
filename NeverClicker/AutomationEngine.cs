@@ -51,7 +51,7 @@ namespace NeverClicker {
 		}
 		
 		public void Log(LogMessage logMessage) {
-			if (logMessage.Type == LogType.Normal) {
+			if (logMessage.Type == LogEntryType.Normal) {
 				MainForm.WriteLine(logMessage.Text);
 			}
 
@@ -63,7 +63,7 @@ namespace NeverClicker {
 				LogXmlDoc.Save(LogFileName);
 			}
 
-			if (logMessage.Type == LogType.Critical) {
+			if (logMessage.Type == LogEntryType.Critical) {
 				MessageBox.Show(logMessage.Text);
 			}
 		}
@@ -77,7 +77,7 @@ namespace NeverClicker {
 			//Itr.Run(GetLogProgress());
 			try {
 				//var result = await Task.Factory.StartNew(action, TaskCreationOptions.LongRunning);
-				var result = await Task.Factory.StartNew(action, Itr.Run(GetLogProgress()), TaskCreationOptions.LongRunning, TaskScheduler.Current);
+				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()), TaskCreationOptions.LongRunning, TaskScheduler.Current);
 				Itr.Stop();
 				return result;
 			} catch (Exception ex) {
@@ -89,30 +89,25 @@ namespace NeverClicker {
 		
 		public async Task Run(Action action) { 
 			try {
-				await Task.Factory.StartNew(action, Itr.Run(GetLogProgress()), TaskCreationOptions.LongRunning, TaskScheduler.Current);
-				Itr.Stop();
+				await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()), TaskCreationOptions.LongRunning, TaskScheduler.Current);
 			} catch (Exception ex) {
 				Log(ex.ToString());
 				MessageBox.Show(ex.ToString());
 				throw ex;
+			} finally {				
+				Itr.Stop();
+				Log("Automation engine stopped. There may be outstanding tasks yet to terminate.");
+				MainForm.SetButtonStateStopped();
 			}
 		}
 
-		public void Stop(MainForm mainForm) {
-			Log("Stopping automation...");			
-
+		public void Stop() {
 			try {
+				Log("Stopping automation...");
 				Itr.CancelSource.Cancel();
 			} catch (Exception ex) {
-				Log(string.Format("Task cancellation status: {0}", ex));
-				MessageBox.Show(ex.ToString());
-			}
-			finally {
-				//Interactor.Reload();
-				mainForm.SetButtonStateStopped();
-				Log("AutoInvoke cancelled.");
-				Log("Automation functions reloaded.");
-			}
+				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Critical));
+			} 
 		}
 
 		public void Reload() {
@@ -132,7 +127,7 @@ namespace NeverClicker {
 			Log("AutoCycle activated.");			
 			await Run(() => Sequences.AutoCycle(Itr, Queue));
 			mainForm.SetButtonStateStopped();
-			Log("AutoCycle complete.");
+			Log("AutoCycle terminated.");
 		}
 	}
 }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace NeverClicker {
 	[Serializable]
 	public class GameTask : IComparable<GameTask>, ISerializable {
-		public DateTime MatureTime;
-		public int CharacterIdx;
-		public TaskKind Kind;
+		public DateTime MatureTime { get; private set; }
+		public uint CharacterIdx { get; private set; }
+		public TaskKind Kind { get; private set; }
 
-		public GameTask(DateTime matureTime, int characterIdx, TaskKind kind) {
+		public GameTask(DateTime matureTime, uint characterIdx, TaskKind kind) {
 			this.MatureTime = matureTime;
 			this.CharacterIdx = characterIdx;
 			this.Kind = kind;
@@ -26,6 +26,10 @@ namespace NeverClicker {
 			info.AddValue("MatureTime", MatureTime);
 			info.AddValue("CharacterIdx", CharacterIdx);
 			info.AddValue("TaskKind", Kind);
+		}
+
+		public void AddTicks(int ticks) {
+			this.MatureTime.AddTicks(ticks);
 		}
 	}
 

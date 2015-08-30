@@ -53,10 +53,10 @@ namespace NeverClicker.Interactions {
 		//}
 
 		public void Log(string message) {
-			Log(message, LogType.Normal);
+			Log(message, LogEntryType.Normal);
 		}
 
-		public void Log(string message, LogType lt) {
+		public void Log(string message, LogEntryType lt) {
 			if (message != null) {
 				ProgressLog.Report(new LogMessage(message, lt));
 			} else {
@@ -131,7 +131,7 @@ namespace NeverClicker.Interactions {
 			Log("Old script initialized.");
 		}
 
-		public CancellationToken Run(IProgress<LogMessage> log) {
+		public CancellationToken Start(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = log;
 				CancelSource = new CancellationTokenSource();
@@ -158,7 +158,7 @@ namespace NeverClicker.Interactions {
 			if (State != AutomationState.Stopped) {
 				CancelSource.Cancel();
 				State = AutomationState.Stopped;
-				//Reload();
+				Reload();
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace NeverClicker.Interactions {
 
 			while (!condition()) {
 				//this.Log("Waiting until: " + condition.ToString() + ".");
-				this.Wait(1000);
+				this.Wait(3000);
 				iters += 1;
 				if (iters >= maxWait) { return false; }
 				if (CancelSource.IsCancellationRequested) {	return false; }

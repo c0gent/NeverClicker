@@ -11,6 +11,14 @@ namespace NeverClicker {
 
 		private SortedList<long, GameTask> TaskList;
 
+		public GameTask NextTask {
+			get {
+				return TaskList.First().Value;
+			}
+
+			private set { }
+		}
+
 		//public GameTaskQueue(SerializationInfo info, StreamingContext context) {
 		//	this.Queue = (SortedList<int, GameTask>)info.GetValue("queue", SortedList<int, GameTask>);
 		//}
@@ -23,7 +31,7 @@ namespace NeverClicker {
 			try {
 				TaskList.Add(gameTask.MatureTime.Ticks, gameTask);
 			} catch (ArgumentException) {
-				gameTask.MatureTime = gameTask.MatureTime.AddTicks(1);
+				gameTask.AddTicks(1);
 				Add(gameTask);
             }
 		}
@@ -44,21 +52,24 @@ namespace NeverClicker {
 			return TaskList.First().Value.MatureTime - DateTime.Now;
         }
 
-		public int NextTaskCharacterIdx() {
-            var nextTask = TaskList.First();
-			return nextTask.Value.CharacterIdx;
-		}
+		//public uint NextTaskCharacterIdx() {
+		//	var nextTask = TaskList.First();
+		//	return nextTask.Value.CharacterIdx;
+		//}
 
-		public void Populate(int charZ, int charN) {
-			for (int i = charZ; i < charN; i++) {
+		//public GameTask NextTask() {
+		//	return TaskList.First().Value;
+		//}
+
+		public void Populate(uint charZ, uint charN) {
+			for (uint i = charZ; i < charN; i++) {
 				Add(new GameTask(
 					DateTime.Now.AddMilliseconds(i), i, TaskKind.Invocation
 				));
 			}
-
 		}
 
-		public void Populate(int charCount) {
+		public void Populate(uint charCount) {
 			Populate(0, charCount);
 		}
 

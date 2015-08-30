@@ -10,7 +10,7 @@ namespace NeverClicker {
 	partial class AutomationEngine {
 
 		public void InitOldScript() {
-			Itr.Run(GetLogProgress());
+			Itr.Start(GetLogProgress());
 			Itr.InitOldScript();
 			Itr.Stop();
 		}
@@ -32,7 +32,7 @@ namespace NeverClicker {
 		}
 		
 
-		public void AddGameTask(int charIdx, int delaySec) {
+		public void AddGameTask(uint charIdx, int delaySec) {
 			var dateTime = DateTime.Now.AddSeconds(delaySec);
 			var taskKind = TaskKind.Invocation;
 
@@ -75,7 +75,7 @@ namespace NeverClicker {
 				//CancelToken = new CancellationTokenSource();
 				//Progress<string> log = GetLogProgress();
 				Log("Mouse movement activated.");
-				Itr.Run(GetLogProgress());
+				Itr.Start(GetLogProgress());
 
 				await Task.Factory.StartNew(
 					() => Sequences.MouseMoveTest(Itr),
@@ -114,7 +114,7 @@ namespace NeverClicker {
 			//.Log(String.Format("{0}({1}, {2}, {3}): {4}", functionName, param1, param2, param3));
 
 			//System.Windows.Forms.MessageBox.Show("test0");
-			Itr.Run(GetLogProgress());
+			Itr.Start(GetLogProgress());
 
 
 			string result = "";
@@ -140,7 +140,7 @@ namespace NeverClicker {
 			//CancelSource = new CancellationTokenSource();
 
 			Log(String.Format("Evaluating '{0}'()...", statement));
-			Itr.Run(GetLogProgress());
+			Itr.Start(GetLogProgress());
 
 			try {
 				await Task.Factory.StartNew(
@@ -181,7 +181,7 @@ namespace NeverClicker {
 		}
 
 		public async void ImageSearch(string imgCode) {
-			Itr.Run(GetLogProgress());
+			Itr.Start(GetLogProgress());
 
 			ImageSearchResult searchResult;
 
