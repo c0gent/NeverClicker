@@ -13,7 +13,8 @@ namespace NeverClicker.Interactions {
 					uint charZeroIdx
 		) {
 			itr.Log("ProcessCharacter(): Processing character: " + charZeroIdx + ".", LogEntryType.Detail);
-			if (Game.ProduceClientState(itr, ClientState.CharSelect)) {
+			if (ProduceClientState(itr, ClientState.CharSelect)) {
+				if (itr.CancelSource.IsCancellationRequested) { return false; }
 
 				// <<<<< FIX THIS LATER - GET RID OF CharOneIdx >>>>>
 				var charOneIdx = (charZeroIdx + 1).ToString();

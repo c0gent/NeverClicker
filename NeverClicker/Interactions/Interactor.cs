@@ -197,17 +197,19 @@ namespace NeverClicker.Interactions {
 			State = AutomationState.Stopped;
 		}
 
-		public bool WaitUntil(int maxWait, Func<bool> condition) {
+		public bool WaitUntil(int maxWaitSeconds, Func<bool> condition) {
+			const int waitSeconds = 3;
+			int maxIters = maxWaitSeconds / waitSeconds;
 			int iters = 0;
 
-			this.Log("Waiting maximum of " + maxWait + " seconds.");
+			this.Log("Waiting maximum of " + maxWaitSeconds + " seconds.");
 
 			while (!condition()) {
+				if (CancelSource.IsCancellationRequested) { return false; }
 				//this.Log("Waiting until: " + condition.ToString() + ".");
-				this.Wait(3000);
+				this.Wait(1000 * waitSeconds);
 				iters += 1;
-				if (iters >= maxWait) { return false; }
-				if (CancelSource.IsCancellationRequested) {	return false; }
+				if (iters >= maxIters) { return false; }				
 			}
 
 			return true;

@@ -43,7 +43,7 @@ namespace NeverClicker.Interactions {
 			var statement = string.Format("ImageSearch, {0}, {1}, {2}, {3}, {4}, {5}, {6} {7}",
 				 OUTPUT_VAR_X, OUTPUT_VAR_Y, "0", "0", "A_ScreenWidth", "A_ScreenHeight", OPTIONS, imageFilePath);
 
-			itr.Log(new LogMessage("Executing: '" + statement + "'", LogEntryType.Detail));
+			//itr.Log(new LogMessage("Executing: '" + statement + "'", LogEntryType.Detail));
 
 			itr.ExecuteStatement(statement);
 

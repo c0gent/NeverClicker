@@ -57,10 +57,14 @@ namespace NeverClicker {
 
 			lock (Locker) {
 				var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
-				el.SetAttribute("time", DateTime.Now.ToString());
-				el.SetAttribute("type", logMessage.Type.ToString());				
-				el.SetAttribute("message", logMessage.Text);
-				LogXmlDoc.Save(LogFileName);
+				el.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
+				el.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
+				el.SetAttribute("message", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
+				try {
+					LogXmlDoc.Save(LogFileName);
+				} catch (Exception ex) {
+					MessageBox.Show("Error saving xml document: " + ex.ToString());
+				}
 			}
 
 			if (logMessage.Type == LogEntryType.Critical) {

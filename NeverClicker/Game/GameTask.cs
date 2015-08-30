@@ -29,8 +29,8 @@ namespace NeverClicker {
 		}
 
 		public void AddTicks(int ticks) {
-			this.MatureTime.AddTicks(ticks);
-		}
+			this.MatureTime = this.MatureTime.AddTicks(ticks);
+        }
 	}
 
 	public enum TaskKind {
