@@ -10,6 +10,7 @@ namespace NeverClicker {
 	partial class AutomationEngine {
 
 		public void InitOldScript() {
+			//Itr.Start(GetLogProgress(), GetTaskQueueProgress());
 			Itr.Start(GetLogProgress());
 			Itr.InitOldScript();
 			Itr.Stop();
@@ -17,7 +18,7 @@ namespace NeverClicker {
 
 
 		public void Timer() {
-			System.Timers.Timer aTimer = new System.Timers.Timer();
+			Timer aTimer = new Timer();
 			aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 			aTimer.Interval = 5000;
 			aTimer.Enabled = true;
@@ -34,14 +35,14 @@ namespace NeverClicker {
 
 		public void AddGameTask(uint charIdx, int delaySec) {
 			var dateTime = DateTime.Now.AddSeconds(delaySec);
-			var taskKind = TaskKind.Invocation;
+			var taskKind = GameTaskType.Invocation;
 
 			GameTask gameTask = new GameTask(
 				dateTime, charIdx, taskKind
 			);
 
 			try {
-				Log(String.Format("Adding task with charIdx: {0}, dateTime: {1}, taskKind: {2}", charIdx, dateTime, taskKind));
+				Log(string.Format("Adding task with charIdx: {0}, dateTime: {1}, taskKind: {2}", charIdx, dateTime, taskKind));
 				Queue.Add(gameTask);
 			} catch (Exception exc) {
 				Log(exc.ToString());
@@ -54,7 +55,9 @@ namespace NeverClicker {
 
 			if (!Queue.IsEmpty()) {
 				nextTask = Queue.Pop();
-				Log(string.Format("Processing next character: {0}.", nextTask.CharacterIdx.ToString()));
+				Log("Processing next task: character: " + nextTask.CharacterZeroIdx.ToString()
+					+ ", time: " + nextTask.MatureTime.ToShortTimeString()
+					+ ", type: " + nextTask.Type.ToString() + ".");
 			} else {
 				Log("Task queue is empty.");
 			}
@@ -70,25 +73,9 @@ namespace NeverClicker {
 
 
 		public async void MouseMovementTest() {
-			//if (MouseMoveTask == null) {
-			try {
-				//CancelToken = new CancellationTokenSource();
-				//Progress<string> log = GetLogProgress();
-				Log("Mouse movement activated.");
-				Itr.Start(GetLogProgress());
-
-				await Task.Factory.StartNew(
-					() => Sequences.MouseMoveTest(Itr),
-					TaskCreationOptions.LongRunning
-				);
-			} catch {
-				Log("Mouse movement cancelled.");
-			}
-
-			//} else {
-			//	Log("Mouse movement resumed.");
-			//	return;
-			//}
+			Log("Mouse movement activated.");
+			await Run(() => Sequences.MouseMoveTest(Itr));
+			Log("Mouse movement cancelled.");
 		}
 
 
@@ -97,65 +84,18 @@ namespace NeverClicker {
 		}
 
 
-		public async void EvaluateFunction(
-						string functionName,
-						string param1 = null,
-						string param2 = null,
-						string param3 = null,
-						string param4 = null
+		public async void EvaluateFunction(string functionName, string param1 = null,
+						string param2 = null, string param3 = null, string param4 = null
 		) {
-			//CancelToken = new CancellationTokenSource();
-			//Progress<string> log = GetLogProgress();
-			//Interactor.State = AutomationState.Running;
-
-			
-
-			//CancelSource = new CancellationTokenSource();
-			//.Log(String.Format("{0}({1}, {2}, {3}): {4}", functionName, param1, param2, param3));
-
-			//System.Windows.Forms.MessageBox.Show("test0");
-			Itr.Start(GetLogProgress());
-
-
-			string result = "";
-
-            try { 
-				result = await Task.Factory.StartNew(
-					() => Itr.EvaluateFunction(functionName, param1, param2, param3, param4),
-					TaskCreationOptions.LongRunning
-				);
-			} catch (Exception ex) {
-                System.Windows.Forms.MessageBox.Show(ex.ToString());
-			}
-
-			Itr.Stop();
-			//Interactor.State = AutomationState.Stopped;
-			Log(String.Format("'{0}()' returns: '{1}'", functionName, result));
+			var result = await Run(() => Itr.EvaluateFunction(functionName, param1, param2, param3, param4));
+			Log(string.Format("'{0}()' returns: '{1}'", functionName, result));
 		}
 
 
 		public async void ExecuteStatementAsync(string statement) {
-			//Progress<string> log = GetLogProgress();
-			//Interactor.State = AutomationState.Running;
-			//CancelSource = new CancellationTokenSource();
-
-			Log(String.Format("Evaluating '{0}'()...", statement));
-			Itr.Start(GetLogProgress());
-
-			try {
-				await Task.Factory.StartNew(
-					() => Itr.ExecuteStatement(statement),
-					TaskCreationOptions.LongRunning
-				);
-			} catch (Exception ex) {
-				System.Windows.Forms.MessageBox.Show(ex.ToString());
-			}
-			
-
-			//Interactor.State = AutomationState.Stopped;
-			Itr.Stop();
+			Log(string.Format("Evaluating '{0}'()...", statement));
+			await Run(() => Itr.ExecuteStatement(statement));
 			Log(string.Format("'{0}' complete.", statement));
-
 		}
 
 
@@ -181,14 +121,7 @@ namespace NeverClicker {
 		}
 
 		public async void ImageSearch(string imgCode) {
-			Itr.Start(GetLogProgress());
-
-			ImageSearchResult searchResult;
-
-			searchResult = await Task.Factory.StartNew(
-				() => Interactions.Screen.ImageSearch(Itr, imgCode),
-				TaskCreationOptions.LongRunning
-			);
+			ImageSearchResult searchResult = await Run(() => Screen.ImageSearch(Itr, imgCode));
 
 			if (searchResult.Found) {
 				Log("Image found at: " + searchResult.Point.ToString());
@@ -198,24 +131,5 @@ namespace NeverClicker {
 
 			Itr.Stop();
 		}
-
-
-		public void AutoInvokeOld() {
-			Log("Depricated.");
-			//CancelToken = new CancellationTokenSource();
-			//Progress<string> log = GetLogProgress();
-
-			//Interactor.State = AutomationState.Running;
-
-			//await Task.Factory.StartNew(
-			//	() => Interactions.Sequences.Old.AutoLaunchInvoke(Interactor, log, CancelToken.Token),
-			//	TaskCreationOptions.LongRunning
-			//);
-
-			//Interactor.State = AutomationState.Stopped;
-			//Log("Depricated.");
-		}
-
-
 	}
 }

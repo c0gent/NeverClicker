@@ -20,7 +20,8 @@ namespace NeverClicker {
 			var data = ReadFile();
 
 			if (data[sectionName][settingName] == null) {
-				throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
+				//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
+				return "";
 			} else {
 				return data[sectionName][settingName];
 			}		

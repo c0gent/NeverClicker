@@ -20,6 +20,7 @@ namespace NeverClicker.Interactions {
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
 		//public IProgress<string> ProgressLog { get; private set; }
 		public IProgress<LogMessage> ProgressLog { get; private set; }
+		//public IProgress<SortedList<long, GameTask>> QueueList { get; private set; }
 		public CancellationTokenSource CancelSource { get; private set; }
 		public IniFile GameAccount = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
 		public IniFile GameClient = new IniFile(Settings.Default["GameClientIniPath"].ToString());
@@ -52,6 +53,10 @@ namespace NeverClicker.Interactions {
 		//	ProgressLog.Report(new LogMessage(string.Format(message, args)));
 		//}
 
+		public void UpdateQueueList(SortedList<long, GameTask> queueList) {
+			//QueueList.Report(queueList);
+		}
+
 		public void Log(string message) {
 			Log(message, LogEntryType.Normal);
 		}
@@ -60,7 +65,7 @@ namespace NeverClicker.Interactions {
 			if (message != null) {
 				ProgressLog.Report(new LogMessage(message, lt));
 			} else {
-				ProgressLog.Report(new LogMessage("Interactor::Log(): null log message passed!"));
+				ProgressLog.Report(new LogMessage("Interactor::Log(): null log message passed!", LogEntryType.Warning));
 			}	
 		}
 
@@ -90,7 +95,7 @@ namespace NeverClicker.Interactions {
 			string imagesFolder = Settings.Default["ImagesFolderPath"].ToString();
 
 			if ((scriptRoot == "") || (gameExeRoot == "")) {
-				Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot));
+				Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Warning);
 				return;
 			}
 
@@ -125,15 +130,17 @@ namespace NeverClicker.Interactions {
 
 				AlibEng.ExecFunction("init");
 			} catch (Exception ex) {
-				Log(ex.ToString());
+				Log(ex.ToString(), LogEntryType.Error);
 			}
 
-			Log("Old script initialized.");
+			Log("Old script initialized.", LogEntryType.Debug);
 		}
 
-		public CancellationToken Start(IProgress<LogMessage> log) {
+		//public CancellationToken Start(IProgress<LogMessage> log, IProgress<SortedList<long, GameTask>> queueList) {
+        public CancellationToken Start(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = log;
+				//QueueList = queueList;
 				CancelSource = new CancellationTokenSource();
 				State = AutomationState.Running;
 			} else {
@@ -215,6 +222,10 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
+		public void Wait(TimeSpan timeSpanDelay) {
+			this.Wait((int)timeSpanDelay.TotalMilliseconds);
+		}
+
 		public void Wait(int millisecondsDelay) {
 			VerifyRunning();
 			try {
@@ -252,11 +263,11 @@ namespace NeverClicker.Interactions {
 					//log.Report(String.Format("Attempting to load '{0}'.", NwCommonFileName));
 					AlibEng.AddFile(NwCommonFileName);
 				} catch (Exception e) {
-					Log(String.Format("Problem loading: '{0}': {1}", NwCommonFileName, e));
+					Log(string.Format("Problem loading: '{0}': {1}", NwCommonFileName, e), LogEntryType.Error);
 					continue;
 				}
 
-				Log(String.Format("'{0}' loaded.", NwCommonFileName));
+				Log(string.Format("'{0}' loaded.", NwCommonFileName), LogEntryType.Debug);
 				break;
 			}
 		}
@@ -306,23 +317,24 @@ namespace NeverClicker.Interactions {
 
 
 		public string EvaluateFunction(string functionName, params string[] args) {
-			//return AlibInterface(new Func<string>(() => {
-			//	return AlibEng.ExecFunction(functionName, args);
-			//}));
+			return AlibInterface(new Func<string>(() => {
+				return AlibEng.ExecFunction(functionName, args);
+			}));
 
 			////System.Windows.Forms.MessageBox.Show("test0");
 			//VerifyRunning();
 			////System.Windows.Forms.MessageBox.Show("test1");
+			//if (CancelSource.Token.IsCancellationRequested) { return ""; }
 
-			try {
-				var result = AlibEng.ExecFunction(functionName, args);
-				return result;
-			} catch (Exception ex) {
-				Log(ex.ToString());
-				System.Windows.Forms.MessageBox.Show(ex.ToString());
-				//return null;
-				throw ex;
-			}
+			//try {
+			//	var result = AlibEng.ExecFunction(functionName, args);
+			//	return result;
+			//} catch (Exception ex) {
+			//	Log(ex.ToString());
+			//	System.Windows.Forms.MessageBox.Show(ex.ToString());
+			//	//return null;
+			//	throw ex;
+			//}
 		}
 
 		public void ExecuteStatement(string statement) {
@@ -337,6 +349,8 @@ namespace NeverClicker.Interactions {
 		//}
 
 		private string AlibInterface(Func<string> alibAction) {
+			if (CancelSource.Token.IsCancellationRequested) { return ""; }
+
 			VerifyRunning();
 
 			try {

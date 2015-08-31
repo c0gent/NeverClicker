@@ -31,7 +31,12 @@ namespace NeverClicker {
 		}
 
 		private void buttonSave_Click(object sender, EventArgs e) {
-			Settings.Default["SettingsRootPath"] = textBoxSettingsRootPath.Text;
+			if (textBoxSettingsRootPath.Text.EndsWith("\\")) {
+				Settings.Default["SettingsRootPath"] = textBoxSettingsRootPath.Text;
+            } else {
+				Settings.Default["SettingsRootPath"] = textBoxSettingsRootPath.Text + "\\";
+			}
+			
 			Settings.Default["NeverwinterExePath"] = textBoxNwRootPath.Text;
 
 			if (checkBoxImagesFolder.Checked) {

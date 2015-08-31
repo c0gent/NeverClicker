@@ -51,18 +51,18 @@ namespace NeverClicker.Interactions {
 			var desiredState = ClientState.CharSelect;
 			itr.ExecuteStatement("ActivateNeverwinter()");
 
-			if (itr.WaitUntil(500, () => { return Game.GetClientState(itr) == desiredState; })) {
+			if (itr.WaitUntil(50, () => { return Game.GetClientState(itr) == desiredState; })) {
 				LogSuccess(itr, ClientState.None, desiredState);
 				return true;
 			} else {
 				LogFailure(itr, ClientState.None, desiredState);
-				itr.Wait(10000);
+				itr.Wait(3000);
 				return ProduceClientState(itr, desiredState);
 			}
 		}
 
 		public static void KillAll(Interactor itr) {
-			itr.Log("Closing Neverwinter.");
+			itr.Log("Closing game client.");
 			itr.ExecuteStatement("VigilantlyCloseClientAndExit()");
 		}
 	}

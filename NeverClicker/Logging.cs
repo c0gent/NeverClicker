@@ -1,4 +1,5 @@
 ﻿using NeverClicker.Interactions;
+using NeverClicker.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,9 +7,41 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace NeverClicker {
+	public class LogFile {
+		private static readonly object Locker = new object();
+		private static XmlDocument LogXmlDoc = new XmlDocument();
+		private string LogFileName = "";
+
+		public LogFile() {
+			LogFileName = Settings.Default.LogFilePath.ToString();
+
+			if (File.Exists(LogFileName))
+				LogXmlDoc.Load(LogFileName);
+			else {
+				var root = LogXmlDoc.CreateElement("messages");
+				LogXmlDoc.AppendChild(root);
+			}
+		}
+
+		public void AppendMessage(LogMessage logMessage) {
+			lock (Locker) {
+				var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
+				el.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
+				el.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
+				el.SetAttribute("message", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
+				try {
+					LogXmlDoc.Save(LogFileName);
+				} catch (Exception ex) {
+					MessageBox.Show("LogFile::AppendMessage(): Error saving xml document: " + ex.ToString());
+				}
+			}
+		}
+	}
+
 	public struct LogMessage {
 		public string Text;
 		public LogEntryType Type;
@@ -25,9 +58,11 @@ namespace NeverClicker {
 	}
 
 	public enum LogEntryType {
+		Debug,
 		Normal,
-		Detail,
-		Critical
+		Warning,
+		Error,
+		Fatal
 	}		
 }
 

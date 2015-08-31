@@ -11,6 +11,7 @@ namespace NeverClicker.Interactions {
 
 		//									     15min,   30min,   45min,   60min,   90min,
 		public static int[] InvokeDelays = { 0, 900000, 1800000, 2700000, 3600000, 5400000, 0, 0 };
+		//public static TimeSpan[] InvokeDelays = { 0, 900000, 1800000, 2700000, 3600000, 5400000, 0, 0 };
 
 		public static void AutoCycle(
 					Interactor itr,
@@ -18,27 +19,32 @@ namespace NeverClicker.Interactions {
         ) {
 			// ##### INITIALIZE #####
 			//int charOneIdxLastInvoked = 0;
-			int charsOneIdxTotal = 0;
+			int charsZeroIdxTotal = 0;
 			
 			// ##### LOAD CHARACTER COUNT AND LAST CHARACTER INVOKED FROM INI FILE #####
 			try {
-				//charOneIdxLastInvoked = itr.GameAccount.GetSettingOrZero("LastCharacterInvoked", "Invocation");
-				charsOneIdxTotal = itr.GameAccount.GetSettingOrZero("NwCharacterCount", "NwAct");
+				//charOneIdxLastInvoked = itr.GameAccount.GetSettingOrZero("CharZeroIdxLastInvoked", "Invocation");
+				charsZeroIdxTotal = itr.GameAccount.GetSettingOrZero("CharZeroIdxCount", "NwAct");
 			} catch (Exception ex) {
 				//System.Windows.Forms.MessageBox.Show("'lastCharInvoked, charsTotal': " + ex.ToString());
-				itr.Log("Interactions::Sequences::AutoCycle(): 'lastCharInvoked, charsTotal': " + ex.ToString(), LogEntryType.Detail);
+				itr.Log("Interactions::Sequences::AutoCycle(): ERROR LOADING: lastCharInvoked OR charsTotal: " + ex.ToString(), LogEntryType.Debug);
 			}
 
-			//itr.Log("Populating Queue: (" + charOneIdxLastInvoked + " -> " + charsOneIdxTotal + ")");
-			//queue.Populate(lastCharInvoked, charsTotal);
-			itr.Log("Populating Queue: (0 -> " + (charsOneIdxTotal - 1).ToString() + ")");
-			queue.Populate(0, (uint)charsOneIdxTotal - 1); // ***** TEMPORARY - RESETTING FOR TODAY *****
+			if (queue.IsEmpty()) {
+				itr.Log("Auto-populating task queue: (0 -> " + (charsZeroIdxTotal).ToString() + ")");
+
+				// <<<<< STILL HAVE TO POPULATE WITH ONE EXTRA BECAUSE OF CHARSELECT BUG IN SCRIPT >>>>>
+				PopulateQueueProperly(itr, queue, charsZeroIdxTotal);
+				//queue.Populate(0, (uint)charsOneIdxTotal);
+
+				itr.UpdateQueueList(queue.TaskList);
+			}
 
 			itr.Log("Beginning AutoCycle.");
 			itr.InitOldScript();
 			itr.Wait(500);
 			
-			// ##### PROCESS CHARACTER #####
+			// ##### BEGIN AUTOCYCLE LOOP #####
 			while (!queue.IsEmpty() && !itr.CancelSource.IsCancellationRequested) {
 				if (itr.CancelSource.IsCancellationRequested) { return; }
 
@@ -48,32 +54,32 @@ namespace NeverClicker.Interactions {
 				}
 
 				itr.Log("Starting AutoInvoke loop.");
-
 				TimeSpan nextTaskWaitTime = queue.NextTaskWaitTime();
-				uint charZeroIdx = queue.NextTask.CharacterIdx;
+				uint charZeroIdx = queue.NextTask.CharacterZeroIdx;
 				uint charOneIdx = charZeroIdx + 1;
-				string charOneIdxLabel = "Character " + charOneIdx.ToString();
+				string charOneIdxLabel = queue.NextTask.CharacterOneIdxLabel;
                 int invokesToday = itr.GameAccount.GetSettingOrZero("InvokesToday", charOneIdxLabel);
 				var invokesCompletedOn = DateTime.Now.AddDays(-99);
+
 				try {
-					invokesCompletedOn = DateTime.Parse(itr.GameAccount.GetSetting("InvokesCompletedForDay", charOneIdxLabel));
+					invokesCompletedOn = DateTime.Parse(itr.GameAccount.GetSetting("InvokesCompleteFor", charOneIdxLabel));
 				} catch (Exception ex) {					
-					itr.Log("Failed to parse ini setting: InvokesCompletedForDay, exception: " + ex.ToString(), LogEntryType.Detail);
+					itr.Log("Failed to parse ini setting: InvokesCompleteFor, exception: " + ex.ToString(), LogEntryType.Debug);
 					// Just carry on, the ini entry probably hasn't been created yet
 				}
 				
 				if (nextTaskWaitTime.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// DETERMINE IF WE'VE ALREADY INVOKED TOO MANY TIMES TODAY
-					if ((invokesToday >= 6) && (queue.NextTask.Kind == TaskKind.Invocation)) {
+					if ((invokesToday >= 6) && (queue.NextTask.Type == GameTaskType.Invocation)) {
 						if (invokesCompletedOn == TodaysGameDate()) {
-							itr.Log("Character " + charZeroIdx.ToString() + " has already invoked 6 times today. Requeuing for tomorrow");
+							itr.Log(charOneIdxLabel + " has already invoked 6 times today. Requeuing for tomorrow");
 							queue.Pop();
 							QueueSubsequentTask(itr, queue, invokesToday, charZeroIdx, charOneIdxLabel);
 
 							itr.Log("Continuing AutoCycle loop.");
 							continue;
 						} else if (invokesCompletedOn < TodaysGameDate()) {
-							itr.Log("Character " + charZeroIdx.ToString() + ": Resetting InvokesToday to 0.");
+							itr.Log(charOneIdxLabel + ": Resetting InvokesToday to 0.");
 							invokesToday = 0;
 							itr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charOneIdxLabel);
 						}
@@ -84,49 +90,32 @@ namespace NeverClicker.Interactions {
 
 					if (itr.CancelSource.IsCancellationRequested) { return; }
 
-					// ENTRY POINT
+					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
 					if (ProcessCharacter(itr, charZeroIdx)) {
 						itr.Log("Completing character: " + charZeroIdx.ToString() + ".");
-
 						invokesToday += 1; // NEED TO DETECT THIS IN-GAME
-
 						QueueSubsequentTask(itr, queue, invokesToday, charZeroIdx, charOneIdxLabel);
-						
-						// SAVE SETTINGS TO INI
-						// UpdateIni() <<<<< CREATE
-						try {
-							string dateTimeFormatted = FormatDateTimeClassic(itr, DateTime.Now);
-                            itr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charOneIdxLabel);
-							itr.GameAccount.SaveSetting(dateTimeFormatted, "MostRecentInvocationTime", charOneIdxLabel);
-							itr.Log("Saved InvokesToday and MRITime for: " + charOneIdxLabel + ".", LogEntryType.Detail);
-						} catch (Exception ex) {
-							itr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
-                        }
-						
-						// ***** ENABLE BELOW ONCE WE REMOVE THIS FROM OLD SCRIPT *****
-						//itr.GameAccount.SaveSetting("0", "LastCharacterInvoked", "Invocation");
-
+						SaveCharacterSettings(itr, invokesToday, charZeroIdx, charOneIdxLabel);
 						queue.Pop(); // COMPLETE
 					} else {
-						itr.Log("Error invoking character: " + charZeroIdx.ToString());
+						itr.Log("Task for character: " + charZeroIdx.ToString() + " incomplete.");
 					}
 					
 				} else { // TASK TIMER NOT MATURE YET -> WAIT
-					itr.Wait(1000);											
+					itr.Wait(500);
+					TimeSpan waitDelayMs = new TimeSpan();
 
 					if (nextTaskWaitTime.TotalMinutes > 10) {
-						int waitDelayMs = (int)nextTaskWaitTime.TotalMilliseconds;
-                        itr.Log("Next task for character " + charZeroIdx.ToString() + " in " 
-							+ (waitDelayMs / 60000).ToString() + " min.", LogEntryType.Normal);
-						itr.Log("AutoCycle(): Closing client.");
+						waitDelayMs = nextTaskWaitTime + RandomDelay(5, 25);
+						itr.Log("AutoCycle(): Closing client and waiting " + waitDelayMs.TotalMinutes.ToString() + " minutes.");
 						ProduceClientState(itr, ClientState.None);
 					} else if (nextTaskWaitTime.TotalMinutes > 1) {
-						var waitDelayMs = 1000 + (int)nextTaskWaitTime.TotalMilliseconds + new Random().Next(300000, 2100000);
-						itr.Log("AutoCycle(): Minimizing client and waiting" + (waitDelayMs / 60000).ToString() + "minutes.");
-						itr.Wait(waitDelayMs); // 5 mins - 35mins
+						waitDelayMs = nextTaskWaitTime;
+						itr.Log("AutoCycle(): Minimizing client and waiting " + waitDelayMs.TotalMinutes.ToString() + " minutes.");						
 						ProduceClientState(itr, ClientState.Inactive);
-						//itr.Wait(300000);
 					}
+
+					itr.Wait(waitDelayMs);
 				}
 
 				// GOTTA HAVE SOME DELAY HERE OR WE CRASH
@@ -134,7 +123,7 @@ namespace NeverClicker.Interactions {
 				//if (itr.CancelSource.IsCancellationRequested) { return; }				
 			}
 
-			itr.GameAccount.SaveSetting("0", "LastCharacterInvoked", "Invocation");
+			itr.GameAccount.SaveSetting("0", "CharZeroIdxLastInvoked", "Invocation");
 			itr.Log("AutoCycle(): Returning.");
 
 			// CLOSE DOWN -- TEMPORARILY DISABLED -- TRANSITION TO USING GAMESTATE TO MANAGE
@@ -142,9 +131,9 @@ namespace NeverClicker.Interactions {
 
 		}
 
-
+		
 		// QueueSubsequentTask(): QUEUE FOLLOW UP TASK
-		public static void QueueSubsequentTask(Interactor itr, GameTaskQueue queue, int invokesToday, uint charZeroIdx, string charOneIdxSectionName) {
+		public static void QueueSubsequentTask(Interactor itr, GameTaskQueue queue, int invokesToday, uint charZeroIdx, string charOneIdxLabel) {
 			DateTime charNextTaskTime = DateTime.Now;
 			DateTime nextThreeThirty = NextThreeThirty();
 			DateTime todaysInvokeDate = TodaysGameDate();
@@ -162,22 +151,67 @@ namespace NeverClicker.Interactions {
 			} else { // QUEUE FOR TOMORROW (NEXT 3:30AM)
 				try {
 					itr.Log("Interactions::Sequences::AutoCycle(): All daily invocation complete for character: " + charZeroIdx + ", on: " + todaysInvokeDate);
-					itr.GameAccount.SaveSetting(todaysInvokeDate.ToString(), "InvokesCompletedForDay", charOneIdxSectionName);
+					itr.GameAccount.SaveSetting(todaysInvokeDate.ToString(), "InvokesCompleteFor", charOneIdxLabel);
 					charNextTaskTime = nextThreeThirty;
 				} catch (Exception ex) {
-					//System.Windows.Forms.MessageBox.Show("Error saving InvokesCompletedForDay" + ex.ToString());
-                    itr.Log("Error saving InvokesCompletedForDay" + ex.ToString(), LogEntryType.Critical);
+					//System.Windows.Forms.MessageBox.Show("Error saving InvokesCompleteFor" + ex.ToString());
+                    itr.Log("Error saving InvokesCompleteFor" + ex.ToString(), LogEntryType.Error);
 					//System.Windows.Forms.MessageBox()
 				}
 			}
 
 			try {
 				itr.Log("Next task for character at: " + charNextTaskTime.ToShortTimeString() + ".");
-				queue.Add(new GameTask(charNextTaskTime.AddSeconds(charZeroIdx), charZeroIdx, TaskKind.Invocation));
+				queue.Add(new GameTask(charNextTaskTime.AddSeconds(charZeroIdx), charZeroIdx, GameTaskType.Invocation));
+				itr.UpdateQueueList(queue.TaskList);
 			} catch (Exception ex) {
 				//System.Windows.Forms.MessageBox.Show("Error adding new task to queue: " + ex.ToString());
-                itr.Log("Error adding new task to queue: " +ex.ToString(), LogEntryType.Critical);
+                itr.Log("Error adding new task to queue: " +ex.ToString(), LogEntryType.Error);
 			}
+		}
+
+
+		// SaveCharacterSettings(): Save relevant settings to .ini file
+		public static void SaveCharacterSettings(Interactor itr, int invokesToday, uint charZeroIdx, string charOneIdxLabel) {
+			// SAVE SETTINGS TO INI
+			// UpdateIni() <<<<< CREATE
+			try {
+				//string dateTimeFormattedClassic = FormatDateTimeClassic(itr, DateTime.Now);
+				itr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charOneIdxLabel);
+				itr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentInvocationTime", charOneIdxLabel);
+				itr.GameAccount.SaveSetting(charZeroIdx.ToString(), "CharZeroIdxLastInvoked", "Invocation");
+				itr.Log("Settings saved to ini for: " + charOneIdxLabel + ".", LogEntryType.Debug);
+			} catch (Exception ex) {
+				itr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
+			}
+		}
+
+
+		// PopulateQueueProperly(): Populate queue taking in to account last invoke times
+		private static void PopulateQueueProperly(Interactor itr, GameTaskQueue queue, int maxOneIdx) {
+			for (uint i = 0; i < maxOneIdx; i++) {
+				var charOneIdxLabel = "Character " + (i + 1).ToString();
+				DateTime mostRecentInvTime = DateTime.Now;
+				int invokesToday = 0;
+
+				if (!DateTime.TryParse(itr.GameAccount.GetSetting("MostRecentInvocationTime", charOneIdxLabel), out mostRecentInvTime)) {
+					mostRecentInvTime = DateTime.Now.AddHours(-2);
+                }
+
+				if (!int.TryParse(itr.GameAccount.GetSetting("InvokesToday", charOneIdxLabel), out invokesToday)) {
+					invokesToday = 0;
+				}
+
+				DateTime taskMatureTime = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, InvokeDelays[invokesToday]);
+
+				queue.Add(new GameTask(taskMatureTime, i, GameTaskType.Invocation));
+			}
+
+		}
+
+		public static TimeSpan RandomDelay(int minutesMin, int minutesMax) {
+			int rnd = new Random().Next(minutesMin, minutesMax);
+			return new TimeSpan(0, rnd, 1);
 		}
 
 
@@ -200,6 +234,7 @@ namespace NeverClicker.Interactions {
 		// <<<<< FOR THE OLD LOG (DEPRICATE) >>>>>
 		public static string FormatDateTimeClassic(Interactor itr, DateTime dt) {
 			string str = "";
+
 			try {
 				str = string.Format("{0:yyyyMMddhhmmss}", dt);
 			} catch (Exception ex) {

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.buttonAutoInvokeAsync = new System.Windows.Forms.Button();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.button3 = new System.Windows.Forms.Button();
 			this.textBox_var = new System.Windows.Forms.TextBox();
@@ -72,12 +72,14 @@
 			this.labelDetectWindow = new System.Windows.Forms.Label();
 			this.buttonWindowDetect = new System.Windows.Forms.Button();
 			this.tabPageQueue = new System.Windows.Forms.TabPage();
-			this.labelDelaySec = new System.Windows.Forms.Label();
-			this.textBoxDelaySec = new System.Windows.Forms.TextBox();
-			this.labelCharacterIdx = new System.Windows.Forms.Label();
+			this.labelGameTaskType = new System.Windows.Forms.Label();
+			this.comboBoxGameTaskType = new System.Windows.Forms.ComboBox();
+			this.labelGameTaskDelaySec = new System.Windows.Forms.Label();
+			this.textBoxGameTaskDelaySec = new System.Windows.Forms.TextBox();
+			this.labelGameTaskCharacterIdx = new System.Windows.Forms.Label();
 			this.buttonNextTask = new System.Windows.Forms.Button();
 			this.buttonAddCharIdx = new System.Windows.Forms.Button();
-			this.textBoxAddCharIdx = new System.Windows.Forms.TextBox();
+			this.textBoxGameTaskCharIdx = new System.Windows.Forms.TextBox();
 			this.tabPageOther = new System.Windows.Forms.TabPage();
 			this.buttonLoadOldScript = new System.Windows.Forms.Button();
 			this.buttonAutoCycle = new System.Windows.Forms.Button();
@@ -89,22 +91,11 @@
 			this.tabPageOther.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// buttonAutoInvokeAsync
-			// 
-			this.buttonAutoInvokeAsync.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.buttonAutoInvokeAsync.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
-			this.buttonAutoInvokeAsync.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonAutoInvokeAsync.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonAutoInvokeAsync.Location = new System.Drawing.Point(16, 6);
-			this.buttonAutoInvokeAsync.Name = "buttonAutoInvokeAsync";
-			this.buttonAutoInvokeAsync.Size = new System.Drawing.Size(136, 23);
-			this.buttonAutoInvokeAsync.TabIndex = 0;
-			this.buttonAutoInvokeAsync.Text = "Begin AutoInvoke (old)";
-			this.buttonAutoInvokeAsync.UseVisualStyleBackColor = false;
-			this.buttonAutoInvokeAsync.Click += new System.EventHandler(this.buttonAutoInvokeAsync_Click);
-			// 
 			// textBox1
 			// 
+			this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox1.Location = new System.Drawing.Point(12, 346);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
@@ -132,7 +123,7 @@
 			// 
 			// buttonMoveMouse
 			// 
-			this.buttonMoveMouse.Location = new System.Drawing.Point(158, 6);
+			this.buttonMoveMouse.Location = new System.Drawing.Point(6, 77);
 			this.buttonMoveMouse.Name = "buttonMoveMouse";
 			this.buttonMoveMouse.Size = new System.Drawing.Size(105, 23);
 			this.buttonMoveMouse.TabIndex = 5;
@@ -142,6 +133,7 @@
 			// 
 			// buttonPause
 			// 
+			this.buttonPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonPause.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonPause.Enabled = false;
 			this.buttonPause.Location = new System.Drawing.Point(174, 592);
@@ -155,6 +147,7 @@
 			// 
 			// buttonReload
 			// 
+			this.buttonReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonReload.Location = new System.Drawing.Point(93, 592);
 			this.buttonReload.Name = "buttonReload";
 			this.buttonReload.Size = new System.Drawing.Size(75, 23);
@@ -165,6 +158,7 @@
 			// 
 			// buttonStop
 			// 
+			this.buttonStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonStop.Enabled = false;
 			this.buttonStop.Location = new System.Drawing.Point(12, 592);
 			this.buttonStop.Name = "buttonStop";
@@ -176,6 +170,7 @@
 			// 
 			// buttonExit
 			// 
+			this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonExit.Location = new System.Drawing.Point(342, 592);
 			this.buttonExit.Name = "buttonExit";
 			this.buttonExit.Size = new System.Drawing.Size(75, 23);
@@ -268,6 +263,7 @@
 			// 
 			// buttonOptions
 			// 
+			this.buttonOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonOptions.Location = new System.Drawing.Point(12, 552);
 			this.buttonOptions.Name = "buttonOptions";
 			this.buttonOptions.Size = new System.Drawing.Size(156, 23);
@@ -278,6 +274,8 @@
 			// 
 			// tabControlPrimary
 			// 
+			this.tabControlPrimary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControlPrimary.Controls.Add(this.tabPageStatus);
 			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
 			this.tabControlPrimary.Controls.Add(this.tabPageWindow);
@@ -305,27 +303,34 @@
 			// 
 			// listBoxTaskQueue
 			// 
+			this.listBoxTaskQueue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.listBoxTaskQueue.Enabled = false;
 			this.listBoxTaskQueue.FormattingEnabled = true;
-			this.listBoxTaskQueue.Location = new System.Drawing.Point(36, 119);
+			this.listBoxTaskQueue.Location = new System.Drawing.Point(19, 88);
 			this.listBoxTaskQueue.Name = "listBoxTaskQueue";
-			this.listBoxTaskQueue.Size = new System.Drawing.Size(325, 69);
+			this.listBoxTaskQueue.Size = new System.Drawing.Size(360, 95);
 			this.listBoxTaskQueue.TabIndex = 3;
 			// 
 			// labelTaskQueue
 			// 
+			this.labelTaskQueue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelTaskQueue.AutoSize = true;
 			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTaskQueue.Location = new System.Drawing.Point(149, 91);
+			this.labelTaskQueue.Location = new System.Drawing.Point(138, 65);
 			this.labelTaskQueue.Name = "labelTaskQueue";
-			this.labelTaskQueue.Size = new System.Drawing.Size(99, 20);
+			this.labelTaskQueue.Size = new System.Drawing.Size(95, 20);
 			this.labelTaskQueue.TabIndex = 2;
-			this.labelTaskQueue.Text = "Task Queue:";
+			this.labelTaskQueue.Text = "Task Queue";
 			// 
 			// labelStatusBar
 			// 
+			this.labelStatusBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelStatusBar.AutoSize = true;
 			this.labelStatusBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelStatusBar.Location = new System.Drawing.Point(76, 19);
+			this.labelStatusBar.Location = new System.Drawing.Point(78, 8);
 			this.labelStatusBar.Name = "labelStatusBar";
 			this.labelStatusBar.Size = new System.Drawing.Size(242, 20);
 			this.labelStatusBar.TabIndex = 1;
@@ -333,10 +338,13 @@
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Location = new System.Drawing.Point(36, 47);
+			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar1.Location = new System.Drawing.Point(19, 31);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(325, 23);
+			this.progressBar1.Size = new System.Drawing.Size(360, 23);
 			this.progressBar1.TabIndex = 0;
+			this.progressBar1.Value = 100;
 			// 
 			// tabPageRaw
 			// 
@@ -506,9 +514,9 @@
 			this.labelDetectWindow.AutoSize = true;
 			this.labelDetectWindow.Location = new System.Drawing.Point(6, 54);
 			this.labelDetectWindow.Name = "labelDetectWindow";
-			this.labelDetectWindow.Size = new System.Drawing.Size(80, 13);
+			this.labelDetectWindow.Size = new System.Drawing.Size(73, 13);
 			this.labelDetectWindow.TabIndex = 1;
-			this.labelDetectWindow.Text = "Window Name:";
+			this.labelDetectWindow.Text = "Window EXE:";
 			// 
 			// buttonWindowDetect
 			// 
@@ -523,12 +531,14 @@
 			// tabPageQueue
 			// 
 			this.tabPageQueue.BackColor = System.Drawing.Color.Transparent;
-			this.tabPageQueue.Controls.Add(this.labelDelaySec);
-			this.tabPageQueue.Controls.Add(this.textBoxDelaySec);
-			this.tabPageQueue.Controls.Add(this.labelCharacterIdx);
+			this.tabPageQueue.Controls.Add(this.labelGameTaskType);
+			this.tabPageQueue.Controls.Add(this.comboBoxGameTaskType);
+			this.tabPageQueue.Controls.Add(this.labelGameTaskDelaySec);
+			this.tabPageQueue.Controls.Add(this.textBoxGameTaskDelaySec);
+			this.tabPageQueue.Controls.Add(this.labelGameTaskCharacterIdx);
 			this.tabPageQueue.Controls.Add(this.buttonNextTask);
 			this.tabPageQueue.Controls.Add(this.buttonAddCharIdx);
-			this.tabPageQueue.Controls.Add(this.textBoxAddCharIdx);
+			this.tabPageQueue.Controls.Add(this.textBoxGameTaskCharIdx);
 			this.tabPageQueue.Location = new System.Drawing.Point(4, 22);
 			this.tabPageQueue.Name = "tabPageQueue";
 			this.tabPageQueue.Padding = new System.Windows.Forms.Padding(3);
@@ -536,34 +546,52 @@
 			this.tabPageQueue.TabIndex = 2;
 			this.tabPageQueue.Text = "Queue";
 			// 
-			// labelDelaySec
+			// labelGameTaskType
 			// 
-			this.labelDelaySec.AutoSize = true;
-			this.labelDelaySec.Location = new System.Drawing.Point(3, 35);
-			this.labelDelaySec.Name = "labelDelaySec";
-			this.labelDelaySec.Size = new System.Drawing.Size(63, 13);
-			this.labelDelaySec.TabIndex = 5;
-			this.labelDelaySec.Text = "Delay (sec):";
+			this.labelGameTaskType.AutoSize = true;
+			this.labelGameTaskType.Location = new System.Drawing.Point(6, 61);
+			this.labelGameTaskType.Name = "labelGameTaskType";
+			this.labelGameTaskType.Size = new System.Drawing.Size(34, 13);
+			this.labelGameTaskType.TabIndex = 7;
+			this.labelGameTaskType.Text = "Type:";
 			// 
-			// textBoxDelaySec
+			// comboBoxGameTaskType
 			// 
-			this.textBoxDelaySec.Location = new System.Drawing.Point(77, 32);
-			this.textBoxDelaySec.Name = "textBoxDelaySec";
-			this.textBoxDelaySec.Size = new System.Drawing.Size(100, 20);
-			this.textBoxDelaySec.TabIndex = 4;
+			this.comboBoxGameTaskType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxGameTaskType.FormattingEnabled = true;
+			this.comboBoxGameTaskType.Location = new System.Drawing.Point(77, 58);
+			this.comboBoxGameTaskType.Name = "comboBoxGameTaskType";
+			this.comboBoxGameTaskType.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxGameTaskType.TabIndex = 6;
 			// 
-			// labelCharacterIdx
+			// labelGameTaskDelaySec
 			// 
-			this.labelCharacterIdx.AutoSize = true;
-			this.labelCharacterIdx.Location = new System.Drawing.Point(6, 9);
-			this.labelCharacterIdx.Name = "labelCharacterIdx";
-			this.labelCharacterIdx.Size = new System.Drawing.Size(56, 13);
-			this.labelCharacterIdx.TabIndex = 3;
-			this.labelCharacterIdx.Text = "Character:";
+			this.labelGameTaskDelaySec.AutoSize = true;
+			this.labelGameTaskDelaySec.Location = new System.Drawing.Point(6, 35);
+			this.labelGameTaskDelaySec.Name = "labelGameTaskDelaySec";
+			this.labelGameTaskDelaySec.Size = new System.Drawing.Size(63, 13);
+			this.labelGameTaskDelaySec.TabIndex = 5;
+			this.labelGameTaskDelaySec.Text = "Delay (sec):";
+			// 
+			// textBoxGameTaskDelaySec
+			// 
+			this.textBoxGameTaskDelaySec.Location = new System.Drawing.Point(77, 32);
+			this.textBoxGameTaskDelaySec.Name = "textBoxGameTaskDelaySec";
+			this.textBoxGameTaskDelaySec.Size = new System.Drawing.Size(121, 20);
+			this.textBoxGameTaskDelaySec.TabIndex = 4;
+			// 
+			// labelGameTaskCharacterIdx
+			// 
+			this.labelGameTaskCharacterIdx.AutoSize = true;
+			this.labelGameTaskCharacterIdx.Location = new System.Drawing.Point(6, 9);
+			this.labelGameTaskCharacterIdx.Name = "labelGameTaskCharacterIdx";
+			this.labelGameTaskCharacterIdx.Size = new System.Drawing.Size(56, 13);
+			this.labelGameTaskCharacterIdx.TabIndex = 3;
+			this.labelGameTaskCharacterIdx.Text = "Character:";
 			// 
 			// buttonNextTask
 			// 
-			this.buttonNextTask.Location = new System.Drawing.Point(183, 58);
+			this.buttonNextTask.Location = new System.Drawing.Point(180, 90);
 			this.buttonNextTask.Name = "buttonNextTask";
 			this.buttonNextTask.Size = new System.Drawing.Size(75, 23);
 			this.buttonNextTask.TabIndex = 2;
@@ -573,7 +601,7 @@
 			// 
 			// buttonAddCharIdx
 			// 
-			this.buttonAddCharIdx.Location = new System.Drawing.Point(6, 58);
+			this.buttonAddCharIdx.Location = new System.Drawing.Point(3, 90);
 			this.buttonAddCharIdx.Name = "buttonAddCharIdx";
 			this.buttonAddCharIdx.Size = new System.Drawing.Size(171, 23);
 			this.buttonAddCharIdx.TabIndex = 1;
@@ -581,17 +609,16 @@
 			this.buttonAddCharIdx.UseVisualStyleBackColor = true;
 			this.buttonAddCharIdx.Click += new System.EventHandler(this.buttonAddCharIdx_Click);
 			// 
-			// textBoxAddCharIdx
+			// textBoxGameTaskCharIdx
 			// 
-			this.textBoxAddCharIdx.Location = new System.Drawing.Point(77, 6);
-			this.textBoxAddCharIdx.Name = "textBoxAddCharIdx";
-			this.textBoxAddCharIdx.Size = new System.Drawing.Size(100, 20);
-			this.textBoxAddCharIdx.TabIndex = 0;
+			this.textBoxGameTaskCharIdx.Location = new System.Drawing.Point(77, 6);
+			this.textBoxGameTaskCharIdx.Name = "textBoxGameTaskCharIdx";
+			this.textBoxGameTaskCharIdx.Size = new System.Drawing.Size(178, 20);
+			this.textBoxGameTaskCharIdx.TabIndex = 0;
 			// 
 			// tabPageOther
 			// 
 			this.tabPageOther.BackColor = System.Drawing.Color.Transparent;
-			this.tabPageOther.Controls.Add(this.buttonAutoInvokeAsync);
 			this.tabPageOther.Controls.Add(this.buttonLoadOldScript);
 			this.tabPageOther.Controls.Add(this.buttonMoveMouse);
 			this.tabPageOther.Location = new System.Drawing.Point(4, 22);
@@ -603,7 +630,7 @@
 			// 
 			// buttonLoadOldScript
 			// 
-			this.buttonLoadOldScript.Location = new System.Drawing.Point(16, 166);
+			this.buttonLoadOldScript.Location = new System.Drawing.Point(6, 6);
 			this.buttonLoadOldScript.Name = "buttonLoadOldScript";
 			this.buttonLoadOldScript.Size = new System.Drawing.Size(124, 23);
 			this.buttonLoadOldScript.TabIndex = 3;
@@ -613,10 +640,12 @@
 			// 
 			// buttonAutoCycle
 			// 
+			this.buttonAutoCycle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAutoCycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonAutoCycle.Location = new System.Drawing.Point(54, 31);
+			this.buttonAutoCycle.Location = new System.Drawing.Point(89, 29);
 			this.buttonAutoCycle.Name = "buttonAutoCycle";
-			this.buttonAutoCycle.Size = new System.Drawing.Size(325, 37);
+			this.buttonAutoCycle.Size = new System.Drawing.Size(256, 37);
 			this.buttonAutoCycle.TabIndex = 18;
 			this.buttonAutoCycle.Text = "Begin AutoCycle";
 			this.buttonAutoCycle.UseVisualStyleBackColor = true;
@@ -637,8 +666,11 @@
 			this.Controls.Add(this.buttonReload);
 			this.Controls.Add(this.buttonPause);
 			this.Controls.Add(this.textBox1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(445, 500);
 			this.Name = "MainForm";
 			this.Text = "NeverClicker";
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControlPrimary.ResumeLayout(false);
 			this.tabPageStatus.ResumeLayout(false);
@@ -656,8 +688,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button buttonAutoInvokeAsync;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBox_var;
@@ -693,10 +723,10 @@
 		private System.Windows.Forms.TabPage tabPageQueue;
 		private System.Windows.Forms.Button buttonNextTask;
 		private System.Windows.Forms.Button buttonAddCharIdx;
-		private System.Windows.Forms.TextBox textBoxAddCharIdx;
-		private System.Windows.Forms.Label labelDelaySec;
-		private System.Windows.Forms.TextBox textBoxDelaySec;
-		private System.Windows.Forms.Label labelCharacterIdx;
+		private System.Windows.Forms.TextBox textBoxGameTaskCharIdx;
+		private System.Windows.Forms.Label labelGameTaskDelaySec;
+		private System.Windows.Forms.TextBox textBoxGameTaskDelaySec;
+		private System.Windows.Forms.Label labelGameTaskCharacterIdx;
 		private System.Windows.Forms.TabPage tabPageOther;
 		private System.Windows.Forms.TabPage tabPageStatus;
 		private System.Windows.Forms.Label labelStatusBar;
@@ -710,5 +740,7 @@
 		private System.Windows.Forms.Button buttonWindowActivate;
 		private System.Windows.Forms.Button buttonWindowKill;
 		private System.Windows.Forms.Button buttonWindowMinimize;
+		private System.Windows.Forms.Label labelGameTaskType;
+		private System.Windows.Forms.ComboBox comboBoxGameTaskType;
 	}
 }

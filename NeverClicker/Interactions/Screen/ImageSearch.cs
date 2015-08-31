@@ -30,7 +30,7 @@ namespace NeverClicker.Interactions {
 			itr.Log(new LogMessage("Searching for image: '" + imageFilePath
 				+ "' [ScreenWidth:" + itr.GetVar("A_ScreenWidth")
 				+ " ScreenHeight:" + itr.GetVar("A_ScreenHeight") + "]",
-				LogEntryType.Detail			
+				LogEntryType.Debug			
 			));
 
 			int outX = 0;
@@ -56,7 +56,7 @@ namespace NeverClicker.Interactions {
 					+ " OutputVarX:" + itr.GetVar(OUTPUT_VAR_X)
 					+ " OutputVarY:" + itr.GetVar(OUTPUT_VAR_Y)
 					+ " ErrorLevel:" + itr.GetVar(ERROR_LEVEL),
-					LogEntryType.Detail					
+					LogEntryType.Debug					
 			));
 
 			//try {

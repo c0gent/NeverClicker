@@ -12,33 +12,32 @@ namespace NeverClicker.Interactions {
 					Interactor itr,
 					uint charZeroIdx
 		) {
-			itr.Log("ProcessCharacter(): Processing character: " + charZeroIdx + ".", LogEntryType.Detail);
+			itr.Log("ProcessCharacter(): Processing character: " + charZeroIdx + ".", LogEntryType.Debug);
 			if (ProduceClientState(itr, ClientState.CharSelect)) {
 				if (itr.CancelSource.IsCancellationRequested) { return false; }
 
 				// <<<<< FIX THIS LATER - GET RID OF CharOneIdx >>>>>
 				var charOneIdx = (charZeroIdx + 1).ToString();
-				itr.Log("ProcessCharacter(): Invoking character: " + charZeroIdx + ".", LogEntryType.Detail);
+				itr.Log("ProcessCharacter(): Invoking character: " + charZeroIdx + ".", LogEntryType.Debug);
 
 				var cmdString = "EnterWorldInvoke(1, 0, " + charOneIdx + ", 0, 0, 5)";
-                itr.Log(cmdString, LogEntryType.Detail);
+                itr.Log(cmdString, LogEntryType.Debug);
 				itr.ExecuteStatement(cmdString);
 
 				itr.Wait(1000);
-				itr.Log("ProcessCharacter(): Invocation complete", LogEntryType.Detail);
+				itr.Log("ProcessCharacter(): Invocation complete", LogEntryType.Debug);
 
 				return true;
-
-			}
-
-			return false;
+			} else {
+				return false;
+			}			
 		}
 
 	}
 }
 
-//#	While((ToggleInv) && (LastCharacterInvoked<NwCharacterCount)) {
-//##		CurrentCharacter := LastCharacterInvoked + 1
+//#	While((ToggleInv) && (CharZeroIdxLastInvoked<CharZeroIdxCount)) {
+//##		CurrentCharacter := CharZeroIdxLastInvoked + 1
 //##		char_label := "Character " . CurrentCharacter
 //$		LoadSetting("MostRecentInvocationTime", tmp_fakedate, char_label, as_ini)
 //$        LoadSetting("VaultPurchase", 7, char_label, as_ini)
@@ -56,7 +55,7 @@ namespace NeverClicker.Interactions {
 //			if (invocation_result == 1) {
 //				FirstRun := 0
 //				EwRetryAttempts := 0
-//				LastCharacterInvoked := CurrentCharacter
+//				CharZeroIdxLastInvoked := CurrentCharacter
 //				LogAppend("[***** TRACE: AUTOINVOKE(): CHARACTER INVOCATION COMPLETE]")
 //			} else {
 //                LogAppend("[### AutoInvoke(): Fatal Error, EnterWorldInvoke() has failed. Character " . CurrentCharacter. " was not invoked. ###]")

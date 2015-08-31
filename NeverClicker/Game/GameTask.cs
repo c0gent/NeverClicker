@@ -9,13 +9,19 @@ namespace NeverClicker {
 	[Serializable]
 	public class GameTask : IComparable<GameTask>, ISerializable {
 		public DateTime MatureTime { get; private set; }
-		public uint CharacterIdx { get; private set; }
-		public TaskKind Kind { get; private set; }
+		public GameTaskType Type { get; private set; }
+		public uint CharacterZeroIdx { get; private set; }
 
-		public GameTask(DateTime matureTime, uint characterIdx, TaskKind kind) {
+		public string CharacterOneIdxLabel {
+			get {
+				return "Character " + (CharacterZeroIdx + 1).ToString();
+			}
+		}
+
+		public GameTask(DateTime matureTime, uint characterIdx, GameTaskType type) {
 			this.MatureTime = matureTime;
-			this.CharacterIdx = characterIdx;
-			this.Kind = kind;
+			this.CharacterZeroIdx = characterIdx;
+			this.Type = type;
 		}
 
 		public int CompareTo(GameTask task) {
@@ -24,8 +30,8 @@ namespace NeverClicker {
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context) {
 			info.AddValue("MatureTime", MatureTime);
-			info.AddValue("CharacterIdx", CharacterIdx);
-			info.AddValue("TaskKind", Kind);
+			info.AddValue("CharacterIdx", CharacterZeroIdx);
+			info.AddValue("TaskKind", Type);
 		}
 
 		public void AddTicks(int ticks) {
@@ -33,7 +39,7 @@ namespace NeverClicker {
         }
 	}
 
-	public enum TaskKind {
+	public enum GameTaskType {
 		Invocation,
 		Profession
 	}

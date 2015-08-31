@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using NeverClicker.Properties;
+using System.Collections;
 
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
@@ -18,6 +19,11 @@ namespace NeverClicker.Forms {
 
 		public MainForm() {
 			InitializeComponent();	
+		}
+
+		private void MainForm_Load(object sender, EventArgs e) {
+			comboBoxGameTaskType.DataSource = Enum.GetValues(typeof(GameTaskType));
+			//cbStatus.DataSource = Enum.GetValues(typeof(Status));
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e) {
@@ -35,8 +41,15 @@ namespace NeverClicker.Forms {
 			opt.ShowDialog();
         }
 
-		private void buttonAutoInvokeAsync_Click(object sender, EventArgs e) {
-			this.AutomationEngine.AutoInvokeOld();
+		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
+			//this.listBoxTaskQueue.Items.Clear();
+			//foreach (GameTask task in taskList.Values) {
+			//	listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString() + "\t" + task.Type.ToString()
+			//		+ "\tCharacter " + task.CharacterZeroIdx.ToString());
+			//}
+
+			//this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
+			//this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();
 		}
 
 		private void buttonMoveMouse_Click(object sender, EventArgs e) {
@@ -116,7 +129,7 @@ namespace NeverClicker.Forms {
 
 		private void buttonAutoCycle_Click(object sender, EventArgs e) {
 			this.SetButtonStateRunning();
-			AutomationEngine.AutoCycle(this);
+			AutomationEngine.AutoCycle();
 		}
 
 		public void UpdateButtonState() {
@@ -134,7 +147,7 @@ namespace NeverClicker.Forms {
 
 		public void SetButtonStateRunning() {
 			buttonAutoCycle.Enabled = false;
-			this.buttonAutoInvokeAsync.Enabled = false;
+			//this.buttonAutoInvokeAsync.Enabled = false;
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = true;
@@ -145,7 +158,7 @@ namespace NeverClicker.Forms {
 
 		public void SetButtonStateStopped() {
 			this.buttonAutoCycle.Enabled = true;
-			this.buttonAutoInvokeAsync.Enabled = true;
+			//this.buttonAutoInvokeAsync.Enabled = true;
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = false;
@@ -158,18 +171,23 @@ namespace NeverClicker.Forms {
 			int delaySec;
 
 			try {
-				charIdx = int.Parse(this.textBoxAddCharIdx.Text);
+				// TODO: CONVERT TO TRYPARSE()
+				charIdx = int.Parse(this.textBoxGameTaskCharIdx.Text);
 			} catch (FormatException) {
 				WriteLine("Error converting character index.");
 				return;
 			}
 
 			try {
-				delaySec = int.Parse(this.textBoxDelaySec.Text);
+				// TODO: CONVERT TO TRYPARSE()
+				delaySec = int.Parse(this.textBoxGameTaskDelaySec.Text);
 			} catch (FormatException) {
 				WriteLine("Error converting delay.");
 				return;
 			}
+
+			GameTaskType taskType;
+			Enum.TryParse<GameTaskType>(this.comboBoxGameTaskType.SelectedValue.ToString(), out taskType);
 
 			AutomationEngine.AddGameTask((uint)charIdx, delaySec);
 		}
@@ -194,5 +212,7 @@ namespace NeverClicker.Forms {
 		private void buttonWindowKill_Click(object sender, EventArgs e) {
 			AutomationEngine.WindowKill(textBoxDetectWindow.Text);
 		}
+
+		
 	}
 }

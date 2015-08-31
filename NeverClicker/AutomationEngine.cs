@@ -17,32 +17,37 @@ namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
 	partial class AutomationEngine {
-		const bool SHOW_DETAILED_LOG_MESSAGES_IN_TEXTBOX = false;
+		const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; // make user setting
+		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make user setting
 
 		private MainForm MainForm;
 		private Interactor Itr;
 		//GameClient. GameClientInstance;
 		GameTaskQueue Queue;
+		LogFile LogFile;
 		//Task MouseMoveTask = null;
 		//private CancellationTokenSource CancelSource;
-		private static readonly object Locker = new object();
-		private static XmlDocument LogXmlDoc = new XmlDocument();
-		private string LogFileName = "";
+		//private static readonly object Locker = new object();
+		//private static XmlDocument LogXmlDoc = new XmlDocument();
+		//private string LogFileName = "";
 				
 		
 		public AutomationEngine(MainForm form) {
-			MainForm = form;
+			this.MainForm = form;
 			Itr = new Interactor(MainForm);
             Queue = new GameTaskQueue();
+			LogFile = new LogFile();
 
-			LogFileName = Settings.Default.LogFilePath.ToString();
+			//this.MainForm.BindListBox(Queue.TaskList);
+			
+			//LogFileName = Settings.Default.LogFilePath.ToString();
 
-			if (File.Exists(LogFileName))
-				LogXmlDoc.Load(LogFileName);
-			else {
-				var root = LogXmlDoc.CreateElement("messages");
-				LogXmlDoc.AppendChild(root);
-			}
+			//if (File.Exists(LogFileName))
+			//	LogXmlDoc.Load(LogFileName);
+			//else {
+			//	var root = LogXmlDoc.CreateElement("messages");
+			//	LogXmlDoc.AppendChild(root);
+			//}
 		}
 		
 		public void Log(string message) {
@@ -50,25 +55,24 @@ namespace NeverClicker {
 			Log(new LogMessage(message));
 		}
 		
-		public void Log(LogMessage logMessage) {
-			if (logMessage.Type == LogEntryType.Normal) {
-				MainForm.WriteLine(logMessage.Text);
-			}
-
-			lock (Locker) {
-				var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
-				el.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
-				el.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
-				el.SetAttribute("message", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
-				try {
-					LogXmlDoc.Save(LogFileName);
-				} catch (Exception ex) {
-					MessageBox.Show("Error saving xml document: " + ex.ToString());
-				}
-			}
-
-			if (logMessage.Type == LogEntryType.Critical) {
-				MessageBox.Show(logMessage.Text);
+		public void Log(LogMessage logMessage) {			
+			switch (logMessage.Type) {
+				case LogEntryType.Warning:
+				case LogEntryType.Normal:
+					LogFile.AppendMessage(logMessage);
+					MainForm.WriteLine(logMessage.Text);					
+					break;
+				case LogEntryType.Error:
+				case LogEntryType.Fatal:
+					LogFile.AppendMessage(logMessage);
+					MainForm.WriteLine(logMessage.Text);
+					MessageBox.Show(logMessage.Text);
+					break;
+				case LogEntryType.Debug:
+					LogFile.AppendMessage(logMessage);
+					if (SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX) { MainForm.WriteLine(logMessage.Text); }
+					if (PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE) { LogFile.AppendMessage(logMessage); }
+					break;				
 			}
 		}
 
@@ -76,12 +80,16 @@ namespace NeverClicker {
 			return new Progress<LogMessage>(l => Log(l));
 		}
 
+		private Progress<SortedList<long, GameTask>> GetTaskQueueProgress() {
+			return new Progress<SortedList<long, GameTask>>(sl => MainForm.RefreshTaskQueue(sl));
+		}
 
 		public async Task<TResult> Run<TResult>(Func<TResult> action) {
 			//Itr.Run(GetLogProgress());
 			try {
 				//var result = await Task.Factory.StartNew(action, TaskCreationOptions.LongRunning);
-				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()), TaskCreationOptions.LongRunning, TaskScheduler.Current);
+				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()), 
+					TaskCreationOptions.LongRunning, TaskScheduler.Current);
 				Itr.Stop();
 				return result;
 			} catch (Exception ex) {
@@ -91,9 +99,12 @@ namespace NeverClicker {
 			}
 		}
 		
-		public async Task Run(Action action) { 
+		public async Task Run(Action action) {
+			MainForm.SetButtonStateRunning();
 			try {
-				await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()), TaskCreationOptions.LongRunning, TaskScheduler.Current);
+				//await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()),
+				await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()),
+					TaskCreationOptions.LongRunning, TaskScheduler.Current);
 			} catch (Exception ex) {
 				Log(ex.ToString());
 				MessageBox.Show(ex.ToString());
@@ -110,7 +121,7 @@ namespace NeverClicker {
 				Log("Stopping automation...");
 				Itr.CancelSource.Cancel();
 			} catch (Exception ex) {
-				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Critical));
+				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Error));
 			} 
 		}
 
@@ -127,10 +138,9 @@ namespace NeverClicker {
 			return Itr.State;
 		}
 
-		public async void AutoCycle(MainForm mainForm) {
+		public async void AutoCycle() {
 			Log("AutoCycle activated.");			
 			await Run(() => Sequences.AutoCycle(Itr, Queue));
-			mainForm.SetButtonStateStopped();
 			Log("AutoCycle terminated.");
 		}
 	}

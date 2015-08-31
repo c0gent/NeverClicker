@@ -10,7 +10,10 @@ namespace NeverClicker {
 	[Serializable]
 	public class GameTaskQueue : ISerializable {
 
-		private SortedList<long, GameTask> TaskList;
+		public SortedList<long, GameTask> TaskList { get; private set; }
+
+		
+			//+= new System.EventHandler(this.buttonAutoCycle_Click);
 
 		public GameTask NextTask {
 			get {
@@ -81,19 +84,10 @@ namespace NeverClicker {
 			return TaskList.First().Value.MatureTime - DateTime.Now;
 		}
 
-		//public uint NextTaskCharacterIdx() {
-		//	var nextTask = TaskList.First();
-		//	return nextTask.Value.CharacterIdx;
-		//}
-
-		//public GameTask NextTask() {
-		//	return TaskList.First().Value;
-		//}
-
 		public void Populate(uint charZ, uint charN) {
 			for (uint i = charZ; i < charN; i++) {
 				Add(new GameTask(
-					DateTime.Now.AddMilliseconds(i), i, TaskKind.Invocation
+					DateTime.Now.AddMilliseconds(i), i, GameTaskType.Invocation
 				));
 			}
 		}
