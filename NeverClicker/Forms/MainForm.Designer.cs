@@ -52,8 +52,6 @@
 			this.tabPageStatus = new System.Windows.Forms.TabPage();
 			this.listBoxTaskQueue = new System.Windows.Forms.ListBox();
 			this.labelTaskQueue = new System.Windows.Forms.Label();
-			this.labelStatusBar = new System.Windows.Forms.Label();
-			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.tabPageRaw = new System.Windows.Forms.TabPage();
 			this.labelFunctionParensClose = new System.Windows.Forms.Label();
 			this.labelFunctionParensOpen = new System.Windows.Forms.Label();
@@ -83,6 +81,8 @@
 			this.tabPageOther = new System.Windows.Forms.TabPage();
 			this.buttonLoadOldScript = new System.Windows.Forms.Button();
 			this.buttonAutoCycle = new System.Windows.Forms.Button();
+			this.progressBar1 = new System.Windows.Forms.ProgressBar();
+			this.labelStatusBar = new System.Windows.Forms.Label();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.tabPageRaw.SuspendLayout();
@@ -309,7 +309,7 @@
 			this.listBoxTaskQueue.FormattingEnabled = true;
 			this.listBoxTaskQueue.Location = new System.Drawing.Point(19, 88);
 			this.listBoxTaskQueue.Name = "listBoxTaskQueue";
-			this.listBoxTaskQueue.Size = new System.Drawing.Size(360, 95);
+			this.listBoxTaskQueue.Size = new System.Drawing.Size(358, 95);
 			this.listBoxTaskQueue.TabIndex = 3;
 			// 
 			// labelTaskQueue
@@ -318,33 +318,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelTaskQueue.AutoSize = true;
 			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTaskQueue.Location = new System.Drawing.Point(138, 65);
+			this.labelTaskQueue.Location = new System.Drawing.Point(149, 65);
 			this.labelTaskQueue.Name = "labelTaskQueue";
 			this.labelTaskQueue.Size = new System.Drawing.Size(95, 20);
 			this.labelTaskQueue.TabIndex = 2;
 			this.labelTaskQueue.Text = "Task Queue";
-			// 
-			// labelStatusBar
-			// 
-			this.labelStatusBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelStatusBar.AutoSize = true;
-			this.labelStatusBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelStatusBar.Location = new System.Drawing.Point(78, 8);
-			this.labelStatusBar.Name = "labelStatusBar";
-			this.labelStatusBar.Size = new System.Drawing.Size(242, 20);
-			this.labelStatusBar.TabIndex = 1;
-			this.labelStatusBar.Text = "Status Bar (not yet implemented)";
-			// 
-			// progressBar1
-			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.Location = new System.Drawing.Point(19, 31);
-			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(360, 23);
-			this.progressBar1.TabIndex = 0;
-			this.progressBar1.Value = 100;
 			// 
 			// tabPageRaw
 			// 
@@ -651,10 +629,33 @@
 			this.buttonAutoCycle.UseVisualStyleBackColor = true;
 			this.buttonAutoCycle.Click += new System.EventHandler(this.buttonAutoCycle_Click);
 			// 
+			// progressBar1
+			// 
+			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar1.Location = new System.Drawing.Point(14, 36);
+			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.Size = new System.Drawing.Size(363, 23);
+			this.progressBar1.TabIndex = 0;
+			this.progressBar1.Value = 100;
+			// 
+			// labelStatusBar
+			// 
+			this.labelStatusBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelStatusBar.AutoSize = true;
+			this.labelStatusBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelStatusBar.Location = new System.Drawing.Point(81, 13);
+			this.labelStatusBar.Name = "labelStatusBar";
+			this.labelStatusBar.Size = new System.Drawing.Size(242, 20);
+			this.labelStatusBar.TabIndex = 1;
+			this.labelStatusBar.Text = "Status Bar (not yet implemented)";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(429, 627);
 			this.Controls.Add(this.buttonAutoCycle);
 			this.Controls.Add(this.tabControlPrimary);
@@ -729,8 +730,6 @@
 		private System.Windows.Forms.Label labelGameTaskCharacterIdx;
 		private System.Windows.Forms.TabPage tabPageOther;
 		private System.Windows.Forms.TabPage tabPageStatus;
-		private System.Windows.Forms.Label labelStatusBar;
-		private System.Windows.Forms.ProgressBar progressBar1;
 		private System.Windows.Forms.ListBox listBoxTaskQueue;
 		private System.Windows.Forms.Label labelTaskQueue;
 		private System.Windows.Forms.Label labelFindImage1;
@@ -742,5 +741,7 @@
 		private System.Windows.Forms.Button buttonWindowMinimize;
 		private System.Windows.Forms.Label labelGameTaskType;
 		private System.Windows.Forms.ComboBox comboBoxGameTaskType;
+		private System.Windows.Forms.Label labelStatusBar;
+		private System.Windows.Forms.ProgressBar progressBar1;
 	}
 }

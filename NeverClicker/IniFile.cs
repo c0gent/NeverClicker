@@ -2,9 +2,11 @@
 using IniParser.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NeverClicker {
 	public class IniFile {
@@ -12,23 +14,42 @@ namespace NeverClicker {
 		//private IniData Data;
 		private string IniFileName;
 
-		public IniFile(string iniFileName) {
-			IniFileName = iniFileName;
+		public IniFile(string fileName) {
+			// ***** ADD A CHECK TO MAKE SURE FILES EXIST AND THROW EXCEPTION HERE RATHER THAN LATER *****
+			if (File.Exists(fileName)) {
+				//MessageBox.Show(fileName + " exists.");
+				IniFileName = fileName;
+			} else {
+				MessageBox.Show(fileName + " does not exist.");
+				return;
+			}			
 		}
 
 		public string GetSetting(string settingName, string sectionName) {
-			var data = ReadFile();
-
-			if (data[sectionName][settingName] == null) {
-				//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
+			try {
+				var data = Parser.ReadFile(IniFileName);
+				if (data[sectionName][settingName] == null) {
+					//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
+					return "";
+				} else {
+					return data[sectionName][settingName];
+				}
+			} catch (Exception) {
+				MessageBox.Show("Problem loading ini files. Please check settings.");
 				return "";
-			} else {
-				return data[sectionName][settingName];
-			}		
+			}					
 		}
 
 		public int GetSettingOrZero(string settingName, string sectionName) {
-			var data = ReadFile();
+			IniData data;
+
+			try {
+				data = Parser.ReadFile(IniFileName);
+			} catch (Exception) {
+				MessageBox.Show("Problem loading ini files. Please check settings.");
+				return 0;
+			}
+			
 			int number;
 			string settingString = null;
 
@@ -50,7 +71,15 @@ namespace NeverClicker {
 		}
 
 		public void SaveSetting(string settingVal, string settingName, string sectionName) {
-			var data = ReadFile();
+			IniData data;
+
+			try {
+				data = Parser.ReadFile(IniFileName);
+			} catch (Exception) {
+				MessageBox.Show("Problem loading ini files. Please check settings.");
+				return;
+			}
+			
 			data[sectionName][settingName] = settingVal;
 			Parser.WriteFile(IniFileName, data);
 
@@ -63,9 +92,9 @@ namespace NeverClicker {
 			//}
 		}
 
-		private IniData ReadFile() {
-			return Parser.ReadFile(IniFileName);
-		}
+		//private IniData ReadFile() {
+		//	return 
+		//}
 	}
 
 	class InvalidIniSettingSectionException : Exception {

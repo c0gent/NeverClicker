@@ -28,19 +28,81 @@ namespace NeverClicker.Forms {
 
 		private void MainForm_Shown(object sender, EventArgs e) {
 			//Settings.Default.Upgrade();
-			this.AutomationEngine = new AutomationEngine(this);
+			if (!SettingsManager.SettingsAreValid()) {
+				this.SetButtonStateAllDisabled();
+				this.SettingsInvalid();
+			} else {
+				this.AutomationEngine = new AutomationEngine(this);
+			}
+			
 		}
 
 		public void WriteLine(string message) {
 			textBox1.AppendText(message + "\r\n");
 		}		
 
-		public void SettingsNotSet() {
-			MessageBox.Show("Settings not configured. Opening settings menu.");
-			var opt = new Options();
-			opt.ShowDialog();
+		public void SettingsInvalid() {
+			MessageBox.Show("Settings not correctly configured. Opening settings menu.");
+			OpenSettingsWindow();
         }
 
+		private void OpenSettingsWindow() {
+			var opt = new SettingsForm();
+			//opt.TopMost = true;	// DON'T SET THIS
+			opt.ShowDialog();
+		}
+
+		public void UpdateButtonState() {
+			//switch (AutomationEngine.EvaluateStatementAsync) {
+			//	case 
+			//}
+			WriteLine("UpdateButtonState(): not yet implemented.");
+		}
+
+		public void SetButtonStatePaused() {
+			// SET STUFF UP
+			this.buttonPause.Enabled = true;
+			buttonPause.Text = "UnPause";
+		}
+
+		public void SetButtonStateRunning() {
+			buttonAutoCycle.Enabled = false;
+			//this.buttonAutoInvokeAsync.Enabled = false;
+			this.buttonReload.Enabled = false;
+			buttonPause.Text = "Pause";
+			buttonPause.Enabled = true;
+
+			this.buttonStop.Enabled = true;
+		}
+
+		public void SetButtonStateStopped() {
+			this.buttonAutoCycle.Enabled = true;
+			//this.buttonAutoInvokeAsync.Enabled = true;
+			this.buttonReload.Enabled = false;
+			buttonPause.Text = "Pause";
+			buttonPause.Enabled = false;
+
+			this.buttonStop.Enabled = false;
+		}
+
+		public void SetButtonStateAllDisabled() {
+			buttonAutoCycle.Enabled = false;
+			//this.buttonAutoInvokeAsync.Enabled = false;
+			this.buttonReload.Enabled = false;
+			//buttonPause.Text = "Pause";
+			buttonPause.Enabled = false;
+			this.buttonStop.Enabled = false;
+			this.tabControlPrimary.Enabled = false;
+		}
+
+
+
+
+
+		private void buttonOptions_Click(object sender, EventArgs e) {
+			OpenSettingsWindow();
+		}
+		
 		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
 			//this.listBoxTaskQueue.Items.Clear();
 			//foreach (GameTask task in taskList.Values) {
@@ -100,11 +162,6 @@ namespace NeverClicker.Forms {
 			//}
 		}		
 
-		private void buttonOptions_Click(object sender, EventArgs e) {
-			var optionsForm = new Options();
-			optionsForm.ShowDialog();
-		}
-
 		private void textBoxDetectWindow_KeyPress(object sender, KeyPressEventArgs e) {
 			if (e.KeyChar == (char)Keys.Enter) {
 				buttonWindowDetect_Click(this, new EventArgs());
@@ -132,40 +189,6 @@ namespace NeverClicker.Forms {
 			AutomationEngine.AutoCycle();
 		}
 
-		public void UpdateButtonState() {
-			//switch (AutomationEngine.EvaluateStatementAsync) {
-			//	case 
-			//}
-			WriteLine("UpdateButtonState(): not yet implemented.");
-		}
-
-		public void SetButtonStatePaused() {
-			// SET STUFF UP
-			this.buttonPause.Enabled = true;
-			buttonPause.Text = "UnPause";
-		}
-
-		public void SetButtonStateRunning() {
-			buttonAutoCycle.Enabled = false;
-			//this.buttonAutoInvokeAsync.Enabled = false;
-			this.buttonReload.Enabled = false;
-			buttonPause.Text = "Pause";
-			buttonPause.Enabled = true;
-
-
-			this.buttonStop.Enabled = true;			
-		}
-
-		public void SetButtonStateStopped() {
-			this.buttonAutoCycle.Enabled = true;
-			//this.buttonAutoInvokeAsync.Enabled = true;
-			this.buttonReload.Enabled = false;
-			buttonPause.Text = "Pause";
-			buttonPause.Enabled = false;
-
-			this.buttonStop.Enabled = false;			
-		}
-
 		private void buttonAddCharIdx_Click(object sender, EventArgs e) {
 			int charIdx;
 			int delaySec;
@@ -187,7 +210,7 @@ namespace NeverClicker.Forms {
 			}
 
 			GameTaskType taskType;
-			Enum.TryParse<GameTaskType>(this.comboBoxGameTaskType.SelectedValue.ToString(), out taskType);
+			Enum.TryParse(this.comboBoxGameTaskType.SelectedValue.ToString(), out taskType);
 
 			AutomationEngine.AddGameTask((uint)charIdx, delaySec);
 		}

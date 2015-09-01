@@ -17,7 +17,7 @@ namespace NeverClicker {
 		private string LogFileName = "";
 
 		public LogFile() {
-			LogFileName = Settings.Default.LogFilePath.ToString();
+			this.LogFileName = Properties.Settings.Default.LogsFolderPath.ToString();
 
 			if (File.Exists(LogFileName))
 				LogXmlDoc.Load(LogFileName);

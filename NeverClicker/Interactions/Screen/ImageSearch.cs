@@ -25,7 +25,7 @@ namespace NeverClicker.Interactions {
 				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
 			}
 
-			var imageFilePath = Settings.Default.ImagesFolderPath.ToString() + imageFileName;
+			var imageFilePath = Properties.Settings.Default.SettingsFolderPath.ToString() + imageFileName;
 
 			itr.Log(new LogMessage("Searching for image: '" + imageFilePath
 				+ "' [ScreenWidth:" + itr.GetVar("A_ScreenWidth")

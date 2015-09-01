@@ -10,37 +10,37 @@ using NeverClicker.Forms;
 using NeverClicker.Properties;
 using IniParser;
 using System.Configuration;
+using System.IO;
 
 namespace NeverClicker.Interactions {
 	// INTERACTOR: MANAGES ALIBENGINE
 	public class Interactor {
 		private AlibEngine AlibEng;
-		string NwCommonFileName;
+		//string NwCommonFileName;
 		static private uint MaxFileLoadAttempts = 5;
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
 		//public IProgress<string> ProgressLog { get; private set; }
 		public IProgress<LogMessage> ProgressLog { get; private set; }
 		//public IProgress<SortedList<long, GameTask>> QueueList { get; private set; }
 		public CancellationTokenSource CancelSource { get; private set; }
-		public IniFile GameAccount = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
-		public IniFile GameClient = new IniFile(Settings.Default["GameClientIniPath"].ToString());
+		public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
+		public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
 
-		public Interactor(MainForm mainForm) {
+		public Interactor() {
+			//InitAlibEng(); // LOADED BELOW (LoadSettings())
+			
+			LoadSettings();
+		}
+
+		public void LoadSettings() {
+			try {
+				this.GameAccount = new IniFile(Properties.Settings.Default["GameAccountIniPath"].ToString());
+				this.GameClient = new IniFile(Properties.Settings.Default["GameClientIniPath"].ToString());
+			} catch (Exception ex) {
+				Log("Problem loading ini files: " + ex.ToString(), LogEntryType.Fatal);
+				return;
+			}
 			InitAlibEng();
-
-			bool settingsNotSet = false; 
-
-			foreach (SettingsProperty setting in Settings.Default.Properties) {
-				//mainForm.Log();
-                if (string.IsNullOrWhiteSpace(Settings.Default[setting.Name].ToString())) {					
-					settingsNotSet = true;
-					break;
-				}
-			}
-
-			if (settingsNotSet) {
-				mainForm.SettingsNotSet();
-			}
 		}
 
 		private void InitAlibEng() {
@@ -90,9 +90,9 @@ namespace NeverClicker.Interactions {
 		// SHOULD BE ASYNC BUT DEPRICATING EVENTUALLY ANYWAY
 		public void InitOldScript() {
 			VerifyRunning();
-			string scriptRoot = Settings.Default["SettingsRootPath"].ToString();
-			string gameExeRoot = Settings.Default["NeverwinterExePath"].ToString();
-			string imagesFolder = Settings.Default["ImagesFolderPath"].ToString();
+			string scriptRoot = Properties.Settings.Default["SettingsRootPath"].ToString();
+			string gameExeRoot = Properties.Settings.Default["NeverwinterExePath"].ToString();
+			string imagesFolder = Properties.Settings.Default["ImagesFolderPath"].ToString();
 
 			if ((scriptRoot == "") || (gameExeRoot == "")) {
 				Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Warning);
@@ -100,23 +100,17 @@ namespace NeverClicker.Interactions {
 			}
 
 			try {
-				NwCommonFileName = scriptRoot + "NW_Common.ahk";
-				LoadFile(NwCommonFileName);
+				var nwCommonFileName = scriptRoot + "Assets\\NW_Common.ahk";
+				LoadFile(nwCommonFileName);
 
 				AlibEng.Exec("SetWorkingDir %A_ScriptDir%");
 				AlibEng.Exec("A_CommonDir = " + scriptRoot);
 				AlibEng.Exec("A_ImagesDir = " + imagesFolder);
 				AlibEng.Exec("NwFolder := \"" + gameExeRoot + "\"");
 
-				//AlibEng.Exec("gcs_ini := A_CommonDir . \"\\nw_game_client_settings.ini\"");
-				//AlibEng.Exec("as_ini := A_CommonDir . \"\\nw_account_settings.ini\"");
-				//AlibEng.Exec("ai_log := A_CommonDir . \"\\NeverClicker_Log.txt\"");
-
-				AlibEng.Exec("gcs_ini := \"" + Settings.Default["GameClientIniPath"].ToString() + "\"");
-				AlibEng.Exec("as_ini := \"" + Settings.Default["GameAccountIniPath"].ToString() + "\"");
-				AlibEng.Exec("ai_log := \"" + Settings.Default["LogFilePath"].ToString() + "\"");
-
-				//AlibEng.Exec("^!=::Suspend");
+				this.AlibEng.Exec("gcs_ini := \"" + Properties.Settings.Default["GameClientIniPath"].ToString() + "\"");
+				this.AlibEng.Exec("as_ini := \"" + Properties.Settings.Default["GameAccountIniPath"].ToString() + "\"");
+				this.AlibEng.Exec("ai_log := \"" + Properties.Settings.Default["LogFilePath"].ToString() + "\"");
 
 				AlibEng.Exec("ToggleAfk := 0");
 				AlibEng.Exec("ToggleMouseDragClick := 0");
@@ -136,8 +130,32 @@ namespace NeverClicker.Interactions {
 			Log("Old script initialized.", LogEntryType.Debug);
 		}
 
+		// CONVERT TO ASYNC
+		private void LoadFile(string fileName) {
+			if (File.Exists(fileName)) {
+				Log(fileName + " exists.", LogEntryType.Fatal);
+			} else {
+				Log(fileName + " does not exist.", LogEntryType.Fatal);
+				return;
+			}
+
+			VerifyRunning();
+			for (uint i = 0; i < MaxFileLoadAttempts; i++) {
+				try {
+					//log.Report(String.Format("Attempting to load '{0}'.", NwCommonFileName));
+					AlibEng.AddFile(fileName);
+				} catch (Exception e) {
+					Log(string.Format("Problem loading: '{0}': {1}", fileName, e), LogEntryType.Error);
+					continue;
+				}
+
+				Log(string.Format("'{0}' loaded.", fileName), LogEntryType.Debug);
+				break;
+			}
+		}
+
 		//public CancellationToken Start(IProgress<LogMessage> log, IProgress<SortedList<long, GameTask>> queueList) {
-        public CancellationToken Start(IProgress<LogMessage> log) {
+		public CancellationToken Start(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = log;
 				//QueueList = queueList;
@@ -192,7 +210,7 @@ namespace NeverClicker.Interactions {
 			return State;
 		}
 
-		// DEPRICATE?
+		// DEPRICATE? - Probably not.
 		public void Reload() {
 			VerifyStopped();
 			//AlibEng.Suspend();
@@ -252,24 +270,6 @@ namespace NeverClicker.Interactions {
 			if ((CancelSource == null) || (State != AutomationState.Running && !(CancelSource.IsCancellationRequested))) {
 				throw new NotRunningException();
 			}		
-		}
-
-
-		// CONVERT TO ASYNC
-		private void LoadFile(string fileName) {
-			VerifyRunning();
-			for (uint i = 0; i < MaxFileLoadAttempts; i++) {
-				try {
-					//log.Report(String.Format("Attempting to load '{0}'.", NwCommonFileName));
-					AlibEng.AddFile(NwCommonFileName);
-				} catch (Exception e) {
-					Log(string.Format("Problem loading: '{0}': {1}", NwCommonFileName, e), LogEntryType.Error);
-					continue;
-				}
-
-				Log(string.Format("'{0}' loaded.", NwCommonFileName), LogEntryType.Debug);
-				break;
-			}
 		}
 
 

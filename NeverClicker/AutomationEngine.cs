@@ -34,12 +34,13 @@ namespace NeverClicker {
 		
 		public AutomationEngine(MainForm form) {
 			this.MainForm = form;
-			Itr = new Interactor(MainForm);
-            Queue = new GameTaskQueue();
-			LogFile = new LogFile();
+
+			//if (!SettingsManager.SettingsAreValid()) {
+			//	MainForm.SettingsInvalid();
+			//}
 
 			//this.MainForm.BindListBox(Queue.TaskList);
-			
+
 			//LogFileName = Settings.Default.LogFilePath.ToString();
 
 			//if (File.Exists(LogFileName))
@@ -48,6 +49,12 @@ namespace NeverClicker {
 			//	var root = LogXmlDoc.CreateElement("messages");
 			//	LogXmlDoc.AppendChild(root);
 			//}
+		}
+
+		public void Init() {
+			Itr = new Interactor();
+			Queue = new GameTaskQueue();
+			LogFile = new LogFile();
 		}
 		
 		public void Log(string message) {
@@ -124,6 +131,11 @@ namespace NeverClicker {
 				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Error));
 			} 
 		}
+
+		public void ReloadSettings() {
+			Itr.LoadSettings();
+		}
+
 
 		public void Reload() {
 			Itr.Reload();
