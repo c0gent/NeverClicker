@@ -8,15 +8,7 @@ using System.Timers;
 
 namespace NeverClicker {
 	partial class AutomationEngine {
-
-		public void InitOldScript() {
-			//Itr.Start(GetLogProgress(), GetTaskQueueProgress());
-			Itr.Start(GetLogProgress());
-			Itr.InitOldScript();
-			Itr.Stop();
-		}
-
-
+		
 		public void Timer() {
 			Timer aTimer = new Timer();
 			aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);

@@ -18,23 +18,23 @@ namespace NeverClicker.Forms {
 		
 
 		public MainForm() {
-			InitializeComponent();	
+			InitializeComponent();
+
+			Settings.Default.Upgrade();
+			//Settings.Default.AssetsFolderPath = Settings.Default.UserRootFolderPath + "\\Assets";
 		}
 
 		private void MainForm_Load(object sender, EventArgs e) {
-			comboBoxGameTaskType.DataSource = Enum.GetValues(typeof(GameTaskType));
-			//cbStatus.DataSource = Enum.GetValues(typeof(Status));
+			comboBoxGameTaskType.DataSource = Enum.GetValues(typeof(GameTaskType));			
 		}
 
-		private void MainForm_Shown(object sender, EventArgs e) {
-			//Settings.Default.Upgrade();
+		private void MainForm_Shown(object sender, EventArgs e) {			
 			if (!SettingsManager.SettingsAreValid()) {
 				this.SetButtonStateAllDisabled();
 				this.SettingsInvalid();
 			} else {
 				this.AutomationEngine = new AutomationEngine(this);
-			}
-			
+			}			
 		}
 
 		public void WriteLine(string message) {
@@ -46,9 +46,18 @@ namespace NeverClicker.Forms {
 			OpenSettingsWindow();
         }
 
+		public void ReloadSettings() {
+			//this.AutomationEngine = new AutomationEngine(this);
+			//AutomationEngine.ReloadSettings();
+			//WriteLine("Reloading settings.");
+			//SetButtonStateStopped();
+			this.SetButtonStateAllDisabled();
+			MessageBox.Show("Please restart to apply settings.");
+			this.Close();
+		}
+
 		private void OpenSettingsWindow() {
-			var opt = new SettingsForm();
-			//opt.TopMost = true;	// DON'T SET THIS
+			var opt = new SettingsForm(this);
 			opt.ShowDialog();
 		}
 
@@ -71,7 +80,7 @@ namespace NeverClicker.Forms {
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = true;
-
+			this.tabControlPrimary.Enabled = false;
 			this.buttonStop.Enabled = true;
 		}
 
@@ -81,7 +90,7 @@ namespace NeverClicker.Forms {
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = false;
-
+			this.tabControlPrimary.Enabled = true;
 			this.buttonStop.Enabled = false;
 		}
 
@@ -94,24 +103,31 @@ namespace NeverClicker.Forms {
 			this.buttonStop.Enabled = false;
 			this.tabControlPrimary.Enabled = false;
 		}
-
-
-
-
+		
 
 		private void buttonOptions_Click(object sender, EventArgs e) {
 			OpenSettingsWindow();
 		}
 		
-		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
-			//this.listBoxTaskQueue.Items.Clear();
-			//foreach (GameTask task in taskList.Values) {
-			//	listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString() + "\t" + task.Type.ToString()
-			//		+ "\tCharacter " + task.CharacterZeroIdx.ToString());
-			//}
+		public void RefreshTaskQueue(SortedList<long, GameTask> taskListOrig) {
+			AutomationEngine.Log(new LogMessage("Refreshing task queue", LogEntryType.Debug));
 
-			//this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
-			//this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();
+			var taskList = new SortedList<long, GameTask>(taskListOrig);
+
+			try {
+				this.listBoxTaskQueue.Items.Clear();
+				foreach (GameTask task in taskList.Values) {
+					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString() + "\t" + task.Type.ToString()
+						+ "\tCharacter " + task.CharacterZeroIdx.ToString());
+				}
+			} catch (Exception ex) {
+				MessageBox.Show("Error refreshing task queue: " + ex.ToString());
+			}
+
+			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
+
+			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
+			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();
 		}
 
 		private void buttonMoveMouse_Click(object sender, EventArgs e) {
@@ -152,14 +168,6 @@ namespace NeverClicker.Forms {
 
 		private void buttonSuspend_Click(object sender, EventArgs e) {
 			AutomationEngine.TogglePause();
-
- 			//if (AutomationEngine.Interactor.State == AutomationState.Running) {
-			//	AutomationEngine.Interactor.Pause();
-			//	buttonPause.Text = "Unpause";
-			//} else if (AutomationEngine.Interactor.State == AutomationState.Paused) {
-			//	AutomationEngine.Interactor.Unpause();
-			//	buttonPause.Text = "Pause";
-			//}
 		}		
 
 		private void textBoxDetectWindow_KeyPress(object sender, KeyPressEventArgs e) {
@@ -176,7 +184,7 @@ namespace NeverClicker.Forms {
 				resultText = "Not Found";
 			}
 
-			WriteLine(String.Format("'{0}': {1}", textBoxDetectWindow.Text, resultText));
+			WriteLine(string.Format("'{0}': {1}", textBoxDetectWindow.Text, resultText));
 			buttonWindowDetect.Text = resultText;
 		}
 

@@ -45,15 +45,16 @@
 			this.checkBoxImagesFolder = new System.Windows.Forms.CheckBox();
 			this.tabControlOptions = new System.Windows.Forms.TabControl();
 			this.tabPagePaths = new System.Windows.Forms.TabPage();
+			this.linkLabelUserConfigFile = new System.Windows.Forms.LinkLabel();
 			this.checkBoxUserRootFolder = new System.Windows.Forms.CheckBox();
 			this.textBoxUserRootFolder = new System.Windows.Forms.TextBox();
 			this.labelUserRootFolder = new System.Windows.Forms.Label();
 			this.buttonUserRootFolder = new System.Windows.Forms.Button();
 			this.checkBoxSettingsFolder = new System.Windows.Forms.CheckBox();
-			this.buttonLogsPath = new System.Windows.Forms.Button();
-			this.checkBoxLogsPath = new System.Windows.Forms.CheckBox();
-			this.textBoxLogsPath = new System.Windows.Forms.TextBox();
-			this.labelLogsPath = new System.Windows.Forms.Label();
+			this.buttonLogsFolder = new System.Windows.Forms.Button();
+			this.checkBoxLogsFolder = new System.Windows.Forms.CheckBox();
+			this.textBoxLogsFolder = new System.Windows.Forms.TextBox();
+			this.labelLogsFolder = new System.Windows.Forms.Label();
 			this.tabPageClient = new System.Windows.Forms.TabPage();
 			this.label1 = new System.Windows.Forms.Label();
 			this.Account = new System.Windows.Forms.TabPage();
@@ -195,15 +196,16 @@
 			// tabPagePaths
 			// 
 			this.tabPagePaths.BackColor = System.Drawing.Color.Transparent;
+			this.tabPagePaths.Controls.Add(this.linkLabelUserConfigFile);
 			this.tabPagePaths.Controls.Add(this.checkBoxUserRootFolder);
 			this.tabPagePaths.Controls.Add(this.textBoxUserRootFolder);
 			this.tabPagePaths.Controls.Add(this.labelUserRootFolder);
 			this.tabPagePaths.Controls.Add(this.buttonUserRootFolder);
 			this.tabPagePaths.Controls.Add(this.checkBoxSettingsFolder);
-			this.tabPagePaths.Controls.Add(this.buttonLogsPath);
-			this.tabPagePaths.Controls.Add(this.checkBoxLogsPath);
-			this.tabPagePaths.Controls.Add(this.textBoxLogsPath);
-			this.tabPagePaths.Controls.Add(this.labelLogsPath);
+			this.tabPagePaths.Controls.Add(this.buttonLogsFolder);
+			this.tabPagePaths.Controls.Add(this.checkBoxLogsFolder);
+			this.tabPagePaths.Controls.Add(this.textBoxLogsFolder);
+			this.tabPagePaths.Controls.Add(this.labelLogsFolder);
 			this.tabPagePaths.Controls.Add(this.textBoxSettingsFolder);
 			this.tabPagePaths.Controls.Add(this.labelSettingsFolder);
 			this.tabPagePaths.Controls.Add(this.buttonImagesFolder);
@@ -220,7 +222,17 @@
 			this.tabPagePaths.Size = new System.Drawing.Size(827, 459);
 			this.tabPagePaths.TabIndex = 0;
 			this.tabPagePaths.Text = "Paths";
-			this.tabPagePaths.Click += new System.EventHandler(this.tabPagePaths_Click);
+			// 
+			// linkLabelUserConfigFile
+			// 
+			this.linkLabelUserConfigFile.AutoSize = true;
+			this.linkLabelUserConfigFile.Location = new System.Drawing.Point(14, 436);
+			this.linkLabelUserConfigFile.Name = "linkLabelUserConfigFile";
+			this.linkLabelUserConfigFile.Size = new System.Drawing.Size(117, 13);
+			this.linkLabelUserConfigFile.TabIndex = 27;
+			this.linkLabelUserConfigFile.TabStop = true;
+			this.linkLabelUserConfigFile.Text = "linkLabelUserConfigFile";
+			this.linkLabelUserConfigFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelUserConfigFile_LinkClicked);
 			// 
 			// checkBoxUserRootFolder
 			// 
@@ -233,14 +245,16 @@
 			this.checkBoxUserRootFolder.TabIndex = 24;
 			this.checkBoxUserRootFolder.Text = "Default";
 			this.checkBoxUserRootFolder.UseVisualStyleBackColor = true;
+			this.checkBoxUserRootFolder.CheckedChanged += new System.EventHandler(this.checkBoxUserRootFolder_CheckedChanged);
 			// 
 			// textBoxUserRootFolder
 			// 
-			this.textBoxUserRootFolder.Enabled = false;
 			this.textBoxUserRootFolder.Location = new System.Drawing.Point(191, 37);
 			this.textBoxUserRootFolder.Name = "textBoxUserRootFolder";
+			this.textBoxUserRootFolder.ReadOnly = true;
 			this.textBoxUserRootFolder.Size = new System.Drawing.Size(556, 20);
 			this.textBoxUserRootFolder.TabIndex = 25;
+			this.textBoxUserRootFolder.TextChanged += new System.EventHandler(this.textBoxUserRootFolder_TextChanged);
 			// 
 			// labelUserRootFolder
 			// 
@@ -253,6 +267,7 @@
 			// 
 			// buttonUserRootFolder
 			// 
+			this.buttonUserRootFolder.Enabled = false;
 			this.buttonUserRootFolder.Location = new System.Drawing.Point(753, 35);
 			this.buttonUserRootFolder.Name = "buttonUserRootFolder";
 			this.buttonUserRootFolder.Size = new System.Drawing.Size(68, 23);
@@ -274,45 +289,45 @@
 			this.checkBoxSettingsFolder.Text = "Default";
 			this.checkBoxSettingsFolder.UseVisualStyleBackColor = true;
 			// 
-			// buttonLogsPath
+			// buttonLogsFolder
 			// 
-			this.buttonLogsPath.Enabled = false;
-			this.buttonLogsPath.Location = new System.Drawing.Point(753, 122);
-			this.buttonLogsPath.Name = "buttonLogsPath";
-			this.buttonLogsPath.Size = new System.Drawing.Size(68, 23);
-			this.buttonLogsPath.TabIndex = 13;
-			this.buttonLogsPath.Text = "Browse...";
-			this.buttonLogsPath.UseVisualStyleBackColor = true;
+			this.buttonLogsFolder.Enabled = false;
+			this.buttonLogsFolder.Location = new System.Drawing.Point(753, 122);
+			this.buttonLogsFolder.Name = "buttonLogsFolder";
+			this.buttonLogsFolder.Size = new System.Drawing.Size(68, 23);
+			this.buttonLogsFolder.TabIndex = 13;
+			this.buttonLogsFolder.Text = "Browse...";
+			this.buttonLogsFolder.UseVisualStyleBackColor = true;
 			// 
-			// checkBoxLogsPath
+			// checkBoxLogsFolder
 			// 
-			this.checkBoxLogsPath.AutoSize = true;
-			this.checkBoxLogsPath.Checked = true;
-			this.checkBoxLogsPath.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBoxLogsPath.Enabled = false;
-			this.checkBoxLogsPath.Location = new System.Drawing.Point(125, 126);
-			this.checkBoxLogsPath.Name = "checkBoxLogsPath";
-			this.checkBoxLogsPath.Size = new System.Drawing.Size(60, 17);
-			this.checkBoxLogsPath.TabIndex = 11;
-			this.checkBoxLogsPath.Text = "Default";
-			this.checkBoxLogsPath.UseVisualStyleBackColor = true;
+			this.checkBoxLogsFolder.AutoSize = true;
+			this.checkBoxLogsFolder.Checked = true;
+			this.checkBoxLogsFolder.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBoxLogsFolder.Enabled = false;
+			this.checkBoxLogsFolder.Location = new System.Drawing.Point(125, 126);
+			this.checkBoxLogsFolder.Name = "checkBoxLogsFolder";
+			this.checkBoxLogsFolder.Size = new System.Drawing.Size(60, 17);
+			this.checkBoxLogsFolder.TabIndex = 11;
+			this.checkBoxLogsFolder.Text = "Default";
+			this.checkBoxLogsFolder.UseVisualStyleBackColor = true;
 			// 
-			// textBoxLogsPath
+			// textBoxLogsFolder
 			// 
-			this.textBoxLogsPath.Location = new System.Drawing.Point(191, 124);
-			this.textBoxLogsPath.Name = "textBoxLogsPath";
-			this.textBoxLogsPath.ReadOnly = true;
-			this.textBoxLogsPath.Size = new System.Drawing.Size(556, 20);
-			this.textBoxLogsPath.TabIndex = 12;
+			this.textBoxLogsFolder.Location = new System.Drawing.Point(191, 124);
+			this.textBoxLogsFolder.Name = "textBoxLogsFolder";
+			this.textBoxLogsFolder.ReadOnly = true;
+			this.textBoxLogsFolder.Size = new System.Drawing.Size(556, 20);
+			this.textBoxLogsFolder.TabIndex = 12;
 			// 
-			// labelLogsPath
+			// labelLogsFolder
 			// 
-			this.labelLogsPath.AutoSize = true;
-			this.labelLogsPath.Location = new System.Drawing.Point(23, 127);
-			this.labelLogsPath.Name = "labelLogsPath";
-			this.labelLogsPath.Size = new System.Drawing.Size(65, 13);
-			this.labelLogsPath.TabIndex = 22;
-			this.labelLogsPath.Text = "Logs Folder:";
+			this.labelLogsFolder.AutoSize = true;
+			this.labelLogsFolder.Location = new System.Drawing.Point(23, 127);
+			this.labelLogsFolder.Name = "labelLogsFolder";
+			this.labelLogsFolder.Size = new System.Drawing.Size(65, 13);
+			this.labelLogsFolder.TabIndex = 22;
+			this.labelLogsFolder.Text = "Logs Folder:";
 			// 
 			// tabPageClient
 			// 
@@ -400,14 +415,15 @@
 		private System.Windows.Forms.TabPage Account;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button buttonLogsPath;
-		private System.Windows.Forms.CheckBox checkBoxLogsPath;
-		private System.Windows.Forms.TextBox textBoxLogsPath;
-		private System.Windows.Forms.Label labelLogsPath;
+		private System.Windows.Forms.Button buttonLogsFolder;
+		private System.Windows.Forms.CheckBox checkBoxLogsFolder;
+		private System.Windows.Forms.TextBox textBoxLogsFolder;
+		private System.Windows.Forms.Label labelLogsFolder;
 		private System.Windows.Forms.CheckBox checkBoxSettingsFolder;
 		private System.Windows.Forms.CheckBox checkBoxUserRootFolder;
 		private System.Windows.Forms.TextBox textBoxUserRootFolder;
 		private System.Windows.Forms.Label labelUserRootFolder;
 		private System.Windows.Forms.Button buttonUserRootFolder;
+		private System.Windows.Forms.LinkLabel linkLabelUserConfigFile;
 	}
 }

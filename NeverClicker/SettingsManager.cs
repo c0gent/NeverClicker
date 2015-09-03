@@ -16,51 +16,142 @@ namespace NeverClicker {
 		const string LOGS_FOLDER_NAME = "Logs";
 		const string ASSETS_FOLDER_NAME = "Assets";
 
-		const string IMAGES_SUBPATH_DEFAULT = IMAGES_FOLDER_NAME + "\\";
-		const string SETTINGS_SUBPATH_DEFAULT = SETTINGS_FOLDER_NAME + "\\";
-		const string LOGS_SUBPATH_DEFAULT = LOGS_FOLDER_NAME + "\\";
-		const string ASSETS_SUBPATH_DEFAULT = ASSETS_FOLDER_NAME + "\\";
+		public const string IMAGES_SUBPATH_DEFAULT = "\\" + IMAGES_FOLDER_NAME;
+		public const string SETTINGS_SUBPATH_DEFAULT = "\\" + SETTINGS_FOLDER_NAME;
+		public const string LOGS_SUBPATH_DEFAULT = "\\" + LOGS_FOLDER_NAME;
+		public const string ASSETS_SUBPATH_DEFAULT = "\\" + ASSETS_FOLDER_NAME;
 
-		const string GAME_ACCOUNT_INI_FILE_NAME = "NeverClicker_GameAccount.ini";
-		const string GAME_CLIENT_INI_FILE_NAME = "NeverClicker_GameClient.ini";
-		const string LOG_FILE_NAME = "NeverClicker_Log.txt";
-		const string OLD_AHK_SCRIPT_FILE_NAME = "NW_Common.ahk";
+		public const string GAME_ACCOUNT_INI_FILE_NAME = "\\NeverClicker_GameAccount.ini";
+		public const string GAME_CLIENT_INI_FILE_NAME = "\\NeverClicker_GameClient.ini";
+		public const string LOG_FILE_NAME = "\\NeverClicker_Log.txt";
+		public const string OLD_AHK_SCRIPT_FILE_NAME = "\\NW_Common.ahk";
 
-		string NeverClickerUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
+		//public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
+		public static string DefaultUserRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
 
-		public static bool SettingsAreValid() {
+		public static bool SettingsAreValid() {			
 			bool settingsValid = true;
 
 			settingsValid &= PatcherExePathIsValid();
-			settingsValid &= RootFolderPathIsValid();
+			settingsValid &= UserRootFolderPathIsValid();
 			settingsValid &= InitSettingsFiles();
 			settingsValid &= InitImages();
-			settingsValid &= InitLogs();
+			settingsValid &= LogsFolderIsValid();
 
 			return settingsValid;
 		}
 
 		public static bool PatcherExePathIsValid() {
-			return File.Exists(Settings.Default.NeverwinterExePath);
+			if (File.Exists(Settings.Default.NeverwinterExePath)) {
+				return true;
+			} else {
+				MessageBox.Show("Neverwinter.exe path: '" + Settings.Default.NeverwinterExePath + "' is invalid.");
+				return false;
+			}            
 		}
 
-		public static bool RootFolderPathIsValid() {
-			return Directory.Exists(Settings.Default.UserRootFolderPath);
+		public static bool UserRootFolderPathIsValid() {
+			if (Directory.Exists(Settings.Default.UserRootFolderPath)) {
+				return true;
+			} else {
+				MessageBox.Show("Neverwinter.exe path: '" + Settings.Default.NeverwinterExePath + "' is invalid.");
+				return false;
+				//Directory.CreateDirectory(DefaultUserRootFolder);
+				//return true;
+			}
 		}
+
+		//public static void InitUserFolders() {
+		//	string newFolder = "";
+
+		//	if (Directory.Exists(Settings.Default.UserRootFolderPath)) {
+		//		newFolder = Settings.Default.UserRootFolderPath;               
+		//	} else {
+		//		newFolder = DefaultUserRootFolder;
+		//	}
+
+		//	MessageBox.Show("Creating settings folder: '" + Settings.Default.UserRootFolderPath);
+		//	try {
+		//		Directory.CreateDirectory(newFolder);
+		//		Directory.CreateDirectory(newFolder + IMAGES_SUBPATH_DEFAULT);
+		//		Directory.CreateDirectory(newFolder + SETTINGS_SUBPATH_DEFAULT);
+		//		Directory.CreateDirectory(newFolder + LOGS_SUBPATH_DEFAULT);
+		//		Directory.CreateDirectory(newFolder + ASSETS_SUBPATH_DEFAULT);
+
+		//		Settings.Default.UserRootFolderPath = newFolder;
+		//		Settings.Default.ImagesFolderPath = newFolder + IMAGES_SUBPATH_DEFAULT;
+		//		Settings.Default.SettingsFolderPath = newFolder + SETTINGS_SUBPATH_DEFAULT;
+		//		Settings.Default.LogsFolderPath = newFolder + LOGS_SUBPATH_DEFAULT;
+
+		//		Settings.Default.Save();
+		//	} catch (Exception ex) {
+		//		MessageBox.Show("Error creating folder: " + newFolder + ". Info: " + ex.ToString());
+		//	}						
+		//}
 
 		public static bool InitSettingsFiles() {
+			var settingsFolderPath = Settings.Default.SettingsFolderPath;
+			bool valid = true;
 
-			return false;
+			if (Directory.Exists(settingsFolderPath)) {
+				if (File.Exists(settingsFolderPath + "\\" + GAME_ACCOUNT_INI_FILE_NAME)) {
+					//MessageBox.Show(GAME_ACCOUNT_INI_FILE_NAME + " exists.");					
+				} else {
+					MessageBox.Show(GAME_ACCOUNT_INI_FILE_NAME + " not found");
+					valid = false;
+					// CREATE OR COPY INI FILE
+				}
+
+				// VERIFY VALIDITY AND RECREATE IF NECESSARY
+
+				if (File.Exists(settingsFolderPath + "\\" + GAME_CLIENT_INI_FILE_NAME)) {
+					//MessageBox.Show(GAME_CLIENT_INI_FILE_NAME + " exists.");
+				} else {
+					MessageBox.Show(GAME_CLIENT_INI_FILE_NAME + " not found");
+					valid = false;
+					// CREATE OR COPY INI FILE
+				}
+			} else {
+				MessageBox.Show("Error: settings folder: '" + settingsFolderPath + "' not found.");
+				valid = false;
+
+				// ACTUALLY CREATE THEM
+
+			}
+			// LOAD UP BOTH/ALL INI FILES AND VERIFY THAT THEY ARE VALID;
+			//	IF THEY ARE NOT VALID:
+			//		CREATE THE DIRECTORIES
+			//		CREATE THE FILES
+			//		CREATE THE SECTIONS
+			return valid;
 		}
+
+		//public void CreateUserRootSubpaths() {
+
+		//}
 
 		public static bool InitImages() {
-
-			return false;
+			if (Directory.Exists(Settings.Default.ImagesFolderPath)) {
+				return true;
+			} else {
+				// CREATE DIRECTORY
+				// COPY IMAGE FILES
+				// VERIFY THEIR EXISTENCE
+				// RETURN TRUE;
+				return false;
+			}
+			// CHECK THAT IMAGE FILES EXIST
+			// PARSE INI?			
 		}
 
-		public static bool InitLogs() {
-
-			return false;
+		public static bool LogsFolderIsValid() {
+			//return LogFile.InitLogFile(Settings.Default.LogsFolderPath);
+			if (Directory.Exists(Settings.Default.LogsFolderPath)) {
+				return true;
+			} else {
+				//MessageBox.Show("Logs folder does not exist.");
+				return false;
+			}
 		}
 
 		public static void Failure() { // ***** DEPRICATE *****
@@ -71,9 +162,20 @@ namespace NeverClicker {
 			//}
 		}
 
-		public static bool Save() {			
-			Settings.Default.Save();
-			return SettingsAreValid(); // ***** TEMP *****
+		public static bool Save() {
+			if (SettingsAreValid()) {
+				Settings.Default.Save();
+				return true;
+			} else {
+				try {
+					Directory.CreateDirectory(Settings.Default.LogsFolderPath);
+					Settings.Default.Save();
+					return true;
+				} catch (Exception ex) {
+					MessageBox.Show("Unable to save settings -- Error creating folders: " + ex.ToString());
+					return false;
+				}			
+			}
 		}
 
 	}

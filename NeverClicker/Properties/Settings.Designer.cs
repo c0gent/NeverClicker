@@ -94,5 +94,17 @@ namespace NeverClicker.Properties {
                 this["SettingsVersion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AssetsFolderPath {
+            get {
+                return ((string)(this["AssetsFolderPath"]));
+            }
+            set {
+                this["AssetsFolderPath"] = value;
+            }
+        }
     }
 }

@@ -48,8 +48,9 @@ namespace NeverClicker {
 
 					try {
 						TaskList.Add(gameTask.MatureTime.Ticks, gameTask);
-					} catch (ArgumentException) {
+					} catch (ArgumentException aex_2) {
 						MessageBox.Show("Failed to add task with key: '" + gameTask.MatureTime.Ticks + "'.");
+						aex = aex_2;
 					}
 				}
 
@@ -62,7 +63,7 @@ namespace NeverClicker {
 				attempts += 1;
 
 				if (attempts > 500) {
-					//MessageBox.Show("GameTaskQueue::Add(): Error adding task: " + aex.ToString());
+					MessageBox.Show("GameTaskQueue::Add(): Error adding task: " + aex.ToString());
 					//throw aex;
 				}
 			}
@@ -84,17 +85,17 @@ namespace NeverClicker {
 			return TaskList.First().Value.MatureTime - DateTime.Now;
 		}
 
-		public void Populate(uint charZ, uint charN) {
-			for (uint i = charZ; i < charN; i++) {
-				Add(new GameTask(
-					DateTime.Now.AddMilliseconds(i), i, GameTaskType.Invocation
-				));
-			}
-		}
+		//public void Populate(uint charZ, uint charN) {
+		//	for (uint i = charZ; i < charN; i++) {
+		//		Add(new GameTask(
+		//			DateTime.Now.AddMilliseconds(i), i, GameTaskType.Invocation
+		//		));
+		//	}
+		//}
 
-		public void Populate(uint charCount) {
-			Populate(0, charCount);
-		}
+		//public void Populate(uint charCount) {
+		//	Populate(0, charCount);
+		//}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context) {
 			info.AddValue("queue", TaskList);

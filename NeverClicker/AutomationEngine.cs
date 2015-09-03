@@ -17,8 +17,8 @@ namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
 	partial class AutomationEngine {
-		const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; // make user setting
-		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make user setting
+		const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; // make a user setting
+		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = true; // make a user setting
 
 		private MainForm MainForm;
 		private Interactor Itr;
@@ -34,6 +34,15 @@ namespace NeverClicker {
 		
 		public AutomationEngine(MainForm form) {
 			this.MainForm = form;
+
+			try {
+				Itr = new Interactor();
+				Queue = new GameTaskQueue();
+				LogFile = new LogFile();
+			} catch (Exception ex) {
+				//MainForm.WriteLine(ex.ToString());
+				MessageBox.Show("Error initializing AutomationEngine: " + ex.ToString());
+			}
 
 			//if (!SettingsManager.SettingsAreValid()) {
 			//	MainForm.SettingsInvalid();
@@ -51,12 +60,17 @@ namespace NeverClicker {
 			//}
 		}
 
-		public void Init() {
-			Itr = new Interactor();
-			Queue = new GameTaskQueue();
-			LogFile = new LogFile();
+		//public void Init() {
+			
+		//}
+
+		public void InitOldScript() {
+			Itr.Start(GetLogProgress(), GetTaskQueueProgress());
+			//Itr.Start(GetLogProgress());
+			Itr.InitOldScript();
+			Itr.Stop();
 		}
-		
+
 		public void Log(string message) {
 			//textBox1.AppendText(message);
 			Log(new LogMessage(message));
@@ -76,9 +90,10 @@ namespace NeverClicker {
 					MessageBox.Show(logMessage.Text);
 					break;
 				case LogEntryType.Debug:
-					LogFile.AppendMessage(logMessage);
-					if (SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX) { MainForm.WriteLine(logMessage.Text); }
+					#pragma warning disable CS0162 // Unreachable code detected
+					if (SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX) { MainForm.WriteLine(logMessage.Text); }					
 					if (PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE) { LogFile.AppendMessage(logMessage); }
+#					pragma warning restore CS0162 // Unreachable code detected
 					break;				
 			}
 		}
@@ -95,7 +110,7 @@ namespace NeverClicker {
 			//Itr.Run(GetLogProgress());
 			try {
 				//var result = await Task.Factory.StartNew(action, TaskCreationOptions.LongRunning);
-				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()), 
+				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()), 
 					TaskCreationOptions.LongRunning, TaskScheduler.Current);
 				Itr.Stop();
 				return result;
@@ -109,8 +124,8 @@ namespace NeverClicker {
 		public async Task Run(Action action) {
 			MainForm.SetButtonStateRunning();
 			try {
-				//await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()),
-				await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()),
+				await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()),
+				//await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()),
 					TaskCreationOptions.LongRunning, TaskScheduler.Current);
 			} catch (Exception ex) {
 				Log(ex.ToString());

@@ -92,11 +92,12 @@ namespace NeverClicker.Interactions {
 
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
 					if (ProcessCharacter(itr, charZeroIdx)) {
+						if (itr.CancelSource.IsCancellationRequested) { return; }
 						itr.Log("Completing character: " + charZeroIdx.ToString() + ".");
 						invokesToday += 1; // NEED TO DETECT THIS IN-GAME
-						QueueSubsequentTask(itr, queue, invokesToday, charZeroIdx, charOneIdxLabel);
-						SaveCharacterSettings(itr, invokesToday, charZeroIdx, charOneIdxLabel);
 						queue.Pop(); // COMPLETE
+						SaveCharacterSettings(itr, invokesToday, charZeroIdx, charOneIdxLabel);
+						QueueSubsequentTask(itr, queue, invokesToday, charZeroIdx, charOneIdxLabel);										
 					} else {
 						itr.Log("Task for character: " + charZeroIdx.ToString() + " incomplete.");
 					}
@@ -188,14 +189,14 @@ namespace NeverClicker.Interactions {
 
 
 		// PopulateQueueProperly(): Populate queue taking in to account last invoke times
-		private static void PopulateQueueProperly(Interactor itr, GameTaskQueue queue, int maxOneIdx) {
-			for (uint i = 0; i < maxOneIdx; i++) {
+		private static void PopulateQueueProperly(Interactor itr, GameTaskQueue queue, int charOneIdxMax) {
+			for (uint i = 0; i < charOneIdxMax; i++) {
 				var charOneIdxLabel = "Character " + (i + 1).ToString();
 				DateTime mostRecentInvTime = DateTime.Now;
 				int invokesToday = 0;
 
 				if (!DateTime.TryParse(itr.GameAccount.GetSetting("MostRecentInvocationTime", charOneIdxLabel), out mostRecentInvTime)) {
-					mostRecentInvTime = DateTime.Now.AddHours(-2);
+					mostRecentInvTime = DateTime.Now.AddHours(-24);
                 }
 
 				if (!int.TryParse(itr.GameAccount.GetSetting("InvokesToday", charOneIdxLabel), out invokesToday)) {
@@ -203,6 +204,8 @@ namespace NeverClicker.Interactions {
 				}
 
 				DateTime taskMatureTime = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, InvokeDelays[invokesToday]);
+
+				itr.Log("Adding task to queue for character " + (i - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Debug);
 
 				queue.Add(new GameTask(taskMatureTime, i, GameTaskType.Invocation));
 			}

@@ -11,6 +11,7 @@ using NeverClicker.Properties;
 using IniParser;
 using System.Configuration;
 using System.IO;
+using System.Windows.Forms;
 
 namespace NeverClicker.Interactions {
 	// INTERACTOR: MANAGES ALIBENGINE
@@ -19,9 +20,8 @@ namespace NeverClicker.Interactions {
 		//string NwCommonFileName;
 		static private uint MaxFileLoadAttempts = 5;
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
-		//public IProgress<string> ProgressLog { get; private set; }
 		public IProgress<LogMessage> ProgressLog { get; private set; }
-		//public IProgress<SortedList<long, GameTask>> QueueList { get; private set; }
+		public IProgress<SortedList<long, GameTask>> QueueList { get; private set; }
 		public CancellationTokenSource CancelSource { get; private set; }
 		public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
 		public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
@@ -32,15 +32,20 @@ namespace NeverClicker.Interactions {
 			LoadSettings();
 		}
 
-		public void LoadSettings() {
-			try {
-				this.GameAccount = new IniFile(Properties.Settings.Default["GameAccountIniPath"].ToString());
-				this.GameClient = new IniFile(Properties.Settings.Default["GameClientIniPath"].ToString());
-			} catch (Exception ex) {
-				Log("Problem loading ini files: " + ex.ToString(), LogEntryType.Fatal);
-				return;
-			}
+		public bool LoadSettings() {
+			//try {
+			//	this.GameAccount = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
+			//	this.GameClient = new IniFile(Settings.Default["GameClientIniPath"].ToString());
+			//} catch (Exception ex) {
+			//	//MessageBox.Show("Problem loading ini files: " + ex.ToString()); // ***** TEMPORARY - REMOVE MESSAGEBOX
+			//	return false;
+			//}
+
+			this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsManager.GAME_ACCOUNT_INI_FILE_NAME);
+			this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsManager.GAME_CLIENT_INI_FILE_NAME);
+
 			InitAlibEng();
+			return true;
 		}
 
 		private void InitAlibEng() {
@@ -54,7 +59,9 @@ namespace NeverClicker.Interactions {
 		//}
 
 		public void UpdateQueueList(SortedList<long, GameTask> queueList) {
-			//QueueList.Report(queueList);
+			Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
+			QueueList.Report(queueList);
+			Wait(50);
 		}
 
 		public void Log(string message) {
@@ -88,29 +95,51 @@ namespace NeverClicker.Interactions {
 		}
 
 		// SHOULD BE ASYNC BUT DEPRICATING EVENTUALLY ANYWAY
-		public void InitOldScript() {
+		public bool InitOldScript() {
 			VerifyRunning();
-			string scriptRoot = Properties.Settings.Default["SettingsRootPath"].ToString();
-			string gameExeRoot = Properties.Settings.Default["NeverwinterExePath"].ToString();
-			string imagesFolder = Properties.Settings.Default["ImagesFolderPath"].ToString();
+			string scriptRoot = Settings.Default.UserRootFolderPath + "\\Assets";
+			if (Directory.Exists(Settings.Default.AssetsFolderPath)) {
+				scriptRoot = Settings.Default.AssetsFolderPath;
+			} else {
+				Log(Settings.Default.AssetsFolderPath + " does not exist. Using: " + Settings.Default.UserRootFolderPath + "\\Assets");
+			}
+			string gameExeRoot = Settings.Default.NeverwinterExePath;
+			string settingsFolder = Settings.Default.SettingsFolderPath;
+            string imagesFolder = Settings.Default.ImagesFolderPath;
+			string logsFolder = Settings.Default.LogsFolderPath;
+            string scriptFileName = "\\NW_Common.ahk";
 
 			if ((scriptRoot == "") || (gameExeRoot == "")) {
-				Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Warning);
-				return;
+				Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Fatal);
+				return false;
 			}
 
 			try {
-				var nwCommonFileName = scriptRoot + "Assets\\NW_Common.ahk";
-				LoadFile(nwCommonFileName);
+				var nwCommonFileName = scriptRoot + scriptFileName;
+
+				if (!File.Exists(nwCommonFileName)) {
+					Log("Error: " + nwCommonFileName + " does not exist.", LogEntryType.Fatal);
+					return false;
+				}
+
+				if (!LoadScript(nwCommonFileName)) {
+					return false;
+				}
 
 				AlibEng.Exec("SetWorkingDir %A_ScriptDir%");
-				AlibEng.Exec("A_CommonDir = " + scriptRoot);
-				AlibEng.Exec("A_ImagesDir = " + imagesFolder);
-				AlibEng.Exec("NwFolder := \"" + gameExeRoot + "\"");
+				//AlibEng.Exec("A_CommonDir = " + scriptRoot);
+				AlibEng.Exec("A_SettingsDir = " + settingsFolder);
+				//Log("A_ImagesDir = " + imagesFolder);
+                AlibEng.Exec("A_ImagesDir = " + imagesFolder);
+				AlibEng.Exec("A_LogsDir = " + logsFolder);
+				AlibEng.Exec("NwFolder := \"" + Path.GetDirectoryName(gameExeRoot) + "\"");
+				//AlibEng.Exec("NwExe := " + gameExeRoot);
 
-				this.AlibEng.Exec("gcs_ini := \"" + Properties.Settings.Default["GameClientIniPath"].ToString() + "\"");
-				this.AlibEng.Exec("as_ini := \"" + Properties.Settings.Default["GameAccountIniPath"].ToString() + "\"");
-				this.AlibEng.Exec("ai_log := \"" + Properties.Settings.Default["LogFilePath"].ToString() + "\"");
+					
+
+				this.AlibEng.Exec("gcs_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
+				this.AlibEng.Exec("as_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
+				this.AlibEng.Exec("ai_log := \"" + Settings.Default.LogsFolderPath + "\"");
 
 				AlibEng.Exec("ToggleAfk := 0");
 				AlibEng.Exec("ToggleMouseDragClick := 0");
@@ -122,22 +151,22 @@ namespace NeverClicker.Interactions {
 				AlibEng.Exec("SetMouseDelay, 55");
 				AlibEng.Exec("SetKeyDelay, 55, 15");
 
-				AlibEng.ExecFunction("init");
+				AlibEng.ExecFunction("Init");
 			} catch (Exception ex) {
 				Log(ex.ToString(), LogEntryType.Error);
+				return false;
 			}
 
 			Log("Old script initialized.", LogEntryType.Debug);
+			return true;
 		}
 
 		// CONVERT TO ASYNC
-		private void LoadFile(string fileName) {
-			if (File.Exists(fileName)) {
-				Log(fileName + " exists.", LogEntryType.Fatal);
-			} else {
+		private bool LoadScript(string fileName) {
+			if (!File.Exists(fileName)) {
 				Log(fileName + " does not exist.", LogEntryType.Fatal);
-				return;
-			}
+				return false;
+			} 
 
 			VerifyRunning();
 			for (uint i = 0; i < MaxFileLoadAttempts; i++) {
@@ -152,16 +181,19 @@ namespace NeverClicker.Interactions {
 				Log(string.Format("'{0}' loaded.", fileName), LogEntryType.Debug);
 				break;
 			}
+
+			return true;
 		}
 
-		//public CancellationToken Start(IProgress<LogMessage> log, IProgress<SortedList<long, GameTask>> queueList) {
-		public CancellationToken Start(IProgress<LogMessage> log) {
+		public CancellationToken Start(IProgress<LogMessage> log, IProgress<SortedList<long, GameTask>> queueList) {
+		//public CancellationToken Start(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = log;
-				//QueueList = queueList;
+				QueueList = queueList;
 				CancelSource = new CancellationTokenSource();
 				State = AutomationState.Running;
 			} else {
+				Log("Interactor::Start(): Automation already running", LogEntryType.Fatal);
 				throw new AlreadyRunningException();
 			}
 
@@ -248,7 +280,7 @@ namespace NeverClicker.Interactions {
 			VerifyRunning();
 			try {
 				//Task.Delay(millisecondsDelay, CancelSource.Token).Wait();
-				Task.Delay(millisecondsDelay).Wait();
+				Task.Delay(millisecondsDelay, CancelSource.Token).Wait();
 			} catch (AggregateException ae) {
 				ae.Handle((x) => {	
 					if (x is TaskCanceledException) {						

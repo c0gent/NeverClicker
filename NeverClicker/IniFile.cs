@@ -75,13 +75,17 @@ namespace NeverClicker {
 
 			try {
 				data = Parser.ReadFile(IniFileName);
-			} catch (Exception) {
-				MessageBox.Show("Problem loading ini files. Please check settings.");
+			} catch (Exception ex) {
+				MessageBox.Show("Error reading ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
 				return;
 			}
-			
-			data[sectionName][settingName] = settingVal;
-			Parser.WriteFile(IniFileName, data);
+
+			try {
+				data[sectionName][settingName] = settingVal;
+				Parser.WriteFile(IniFileName, data);
+			} catch (Exception ex) {
+				MessageBox.Show("Error writing ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
+			}
 
 			//if (data[sectionName][settingName] == null) {
 			//	data[sectionName][settingName] = settingVal;
