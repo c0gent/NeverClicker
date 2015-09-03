@@ -105,6 +105,7 @@
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
     <Compile Include="Interactions\Sequences\EnterWorld.cs" />
+    <Compile Include="Interactions\Sequences\LogWaitStatus.cs" />
     <Compile Include="Interactions\Sequences\ProduceClientState.cs" />
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
     <Compile Include="Logging.cs" />
@@ -214,21 +215,6 @@
   <ItemGroup>
     <Content Include="assets\cursor-512.ico" />
     <Content Include="cursor-512.ico" />
-    <Content Include="Images\0 NEEDS HANDLING - 2.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\0 NEEDS HANDLING - CharacterSelectEnterWorldWarning.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\0 NEEDS HANDLING - InvocationSuccess.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\0 NEEDS HANDLING - RewardsOfDevotionPatience.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\0 NEEDS HANDLING.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Images\AbilityPanelSerpent.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

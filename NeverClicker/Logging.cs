@@ -133,15 +133,25 @@ namespace NeverClicker {
 	}		
 }
 
-namespace NeverClicker.Interactions {
-	public static partial class Sequences {
-		public static void LogSuccess<T, U>(Interactor itr, T start, U end) {
-			itr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
-		}
+//namespace NeverClicker.Interactions {
+//	public static partial class Sequences {
+//		public static void LogWaitResult<T, U>(Interactor itr, T start, U end, bool success) {
+//			if (success) {
+//				itr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: "
+//					+ start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
+//			} else {
+//				itr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " 
+//					+ start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
+//			}
+//		}
 
-		public static void LogFailure<T, U>(Interactor itr, T start, U end) {
-			itr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
-		}
-	}
-}
+//		public static void LogSuccess<T, U>(Interactor itr, T start, U end) {
+//			itr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
+//		}
+
+//		public static void LogFailure<T, U>(Interactor itr, T start, U end) {
+//			itr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
+//		}
+//	}
+//}
 

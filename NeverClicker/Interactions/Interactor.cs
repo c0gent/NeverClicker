@@ -254,21 +254,29 @@ namespace NeverClicker.Interactions {
 			State = AutomationState.Stopped;
 		}
 
-		public bool WaitUntil(int maxWaitSeconds, Func<bool> condition) {
-			const int waitSeconds = 3;
-			int maxIters = maxWaitSeconds / waitSeconds;
+		//public bool WaitUntil(int maxWaitSeconds, Func<bool> condition, Enum endState, ) {
+        public bool WaitUntil<TState>(int maxWaitSeconds, TState endState, Func<Interactor, TState> getState,  
+						Func<Interactor, TState, bool> doFailure
+		) where TState : struct {
+			const int secondsPerIter = 3;
+			int maxIters = maxWaitSeconds / secondsPerIter;
 			int iters = 0;
 
-			this.Log("Waiting maximum of " + maxWaitSeconds + " seconds.");
+			this.Log("Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.");
 
-			while (!condition()) {
+			while (!(getState(this).Equals(endState))) {
 				if (CancelSource.IsCancellationRequested) { return false; }
 				//this.Log("Waiting until: " + condition.ToString() + ".");
-				this.Wait(1000 * waitSeconds);
+				this.Wait(1000 * secondsPerIter);
 				iters += 1;
-				if (iters >= maxIters) { return false; }				
+				if (iters >= maxIters) {
+					doFailure(this, endState);
+					Sequences.LogWaitStatus(this, endState, false);
+					return false;
+				}				
 			}
 
+			Sequences.LogWaitStatus(this, endState, true);
 			return true;
 		}
 
@@ -287,7 +295,7 @@ namespace NeverClicker.Interactions {
 						return true;
 					} else {
 						Log(x.ToString());
-						System.Windows.Forms.MessageBox.Show(x.ToString());
+						MessageBox.Show(x.ToString());
 						return false; // Let anything else stop the application.
 					}
 				});

@@ -106,13 +106,13 @@ namespace NeverClicker.Interactions {
 					itr.Wait(500);
 					TimeSpan waitDelayMs = new TimeSpan();
 
-					if (nextTaskWaitTime.TotalMinutes > 10) {
+					if (nextTaskWaitTime.TotalMinutes > 8) {
 						waitDelayMs = nextTaskWaitTime + RandomDelay(5, 25);
-						itr.Log("AutoCycle(): Closing client and waiting " + waitDelayMs.TotalMinutes.ToString() + " minutes.");
+						itr.Log("AutoCycle(): Closing client and waiting " + waitDelayMs.TotalMinutes.ToString("F0") + " minutes.");
 						ProduceClientState(itr, ClientState.None);
 					} else if (nextTaskWaitTime.TotalMinutes > 1) {
 						waitDelayMs = nextTaskWaitTime;
-						itr.Log("AutoCycle(): Minimizing client and waiting " + waitDelayMs.TotalMinutes.ToString() + " minutes.");						
+						itr.Log("AutoCycle(): Minimizing client and waiting " + waitDelayMs.TotalMinutes.ToString("F0") + " minutes.");						
 						ProduceClientState(itr, ClientState.Inactive);
 					}
 
