@@ -85,12 +85,16 @@ namespace NeverClicker.Forms {
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = true;
+			this.buttonTestsForm.Enabled = false;
+			this.buttonOptionsForm.Enabled = false;
 			//this.tabControlPrimary.Enabled = false;
 			this.buttonStop.Enabled = true;
 		}
 
 		public void SetButtonStateStopped() {
 			this.buttonAutoCycle.Enabled = true;
+			this.buttonTestsForm.Enabled = true;
+			this.buttonOptionsForm.Enabled = true;
 			//this.buttonAutoInvokeAsync.Enabled = true;
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";

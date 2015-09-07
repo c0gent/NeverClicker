@@ -16,34 +16,33 @@ namespace NeverClicker {
 	public class LogFile {
 		private static readonly object Locker = new object();
 		private static XmlDocument LogXmlDoc = new XmlDocument();
+		private XmlElement SessionElement;
 		private string LogFileName = "";
 
 		public LogFile() {
-			//this.LogFileName = Properties.Settings.Default.LogsFolderPath;
-			//if (File.Exists(LogFileName)) {
-			//	LogXmlDoc.Load(LogFileName);
-			//	var root = LogXmlDoc.CreateElement("log_entries");
-			//	LogXmlDoc.AppendChild(root);
-			//} else {
-
-			//}
-
-			//var lfPath = Settings.Default.LogsFolderPath.ToString();
-
-
-			//if (InitLogFile(lfName)) {
-			//	LogFileName = lfName;
-			//}
+			
 			LogFileName = Settings.Default.LogsFolderPath + SettingsManager.LOG_FILE_NAME;
 
-
-			try {
-				var root = LogXmlDoc.CreateElement("log_entries");
-				LogXmlDoc.AppendChild(root);
-				LogXmlDoc.Save(LogFileName);
-
-			} catch (Exception ex) {
-				MessageBox.Show("LogFile::AppendMessage(): Error saving xml document: " + ex.ToString());
+			if (File.Exists(LogFileName)) {
+				try {
+					LogXmlDoc.Load(LogFileName);
+					SessionElement = LogXmlDoc.CreateElement("session_" + DateTime.Now.ToFileTime().ToString());
+					LogXmlDoc.DocumentElement.AppendChild(SessionElement);
+					//var root = LogXmlDoc.CreateElement("Log_" + DateTime.Now.ToFileTime().ToString());
+					//LogXmlDoc.AppendChild(root);
+				} catch (Exception ex) {
+					MessageBox.Show("LogFile::AppendMessage(): Error loading log file. Please rename or delete. Error info: " + ex.ToString());
+				}
+			} else {
+				try {
+					var root = LogXmlDoc.CreateElement("NeverClicker");
+					LogXmlDoc.AppendChild(root);
+					SessionElement = LogXmlDoc.CreateElement("session_" + DateTime.Now.ToFileTime().ToString());
+					LogXmlDoc.DocumentElement.AppendChild(SessionElement);
+					LogXmlDoc.Save(LogFileName);
+				} catch (Exception ex) {
+					MessageBox.Show("LogFile::AppendMessage(): Error saving log file: " + ex.ToString());
+				}
 			}
 
 			//MessageBox.Show("LogFile::LogFile(): Loading " + LogFileName);
@@ -63,6 +62,37 @@ namespace NeverClicker {
 			//LogXmlDoc.AppendChild(root);
 		}
 
+		public void AppendMessage(LogMessage logMessage) {
+			lock (Locker) {
+				//var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
+				var entry = (XmlElement)SessionElement.AppendChild(LogXmlDoc.CreateElement("entry"));
+				entry.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
+				entry.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
+				entry.SetAttribute("text", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
+				try {
+					LogXmlDoc.Save(LogFileName);
+				} catch (Exception ex) {
+					MessageBox.Show("LogFile::AppendMessage(): Error saving xml document: " + ex.ToString());
+				}
+			}
+		}
+
+
+		//this.LogFileName = Properties.Settings.Default.LogsFolderPath;
+		//if (File.Exists(LogFileName)) {
+		//	LogXmlDoc.Load(LogFileName);
+		//	var root = LogXmlDoc.CreateElement("log_entries");
+		//	LogXmlDoc.AppendChild(root);
+		//} else {
+
+		//}
+
+		//var lfPath = Settings.Default.LogsFolderPath.ToString();
+
+
+		//if (InitLogFile(lfName)) {
+		//	LogFileName = lfName;
+		//}
 
 		//public static bool InitLogFile(string logFileName) {
 		//	//string logFileName = ;
@@ -96,20 +126,7 @@ namespace NeverClicker {
 		//		//}				
 		//	}
 		//}
-
-		public void AppendMessage(LogMessage logMessage) {
-			lock (Locker) {
-				var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
-				el.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
-				el.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
-				el.SetAttribute("text", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
-				try {
-					LogXmlDoc.Save(LogFileName);
-				} catch (Exception ex) {
-					MessageBox.Show("LogFile::AppendMessage(): Error saving xml document: " + ex.ToString());
-				}
-			}
-		}
+		
 	}
 
 	public struct LogMessage {

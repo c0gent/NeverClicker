@@ -50,12 +50,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox1.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location = new System.Drawing.Point(13, 314);
+			this.textBox1.Location = new System.Drawing.Point(12, 314);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(425, 203);
+			this.textBox1.Size = new System.Drawing.Size(426, 200);
 			this.textBox1.TabIndex = 1;
 			// 
 			// buttonPause
@@ -66,7 +66,7 @@
 			this.buttonPause.Enabled = false;
 			this.buttonPause.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonPause.Location = new System.Drawing.Point(174, 563);
+			this.buttonPause.Location = new System.Drawing.Point(174, 523);
 			this.buttonPause.Name = "buttonPause";
 			this.buttonPause.Size = new System.Drawing.Size(75, 23);
 			this.buttonPause.TabIndex = 6;
@@ -81,7 +81,7 @@
 			this.buttonReload.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.buttonReload.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonReload.Location = new System.Drawing.Point(93, 563);
+			this.buttonReload.Location = new System.Drawing.Point(93, 523);
 			this.buttonReload.Name = "buttonReload";
 			this.buttonReload.Size = new System.Drawing.Size(75, 23);
 			this.buttonReload.TabIndex = 7;
@@ -96,7 +96,7 @@
 			this.buttonStop.Enabled = false;
 			this.buttonStop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonStop.Location = new System.Drawing.Point(12, 563);
+			this.buttonStop.Location = new System.Drawing.Point(12, 523);
 			this.buttonStop.Name = "buttonStop";
 			this.buttonStop.Size = new System.Drawing.Size(75, 23);
 			this.buttonStop.TabIndex = 8;
@@ -121,10 +121,10 @@
 			// labelLog
 			// 
 			this.labelLog.AutoSize = true;
-			this.labelLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelLog.Location = new System.Drawing.Point(196, 291);
+			this.labelLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelLog.Location = new System.Drawing.Point(198, 295);
 			this.labelLog.Name = "labelLog";
-			this.labelLog.Size = new System.Drawing.Size(36, 20);
+			this.labelLog.Size = new System.Drawing.Size(31, 16);
 			this.labelLog.TabIndex = 14;
 			this.labelLog.Text = "Log";
 			// 
@@ -142,9 +142,9 @@
 			this.buttonOptionsForm.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.buttonOptionsForm.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonOptionsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonOptionsForm.Location = new System.Drawing.Point(12, 523);
+			this.buttonOptionsForm.Location = new System.Drawing.Point(12, 563);
 			this.buttonOptionsForm.Name = "buttonOptionsForm";
-			this.buttonOptionsForm.Size = new System.Drawing.Size(156, 23);
+			this.buttonOptionsForm.Size = new System.Drawing.Size(116, 23);
 			this.buttonOptionsForm.TabIndex = 16;
 			this.buttonOptionsForm.Text = "Settings...";
 			this.buttonOptionsForm.UseVisualStyleBackColor = false;
@@ -173,9 +173,9 @@
 			this.buttonTestsForm.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.buttonTestsForm.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonTestsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonTestsForm.Location = new System.Drawing.Point(175, 523);
+			this.buttonTestsForm.Location = new System.Drawing.Point(134, 563);
 			this.buttonTestsForm.Name = "buttonTestsForm";
-			this.buttonTestsForm.Size = new System.Drawing.Size(156, 23);
+			this.buttonTestsForm.Size = new System.Drawing.Size(115, 23);
 			this.buttonTestsForm.TabIndex = 19;
 			this.buttonTestsForm.Text = "Tests...";
 			this.buttonTestsForm.UseVisualStyleBackColor = false;
@@ -188,10 +188,10 @@
 			this.listBoxTaskQueue.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.listBoxTaskQueue.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listBoxTaskQueue.FormattingEnabled = true;
-			this.listBoxTaskQueue.Location = new System.Drawing.Point(13, 122);
+			this.listBoxTaskQueue.Location = new System.Drawing.Point(12, 122);
 			this.listBoxTaskQueue.Name = "listBoxTaskQueue";
 			this.listBoxTaskQueue.ScrollAlwaysVisible = true;
-			this.listBoxTaskQueue.Size = new System.Drawing.Size(425, 143);
+			this.listBoxTaskQueue.Size = new System.Drawing.Size(426, 143);
 			this.listBoxTaskQueue.TabIndex = 21;
 			// 
 			// labelTaskQueue
@@ -199,10 +199,10 @@
 			this.labelTaskQueue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelTaskQueue.AutoSize = true;
-			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTaskQueue.Location = new System.Drawing.Point(162, 99);
+			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTaskQueue.Location = new System.Drawing.Point(181, 103);
 			this.labelTaskQueue.Name = "labelTaskQueue";
-			this.labelTaskQueue.Size = new System.Drawing.Size(95, 20);
+			this.labelTaskQueue.Size = new System.Drawing.Size(82, 16);
 			this.labelTaskQueue.TabIndex = 20;
 			this.labelTaskQueue.Text = "Task Queue";
 			// 

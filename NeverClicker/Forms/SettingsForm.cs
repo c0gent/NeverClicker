@@ -173,9 +173,9 @@ namespace NeverClicker {
 		}
 
 		private void tabControlOptions_Selected(object sender, TabControlEventArgs e) {
-			using (StreamReader sr = File.OpenText(Settings.Default.SettingsFolderPath + "\\yamlTest.yaml")) {
+			//using (StreamReader sr = File.OpenText(Settings.Default.SettingsFolderPath + "\\yamlTest.yaml")) {
 
-			}
+			//}
 			//var input = new 
 			//this.textBoxTestFileContents = YamlDotNet.Serialization.
 		}

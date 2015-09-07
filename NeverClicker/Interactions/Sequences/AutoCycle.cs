@@ -53,7 +53,7 @@ namespace NeverClicker.Interactions {
 					intr.Wait(1800000); // 30 minutes
 				}
 
-				intr.Log("Starting AutoInvoke loop.");
+				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);
 				TimeSpan nextTaskWaitTime = queue.NextTaskWaitTime();
 				uint charZeroIdx = queue.NextTask.CharacterZeroIdx;
 				uint charOneIdx = charZeroIdx + 1;
@@ -72,11 +72,11 @@ namespace NeverClicker.Interactions {
 					// DETERMINE IF WE'VE ALREADY INVOKED TOO MANY TIMES TODAY
 					if ((invokesToday >= 6) && (queue.NextTask.Type == GameTaskType.Invocation)) {
 						if (invokesCompletedOn == TodaysGameDate()) {
-							intr.Log(charOneIdxLabel + " has already invoked 6 times today. Requeuing for tomorrow");
+							intr.Log(charOneIdxLabel + " has already invoked 6 times today. Requeuing for tomorrow", LogEntryType.Normal);
 							queue.Pop();
 							QueueSubsequentTask(intr, queue, invokesToday, charZeroIdx, charOneIdxLabel);
 
-							intr.Log("Continuing AutoCycle loop.");
+							//intr.Log("Continuing AutoCycle loop.", LogEntryType.Debug);
 							continue;
 						} else if (invokesCompletedOn < TodaysGameDate()) {
 							intr.Log(charOneIdxLabel + ": Resetting InvokesToday to 0.", LogEntryType.Debug);
@@ -140,7 +140,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			intr.GameAccount.SaveSetting("0", "CharZeroIdxLastInvoked", "Invocation");
-			intr.Log("AutoCycle(): Returning.");
+			intr.Log("AutoCycle(): Returning.", LogEntryType.Info);
 
 			// CLOSE DOWN -- TEMPORARILY DISABLED -- TRANSITION TO USING GAMESTATE TO MANAGE
 			//intr.EvaluateFunction("VigilantlyCloseClientAndExit");
