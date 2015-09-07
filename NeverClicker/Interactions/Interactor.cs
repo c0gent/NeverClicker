@@ -12,6 +12,7 @@ using IniParser;
 using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace NeverClicker.Interactions {
 	// INTERACTOR: MANAGES ALIBENGINE
@@ -19,6 +20,7 @@ namespace NeverClicker.Interactions {
 		private AlibEngine AlibEng;
 		//string NwCommonFileName;
 		static private uint MaxFileLoadAttempts = 5;
+		public Random Rng = new Random();
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
 		public IProgress<LogMessage> ProgressLog { get; private set; }
 		public IProgress<SortedList<long, GameTask>> QueueList { get; private set; }
@@ -255,24 +257,27 @@ namespace NeverClicker.Interactions {
 		}
 
 		//public bool WaitUntil(int maxWaitSeconds, Func<bool> condition, Enum endState, ) {
-        public bool WaitUntil<TState>(int maxWaitSeconds, TState endState, Func<Interactor, TState> getState,  
+        public bool WaitUntil<TState>(int maxWaitSeconds, TState endState, Func<Interactor, TState, bool> isState,  
 						Func<Interactor, TState, bool> doFailure
 		) where TState : struct {
-			const int secondsPerIter = 3;
+			const int secondsPerIter = 1;
 			int maxIters = maxWaitSeconds / secondsPerIter;
 			int iters = 0;
 
-			this.Log("Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.");
+			this.Log("Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.", LogEntryType.Info);
 
-			while (!(getState(this).Equals(endState))) {
+			while (!(isState(this, endState))) {
 				if (CancelSource.IsCancellationRequested) { return false; }
-				//this.Log("Waiting until: " + condition.ToString() + ".");
+				this.Log("Waiting until state: " + endState.ToString() + ".", LogEntryType.Debug);
 				this.Wait(1000 * secondsPerIter);
 				iters += 1;
-				if (iters >= maxIters) {
-					doFailure(this, endState);
+				if (iters >= maxIters) {					
 					Sequences.LogWaitStatus(this, endState, false);
-					return false;
+					if (doFailure != null) {
+						return doFailure(this, endState);
+					} else {
+						return false;
+					}
 				}				
 			}
 
@@ -280,12 +285,32 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
-		public void Wait(TimeSpan timeSpanDelay) {
+		public TimeSpan AddRandomDelay(TimeSpan original) {
+			var min = (int)original.TotalMilliseconds;
+			var max = min + (min / 2);
+			int newDelay = Rng.Next(min, max);
+			return new TimeSpan(0, 0, 0, 0, newDelay);
+		}
+
+		public TimeSpan RandomDelay(int minutesMin, int minutesMax) {
+			int rnd = Rng.Next(minutesMin, minutesMax);
+			return new TimeSpan(0, rnd, 1);
+		}
+
+		public int WaitRand(int minMs, int maxMs) {
+			//uint delayRange = (maxMs > minMs) ? (maxMs - minMs) : (minMs - maxMs);
+			var waitTime = Rng.Next(minMs, maxMs);
+			this.Wait(waitTime);
+			return waitTime;
+		}
+
+		public void Wait(TimeSpan timeSpanDelay) {			
 			this.Wait((int)timeSpanDelay.TotalMilliseconds);
 		}
 
 		public void Wait(int millisecondsDelay) {
 			VerifyRunning();
+			Log("Waiting for " + millisecondsDelay.ToString("F0") + "ms.", LogEntryType.Debug);
 			try {
 				//Task.Delay(millisecondsDelay, CancelSource.Token).Wait();
 				Task.Delay(millisecondsDelay, CancelSource.Token).Wait();

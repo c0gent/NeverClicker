@@ -45,6 +45,8 @@
 			this.checkBoxImagesFolder = new System.Windows.Forms.CheckBox();
 			this.tabControlOptions = new System.Windows.Forms.TabControl();
 			this.tabPagePaths = new System.Windows.Forms.TabPage();
+			this.textBoxImageShadeVariation = new System.Windows.Forms.TextBox();
+			this.labelImageShadeVariation = new System.Windows.Forms.Label();
 			this.linkLabelUserConfigFile = new System.Windows.Forms.LinkLabel();
 			this.checkBoxUserRootFolder = new System.Windows.Forms.CheckBox();
 			this.textBoxUserRootFolder = new System.Windows.Forms.TextBox();
@@ -59,10 +61,22 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.Account = new System.Windows.Forms.TabPage();
 			this.label2 = new System.Windows.Forms.Label();
+			this.tabPageTesting = new System.Windows.Forms.TabPage();
+			this.textBoxTestReadValue = new System.Windows.Forms.TextBox();
+			this.textBoxTestReadName = new System.Windows.Forms.TextBox();
+			this.buttonTestReadValue = new System.Windows.Forms.Button();
+			this.labelTestProperty = new System.Windows.Forms.Label();
+			this.labelTestFileName = new System.Windows.Forms.Label();
+			this.textBoxTestFileName = new System.Windows.Forms.TextBox();
+			this.textBoxTestFileContents = new System.Windows.Forms.TextBox();
+			this.textBoxTestStoreName = new System.Windows.Forms.TextBox();
+			this.textBoxTestStoreValue = new System.Windows.Forms.TextBox();
+			this.buttonTestStore = new System.Windows.Forms.Button();
 			this.tabControlOptions.SuspendLayout();
 			this.tabPagePaths.SuspendLayout();
 			this.tabPageClient.SuspendLayout();
 			this.Account.SuspendLayout();
+			this.tabPageTesting.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelSettingsFolder
@@ -187,15 +201,19 @@
 			this.tabControlOptions.Controls.Add(this.tabPagePaths);
 			this.tabControlOptions.Controls.Add(this.tabPageClient);
 			this.tabControlOptions.Controls.Add(this.Account);
+			this.tabControlOptions.Controls.Add(this.tabPageTesting);
 			this.tabControlOptions.Location = new System.Drawing.Point(12, 12);
 			this.tabControlOptions.Name = "tabControlOptions";
 			this.tabControlOptions.SelectedIndex = 0;
 			this.tabControlOptions.Size = new System.Drawing.Size(835, 485);
 			this.tabControlOptions.TabIndex = 22;
+			this.tabControlOptions.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlOptions_Selected);
 			// 
 			// tabPagePaths
 			// 
 			this.tabPagePaths.BackColor = System.Drawing.Color.Transparent;
+			this.tabPagePaths.Controls.Add(this.textBoxImageShadeVariation);
+			this.tabPagePaths.Controls.Add(this.labelImageShadeVariation);
 			this.tabPagePaths.Controls.Add(this.linkLabelUserConfigFile);
 			this.tabPagePaths.Controls.Add(this.checkBoxUserRootFolder);
 			this.tabPagePaths.Controls.Add(this.textBoxUserRootFolder);
@@ -222,6 +240,22 @@
 			this.tabPagePaths.Size = new System.Drawing.Size(827, 459);
 			this.tabPagePaths.TabIndex = 0;
 			this.tabPagePaths.Text = "Paths";
+			// 
+			// textBoxImageShadeVariation
+			// 
+			this.textBoxImageShadeVariation.Location = new System.Drawing.Point(191, 183);
+			this.textBoxImageShadeVariation.Name = "textBoxImageShadeVariation";
+			this.textBoxImageShadeVariation.Size = new System.Drawing.Size(93, 20);
+			this.textBoxImageShadeVariation.TabIndex = 29;
+			// 
+			// labelImageShadeVariation
+			// 
+			this.labelImageShadeVariation.AutoSize = true;
+			this.labelImageShadeVariation.Location = new System.Drawing.Point(6, 186);
+			this.labelImageShadeVariation.Name = "labelImageShadeVariation";
+			this.labelImageShadeVariation.Size = new System.Drawing.Size(120, 13);
+			this.labelImageShadeVariation.TabIndex = 28;
+			this.labelImageShadeVariation.Text = "Image Shade Variation: ";
 			// 
 			// linkLabelUserConfigFile
 			// 
@@ -368,6 +402,105 @@
 			this.label2.TabIndex = 1;
 			this.label2.Text = "Not Yet Implemented - Edit Ini File Manually";
 			// 
+			// tabPageTesting
+			// 
+			this.tabPageTesting.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageTesting.Controls.Add(this.textBoxTestReadValue);
+			this.tabPageTesting.Controls.Add(this.textBoxTestReadName);
+			this.tabPageTesting.Controls.Add(this.buttonTestReadValue);
+			this.tabPageTesting.Controls.Add(this.labelTestProperty);
+			this.tabPageTesting.Controls.Add(this.labelTestFileName);
+			this.tabPageTesting.Controls.Add(this.textBoxTestFileName);
+			this.tabPageTesting.Controls.Add(this.textBoxTestFileContents);
+			this.tabPageTesting.Controls.Add(this.textBoxTestStoreName);
+			this.tabPageTesting.Controls.Add(this.textBoxTestStoreValue);
+			this.tabPageTesting.Controls.Add(this.buttonTestStore);
+			this.tabPageTesting.Location = new System.Drawing.Point(4, 22);
+			this.tabPageTesting.Name = "tabPageTesting";
+			this.tabPageTesting.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageTesting.Size = new System.Drawing.Size(827, 459);
+			this.tabPageTesting.TabIndex = 3;
+			this.tabPageTesting.Text = "Testing";
+			// 
+			// textBoxTestReadValue
+			// 
+			this.textBoxTestReadValue.Location = new System.Drawing.Point(335, 201);
+			this.textBoxTestReadValue.Name = "textBoxTestReadValue";
+			this.textBoxTestReadValue.Size = new System.Drawing.Size(100, 20);
+			this.textBoxTestReadValue.TabIndex = 9;
+			// 
+			// textBoxTestReadName
+			// 
+			this.textBoxTestReadName.Location = new System.Drawing.Point(75, 201);
+			this.textBoxTestReadName.Name = "textBoxTestReadName";
+			this.textBoxTestReadName.Size = new System.Drawing.Size(173, 20);
+			this.textBoxTestReadName.TabIndex = 8;
+			// 
+			// buttonTestReadValue
+			// 
+			this.buttonTestReadValue.Location = new System.Drawing.Point(254, 199);
+			this.buttonTestReadValue.Name = "buttonTestReadValue";
+			this.buttonTestReadValue.Size = new System.Drawing.Size(75, 23);
+			this.buttonTestReadValue.TabIndex = 7;
+			this.buttonTestReadValue.Text = "Read";
+			this.buttonTestReadValue.UseVisualStyleBackColor = true;
+			// 
+			// labelTestProperty
+			// 
+			this.labelTestProperty.AutoSize = true;
+			this.labelTestProperty.Location = new System.Drawing.Point(6, 178);
+			this.labelTestProperty.Name = "labelTestProperty";
+			this.labelTestProperty.Size = new System.Drawing.Size(49, 13);
+			this.labelTestProperty.TabIndex = 6;
+			this.labelTestProperty.Text = "Property:";
+			// 
+			// labelTestFileName
+			// 
+			this.labelTestFileName.AutoSize = true;
+			this.labelTestFileName.Location = new System.Drawing.Point(6, 150);
+			this.labelTestFileName.Name = "labelTestFileName";
+			this.labelTestFileName.Size = new System.Drawing.Size(52, 13);
+			this.labelTestFileName.TabIndex = 5;
+			this.labelTestFileName.Text = "Yaml File:";
+			// 
+			// textBoxTestFileName
+			// 
+			this.textBoxTestFileName.Location = new System.Drawing.Point(75, 147);
+			this.textBoxTestFileName.Name = "textBoxTestFileName";
+			this.textBoxTestFileName.Size = new System.Drawing.Size(360, 20);
+			this.textBoxTestFileName.TabIndex = 4;
+			// 
+			// textBoxTestFileContents
+			// 
+			this.textBoxTestFileContents.Location = new System.Drawing.Point(6, 227);
+			this.textBoxTestFileContents.Multiline = true;
+			this.textBoxTestFileContents.Name = "textBoxTestFileContents";
+			this.textBoxTestFileContents.Size = new System.Drawing.Size(815, 226);
+			this.textBoxTestFileContents.TabIndex = 3;
+			// 
+			// textBoxTestStoreName
+			// 
+			this.textBoxTestStoreName.Location = new System.Drawing.Point(75, 175);
+			this.textBoxTestStoreName.Name = "textBoxTestStoreName";
+			this.textBoxTestStoreName.Size = new System.Drawing.Size(173, 20);
+			this.textBoxTestStoreName.TabIndex = 2;
+			// 
+			// textBoxTestStoreValue
+			// 
+			this.textBoxTestStoreValue.Location = new System.Drawing.Point(254, 175);
+			this.textBoxTestStoreValue.Name = "textBoxTestStoreValue";
+			this.textBoxTestStoreValue.Size = new System.Drawing.Size(100, 20);
+			this.textBoxTestStoreValue.TabIndex = 1;
+			// 
+			// buttonTestStore
+			// 
+			this.buttonTestStore.Location = new System.Drawing.Point(360, 173);
+			this.buttonTestStore.Name = "buttonTestStore";
+			this.buttonTestStore.Size = new System.Drawing.Size(75, 23);
+			this.buttonTestStore.TabIndex = 0;
+			this.buttonTestStore.Text = "Store";
+			this.buttonTestStore.UseVisualStyleBackColor = true;
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -389,6 +522,8 @@
 			this.tabPageClient.PerformLayout();
 			this.Account.ResumeLayout(false);
 			this.Account.PerformLayout();
+			this.tabPageTesting.ResumeLayout(false);
+			this.tabPageTesting.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -425,5 +560,18 @@
 		private System.Windows.Forms.Label labelUserRootFolder;
 		private System.Windows.Forms.Button buttonUserRootFolder;
 		private System.Windows.Forms.LinkLabel linkLabelUserConfigFile;
+		private System.Windows.Forms.TextBox textBoxImageShadeVariation;
+		private System.Windows.Forms.Label labelImageShadeVariation;
+		private System.Windows.Forms.TabPage tabPageTesting;
+		private System.Windows.Forms.TextBox textBoxTestFileContents;
+		private System.Windows.Forms.TextBox textBoxTestStoreName;
+		private System.Windows.Forms.TextBox textBoxTestStoreValue;
+		private System.Windows.Forms.Button buttonTestStore;
+		private System.Windows.Forms.Label labelTestProperty;
+		private System.Windows.Forms.Label labelTestFileName;
+		private System.Windows.Forms.TextBox textBoxTestFileName;
+		private System.Windows.Forms.TextBox textBoxTestReadValue;
+		private System.Windows.Forms.TextBox textBoxTestReadName;
+		private System.Windows.Forms.Button buttonTestReadValue;
 	}
 }

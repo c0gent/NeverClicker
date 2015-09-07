@@ -7,40 +7,55 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
-		public static bool ProduceClientState(Interactor itr, ClientState desiredState) {
-			if (itr.CancelSource.Token.IsCancellationRequested) { return false;	}
+		public static bool ProduceClientState(Interactor intr, ClientState desiredState) {
+			if (intr.CancelSource.Token.IsCancellationRequested) { return false; }
 
-			itr.Log("Attempting to produce client state: " + desiredState.ToString());
+			intr.Log("Attempting to produce client state: " + desiredState.ToString(), LogEntryType.Info);
 
-			var currentState = Game.GetClientState(itr);
-
-			if (desiredState == currentState) {
+			if (Game.IsClientState(intr, desiredState)) {
 				return true;
 			} else if (desiredState == ClientState.Inactive) {
-				Screen.WindowMinimize(itr, Game.GAMECLIENTEXE);
+				if (Game.IsGameState(intr, GameState.ClientActive)) {
+					intr.Log("Minimizing client...", LogEntryType.Normal);
+					Screen.WindowMinimize(intr, Game.GAMECLIENTEXE);					
+				} 
+				return true;
 			} else if (desiredState == ClientState.None) {
-				KillAll(itr);
+				intr.Log("Attempting to close game client...", LogEntryType.Normal);
+				KillAll(intr);
+				return true;
 			} else if (desiredState == ClientState.CharSelect) {
-				switch (currentState) {
+				switch (Game.DetermineClientState(intr)) {
 					case ClientState.None:
-						itr.Log("Client not found, launching patcher.");
-						return PatcherLogin(itr);
+						intr.Log("Launching patcher...");
+						return PatcherLogin(intr, desiredState);
 
-					case ClientState.Inactive:
-						itr.Log("Client inactive, activating.");
-						return ActivateClient(itr);
+					case ClientState.Inactive:						
+						intr.Log("Game client currently inactive. Waiting 30 seconds before re-activating...", LogEntryType.Normal);
+						intr.Wait(30000);
+						intr.Log("Activating Client...", LogEntryType.Normal);
+						ActivateClient(intr);
+						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
 
 					case ClientState.InWorld:
-						itr.Log("Client in world, logging out.");
-						return LogOut(itr);
+						intr.Log("Logging out...", LogEntryType.Normal);
+						LogOut(intr);
+						return intr.WaitUntil(45, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
 
 					case ClientState.LogIn:
-						itr.Log("Client open, at login screen.");
-						return ClientSignIn(itr);
+						intr.Log("Client open, at login screen.", LogEntryType.Normal);
+						ClientSignIn(intr);
+						return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
 
-					default:
-						itr.Log("Client state unknown. Attempting to retry...");
-						break;
+					default:				
+						intr.Wait(1000);
+						if (!intr.WaitUntil(60, ClientState.CharSelect, Game.IsClientState, null)) {
+							intr.Log("Client state unknown. Attempting crash recovery...", LogEntryType.Info);
+							CrashCheckRecovery(intr);
+							return false;
+						} else {
+							return true;
+						}
 				}
 			}
 

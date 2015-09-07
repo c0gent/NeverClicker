@@ -12,13 +12,15 @@ using System.Configuration;
 using System.Xml;
 using NeverClicker.Properties;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
-	partial class AutomationEngine {
+	public partial class AutomationEngine {
 		const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; // make a user setting
-		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = true; // make a user setting
+		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make a user setting
 
 		private MainForm MainForm;
 		private Interactor Itr;
@@ -78,16 +80,24 @@ namespace NeverClicker {
 		
 		public void Log(LogMessage logMessage) {			
 			switch (logMessage.Type) {
+				case LogEntryType.FatalWithScreenshot:
+					SaveErrorScreenshot();
+					goto case LogEntryType.Fatal;
+				case LogEntryType.Fatal:					
+					//var msgBoxForm = new Form(){TopMost = true};
+					//MessageBox.Show(msgBoxForm, logMessage.Text, "NeverClicker Error");
+					MessageBox.Show(logMessage.Text, "NeverClicker Error");
+					//Task.Delay(495000).Wait();
+					goto case LogEntryType.Normal;
+				case LogEntryType.Error:
+					goto case LogEntryType.Normal;				
 				case LogEntryType.Warning:
 				case LogEntryType.Normal:
 					LogFile.AppendMessage(logMessage);
-					MainForm.WriteLine(logMessage.Text);					
-					break;
-				case LogEntryType.Error:
-				case LogEntryType.Fatal:
-					LogFile.AppendMessage(logMessage);
 					MainForm.WriteLine(logMessage.Text);
-					MessageBox.Show(logMessage.Text);
+					break;				
+				case LogEntryType.Info:
+					LogFile.AppendMessage(logMessage);
 					break;
 				case LogEntryType.Debug:
 					#pragma warning disable CS0162 // Unreachable code detected
@@ -96,6 +106,18 @@ namespace NeverClicker {
 #					pragma warning restore CS0162 // Unreachable code detected
 					break;				
 			}
+		}
+
+		public void SaveErrorScreenshot() {
+			ScreenCapture sc = new ScreenCapture();
+			Image img = sc.CaptureScreen();
+			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "ERROR_SCREENSHOT_PLEASE_INVESTIGATE"
+				+ DateTime.Now.ToFileTime().ToString() + ".png";
+			img.Save(errorImageFileName, ImageFormat.Png);
+
+			var errMsg = "FATAL ERROR: PLEASE INVESTIGATE AND REPORT! -- IMAGE FILE: " + errorImageFileName;
+			Log(new LogMessage(errMsg, LogEntryType.Fatal));
+			MessageBox.Show(errMsg, "NEVERCLICKER ERROR");
 		}
 
 		private Progress<LogMessage> GetLogProgress() {
@@ -107,9 +129,8 @@ namespace NeverClicker {
 		}
 
 		public async Task<TResult> Run<TResult>(Func<TResult> action) {
-			//Itr.Run(GetLogProgress());
+			MainForm.SetButtonStateRunning();
 			try {
-				//var result = await Task.Factory.StartNew(action, TaskCreationOptions.LongRunning);
 				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()), 
 					TaskCreationOptions.LongRunning, TaskScheduler.Current);
 				Itr.Stop();
@@ -118,24 +139,30 @@ namespace NeverClicker {
 				Log(ex.ToString());
 				MessageBox.Show(ex.ToString());
 				throw ex;
-			}
-		}
-		
-		public async Task Run(Action action) {
-			MainForm.SetButtonStateRunning();
-			try {
-				await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()),
-				//await Task.Factory.StartNew(action, Itr.Start(GetLogProgress()),
-					TaskCreationOptions.LongRunning, TaskScheduler.Current);
-			} catch (Exception ex) {
-				Log(ex.ToString());
-				MessageBox.Show(ex.ToString());
-				throw ex;
-			} finally {				
+			} finally {
 				Itr.Stop();
 				Log("Automation engine stopped. There may be outstanding tasks yet to terminate.");
 				MainForm.SetButtonStateStopped();
 			}
+		}
+		
+		public async Task Run(Action action) {
+			Func<bool> func = () => { action(); return false; };
+			await Run(func);
+
+			//MainForm.SetButtonStateRunning();
+			//try {
+			//	await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()),
+			//		TaskCreationOptions.LongRunning, TaskScheduler.Current);
+			//} catch (Exception ex) {
+			//	Log(ex.ToString());
+			//	MessageBox.Show(ex.ToString());
+			//	throw ex;
+			//} finally {				
+			//	Itr.Stop();
+			//	Log("Automation engine stopped. There may be outstanding tasks yet to terminate.");
+			//	MainForm.SetButtonStateStopped();
+			//}
 		}
 
 		public void Stop() {

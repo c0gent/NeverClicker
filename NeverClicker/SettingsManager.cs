@@ -26,6 +26,12 @@ namespace NeverClicker {
 		public const string LOG_FILE_NAME = "\\NeverClicker_Log.txt";
 		public const string OLD_AHK_SCRIPT_FILE_NAME = "\\NW_Common.ahk";
 
+		public SettingsManager() {
+			ExeConfigurationFileMap configMap = new ExeConfigurationFileMap();
+			configMap.ExeConfigFilename = @"d:\test\justAConfigFile.config.whateverYouLikeExtension";
+			Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+		}
+
 		//public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
 		public static string DefaultUserRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
 
@@ -35,9 +41,9 @@ namespace NeverClicker {
 			settingsValid &= PatcherExePathIsValid();
 			settingsValid &= UserRootFolderPathIsValid();
 			settingsValid &= InitSettingsFiles();
-			settingsValid &= InitImages();
+			settingsValid &= ImagesFolderIsValid();
 			settingsValid &= LogsFolderIsValid();
-
+			
 			return settingsValid;
 		}
 
@@ -130,10 +136,11 @@ namespace NeverClicker {
 
 		//}
 
-		public static bool InitImages() {
+		public static bool ImagesFolderIsValid() {
 			if (Directory.Exists(Settings.Default.ImagesFolderPath)) {
 				return true;
 			} else {
+				MessageBox.Show("Images folder does not exist.");
 				// CREATE DIRECTORY
 				// COPY IMAGE FILES
 				// VERIFY THEIR EXISTENCE
@@ -149,7 +156,7 @@ namespace NeverClicker {
 			if (Directory.Exists(Settings.Default.LogsFolderPath)) {
 				return true;
 			} else {
-				//MessageBox.Show("Logs folder does not exist.");
+				MessageBox.Show("Logs folder does not exist.");
 				return false;
 			}
 		}

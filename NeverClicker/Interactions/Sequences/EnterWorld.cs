@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static bool EnterWorld(Interactor itr, uint charZeroIdx) {
+		public static bool EnterWorld(Interactor intr, uint charZeroIdx) {
 			//SelectCharacter(CurrentCharacter, 1, 0)
 			//While (!(FindLoggedIn())) {
 			//	ClearOkPopupBullshit()

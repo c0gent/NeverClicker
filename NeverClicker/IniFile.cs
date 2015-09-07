@@ -32,7 +32,7 @@ namespace NeverClicker {
 					//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
 					return "";
 				} else {
-					return data[sectionName][settingName];
+					return data[sectionName][settingName].Trim();
 				}
 			} catch (Exception) {
 				MessageBox.Show("Problem loading ini files. Please check settings.");

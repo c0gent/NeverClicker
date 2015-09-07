@@ -82,6 +82,9 @@
     <ApplicationIcon>cursor-512.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Imaging">
+      <HintPath>..\..\AForge\Release\AForge.Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="INIFileParser, Version=2.2.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>..\packages\ini-parser.2.2.2\lib\net20\INIFileParser.dll</HintPath>
       <Private>True</Private>
@@ -98,16 +101,36 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.3.7.0\lib\net35\YamlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomationEngine.Tests.cs" />
+    <Compile Include="Forms\TestsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TestsForm.Designer.cs">
+      <DependentUpon>TestsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImageCompare.cs" />
+    <Compile Include="Interactions\CompletionStatus.cs" />
+    <Compile Include="Interactions\Keyboard\Keyboard.cs" />
+    <Compile Include="Interactions\Mouse\ClickImage.cs" />
+    <Compile Include="Interactions\Mouse\Mouse.cs" />
+    <Compile Include="Interactions\Screen\Wake.cs" />
     <Compile Include="Interactions\Screen\Window.cs" />
+    <Compile Include="Interactions\Sequences\ClearDialogues.cs" />
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
     <Compile Include="Interactions\Sequences\EnterWorld.cs" />
+    <Compile Include="Interactions\Sequences\Invoke.cs" />
     <Compile Include="Interactions\Sequences\LogWaitStatus.cs" />
+    <Compile Include="Interactions\Sequences\Patcher.cs" />
     <Compile Include="Interactions\Sequences\ProduceClientState.cs" />
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
+    <Compile Include="Interactions\Sequences\World.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Game\GameTask.cs" />
     <Compile Include="Game\GameTaskQueue.cs" />
@@ -120,10 +143,9 @@
     <Compile Include="Alib\AlibUtil.cs" />
     <Compile Include="AutomationEngine.cs" />
     <Compile Include="Interactions\Screen\ImageSearch.cs" />
-    <Compile Include="Interactions\Sequences\Activate.cs" />
     <Compile Include="Interactions\Sequences\AutoCycle.cs" />
     <Compile Include="Interactions\Sequences\MouseMoveTest.cs" />
-    <Compile Include="Game\GameState.cs" />
+    <Compile Include="Game\States.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,9 +159,13 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Interactions\Sequences\ProcessCharacter.cs" />
+    <Compile Include="ScreenCapture.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\TestsForm.resx">
+      <DependentUpon>TestsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,7 +186,6 @@
     <None Include="assets\NW_Common.ahk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Images\Thumbs.db" />
     <None Include="NeverClicker_Key.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -208,26 +233,54 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interactions\Keyboard\" />
-    <Folder Include="Interactions\Mouse\" />
     <Folder Include="Logs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\cursor-512.ico" />
     <Content Include="cursor-512.ico" />
-    <Content Include="Images\AbilityPanelSerpent.bmp">
+    <Content Include="Images\AbilityPanelSerpent.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\CharSelectSafeLoginButton.bmp">
+    <Content Include="Images\CharSelectSafeLoginButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ClientLoginButton.bmp">
+    <Content Include="Images\ClientLoginAutoLoggedOutOkButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\EnterWorldButton.bmp">
+    <Content Include="Images\ClientLoginButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\LoginButton.bmp">
+    <Content Include="Images\EnterWorldButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationMaximumBlessings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationNotReady.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationReady.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationRewardsOfDevotionCloseButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationRewardsOfDevotionDoneForDay.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationRewardsOfDevotionInvokeReady.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationRewardsOfDevotionPatience.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationRewardsOfDevotionWindowTitle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationSuccessWindowOkButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InvocationSuccessWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\nw_altar_icon.bmp">
@@ -290,19 +343,19 @@
     <Content Include="Images\nw_vault_piety_title_yellow.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PatcherLoginButtonPart.bmp">
+    <Content Include="Images\PatcherLoginButtonPart.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PatcherPlayButton.bmp">
+    <Content Include="Images\PatcherPlayButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\PatcherServerDownIndicator.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\PatcherServerUpIndicator.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\powers_reset.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\StartMenuButton.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\TestIcon.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

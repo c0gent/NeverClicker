@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Screen {
 
-		public static bool WindowDetectExist(Interactor itr, string windowExe) {
-			return WindowDetect(itr, windowExe, "Exist");
+		public static bool WindowDetectExist(Interactor intr, string windowExe) {
+			return WindowDetect(intr, windowExe, "Exist");
 		}
 
-		public static bool WindowDetectActive(Interactor itr, string windowExe) {
-			return WindowDetect(itr, windowExe, "Active");
+		public static bool WindowDetectActive(Interactor intr, string windowExe) {
+			return WindowDetect(intr, windowExe, "Active");
 		}
 
-		public static bool WindowDetect(Interactor itr, string windowExe, string flavor) {
+		public static bool WindowDetect(Interactor intr, string windowExe, string flavor) {
 			string detectionParam = string.Format("ahk_exe {0}", windowExe);
-			var result = itr.EvaluateFunction("Win" + flavor, detectionParam);
-			itr.Log("Interactions::Screen::WindowDetect" + flavor + "(): Win" + flavor + "(" + detectionParam + "): '" + result + "'", LogEntryType.Debug);
+			var result = intr.EvaluateFunction("Win" + flavor, detectionParam);
+			intr.Log("Interactions::Screen::WindowDetect" + flavor + "(): Win" + flavor + "(" + detectionParam + "): '" + result + "'", LogEntryType.Debug);
 
 			if ((result.Trim() == "0x0") || (string.IsNullOrWhiteSpace(result))) {
 				return false;
@@ -27,19 +27,24 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
-		public static void WindowMinimize(Interactor itr, string windowExe) {
-			string param = string.Format("ahk_exe {0}", windowExe);
-			itr.ExecuteStatement("WinMinimize, " + param);
-        }
-
-		public static void WindowActivate(Interactor itr, string windowExe) {
-			string param = string.Format("ahk_exe {0}", windowExe);
-			itr.ExecuteStatement("WinActivate, " + param);
+		public static void WindowRun(Interactor intr, string windowExePath) {
+			string param = string.Format("\"{0}\"", windowExePath);
+			intr.ExecuteStatement("Run, " + param);
 		}
 
-		public static void WindowKill(Interactor itr, string windowExe) {
+		public static void WindowMinimize(Interactor intr, string windowExe) {
 			string param = string.Format("ahk_exe {0}", windowExe);
-			itr.ExecuteStatement("WinKill, " + param);
+			intr.ExecuteStatement("WinMinimize, " + param);
+        }
+
+		public static void WindowActivate(Interactor intr, string windowExe) {
+			string param = string.Format("ahk_exe {0}", windowExe);
+			intr.ExecuteStatement("WinActivate, " + param);
+		}
+
+		public static void WindowKill(Interactor intr, string windowExe) {
+			string param = string.Format("ahk_exe {0}", windowExe);
+			intr.ExecuteStatement("WinKill, " + param);
 		}
 	}
 

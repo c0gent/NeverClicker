@@ -355,6 +355,10 @@ Init() {
 	LoadSetting("Plb_ImageFile", "nw_patcher_login_button.bmp", "SearchRectanglesAnd_ImageFiles")
 	Plb_ImageFile := A_ImagesDir . "\" . Plb_ImageFile
 
+	;--- Client Login Button --- NEW ---
+	LoadSetting("ClientLoginButton_ImageFile", "ClientLoginButton.png", "SearchRectanglesAnd_ImageFiles")
+	ClientLoginButton_ImageFile := A_ImagesDir . "\" . ClientLoginButton_ImageFile
+
 	;--- Client Charselect Logout Button ---
 	LoadSetting("Cslo_ImageFile", "nw_charselect_logout_button.bmp", "SearchRectanglesAnd_ImageFiles")
 	Cslo_ImageFile := A_ImagesDir . "\" . Cslo_ImageFile
@@ -374,6 +378,11 @@ Init() {
 	;--- Powers Reset Button Upon Character Select ---
 	LoadSetting("PowersReset_ImageFile", "powers_reset.bmp", "SearchRectanglesAnd_ImageFiles")
 	PowersReset_ImageFile := A_ImagesDir . "\" . PowersReset_ImageFile
+
+	
+	;--- Character Select Safe Login Button --- NEW ---
+	LoadSetting("CharSelectSafeLoginButton_ImageFile", "CharSelectSafeLoginButton.png", "SearchRectanglesAnd_ImageFiles")
+	CharSelectSafeLoginButton_ImageFile := A_ImagesDir . "\" . CharSelectSafeLoginButton_ImageFile
 
 
 	;--- Rectangle to search for number of 7/7 coins (unused)
@@ -726,20 +735,27 @@ EnterWorldInvoke(invoke_mode, MostRecentInvocationTime, CurrentCharacter, AutoUi
 			
 			Invoke(FirstRun, VaultPurchase)
 			
-			LogAppend("[*****TRACE: ENTERWORLDINVOKE(): POST-INVOKE]")			
+			LogAppend("[*****TRACE: ENTERWORLDINVOKE(): POST-INVOKE]")
+
+
 			
 			if (invoke_mode == 2) {
+				LogAppend("[*****TRACE: ENTERWORLDINVOKE(): REEDEEMING]")
 				Redeem(3)
 			}
 			
 			; #####	CLOSE ALL POP-UPS AND LOOP UNTIL THAT IS DONE
+			LogAppend("[*****TRACE: ENTERWORLDINVOKE(): CLEARING POPUPS]")
+
 			if (ClearOkPopupBullshit()) {
+				LogAppend("[*****TRACE: ENTERWORLDINVOKE(): AT LEAST ONE POPUP WAS CLEARED, ATTEMPTING TO INVOKE AGAIN]")
 				continue
 			} else {
+				LogAppend("[*****TRACE: ENTERWORLDINVOKE(): NO POPUPS WERE FOUND, COMPLETED]")
 				break
 			}
 			
-			LogAppend("[*****TRACE: ENTERWORLDINVOKE(): POST-INVOKE POST-CLEAROKPOPUPBULLSHIT]")
+			LogAppend("[*****TRACE: ENTERWORLDINVOKE(): POST-INVOKE POST-CLEAR-POPUPS]")
 		}
 		
 		LogAppend("[*****TRACE: ENTERWORLDINVOKE(): PRE-LOGOUT]")
@@ -1145,21 +1161,14 @@ Logout(fast_mode := 0) {
 	
 	LogAppend("[*****TRACE: LOGGING OUT]")
 	
-	Sleep 500 + Ran(100)
+	Sleep 100
 	
 	Send {Enter}
-	Sleep 140
+	Sleep 60
 	Send /gotocharacterselect
-	Sleep 190
+	Sleep 90
 	Send {Enter}
-	Sleep 400 + Ran(200)
-
-	;lo_but_x := LoButtonX + 4*Ran(OffsetSmall)
-	;lo_but_y := LoButtonY + Ran(OffsetSmall)
-	;SendEvent {Click %lo_but_x%, %lo_but_y%, 0}
-	;sleep LoggingOutClickExitNowExtraDelay
-	;SendEvent {Click %lo_but_x%, %lo_but_y%, 1}
-	;sleep AfterLogoutDelay + Ran(120)
+	Sleep 100
 }
 
 
@@ -1706,12 +1715,12 @@ FindPatcherOpen() {
 
 FindPatcherLoginButton() {
 	global
-	return FindAndClick(A_ImagesDir . "\" . "PatcherLoginButtonPart.bmp", 0, 1)
+	return FindAndClick(A_ImagesDir . "\" . "PatcherLoginButtonPart.png", 0, 1)
 }
 
 FindPatcherPlayButton() {
 	global
-	return FindAndClick(A_ImagesDir . "\" . "PatcherPlayButton.bmp", 0, 1)
+	return FindAndClick(A_ImagesDir . "\" . "PatcherPlayButton.png", 0, 1)
 }
 
 FindClientOpen() {

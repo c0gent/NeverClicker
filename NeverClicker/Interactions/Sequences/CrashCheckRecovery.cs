@@ -6,25 +6,31 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static bool CrashCheckRecovery(Interactor itr) {
+		public static bool CrashCheckRecovery(Interactor intr) {
 			var desiredState = ClientState.CharSelect;
 
-			switch (Game.GetGameState(itr)) {
+			Screen.Wake(intr);
+
+			Mouse.Move(intr, 1, 1);
+
+			intr.Wait(2000);
+
+			switch (Game.DetermineGameState(intr)) {
 				case GameState.Closed:
-					return ProduceClientState(itr, desiredState);
+					return ProduceClientState(intr, desiredState);
 
 				case GameState.Patcher:
-					return ProduceClientState(itr, desiredState);
+					return ProduceClientState(intr, desiredState);
 
 				case GameState.Unknown:
 				case GameState.ClientActive:
 					// CHECK FOR POPUP WINDOWS ETC.
 					// CHECK FOR CRASH
-					KillAll(itr);
-					return ProduceClientState(itr, desiredState);
+					KillAll(intr);
+					return ProduceClientState(intr, desiredState);
 
 				default:
-					itr.Log("ProduceClientState(): Unable to produce desired client state.");
+					intr.Log("ProduceClientState(): Unable to produce desired client state.");
 					//throw new NotImplementedException("ProduceClientState(): Unable to produce desired client state.");
 					return false;
 			}

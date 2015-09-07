@@ -13,7 +13,7 @@ using System.Collections;
 
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
-		AutomationEngine AutomationEngine;
+		public AutomationEngine AutomationEngine;
 		private void buttonExit_Click(object sender, EventArgs e) => Close();
 		
 
@@ -25,7 +25,7 @@ namespace NeverClicker.Forms {
 		}
 
 		private void MainForm_Load(object sender, EventArgs e) {
-			comboBoxGameTaskType.DataSource = Enum.GetValues(typeof(GameTaskType));			
+				
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e) {			
@@ -61,6 +61,11 @@ namespace NeverClicker.Forms {
 			opt.ShowDialog();
 		}
 
+		private void OpenTestsWindow() {
+			var opt = new TestsForm(this);
+			opt.ShowDialog();
+		}
+
 		public void UpdateButtonState() {
 			//switch (AutomationEngine.EvaluateStatementAsync) {
 			//	case 
@@ -80,7 +85,7 @@ namespace NeverClicker.Forms {
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = true;
-			this.tabControlPrimary.Enabled = false;
+			//this.tabControlPrimary.Enabled = false;
 			this.buttonStop.Enabled = true;
 		}
 
@@ -90,7 +95,7 @@ namespace NeverClicker.Forms {
 			this.buttonReload.Enabled = false;
 			buttonPause.Text = "Pause";
 			buttonPause.Enabled = false;
-			this.tabControlPrimary.Enabled = true;
+			//this.tabControlPrimary.Enabled = true;
 			this.buttonStop.Enabled = false;
 		}
 
@@ -101,7 +106,7 @@ namespace NeverClicker.Forms {
 			//buttonPause.Text = "Pause";
 			buttonPause.Enabled = false;
 			this.buttonStop.Enabled = false;
-			this.tabControlPrimary.Enabled = false;
+			//this.tabControlPrimary.Enabled = false;
 		}
 		
 
@@ -110,7 +115,7 @@ namespace NeverClicker.Forms {
 		}
 		
 		public void RefreshTaskQueue(SortedList<long, GameTask> taskListOrig) {
-			AutomationEngine.Log(new LogMessage("Refreshing task queue", LogEntryType.Debug));
+			//AutomationEngine.Log(new LogMessage("Refreshing task queue", LogEntryType.Debug));
 
 			var taskList = new SortedList<long, GameTask>(taskListOrig);
 
@@ -124,7 +129,7 @@ namespace NeverClicker.Forms {
 				MessageBox.Show("Error refreshing task queue: " + ex.ToString());
 			}
 
-			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
+			//AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
 
 			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
 			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();
@@ -143,23 +148,6 @@ namespace NeverClicker.Forms {
 			AutomationEngine.InitOldScript();
 		}
 
-		private void buttonExecuteStatement_Click(object sender, EventArgs e) {
-			AutomationEngine.ExecuteStatementAsync(textBoxExecuteStatement.Text);
-		}
-
-		private void buttonCheckVar_Click(object sender, EventArgs e) {
-			WriteLine(textBox_var.Text + ": " + this.AutomationEngine.GetVar(textBox_var.Text) + "\r\n");
-		}
-
-		private void buttonExecuteFunction_Click(object sender, EventArgs e) {
-			this.AutomationEngine.EvaluateFunction(
-				textBoxExecuteFunction.Text,
-				textBoxExecuteFunctionP1.Text,
-				textBoxExecuteFunctionP2.Text,
-				textBoxExecuteFunctionP3.Text
-			);
-		}
-
 		private void buttonReload_Click(object sender, EventArgs e) {
 			WriteLine("Reloading Interactor...");
 			AutomationEngine.Reload();
@@ -170,80 +158,18 @@ namespace NeverClicker.Forms {
 			AutomationEngine.TogglePause();
 		}		
 
-		private void textBoxDetectWindow_KeyPress(object sender, KeyPressEventArgs e) {
-			if (e.KeyChar == (char)Keys.Enter) {
-				buttonWindowDetect_Click(this, new EventArgs());
-			}
-		}
-
-		private async void buttonWindowDetect_Click(object sender, EventArgs e) {
-			string resultText;
-			if (await AutomationEngine.DetectWindowAsync(textBoxDetectWindow.Text)) {
-				resultText = "Found!";
-			} else {
-				resultText = "Not Found";
-			}
-
-			WriteLine(string.Format("'{0}': {1}", textBoxDetectWindow.Text, resultText));
-			buttonWindowDetect.Text = resultText;
-		}
-
-		private void textBoxDetectWindow_TextChanged(object sender, EventArgs e) {
-			buttonWindowDetect.Text = "Detect";
-		}
-
 		private void buttonAutoCycle_Click(object sender, EventArgs e) {
 			this.SetButtonStateRunning();
 			AutomationEngine.AutoCycle();
 		}
 
-		private void buttonAddCharIdx_Click(object sender, EventArgs e) {
-			int charIdx;
-			int delaySec;
 
-			try {
-				// TODO: CONVERT TO TRYPARSE()
-				charIdx = int.Parse(this.textBoxGameTaskCharIdx.Text);
-			} catch (FormatException) {
-				WriteLine("Error converting character index.");
-				return;
-			}
+		private void labelTaskQueue_Click(object sender, EventArgs e) {
 
-			try {
-				// TODO: CONVERT TO TRYPARSE()
-				delaySec = int.Parse(this.textBoxGameTaskDelaySec.Text);
-			} catch (FormatException) {
-				WriteLine("Error converting delay.");
-				return;
-			}
-
-			GameTaskType taskType;
-			Enum.TryParse(this.comboBoxGameTaskType.SelectedValue.ToString(), out taskType);
-
-			AutomationEngine.AddGameTask((uint)charIdx, delaySec);
 		}
 
-		private void buttonNextTask_Click(object sender, EventArgs e) {
-			AutomationEngine.ProcessNextGameTask();
+		private void buttonTestsForm_Click(object sender, EventArgs e) {
+			this.OpenTestsWindow();
 		}
-
-		private void buttonFindImage_Click(object sender, EventArgs e) {
-			AutomationEngine.ImageSearch(textBoxFindImage.Text);
-			WriteLine("Test1");
-		}
-
-		private void buttonWindowInactivate_Click(object sender, EventArgs e) {
-			AutomationEngine.WindowMinimize(textBoxDetectWindow.Text);
-		}
-
-		private void buttonWindowActivate_Click(object sender, EventArgs e) {
-			AutomationEngine.WindowActivate(textBoxDetectWindow.Text);
-		}
-
-		private void buttonWindowKill_Click(object sender, EventArgs e) {
-			AutomationEngine.WindowKill(textBoxDetectWindow.Text);
-		}
-
-		
 	}
 }

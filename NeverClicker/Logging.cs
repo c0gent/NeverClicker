@@ -2,6 +2,8 @@
 using NeverClicker.Properties;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -60,6 +62,7 @@ namespace NeverClicker {
 			//var root = LogXmlDoc.CreateElement("log_entries");
 			//LogXmlDoc.AppendChild(root);
 		}
+
 
 		//public static bool InitLogFile(string logFileName) {
 		//	//string logFileName = ;
@@ -124,33 +127,35 @@ namespace NeverClicker {
 		}
 	}
 
-	public enum LogEntryType {
-		Debug,
+	public enum LogEntryType {		
 		Normal,
+		Debug,
+		Info,
 		Warning,
-		Error,
-		Fatal
+		Error,		
+		Fatal,
+		FatalWithScreenshot,
 	}		
 }
 
 //namespace NeverClicker.Interactions {
 //	public static partial class Sequences {
-//		public static void LogWaitResult<T, U>(Interactor itr, T start, U end, bool success) {
+//		public static void LogWaitResult<T, U>(Interactor intr, T start, U end, bool success) {
 //			if (success) {
-//				itr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: "
+//				intr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: "
 //					+ start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
 //			} else {
-//				itr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " 
+//				intr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " 
 //					+ start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
 //			}
 //		}
 
-//		public static void LogSuccess<T, U>(Interactor itr, T start, U end) {
-//			itr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
+//		public static void LogSuccess<T, U>(Interactor intr, T start, U end) {
+//			intr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
 //		}
 
-//		public static void LogFailure<T, U>(Interactor itr, T start, U end) {
-//			itr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
+//		public static void LogFailure<T, U>(Interactor intr, T start, U end) {
+//			intr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
 //		}
 //	}
 //}

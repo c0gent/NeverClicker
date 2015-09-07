@@ -6,57 +6,65 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static bool ActivateClient(Interactor itr) {
+		public static bool ActivateClient(Interactor intr) {
 			//var desiredState = ClientState.CharSelect;
-			itr.ExecuteStatement("ActivateNeverwinter()");
+			//intr.ExecuteStatement("ActivateNeverwinter()");
 
-			return itr.WaitUntil(10, ClientState.CharSelect, Game.GetClientState, ProduceClientState); 
+			Screen.WindowActivate(intr, Game.GAMECLIENTEXE);
 
-			//if (itr.WaitUntil(5, () => { return Game.GetClientState(itr) == desiredState; })) {
-			//	LogSuccess(itr, ClientState.Inactive, desiredState);
+			intr.Wait(1000);
+
+			return true;
+
+			//if (intr.WaitUntil(5, () => { return Game.GetClientState(intr) == desiredState; })) {
+			//	LogSuccess(intr, ClientState.Inactive, desiredState);
 			//	return true;
 			//} else {
-			//	LogFailure(itr, ClientState.Inactive, desiredState);
-			//	return ProduceClientState(itr, desiredState);
+			//	LogFailure(intr, ClientState.Inactive, desiredState);
+			//	return ProduceClientState(intr, desiredState);
 			//}
 		}
 
-		public static bool LogOut(Interactor itr) {
+		public static bool LogOut(Interactor intr) {
 			//var desiredState = ClientState.CharSelect;
-			itr.Log("Logging out.");
-			itr.ExecuteStatement("ActivateNeverwinter()");
+			intr.ExecuteStatement("Logout()");
+			//intr.ExecuteStatement("ActivateNeverwinter()");
 
-			return itr.WaitUntil(20, ClientState.CharSelect, Game.GetClientState, ProduceClientState);
+			intr.Wait(3000);
 
-			//if (itr.WaitUntil(10, () => { return Game.GetClientState(itr) == desiredState; })) {
-			//	LogSuccess(itr, ClientState.InWorld, desiredState);
+			return true;
+
+			//if (intr.WaitUntil(10, () => { return Game.GetClientState(intr) == desiredState; })) {
+			//	LogSuccess(intr, ClientState.InWorld, desiredState);
 			//	return true;
 			//} else {
-			//	LogFailure(itr, ClientState.InWorld, desiredState);
-			//	return ProduceClientState(itr, desiredState);
+			//	LogFailure(intr, ClientState.InWorld, desiredState);
+			//	return ProduceClientState(intr, desiredState);
 			//}
 		}
 
-		public static bool ClientSignIn(Interactor itr) {
+		public static bool ClientSignIn(Interactor intr) {
 			//var desiredState = ClientState.CharSelect;
-			itr.Log("Signing in Client.");
-			itr.ExecuteStatement("ClientLogin()");
+			intr.Log("Signing in Client...", LogEntryType.Info);
+			intr.ExecuteStatement("ClientLogin()");
 
-			return itr.WaitUntil(45, ClientState.CharSelect, Game.GetClientState, ProduceClientState);
+			intr.Wait(3000);
 
-			//if (itr.WaitUntil(60, () => { return Game.GetClientState(itr) == desiredState; })) {
-			//	LogSuccess(itr, ClientState.LogIn, desiredState);
+			return true;
+
+			//if (intr.WaitUntil(60, () => { return Game.GetClientState(intr) == desiredState; })) {
+			//	LogSuccess(intr, ClientState.LogIn, desiredState);
 			//	return true;
 			//} else {
-			//	LogFailure(itr, ClientState.LogIn, desiredState);
-			//	return ProduceClientState(itr, desiredState);
+			//	LogFailure(intr, ClientState.LogIn, desiredState);
+			//	return ProduceClientState(intr, desiredState);
 			//}
 		}
 
 
-		public static void KillAll(Interactor itr) {
-			itr.Log("Closing game client.");
-			itr.ExecuteStatement("VigilantlyCloseClientAndExit()");
+		public static void KillAll(Interactor intr) {
+			intr.Log("Closing game client and/or patcher...", LogEntryType.Info);
+			intr.ExecuteStatement("VigilantlyCloseClientAndExit()");
 		}
 	}
 }

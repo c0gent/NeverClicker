@@ -11,25 +11,25 @@ namespace NeverClicker.Interactions {
 		public const string OUTPUT_VAR_X = "OutputVarX";
 		public const string OUTPUT_VAR_Y = "OutputVarY";
 		public const string ERROR_LEVEL = "ErrorLevel";
-		public const string OPTIONS = "*40";
+		//public const string OPTIONS = "*40";
 
-		public static Point ImageSearchAndClick(Interactor itr, string imgCode) {
+		public static Point ImageSearchAndClick(Interactor intr, string imgCode) {
 			return new Point(0, 0);
 		}
 
-		public static ImageSearchResult ImageSearch(Interactor itr, string imgCode) {
+		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode) {
 			//ImageSearch, ImgX, ImgY, 1, 1, 1920, 1080, *40 % image_file %
-			var imageFileName = itr.GameClient.GetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
+			var imageFileName = intr.GameClient.GetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 			if (string.IsNullOrWhiteSpace(imageFileName)) {
-				itr.Log("Image code prefix '" + imgCode + "' not found in settings ini file.");
+				intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file.", LogEntryType.Error);
 				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
 			}
 
 			var imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
 
-			itr.Log(new LogMessage("Searching for image: '" + imageFilePath
-				+ "' [ScreenWidth:" + itr.GetVar("A_ScreenWidth")
-				+ " ScreenHeight:" + itr.GetVar("A_ScreenHeight") + "]",
+			intr.Log(new LogMessage("ImageSearch(" + imgCode + "): Searching for image: '" + imageFilePath
+				+ "' [ScreenWidth:" + intr.GetVar("A_ScreenWidth")
+				+ " ScreenHeight:" + intr.GetVar("A_ScreenHeight") + "]",
 				LogEntryType.Debug			
 			));
 
@@ -37,46 +37,50 @@ namespace NeverClicker.Interactions {
 			int outY = 0;
 			int errorLevel = 0;
 
-			itr.SetVar(OUTPUT_VAR_X, outX.ToString());
-			itr.SetVar(OUTPUT_VAR_Y, outY.ToString());
+			var imgSrcOptions = Settings.Default.ImageShadeVariation.ToString();
+
+			intr.SetVar(OUTPUT_VAR_X, outX.ToString());
+			intr.SetVar(OUTPUT_VAR_Y, outY.ToString());
 
 			var statement = string.Format("ImageSearch, {0}, {1}, {2}, {3}, {4}, {5}, {6} {7}",
-				 OUTPUT_VAR_X, OUTPUT_VAR_Y, "0", "0", "A_ScreenWidth", "A_ScreenHeight", OPTIONS, imageFilePath);
+				 OUTPUT_VAR_X, OUTPUT_VAR_Y, "0", "0", "A_ScreenWidth", "A_ScreenHeight", "*" + imgSrcOptions, imageFilePath);
 
-			//itr.Log(new LogMessage("Executing: '" + statement + "'", LogEntryType.Detail));
+			//intr.Log(new LogMessage(""ImageSearch(" + imgCode + "): Executing: '" + statement + "'", LogEntryType.Detail));
 
-			itr.ExecuteStatement(statement);
+			intr.ExecuteStatement(statement);
 
-			int.TryParse(itr.GetVar(OUTPUT_VAR_X), out outX);
-			int.TryParse(itr.GetVar(OUTPUT_VAR_Y), out outY);
-			int.TryParse(itr.GetVar(ERROR_LEVEL), out errorLevel);
+			int.TryParse(intr.GetVar(OUTPUT_VAR_X), out outX);
+			int.TryParse(intr.GetVar(OUTPUT_VAR_Y), out outY);
+			int.TryParse(intr.GetVar(ERROR_LEVEL), out errorLevel);
 
-			itr.Log(new LogMessage(
-					"ImageSearch Results: "
-					+ " OutputVarX:" + itr.GetVar(OUTPUT_VAR_X)
-					+ " OutputVarY:" + itr.GetVar(OUTPUT_VAR_Y)
-					+ " ErrorLevel:" + itr.GetVar(ERROR_LEVEL),
+			intr.Log(new LogMessage(
+					"ImageSearch(" + imgCode + "): Results: "
+					+ " OutputVarX:" + intr.GetVar(OUTPUT_VAR_X)
+					+ " OutputVarY:" + intr.GetVar(OUTPUT_VAR_Y)
+					+ " ErrorLevel:" + intr.GetVar(ERROR_LEVEL),
 					LogEntryType.Debug					
 			));
 
 			//try {
 
-			//	outX = int.Parse(itr.GetVar(OUTPUT_VAR_X));
-			//	outY = int.Parse(itr.GetVar(OUTPUT_VAR_Y));
-			//	errorLevel = int.Parse(itr.GetVar(ERROR_LEVEL));
+			//	outX = int.Parse(intr.GetVar(OUTPUT_VAR_X));
+			//	outY = int.Parse(intr.GetVar(OUTPUT_VAR_Y));
+			//	errorLevel = int.Parse(intr.GetVar(ERROR_LEVEL));
 			//} catch (Exception){
 			//	throw new ProblemConductingImageSearchException("ImageSearch Results: "
-			//		+ " OutputVarX:" + itr.GetVar(OUTPUT_VAR_X)
-			//		+ " OutPutVarY:" + itr.GetVar(OUTPUT_VAR_Y)
-			//		+ " ErrorLevel:" + itr.GetVar(ERROR_LEVEL)
+			//		+ " OutputVarX:" + intr.GetVar(OUTPUT_VAR_X)
+			//		+ " OutPutVarY:" + intr.GetVar(OUTPUT_VAR_Y)
+			//		+ " ErrorLevel:" + intr.GetVar(ERROR_LEVEL)
 			//	);
 			//	//return new FindResult() { Found = false, At = new Point(0, 0) };
 			//}
 
 			switch (errorLevel) {
 				case 0:
+					intr.Log("ImageSearch(" + imgCode + "): Found.", LogEntryType.Info);
 					return new ImageSearchResult() { Found = true, Point = new Point(outX, outY) };
 				case 1:
+					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Debug);
 					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };				
 				case 2:
 					throw new ProblemConductingImageSearchException();

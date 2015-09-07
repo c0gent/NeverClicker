@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void LogWaitStatus<TState>(Interactor itr, TState end, bool success) {
+		public static void LogWaitStatus<TState>(Interactor intr, TState end, bool success) {
 			if (success) {
-				itr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Success producing client state: "
-					+ " -> " + end.ToString() + ".", LogEntryType.Debug);
+				intr.Log("WaitUntil(): Success producing client state: "
+					+ " -> " + end.ToString() + ".", LogEntryType.Info);
 			} else {
-				itr.Log("logging.cs::Interactions::Sequences::LogFailure(): Failure to produce client state: "
-					+ " -> " + end.ToString() + ". Re-evaluating...", LogEntryType.Debug);
+				intr.Log("WaitUntil(): Failure to produce client state: "
+					+ " -> " + end.ToString() + ". Re-evaluating...", LogEntryType.Info);
 			}
 		}
 	}

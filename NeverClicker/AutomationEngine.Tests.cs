@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 namespace NeverClicker {
-	partial class AutomationEngine {
+	public partial class AutomationEngine {
 		
 		public void Timer() {
 			Timer aTimer = new Timer();
@@ -22,6 +22,10 @@ namespace NeverClicker {
 		// Specify what you want to happen when the Elapsed event is raised.
 		private void OnTimedEvent(object source, ElapsedEventArgs e) {
 			Log("Hello World!");
+		}
+
+		public async void SendKeys(string keys) {
+			await Run(() => Keyboard.SendTest(Itr, keys));
 		}
 		
 
@@ -47,9 +51,9 @@ namespace NeverClicker {
 
 			if (!Queue.IsEmpty()) {
 				nextTask = Queue.Pop();
-				Log("Processing next task: character: " + nextTask.CharacterZeroIdx.ToString()
-					+ ", time: " + nextTask.MatureTime.ToShortTimeString()
-					+ ", type: " + nextTask.Type.ToString() + ".");
+				Log("Processing next task for character " + nextTask.CharacterZeroIdx.ToString()
+					+ "; time: " + nextTask.MatureTime.ToShortTimeString()
+					+ "; type: " + nextTask.Type.ToString() + ".");
 			} else {
 				Log("Task queue is empty.");
 			}

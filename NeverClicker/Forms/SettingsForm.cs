@@ -52,7 +52,11 @@ namespace NeverClicker {
 			//} else {
 			//	this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH_DEFAULT;
 			//}
-			this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH_DEFAULT;
+			if (SettingsManager.ImagesFolderIsValid()) {
+				this.textBoxImagesFolder.Text = Settings.Default.ImagesFolderPath;
+			} else {
+				this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH_DEFAULT;
+			}
 
 			// ##### SETTINGS #####
 			//if (Directory.Exists(Settings.Default.SettingsFolderPath)) {
@@ -69,20 +73,37 @@ namespace NeverClicker {
 			//	this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.LOGS_SUBPATH_DEFAULT;
 			//}
 			this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.LOGS_SUBPATH_DEFAULT;
+
+
+			this.textBoxImageShadeVariation.Text = Settings.Default.ImageShadeVariation.ToString();
 		}
 
 
 		private void buttonSave_Click(object sender, EventArgs e) {
+			bool saveSuccess = true;
+
 			Settings.Default.NeverwinterExePath = this.textBoxPatcherExePath.Text;
 			Settings.Default.UserRootFolderPath = this.textBoxUserRootFolder.Text;
 			Settings.Default.ImagesFolderPath = this.textBoxImagesFolder.Text;
 			Settings.Default.SettingsFolderPath = this.textBoxSettingsFolder.Text;
 			Settings.Default.LogsFolderPath = this.textBoxLogsFolder.Text;
 
-			//Settings.Default.Save();
+			ushort imageShadeVariation = 0;
+			bool parseSuccess = ushort.TryParse(this.textBoxImageShadeVariation.Text, out imageShadeVariation);
 
-			if (SettingsManager.Save()) {
-				Settings.Default.Save();								
+			if ((parseSuccess) && (imageShadeVariation <= 255)) {
+				Settings.Default.ImageShadeVariation = imageShadeVariation;							
+			} else {
+				MessageBox.Show("Image shade variation must be a number between 0 and 255.");
+				saveSuccess = false;
+			}
+
+			if (!SettingsManager.Save()) {
+				saveSuccess = false;
+			} 
+
+			if (saveSuccess) {
+				Settings.Default.Save();
 				Close();
 				MainForm.ReloadSettings();
 			} else {
@@ -150,6 +171,16 @@ namespace NeverClicker {
 		private void linkLabelUserConfigFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			Process.Start(Path.GetDirectoryName(linkLabelUserConfigFile.Text));
 		}
+
+		private void tabControlOptions_Selected(object sender, TabControlEventArgs e) {
+			using (StreamReader sr = File.OpenText(Settings.Default.SettingsFolderPath + "\\yamlTest.yaml")) {
+
+			}
+			//var input = new 
+			//this.textBoxTestFileContents = YamlDotNet.Serialization.
+		}
+
+
 
 
 

@@ -21,7 +21,13 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="AssetsFolderPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ImageShadeVariation" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
