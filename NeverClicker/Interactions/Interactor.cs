@@ -286,10 +286,11 @@ namespace NeverClicker.Interactions {
 		}
 
 		public TimeSpan AddRandomDelay(TimeSpan original) {
-			var min = (int)original.TotalMilliseconds;
-			var max = min + (min / 2);
+			var min = (int)original.TotalSeconds;
+			// MAX_DELAY = ORIG + (IF ORIG < ONE HOUR --> ORIG / 2) ELSE IF (ORIG IS >= ONE HOUR --> ONE HOUR)
+			var max = min + ((min < 3600) ? (min / 2) : 3600);
 			int newDelay = Rng.Next(min, max);
-			return new TimeSpan(0, 0, 0, 0, newDelay);
+			return new TimeSpan(0, 0, 0, newDelay);
 		}
 
 		public TimeSpan RandomDelay(int minutesMin, int minutesMax) {
