@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void ClearDialogues() {
-
+		public static void ClearSafeLogin(Interactor intr) {
+			Mouse.ClickImage(intr, "CharSelectSafeLoginButton");
 		}
 	}
 }

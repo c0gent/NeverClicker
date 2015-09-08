@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,8 +8,17 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Mouse {
 
+		public static void Click(Interactor intr, Point point) {
+			Click(intr, point.X, point.Y);
+		}
+
 		public static void Click(Interactor intr, int xCoord, int yCoord) {
 			intr.ExecuteStatement("SendEvent { Click " + xCoord + ", " + yCoord + ", 1 }");
+		}
+
+
+		public static void DoubleClick(Interactor intr, Point point) {
+			DoubleClick(intr, point.X, point.Y);
 		}
 
 		public static void DoubleClick(Interactor intr, int xCoord, int yCoord) {
@@ -17,9 +27,15 @@ namespace NeverClicker.Interactions {
 			intr.ExecuteStatement("SendEvent { Click 2 }");
 		}
 
+
+		public static void Move(Interactor intr, Point point) {
+			Move(intr, point.X, point.Y);
+		}
+
 		public static void Move(Interactor intr, int xCoord, int yCoord) {
 			intr.ExecuteStatement("SendEvent { Click " + xCoord + ", " + yCoord + ", 0 }");
 		}
+
 
 		public static void WheelUp(Interactor intr) {
 			intr.ExecuteStatement("SendEvent { Click WheelUp }");

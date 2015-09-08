@@ -124,8 +124,16 @@ namespace NeverClicker {
 			} else {
 				Log("Image not found.");
 			}
+		}
 
-			Itr.Stop();
+		public async void ImageClick(string imgCode) {
+			var searchResult = await Run(() => Mouse.ClickImage(Itr, imgCode));
+
+			if (searchResult) {
+				Log("Image clicked.");
+			} else {
+				Log("Image not found.");
+			}
 		}
 	}
 }

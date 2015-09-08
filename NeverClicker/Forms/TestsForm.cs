@@ -92,7 +92,12 @@ namespace NeverClicker.Forms {
 
 		private void buttonFindImage_Click(object sender, EventArgs e) {
 			MainForm.AutomationEngine.ImageSearch(textBoxFindImage.Text);
-			MainForm.WriteLine("Test1");
+			//MainForm.WriteLine("Test1");
+		}
+
+		private void buttonClickImage_Click(object sender, EventArgs e) {
+			MainForm.AutomationEngine.ImageClick(textBoxFindImage.Text);
+			//MainForm.WriteLine("Test1");
 		}
 
 		private void buttonWindowInactivate_Click(object sender, EventArgs e) {
@@ -111,5 +116,7 @@ namespace NeverClicker.Forms {
 			MainForm.AutomationEngine.SendKeys(textBoxSendKeys.Text);
             //Interactions.Keyboard.Send();
 		}
+
+
 	}
 }

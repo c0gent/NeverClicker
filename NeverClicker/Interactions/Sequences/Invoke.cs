@@ -12,12 +12,15 @@ namespace NeverClicker.Interactions {
 		public static CompletionStatus Invoke(Interactor intr) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
-			intr.ExecuteStatement("ClearOkPopupBullshit()");
+			//intr.ExecuteStatement("ClearOkPopupBullshit()");			
 
-			intr.Wait(100);
+			intr.Wait(1000);
 
-			intr.ExecuteStatement("MoveAround()");
-			intr.Wait(100);
+			ClearOkButtons(intr);
+			intr.Wait(200);			
+
+			//intr.ExecuteStatement("MoveAround()");
+			MoveAround(intr);
 
 
 			string invokeKey = intr.GameClient.GetSetting("NwInvokeKey", "GameHotkeys");
@@ -26,15 +29,31 @@ namespace NeverClicker.Interactions {
 			intr.Log("Performing invocation...", LogEntryType.Info);
 			Keyboard.SendKey(intr, invokeKey);
 
+
+
+
+
+
 			intr.Wait(300);
 
-			 if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
-				intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
-				intr.ExecuteStatement("Redeem(5)");
-				intr.ExecuteStatement("MoveAround()");
-				//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);
-				Keyboard.SendKey(intr, invokeKey);
-			}
+			RedeemCelestialCoins(intr);
+
+			return CompletionStatus.Complete;
+			
+			// if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
+			//	intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
+			//	intr.ExecuteStatement("Redeem(5)");
+			//	//intr.ExecuteStatement("MoveAround()");
+			//	MoveAround(intr);
+			//	//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);
+			//	Keyboard.SendKey(intr, invokeKey);
+			//}
+
+
+
+
+
+
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
@@ -60,12 +79,13 @@ namespace NeverClicker.Interactions {
 			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {
 				// check for findmaxblessings
 				Keyboard.SendKey(intr, invokeKey);
-				intr.Wait(500);
+				intr.Wait(1500);
 			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Info);
-				intr.ExecuteStatement("FindAndClick(\"InvocationRewardsOfDevotionCloseButton.png\")");
+				//intr.ExecuteStatement("FindAndClick(\"InvocationRewardsOfDevotionCloseButton.png\")");
+				Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
 			}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {

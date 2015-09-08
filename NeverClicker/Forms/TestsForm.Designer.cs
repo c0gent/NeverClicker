@@ -68,6 +68,7 @@
 			this.textBoxSendKeys = new System.Windows.Forms.TextBox();
 			this.buttonLoadOldScript = new System.Windows.Forms.Button();
 			this.buttonMoveMouse = new System.Windows.Forms.Button();
+			this.buttonClickImage = new System.Windows.Forms.Button();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageRaw.SuspendLayout();
 			this.tabPageWindow.SuspendLayout();
@@ -77,19 +78,19 @@
 			// 
 			// tabControlPrimary
 			// 
-			this.tabControlPrimary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.tabControlPrimary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControlPrimary.Controls.Add(this.tabPageStatus);
 			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
 			this.tabControlPrimary.Controls.Add(this.tabPageWindow);
 			this.tabControlPrimary.Controls.Add(this.tabPageQueue);
 			this.tabControlPrimary.Controls.Add(this.tabPageOther);
-			this.tabControlPrimary.Location = new System.Drawing.Point(32, 51);
+			this.tabControlPrimary.Location = new System.Drawing.Point(9, 9);
 			this.tabControlPrimary.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControlPrimary.Name = "tabControlPrimary";
 			this.tabControlPrimary.Padding = new System.Drawing.Point(0, 0);
 			this.tabControlPrimary.SelectedIndex = 0;
-			this.tabControlPrimary.Size = new System.Drawing.Size(446, 238);
+			this.tabControlPrimary.Size = new System.Drawing.Size(493, 322);
 			this.tabControlPrimary.TabIndex = 18;
 			// 
 			// tabPageStatus
@@ -98,7 +99,7 @@
 			this.tabPageStatus.Location = new System.Drawing.Point(4, 22);
 			this.tabPageStatus.Name = "tabPageStatus";
 			this.tabPageStatus.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageStatus.Size = new System.Drawing.Size(438, 212);
+			this.tabPageStatus.Size = new System.Drawing.Size(485, 296);
 			this.tabPageStatus.TabIndex = 4;
 			this.tabPageStatus.Text = "Status";
 			// 
@@ -123,7 +124,7 @@
 			this.tabPageRaw.Location = new System.Drawing.Point(4, 22);
 			this.tabPageRaw.Name = "tabPageRaw";
 			this.tabPageRaw.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageRaw.Size = new System.Drawing.Size(438, 212);
+			this.tabPageRaw.Size = new System.Drawing.Size(485, 296);
 			this.tabPageRaw.TabIndex = 0;
 			this.tabPageRaw.Text = "Raw";
 			// 
@@ -253,6 +254,7 @@
 			// tabPageWindow
 			// 
 			this.tabPageWindow.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageWindow.Controls.Add(this.buttonClickImage);
 			this.tabPageWindow.Controls.Add(this.buttonWindowActivate);
 			this.tabPageWindow.Controls.Add(this.buttonWindowKill);
 			this.tabPageWindow.Controls.Add(this.buttonWindowMinimize);
@@ -266,13 +268,13 @@
 			this.tabPageWindow.Location = new System.Drawing.Point(4, 22);
 			this.tabPageWindow.Name = "tabPageWindow";
 			this.tabPageWindow.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageWindow.Size = new System.Drawing.Size(438, 212);
+			this.tabPageWindow.Size = new System.Drawing.Size(485, 296);
 			this.tabPageWindow.TabIndex = 1;
 			this.tabPageWindow.Text = "Window";
 			// 
 			// buttonWindowActivate
 			// 
-			this.buttonWindowActivate.Location = new System.Drawing.Point(150, 77);
+			this.buttonWindowActivate.Location = new System.Drawing.Point(150, 132);
 			this.buttonWindowActivate.Name = "buttonWindowActivate";
 			this.buttonWindowActivate.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowActivate.TabIndex = 9;
@@ -281,7 +283,7 @@
 			// 
 			// buttonWindowKill
 			// 
-			this.buttonWindowKill.Location = new System.Drawing.Point(312, 77);
+			this.buttonWindowKill.Location = new System.Drawing.Point(312, 132);
 			this.buttonWindowKill.Name = "buttonWindowKill";
 			this.buttonWindowKill.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowKill.TabIndex = 8;
@@ -290,7 +292,7 @@
 			// 
 			// buttonWindowMinimize
 			// 
-			this.buttonWindowMinimize.Location = new System.Drawing.Point(231, 77);
+			this.buttonWindowMinimize.Location = new System.Drawing.Point(231, 132);
 			this.buttonWindowMinimize.Name = "buttonWindowMinimize";
 			this.buttonWindowMinimize.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowMinimize.TabIndex = 7;
@@ -315,7 +317,7 @@
 			// 
 			// textBoxDetectWindow
 			// 
-			this.textBoxDetectWindow.Location = new System.Drawing.Point(98, 51);
+			this.textBoxDetectWindow.Location = new System.Drawing.Point(98, 106);
 			this.textBoxDetectWindow.Name = "textBoxDetectWindow";
 			this.textBoxDetectWindow.Size = new System.Drawing.Size(289, 20);
 			this.textBoxDetectWindow.TabIndex = 2;
@@ -328,6 +330,7 @@
 			this.buttonFindImage.TabIndex = 4;
 			this.buttonFindImage.Text = "Find";
 			this.buttonFindImage.UseVisualStyleBackColor = true;
+			this.buttonFindImage.Click += new System.EventHandler(this.buttonFindImage_Click);
 			// 
 			// labelFindImage2
 			// 
@@ -341,7 +344,7 @@
 			// labelDetectWindow
 			// 
 			this.labelDetectWindow.AutoSize = true;
-			this.labelDetectWindow.Location = new System.Drawing.Point(6, 54);
+			this.labelDetectWindow.Location = new System.Drawing.Point(6, 109);
 			this.labelDetectWindow.Name = "labelDetectWindow";
 			this.labelDetectWindow.Size = new System.Drawing.Size(73, 13);
 			this.labelDetectWindow.TabIndex = 1;
@@ -349,7 +352,7 @@
 			// 
 			// buttonWindowDetect
 			// 
-			this.buttonWindowDetect.Location = new System.Drawing.Point(69, 77);
+			this.buttonWindowDetect.Location = new System.Drawing.Point(69, 132);
 			this.buttonWindowDetect.Name = "buttonWindowDetect";
 			this.buttonWindowDetect.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowDetect.TabIndex = 0;
@@ -370,7 +373,7 @@
 			this.tabPageQueue.Location = new System.Drawing.Point(4, 22);
 			this.tabPageQueue.Name = "tabPageQueue";
 			this.tabPageQueue.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageQueue.Size = new System.Drawing.Size(438, 212);
+			this.tabPageQueue.Size = new System.Drawing.Size(485, 296);
 			this.tabPageQueue.TabIndex = 2;
 			this.tabPageQueue.Text = "Queue";
 			// 
@@ -453,7 +456,7 @@
 			this.tabPageOther.Location = new System.Drawing.Point(4, 22);
 			this.tabPageOther.Name = "tabPageOther";
 			this.tabPageOther.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageOther.Size = new System.Drawing.Size(438, 212);
+			this.tabPageOther.Size = new System.Drawing.Size(485, 296);
 			this.tabPageOther.TabIndex = 3;
 			this.tabPageOther.Text = "Other";
 			// 
@@ -500,14 +503,24 @@
 			this.buttonMoveMouse.Text = "Move Mouse";
 			this.buttonMoveMouse.UseVisualStyleBackColor = true;
 			// 
-			// Tests
+			// buttonClickImage
+			// 
+			this.buttonClickImage.Location = new System.Drawing.Point(393, 11);
+			this.buttonClickImage.Name = "buttonClickImage";
+			this.buttonClickImage.Size = new System.Drawing.Size(75, 23);
+			this.buttonClickImage.TabIndex = 10;
+			this.buttonClickImage.Text = "Click";
+			this.buttonClickImage.UseVisualStyleBackColor = true;
+			this.buttonClickImage.Click += new System.EventHandler(this.buttonClickImage_Click);
+			// 
+			// TestsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(511, 340);
 			this.Controls.Add(this.tabControlPrimary);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "Tests";
+			this.Name = "TestsForm";
 			this.Text = "Tests";
 			this.Load += new System.EventHandler(this.Tests_Load);
 			this.tabControlPrimary.ResumeLayout(false);
@@ -569,5 +582,6 @@
 		private System.Windows.Forms.TextBox textBoxSendKeys;
 		private System.Windows.Forms.Button buttonLoadOldScript;
 		private System.Windows.Forms.Button buttonMoveMouse;
+		private System.Windows.Forms.Button buttonClickImage;
 	}
 }

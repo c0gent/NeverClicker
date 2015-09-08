@@ -121,14 +121,17 @@
     <Compile Include="Interactions\Mouse\Mouse.cs" />
     <Compile Include="Interactions\Screen\Wake.cs" />
     <Compile Include="Interactions\Screen\Window.cs" />
-    <Compile Include="Interactions\Sequences\ClearDialogues.cs" />
+    <Compile Include="Interactions\Sequences\ClearOkButtons.cs" />
+    <Compile Include="Interactions\Sequences\ClearSafeLogin.cs" />
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
     <Compile Include="Interactions\Sequences\EnterWorld.cs" />
     <Compile Include="Interactions\Sequences\Invoke.cs" />
     <Compile Include="Interactions\Sequences\LogWaitStatus.cs" />
+    <Compile Include="Interactions\Sequences\MoveAround.cs" />
     <Compile Include="Interactions\Sequences\Patcher.cs" />
     <Compile Include="Interactions\Sequences\ProduceClientState.cs" />
+    <Compile Include="Interactions\Sequences\RedeemCelestialCoins.cs" />
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
     <Compile Include="Interactions\Sequences\World.cs" />
     <Compile Include="Logging.cs" />
@@ -239,6 +242,12 @@
     <Content Include="assets\cursor-512.ico" />
     <Content Include="cursor-512.ico" />
     <Content Include="Images\AbilityPanelSerpent.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CharSelectOkayButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CharSelectOkButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\CharSelectSafeLoginButton.png">

@@ -13,9 +13,9 @@ namespace NeverClicker.Interactions {
 		public const string ERROR_LEVEL = "ErrorLevel";
 		//public const string OPTIONS = "*40";
 
-		public static Point ImageSearchAndClick(Interactor intr, string imgCode) {
-			return new Point(0, 0);
-		}
+		//public static Point ImageSearchAndClick(Interactor intr, string imgCode) {
+		//	return new Point(0, 0);
+		//}
 
 		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode) {
 			//ImageSearch, ImgX, ImgY, 1, 1, 1920, 1080, *40 % image_file %

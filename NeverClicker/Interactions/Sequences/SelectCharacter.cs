@@ -144,8 +144,10 @@ namespace NeverClicker.Interactions {
 
 
 
-			intr.ExecuteStatement("ClearSafeLogin()");
-			intr.ExecuteStatement("ClearOkPopupBullshit()");
+			//intr.ExecuteStatement("ClearSafeLogin()");			
+			//intr.ExecuteStatement("ClearOkPopupBullshit()");
+			ClearSafeLogin(intr);
+			ClearOkButtons(intr);
 
 			intr.Wait(3000);
 

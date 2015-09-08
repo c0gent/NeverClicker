@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Mouse {
-
+		public static bool ClickImage(Interactor intr, string imgCode) {
+			var result = Screen.ImageSearch(intr, imgCode);
+			if (result.Found) {
+				Click(intr, result.Point.X + 5, result.Point.Y + 5);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 }
 

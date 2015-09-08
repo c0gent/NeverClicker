@@ -14,11 +14,19 @@ namespace NeverClicker.Interactions {
 			SendInput(intr, "{ " + key + " }");
 		}
 
-		public static void KeyPress(Interactor intr, string key) {
-			intr.ExecuteStatement("Send { " + key + " down }");
-			intr.Wait(70);
-			intr.ExecuteStatement("Send { " + key + " up }");
-			intr.Wait(20);
+		public static void KeyPress(Interactor intr, string key, uint duration) {
+			//intr.ExecuteStatement("SendInput { " + key + " down }");
+			//intr.Wait((int)duration + 180);
+			//intr.ExecuteStatement("SendInput { " + key + " up }");
+			//intr.Wait(20);
+
+			string cmd = @"Send {" + key + @" down}
+			Sleep " + duration.ToString() + @"
+			Send {" + key + @" up}
+			Sleep " + duration.ToString() + @"
+			";
+
+			intr.ExecuteStatement(cmd);
 		}
 
 		public static void SendInput(Interactor intr, string key) {

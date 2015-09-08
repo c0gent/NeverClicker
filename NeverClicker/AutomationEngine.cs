@@ -19,7 +19,7 @@ namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
 	public partial class AutomationEngine {
-		const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; // make a user setting
+		//const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; 
 		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make a user setting
 
 		private MainForm MainForm;
@@ -82,11 +82,11 @@ namespace NeverClicker {
 			switch (logMessage.Type) {
 				case LogEntryType.FatalWithScreenshot:
 					SaveErrorScreenshot();
-					goto case LogEntryType.Fatal;
+					goto case LogEntryType.Error;
 				case LogEntryType.Fatal:					
 					//var msgBoxForm = new Form(){TopMost = true};
 					//MessageBox.Show(msgBoxForm, logMessage.Text, "NeverClicker Error");
-					MessageBox.Show(logMessage.Text, "NeverClicker Error");
+					MessageBox.Show(logMessage.Text, "Error - NeverClicker");
 					//Task.Delay(495000).Wait();
 					goto case LogEntryType.Normal;
 				case LogEntryType.Error:
@@ -101,7 +101,7 @@ namespace NeverClicker {
 					break;
 				case LogEntryType.Debug:
 					#pragma warning disable CS0162 // Unreachable code detected
-					if (SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX) { MainForm.WriteLine(logMessage.Text); }					
+					//if (SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX) { MainForm.WriteLine(logMessage.Text); }					
 					if (PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE) { LogFile.AppendMessage(logMessage); }
 #					pragma warning restore CS0162 // Unreachable code detected
 					break;				
@@ -117,7 +117,7 @@ namespace NeverClicker {
 
 			var errMsg = "FATAL ERROR: PLEASE INVESTIGATE AND REPORT! -- IMAGE FILE: " + errorImageFileName;
 			Log(new LogMessage(errMsg, LogEntryType.Fatal));
-			MessageBox.Show(errMsg, "NEVERCLICKER ERROR");
+			MessageBox.Show(errMsg, "Error - NeverClicker");
 		}
 
 		private Progress<LogMessage> GetLogProgress() {
