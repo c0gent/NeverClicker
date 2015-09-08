@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool ActivateClient(Interactor intr) {
-			//var desiredState = ClientState.CharSelect;
 			//intr.ExecuteStatement("ActivateNeverwinter()");
 
 			Screen.WindowActivate(intr, Game.GAMECLIENTEXE);
@@ -15,56 +14,155 @@ namespace NeverClicker.Interactions {
 			intr.Wait(1000);
 
 			return true;
-
-			//if (intr.WaitUntil(5, () => { return Game.GetClientState(intr) == desiredState; })) {
-			//	LogSuccess(intr, ClientState.Inactive, desiredState);
-			//	return true;
-			//} else {
-			//	LogFailure(intr, ClientState.Inactive, desiredState);
-			//	return ProduceClientState(intr, desiredState);
-			//}
 		}
 
 		public static bool LogOut(Interactor intr) {
-			//var desiredState = ClientState.CharSelect;
-			intr.ExecuteStatement("Logout()");
-			//intr.ExecuteStatement("ActivateNeverwinter()");
+			//intr.ExecuteStatement("Logout()");
+
+			MoveAround(intr);
+
+			Keyboard.SendKey(intr, "Enter");
+			intr.Wait(50);
+
+			Keyboard.Send(intr, "/gotocharacterselect");
+			intr.Wait(100);
+
+			Keyboard.SendKey(intr, "Enter");
+			intr.Wait(100);
 
 			intr.Wait(3000);
 
 			return true;
-
-			//if (intr.WaitUntil(10, () => { return Game.GetClientState(intr) == desiredState; })) {
-			//	LogSuccess(intr, ClientState.InWorld, desiredState);
-			//	return true;
-			//} else {
-			//	LogFailure(intr, ClientState.InWorld, desiredState);
-			//	return ProduceClientState(intr, desiredState);
-			//}
 		}
 
+
 		public static bool ClientSignIn(Interactor intr) {
-			//var desiredState = ClientState.CharSelect;
 			intr.Log("Signing in Client...", LogEntryType.Info);
-			intr.ExecuteStatement("ClientLogin()");
+
+			//intr.ExecuteStatement("ClientLogin()");
+
+			if (!intr.WaitUntil(15, ClientState.LogIn, Game.IsClientState, null)) { return false; }
+
+			string gameUserName = intr.GameAccount.GetSetting("NwUserName", "NwAct");
+			string gamePassword = intr.GameAccount.GetSetting("NwActPwd", "NwAct");
+
+			intr.Wait(100);
+
+			var shiftHome = @"Send {Shift down}
+			Sleep 20
+			Send { Home down}
+			Sleep 20
+			Send { Shift up}
+			Sleep 20
+			Send { Home up}
+			Sleep 20
+			";
+
+			intr.ExecuteStatement(shiftHome);
+
+			Keyboard.Send(intr, gameUserName);
+			Keyboard.SendKey(intr, "Tab"); 
+			intr.Wait(200);
+			Keyboard.Send(intr, gamePassword);
+			intr.Wait(200);
+			Keyboard.SendKey(intr, "Enter");
 
 			intr.Wait(3000);
 
 			return true;
 
-			//if (intr.WaitUntil(60, () => { return Game.GetClientState(intr) == desiredState; })) {
-			//	LogSuccess(intr, ClientState.LogIn, desiredState);
-			//	return true;
-			//} else {
-			//	LogFailure(intr, ClientState.LogIn, desiredState);
-			//	return ProduceClientState(intr, desiredState);
+			//ClientLogin() {
+			//	global
+	
+			//	While ((ToggleInv && !FindClientLoginButton()) && (A_Index < 10))  {
+			//		LogAppend("[Attempting to find ClientLoginButton.]")
+			//		sleep 1500
+			//	}
+	
+			//	if (ToggleInv && !FindClientLoginButton()) {
+			//			LogAppend("[Not sure if we found ClientLoginButton but continuing...]")
+			//			; msgbox ClientLogin() Waited too long for Login Screen to appear. If you are at login screen please check or remake %Lb_ImageFile%.
+			//	}
+	
+			//	if (ToggleInv) {
+			//		Sleep 2000 + Ran(500)
+			//		Send {Shift down}
+			//		Sleep 20
+			//		Send {Home down}
+			//		Sleep 20
+			//		Send {Shift up}
+			//		Sleep 20
+			//		Send {Home up}
+			//		Sleep 20
+			//		Send %NwUserName%
+			//		Sleep 50
+			//		Send {Tab}
+			//		Sleep 200 + Ran(100)
+			//		Send %NwActPwd%
+			//		Sleep 200 + Ran(100)
+			//		Send {Enter}
+			//		Sleep AfterLoginDelay + Ran(120)
+			//	}
 			//}
 		}
 
 
 		public static void KillAll(Interactor intr) {
 			intr.Log("Closing game client and/or patcher...", LogEntryType.Info);
-			intr.ExecuteStatement("VigilantlyCloseClientAndExit()");
+			//intr.ExecuteStatement("VigilantlyCloseClientAndExit()");
+
+			Screen.WindowKill(intr, "Neverwinter.exe");
+			Screen.WindowKill(intr, "GameClient.exe");
+
+			//VigilantlyCloseClientAndExit() {
+			//	global
+			//	if (FindLoggedIn()) {
+			//		Logout()
+			//		Sleep 5000
+			//	}
+	
+			//	if (FindEwButton()) {
+			//		FindAndClick(Cslo_ImageFile)
+			//		Sleep 3000
+			//	}
+
+			//	if (FindClientLoginButton()) {
+			//		FindAndClick(Lseb_ImageFile)
+			//	}
+	
+	
+			//	; ##### SHUT THINGS DOWN
+	
+			//	IfWinExist ahk_class CrypticWindowClass
+			//	{
+			//		WinKill
+			//	}
+	
+			//	IfWinExist ahk_class #32770
+			//	{
+			//		WinKill
+			//	}		
+	
+			//	IfWinExist ahk_class #327707
+			//	{
+			//		WinKill
+			//	}
+	
+			//	IfWinExist ahk_exe Neverwinter.exe
+			//	{
+			//		WinKill
+			//	}
+	
+			//	IfWinExist ahk_exe GameClient.exe
+			//	{
+			//		WinKill
+			//	}
+	
+				
+			//	; PostMessage, 0x0112, 0xF170, 2,, A 			; Turn off Display (-1 on, 1 low-pow, 2 off)
+	
+			//	; exitapp 0
+			//}
 		}
 	}
 }

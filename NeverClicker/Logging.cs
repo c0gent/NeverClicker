@@ -18,6 +18,8 @@ namespace NeverClicker {
 		private static XmlDocument LogXmlDoc = new XmlDocument();
 		private XmlElement SessionElement;
 		private string LogFileName = "";
+		private const string RootElementName = "log";
+		private const string SessionPrefix = "session_";
 
 		public LogFile() {
 			
@@ -26,18 +28,21 @@ namespace NeverClicker {
 			if (File.Exists(LogFileName)) {
 				try {
 					LogXmlDoc.Load(LogFileName);
-					SessionElement = LogXmlDoc.CreateElement("session_" + DateTime.Now.ToFileTime().ToString());
+
+					// <<<<< TODO: PRUNE OLD ENTRIES >>>>>
+
+					SessionElement = LogXmlDoc.CreateElement(SessionPrefix + DateTime.Now.ToFileTime().ToString());
 					LogXmlDoc.DocumentElement.AppendChild(SessionElement);
 					//var root = LogXmlDoc.CreateElement("Log_" + DateTime.Now.ToFileTime().ToString());
 					//LogXmlDoc.AppendChild(root);
 				} catch (Exception ex) {
-					MessageBox.Show("LogFile::AppendMessage(): Error loading log file. Please rename or delete. Error info: " + ex.ToString());
+					MessageBox.Show("LogFile::AppendMessage(): Error loading log file. Please rename or delete. \r\n Error info: " + ex.ToString());
 				}
 			} else {
 				try {
-					var root = LogXmlDoc.CreateElement("NeverClicker");
+					var root = LogXmlDoc.CreateElement(RootElementName);
 					LogXmlDoc.AppendChild(root);
-					SessionElement = LogXmlDoc.CreateElement("session_" + DateTime.Now.ToFileTime().ToString());
+					SessionElement = LogXmlDoc.CreateElement(SessionPrefix + DateTime.Now.ToFileTime().ToString());
 					LogXmlDoc.DocumentElement.AppendChild(SessionElement);
 					LogXmlDoc.Save(LogFileName);
 				} catch (Exception ex) {

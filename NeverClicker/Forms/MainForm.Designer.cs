@@ -41,6 +41,7 @@
 			this.buttonTestsForm = new System.Windows.Forms.Button();
 			this.listBoxTaskQueue = new System.Windows.Forms.ListBox();
 			this.labelTaskQueue = new System.Windows.Forms.Label();
+			this.checkBoxBeginOnStartup = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// textBox1
@@ -121,10 +122,10 @@
 			// labelLog
 			// 
 			this.labelLog.AutoSize = true;
-			this.labelLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelLog.Location = new System.Drawing.Point(198, 295);
+			this.labelLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelLog.Location = new System.Drawing.Point(208, 298);
 			this.labelLog.Name = "labelLog";
-			this.labelLog.Size = new System.Drawing.Size(31, 16);
+			this.labelLog.Size = new System.Drawing.Size(25, 13);
 			this.labelLog.TabIndex = 14;
 			this.labelLog.Text = "Log";
 			// 
@@ -159,7 +160,7 @@
 			this.buttonAutoCycle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonAutoCycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonAutoCycle.ForeColor = System.Drawing.Color.Black;
-			this.buttonAutoCycle.Location = new System.Drawing.Point(89, 29);
+			this.buttonAutoCycle.Location = new System.Drawing.Point(89, 17);
 			this.buttonAutoCycle.Name = "buttonAutoCycle";
 			this.buttonAutoCycle.Size = new System.Drawing.Size(277, 37);
 			this.buttonAutoCycle.TabIndex = 18;
@@ -199,12 +200,24 @@
 			this.labelTaskQueue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelTaskQueue.AutoSize = true;
-			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTaskQueue.Location = new System.Drawing.Point(181, 103);
+			this.labelTaskQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTaskQueue.Location = new System.Drawing.Point(192, 106);
 			this.labelTaskQueue.Name = "labelTaskQueue";
-			this.labelTaskQueue.Size = new System.Drawing.Size(82, 16);
+			this.labelTaskQueue.Size = new System.Drawing.Size(66, 13);
 			this.labelTaskQueue.TabIndex = 20;
 			this.labelTaskQueue.Text = "Task Queue";
+			// 
+			// checkBoxBeginOnStartup
+			// 
+			this.checkBoxBeginOnStartup.AutoSize = true;
+			this.checkBoxBeginOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.checkBoxBeginOnStartup.Location = new System.Drawing.Point(176, 60);
+			this.checkBoxBeginOnStartup.Name = "checkBoxBeginOnStartup";
+			this.checkBoxBeginOnStartup.Size = new System.Drawing.Size(102, 17);
+			this.checkBoxBeginOnStartup.TabIndex = 22;
+			this.checkBoxBeginOnStartup.Text = "Begin on Startup";
+			this.checkBoxBeginOnStartup.UseVisualStyleBackColor = true;
+			this.checkBoxBeginOnStartup.CheckedChanged += new System.EventHandler(this.checkBoxBeginOnStartup_CheckedChanged);
 			// 
 			// MainForm
 			// 
@@ -212,6 +225,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(450, 598);
+			this.Controls.Add(this.checkBoxBeginOnStartup);
 			this.Controls.Add(this.listBoxTaskQueue);
 			this.Controls.Add(this.labelTaskQueue);
 			this.Controls.Add(this.buttonTestsForm);
@@ -248,5 +262,6 @@
 		private System.Windows.Forms.Button buttonTestsForm;
 		private System.Windows.Forms.ListBox listBoxTaskQueue;
 		private System.Windows.Forms.Label labelTaskQueue;
+		private System.Windows.Forms.CheckBox checkBoxBeginOnStartup;
 	}
 }

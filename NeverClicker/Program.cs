@@ -13,6 +13,12 @@ namespace NeverClicker {
 	static class Program {
 		[STAThread]
 		static void Main(string[] args) {
+			string thisprocessname = Process.GetCurrentProcess().ProcessName;
+
+			if (Process.GetProcesses().Count(p => p.ProcessName == thisprocessname) > 1) {
+				return;
+			}
+
 			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);

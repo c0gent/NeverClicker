@@ -34,6 +34,12 @@ namespace NeverClicker.Forms {
 				this.SettingsInvalid();
 			} else {
 				this.AutomationEngine = new AutomationEngine(this);
+				this.checkBoxBeginOnStartup.Checked = Settings.Default.BeginOnStartup;
+
+				if (this.checkBoxBeginOnStartup.Checked) {
+					this.SetButtonStateRunning();
+					AutomationEngine.AutoCycle();
+				}
 			}			
 		}
 
@@ -118,10 +124,8 @@ namespace NeverClicker.Forms {
 			OpenSettingsWindow();
 		}
 		
-		public void RefreshTaskQueue(SortedList<long, GameTask> taskListOrig) {
+		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
 			//AutomationEngine.Log(new LogMessage("Refreshing task queue", LogEntryType.Debug));
-
-			var taskList = new SortedList<long, GameTask>(taskListOrig);
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
@@ -148,10 +152,6 @@ namespace NeverClicker.Forms {
 			this.AutomationEngine.Stop();
 		}
 
-		private void buttonLoadOldScript_Click(object sender, EventArgs e) {
-			AutomationEngine.InitOldScript();
-		}
-
 		private void buttonReload_Click(object sender, EventArgs e) {
 			WriteLine("Reloading Interactor...");
 			AutomationEngine.Reload();
@@ -174,6 +174,11 @@ namespace NeverClicker.Forms {
 
 		private void buttonTestsForm_Click(object sender, EventArgs e) {
 			this.OpenTestsWindow();
+		}
+
+		private void checkBoxBeginOnStartup_CheckedChanged(object sender, EventArgs e) {
+			Settings.Default.BeginOnStartup = this.checkBoxBeginOnStartup.Checked;
+			Settings.Default.Save();
 		}
 	}
 }

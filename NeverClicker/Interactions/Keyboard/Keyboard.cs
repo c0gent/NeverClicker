@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Keyboard {
+		public enum KeyMod {
+			Ctrl,
+			Alt,
+			Shift,
+			Win,
+		}
+
 		public static void Send(Interactor intr, string key) {
 			SendInput(intr, key);
 		}
@@ -27,6 +34,22 @@ namespace NeverClicker.Interactions {
 			";
 
 			intr.ExecuteStatement(cmd);
+			intr.Wait((int)duration * 3);
+		}
+
+		// SendKeyWithMod <<<<< TODO: CREATE MODIFIER ENUM >>>>> <<<<< TODO: HANDLE DOUBLE MODIFIER (CTRL+ALT+X) >>>>>
+		public static void SendKeyWithMod(Interactor intr, string key1, string keyMod) {			
+			var seq = @"Send { " + keyMod + @" down }
+			Sleep 20
+			Send { " + key1 + @" down }
+			Sleep 20
+			Send { " + keyMod + @" up }
+			Sleep 20
+			Send { " + key1 + @" up }
+			Sleep 20
+			";
+
+			intr.ExecuteStatement(seq);
 		}
 
 		public static void SendInput(Interactor intr, string key) {

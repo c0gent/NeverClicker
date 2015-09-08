@@ -12,16 +12,12 @@ namespace NeverClicker.Interactions {
 		public static CompletionStatus Invoke(Interactor intr) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
-			//intr.ExecuteStatement("ClearOkPopupBullshit()");			
-
 			intr.Wait(1000);
 
 			ClearOkButtons(intr);
 			intr.Wait(200);			
 
-			//intr.ExecuteStatement("MoveAround()");
 			MoveAround(intr);
-
 
 			string invokeKey = intr.GameClient.GetSetting("NwInvokeKey", "GameHotkeys");
 			//Keyboard.KeyPress(intr, invokeKey);
@@ -29,31 +25,14 @@ namespace NeverClicker.Interactions {
 			intr.Log("Performing invocation...", LogEntryType.Info);
 			Keyboard.SendKey(intr, invokeKey);
 
-
-
-
-
-
-			intr.Wait(300);
-
-			RedeemCelestialCoins(intr);
-
-			return CompletionStatus.Complete;
-			
-			// if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
-			//	intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
-			//	intr.ExecuteStatement("Redeem(5)");
-			//	//intr.ExecuteStatement("MoveAround()");
-			//	MoveAround(intr);
-			//	//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);
-			//	Keyboard.SendKey(intr, invokeKey);
-			//}
-
-
-
-
-
-
+			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
+				intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
+				RedeemCelestialCoins(intr);
+				//intr.ExecuteStatement("MoveAround()");
+				MoveAround(intr);
+				//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);
+				Keyboard.SendKey(intr, invokeKey);
+			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {

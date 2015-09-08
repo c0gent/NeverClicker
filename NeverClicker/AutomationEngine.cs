@@ -66,10 +66,10 @@ namespace NeverClicker {
 			
 		//}
 
-		public void InitOldScript() {
+		public void InitOldScript_DEPRICATING() {
 			Itr.Start(GetLogProgress(), GetTaskQueueProgress());
 			//Itr.Start(GetLogProgress());
-			Itr.InitOldScript();
+			//Itr.InitOldScript();
 			Itr.Stop();
 		}
 

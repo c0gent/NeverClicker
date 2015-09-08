@@ -26,8 +26,8 @@
     <Setting Name="ImageShadeVariation" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="BeginOnStartup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

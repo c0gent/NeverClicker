@@ -186,9 +186,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
-    <None Include="assets\NW_Common.ahk">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="NeverClicker_Key.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

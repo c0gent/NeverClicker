@@ -121,13 +121,13 @@ namespace NeverClicker.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BeginOnStartup {
             get {
-                return ((string)(this["Setting"]));
+                return ((bool)(this["BeginOnStartup"]));
             }
             set {
-                this["Setting"] = value;
+                this["BeginOnStartup"] = value;
             }
         }
     }

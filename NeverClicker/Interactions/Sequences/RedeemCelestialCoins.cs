@@ -101,6 +101,8 @@ namespace NeverClicker.Interactions {
 
 				intr.Log("Vault of Piety item 1 purchased", LogEntryType.Info);
 			}
+
+			return;
 		}
 	}
 }

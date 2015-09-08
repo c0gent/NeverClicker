@@ -41,7 +41,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			intr.Log("Beginning AutoCycle.");
-			intr.InitOldScript();
+			//intr.InitOldScript();
 			intr.Wait(500);
 			
 			// ##### BEGIN AUTOCYCLE LOOP #####

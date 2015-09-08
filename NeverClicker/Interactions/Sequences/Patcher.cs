@@ -11,6 +11,9 @@ namespace NeverClicker.Interactions {
 		public static bool PatcherLogin<TState>(Interactor intr, TState state) {
 			//intr.ExecuteStatement("ActivateNeverwinter()");
 
+			string gameUserName = intr.GameAccount.GetSetting("NwUserName", "NwAct");
+			string gamePassword = intr.GameAccount.GetSetting("NwActPwd", "NwAct");
+
 			if (Game.DeterminePatcherState(intr) != PatcherState.None) {
 				Screen.WindowKill(intr, Game.GAMEPATCHEREXE);
 				if (!intr.WaitUntil(15, PatcherState.None, Game.IsPatcherState, PatcherKillFailure)) { return false; }
@@ -26,27 +29,15 @@ namespace NeverClicker.Interactions {
 
 			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure)) { return false; }
 
-			//intr.Wait(1000);
-			//Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
-			//intr.Wait(1000);
-
 			Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
-			//intr.Wait(200);
 			
-			Keyboard.SendInput(intr, "%NwUserName%");
-			//intr.Wait(200);
+			Keyboard.SendInput(intr, gameUserName);
 
 			Keyboard.SendInput(intr, "{Tab}");
-			//intr.Wait(200);
 
-			Keyboard.SendInput(intr, "%NwActPwd%");
-			//intr.Wait(200);
+			Keyboard.SendInput(intr, gamePassword);
 
 			Keyboard.SendInput(intr, "{Enter}");
-			//intr.Wait(200);
-
-			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
-			//intr.Wait(200);
 
 			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure)) { return false; }
 

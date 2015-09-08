@@ -52,17 +52,23 @@ namespace NeverClicker.Interactions {
 
 		private void InitAlibEng() {
 			AlibEng = new AlibEngine();
-			//AlibEng.Exec("CoordMode, Mouse, Screen");
-			//AlibEng.Exec("CoordMode, Pixel, Screen");
+
+			AlibEng.Exec("SendMode Input");
+			AlibEng.Exec("CoordMode, Mouse, Screen");
+			AlibEng.Exec("CoordMode, Pixel, Screen");
+			AlibEng.Exec("SetMouseDelay, 55");
+			AlibEng.Exec("SetKeyDelay, 55, 15");
 		}
 
 		//public void Log(string message, params string[] args) {
 		//	ProgressLog.Report(new LogMessage(string.Format(message, args)));
 		//}
 
-		public void UpdateQueueList(SortedList<long, GameTask> queueList) {
+		// UpdateQueueList(): MAKE THIS ASYNC
+		public void UpdateQueueList(SortedList<long, GameTask> taskListOrig) {
 			Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
-			QueueList.Report(queueList);
+			var taskList = new SortedList<long, GameTask>(taskListOrig);
+			QueueList.Report(taskList);
 			Wait(50);
 		}
 
@@ -97,14 +103,16 @@ namespace NeverClicker.Interactions {
 		}
 
 		// SHOULD BE ASYNC BUT DEPRICATING EVENTUALLY ANYWAY
-		public bool InitOldScript() {
+		public bool InitOldScript_DEPRICATING() {
 			VerifyRunning();
 			string scriptRoot = Settings.Default.UserRootFolderPath + "\\Assets";
+
 			if (Directory.Exists(Settings.Default.AssetsFolderPath)) {
 				scriptRoot = Settings.Default.AssetsFolderPath;
 			} else {
 				Log(Settings.Default.AssetsFolderPath + " does not exist. Using: " + Settings.Default.UserRootFolderPath + "\\Assets");
 			}
+
 			string gameExeRoot = Settings.Default.NeverwinterExePath;
 			string settingsFolder = Settings.Default.SettingsFolderPath;
             string imagesFolder = Settings.Default.ImagesFolderPath;
@@ -146,12 +154,6 @@ namespace NeverClicker.Interactions {
 				AlibEng.Exec("ToggleAfk := 0");
 				AlibEng.Exec("ToggleMouseDragClick := 0");
 				AlibEng.Exec("ToggleShit := 0");
-
-				AlibEng.Exec("SendMode Input");
-				AlibEng.Exec("CoordMode, Mouse, Screen");
-				AlibEng.Exec("CoordMode, Pixel, Screen");
-				AlibEng.Exec("SetMouseDelay, 55");
-				AlibEng.Exec("SetKeyDelay, 55, 15");
 
 				AlibEng.ExecFunction("Init");
 			} catch (Exception ex) {
