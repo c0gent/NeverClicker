@@ -182,5 +182,9 @@ namespace NeverClicker.Forms {
 			Settings.Default.BeginOnStartup = this.checkBoxBeginOnStartup.Checked;
 			Settings.Default.Save();
 		}
+
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+			this.AutomationEngine.Log("NeverClicker Exiting.");
+		}
 	}
 }

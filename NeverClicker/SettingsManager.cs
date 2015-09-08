@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace NeverClicker {
 	class SettingsManager {
@@ -26,10 +27,15 @@ namespace NeverClicker {
 		public const string LOG_FILE_NAME = "\\NeverClicker_Log.txt";
 		public const string OLD_AHK_SCRIPT_FILE_NAME = "\\NW_Common.ahk";
 
+		private static readonly object Locker = new object();
+		private static XmlDocument LogXmlDoc = new XmlDocument();
+
 		public SettingsManager() {
-			ExeConfigurationFileMap configMap = new ExeConfigurationFileMap();
-			configMap.ExeConfigFilename = @"d:\test\justAConfigFile.config.whateverYouLikeExtension";
-			Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+			//ExeConfigurationFileMap configMap = new ExeConfigurationFileMap();
+			//configMap.ExeConfigFilename = @"d:\test\justAConfigFile.config.whateverYouLikeExtension";
+			//Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+
+
 		}
 
 		//public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";

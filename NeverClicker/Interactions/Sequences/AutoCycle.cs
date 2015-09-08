@@ -148,9 +148,7 @@ namespace NeverClicker.Interactions {
 
 			// CLOSE DOWN -- TEMPORARILY DISABLED -- TRANSITION TO USING GAMESTATE TO MANAGE
 			//intr.EvaluateFunction("VigilantlyCloseClientAndExit");
-
 		}
-
 		
 		// QueueSubsequentTask(): QUEUE FOLLOW UP TASK
 		public static void QueueSubsequentTask(Interactor intr, GameTaskQueue queue, int invokesToday, uint charZeroIdx, string charOneIdxLabel) {

@@ -26,6 +26,15 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestsForm));
 			this.tabControlPrimary = new System.Windows.Forms.TabControl();
 			this.tabPageStatus = new System.Windows.Forms.TabPage();
+			this.textBoxFileName = new System.Windows.Forms.TextBox();
+			this.labelFileName = new System.Windows.Forms.Label();
+			this.groupBoxSettings = new System.Windows.Forms.GroupBox();
+			this.textBoxSettingName = new System.Windows.Forms.TextBox();
+			this.labelSettingValue = new System.Windows.Forms.Label();
+			this.buttonSaveSetting = new System.Windows.Forms.Button();
+			this.textBoxSettingValue = new System.Windows.Forms.TextBox();
+			this.labelSettingName = new System.Windows.Forms.Label();
+			this.buttonReadSetting = new System.Windows.Forms.Button();
 			this.tabPageRaw = new System.Windows.Forms.TabPage();
 			this.labelFunctionParensClose = new System.Windows.Forms.Label();
 			this.labelFunctionParensOpen = new System.Windows.Forms.Label();
@@ -43,6 +52,7 @@
 			this.labelEvaluateVariable = new System.Windows.Forms.Label();
 			this.buttonExecuteFunction = new System.Windows.Forms.Button();
 			this.tabPageWindow = new System.Windows.Forms.TabPage();
+			this.buttonClickImage = new System.Windows.Forms.Button();
 			this.buttonWindowActivate = new System.Windows.Forms.Button();
 			this.buttonWindowKill = new System.Windows.Forms.Button();
 			this.buttonWindowMinimize = new System.Windows.Forms.Button();
@@ -68,8 +78,17 @@
 			this.textBoxSendKeys = new System.Windows.Forms.TextBox();
 			this.buttonLoadOldScript = new System.Windows.Forms.Button();
 			this.buttonMoveMouse = new System.Windows.Forms.Button();
-			this.buttonClickImage = new System.Windows.Forms.Button();
+			this.buttonClose = new System.Windows.Forms.Button();
+			this.labelSettingValue2 = new System.Windows.Forms.Label();
+			this.textBoxSettingValue2 = new System.Windows.Forms.TextBox();
+			this.labelSettingValue3 = new System.Windows.Forms.Label();
+			this.textBoxSettingValue3 = new System.Windows.Forms.TextBox();
+			this.textBoxReadSettingValue = new System.Windows.Forms.TextBox();
+			this.textBoxReadSettingValue2 = new System.Windows.Forms.TextBox();
+			this.textBoxReadSettingValue3 = new System.Windows.Forms.TextBox();
 			this.tabControlPrimary.SuspendLayout();
+			this.tabPageStatus.SuspendLayout();
+			this.groupBoxSettings.SuspendLayout();
 			this.tabPageRaw.SuspendLayout();
 			this.tabPageWindow.SuspendLayout();
 			this.tabPageQueue.SuspendLayout();
@@ -85,7 +104,7 @@
 			this.tabControlPrimary.Controls.Add(this.tabPageWindow);
 			this.tabControlPrimary.Controls.Add(this.tabPageQueue);
 			this.tabControlPrimary.Controls.Add(this.tabPageOther);
-			this.tabControlPrimary.Location = new System.Drawing.Point(9, 9);
+			this.tabControlPrimary.Location = new System.Drawing.Point(9, 27);
 			this.tabControlPrimary.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControlPrimary.Name = "tabControlPrimary";
 			this.tabControlPrimary.Padding = new System.Drawing.Point(0, 0);
@@ -96,12 +115,106 @@
 			// tabPageStatus
 			// 
 			this.tabPageStatus.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageStatus.Controls.Add(this.textBoxFileName);
+			this.tabPageStatus.Controls.Add(this.labelFileName);
+			this.tabPageStatus.Controls.Add(this.groupBoxSettings);
 			this.tabPageStatus.Location = new System.Drawing.Point(4, 22);
 			this.tabPageStatus.Name = "tabPageStatus";
 			this.tabPageStatus.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageStatus.Size = new System.Drawing.Size(485, 296);
 			this.tabPageStatus.TabIndex = 4;
-			this.tabPageStatus.Text = "Status";
+			this.tabPageStatus.Text = "Config";
+			// 
+			// textBoxFileName
+			// 
+			this.textBoxFileName.Location = new System.Drawing.Point(96, 12);
+			this.textBoxFileName.Name = "textBoxFileName";
+			this.textBoxFileName.ReadOnly = true;
+			this.textBoxFileName.Size = new System.Drawing.Size(383, 20);
+			this.textBoxFileName.TabIndex = 7;
+			// 
+			// labelFileName
+			// 
+			this.labelFileName.AutoSize = true;
+			this.labelFileName.Location = new System.Drawing.Point(16, 15);
+			this.labelFileName.Name = "labelFileName";
+			this.labelFileName.Size = new System.Drawing.Size(57, 13);
+			this.labelFileName.TabIndex = 8;
+			this.labelFileName.Text = "File Name:";
+			// 
+			// groupBoxSettings
+			// 
+			this.groupBoxSettings.Controls.Add(this.textBoxReadSettingValue3);
+			this.groupBoxSettings.Controls.Add(this.textBoxReadSettingValue2);
+			this.groupBoxSettings.Controls.Add(this.labelSettingValue3);
+			this.groupBoxSettings.Controls.Add(this.textBoxSettingValue3);
+			this.groupBoxSettings.Controls.Add(this.labelSettingValue2);
+			this.groupBoxSettings.Controls.Add(this.textBoxSettingValue2);
+			this.groupBoxSettings.Controls.Add(this.textBoxReadSettingValue);
+			this.groupBoxSettings.Controls.Add(this.textBoxSettingName);
+			this.groupBoxSettings.Controls.Add(this.labelSettingValue);
+			this.groupBoxSettings.Controls.Add(this.buttonSaveSetting);
+			this.groupBoxSettings.Controls.Add(this.textBoxSettingValue);
+			this.groupBoxSettings.Controls.Add(this.labelSettingName);
+			this.groupBoxSettings.Controls.Add(this.buttonReadSetting);
+			this.groupBoxSettings.Location = new System.Drawing.Point(9, 51);
+			this.groupBoxSettings.Name = "groupBoxSettings";
+			this.groupBoxSettings.Size = new System.Drawing.Size(470, 239);
+			this.groupBoxSettings.TabIndex = 6;
+			this.groupBoxSettings.TabStop = false;
+			this.groupBoxSettings.Text = "Settings";
+			// 
+			// textBoxSettingName
+			// 
+			this.textBoxSettingName.Location = new System.Drawing.Point(87, 23);
+			this.textBoxSettingName.Name = "textBoxSettingName";
+			this.textBoxSettingName.Size = new System.Drawing.Size(212, 20);
+			this.textBoxSettingName.TabIndex = 1;
+			// 
+			// labelSettingValue
+			// 
+			this.labelSettingValue.AutoSize = true;
+			this.labelSettingValue.Location = new System.Drawing.Point(49, 52);
+			this.labelSettingValue.Name = "labelSettingValue";
+			this.labelSettingValue.Size = new System.Drawing.Size(46, 13);
+			this.labelSettingValue.TabIndex = 5;
+			this.labelSettingValue.Text = "Value 1:";
+			// 
+			// buttonSaveSetting
+			// 
+			this.buttonSaveSetting.Location = new System.Drawing.Point(52, 127);
+			this.buttonSaveSetting.Name = "buttonSaveSetting";
+			this.buttonSaveSetting.Size = new System.Drawing.Size(75, 23);
+			this.buttonSaveSetting.TabIndex = 0;
+			this.buttonSaveSetting.Text = "Save";
+			this.buttonSaveSetting.UseVisualStyleBackColor = true;
+			this.buttonSaveSetting.Click += new System.EventHandler(this.buttonSaveSetting_Click);
+			// 
+			// textBoxSettingValue
+			// 
+			this.textBoxSettingValue.Location = new System.Drawing.Point(110, 49);
+			this.textBoxSettingValue.Name = "textBoxSettingValue";
+			this.textBoxSettingValue.Size = new System.Drawing.Size(108, 20);
+			this.textBoxSettingValue.TabIndex = 4;
+			// 
+			// labelSettingName
+			// 
+			this.labelSettingName.AutoSize = true;
+			this.labelSettingName.Location = new System.Drawing.Point(26, 26);
+			this.labelSettingName.Name = "labelSettingName";
+			this.labelSettingName.Size = new System.Drawing.Size(38, 13);
+			this.labelSettingName.TabIndex = 2;
+			this.labelSettingName.Text = "Name:";
+			// 
+			// buttonReadSetting
+			// 
+			this.buttonReadSetting.Location = new System.Drawing.Point(305, 21);
+			this.buttonReadSetting.Name = "buttonReadSetting";
+			this.buttonReadSetting.Size = new System.Drawing.Size(75, 23);
+			this.buttonReadSetting.TabIndex = 3;
+			this.buttonReadSetting.Text = "Read";
+			this.buttonReadSetting.UseVisualStyleBackColor = true;
+			this.buttonReadSetting.Click += new System.EventHandler(this.buttonReadSetting_Click);
 			// 
 			// tabPageRaw
 			// 
@@ -271,6 +384,16 @@
 			this.tabPageWindow.Size = new System.Drawing.Size(485, 296);
 			this.tabPageWindow.TabIndex = 1;
 			this.tabPageWindow.Text = "Window";
+			// 
+			// buttonClickImage
+			// 
+			this.buttonClickImage.Location = new System.Drawing.Point(393, 11);
+			this.buttonClickImage.Name = "buttonClickImage";
+			this.buttonClickImage.Size = new System.Drawing.Size(75, 23);
+			this.buttonClickImage.TabIndex = 10;
+			this.buttonClickImage.Text = "Click";
+			this.buttonClickImage.UseVisualStyleBackColor = true;
+			this.buttonClickImage.Click += new System.EventHandler(this.buttonClickImage_Click);
 			// 
 			// buttonWindowActivate
 			// 
@@ -503,27 +626,88 @@
 			this.buttonMoveMouse.Text = "Move Mouse";
 			this.buttonMoveMouse.UseVisualStyleBackColor = true;
 			// 
-			// buttonClickImage
+			// buttonClose
 			// 
-			this.buttonClickImage.Location = new System.Drawing.Point(393, 11);
-			this.buttonClickImage.Name = "buttonClickImage";
-			this.buttonClickImage.Size = new System.Drawing.Size(75, 23);
-			this.buttonClickImage.TabIndex = 10;
-			this.buttonClickImage.Text = "Click";
-			this.buttonClickImage.UseVisualStyleBackColor = true;
-			this.buttonClickImage.Click += new System.EventHandler(this.buttonClickImage_Click);
+			this.buttonClose.Location = new System.Drawing.Point(424, 362);
+			this.buttonClose.Name = "buttonClose";
+			this.buttonClose.Size = new System.Drawing.Size(75, 23);
+			this.buttonClose.TabIndex = 19;
+			this.buttonClose.Text = "Close";
+			this.buttonClose.UseVisualStyleBackColor = true;
+			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+			// 
+			// labelSettingValue2
+			// 
+			this.labelSettingValue2.AutoSize = true;
+			this.labelSettingValue2.Location = new System.Drawing.Point(49, 78);
+			this.labelSettingValue2.Name = "labelSettingValue2";
+			this.labelSettingValue2.Size = new System.Drawing.Size(46, 13);
+			this.labelSettingValue2.TabIndex = 8;
+			this.labelSettingValue2.Text = "Value 2:";
+			// 
+			// textBoxSettingValue2
+			// 
+			this.textBoxSettingValue2.Location = new System.Drawing.Point(110, 75);
+			this.textBoxSettingValue2.Name = "textBoxSettingValue2";
+			this.textBoxSettingValue2.Size = new System.Drawing.Size(108, 20);
+			this.textBoxSettingValue2.TabIndex = 7;
+			// 
+			// labelSettingValue3
+			// 
+			this.labelSettingValue3.AutoSize = true;
+			this.labelSettingValue3.Location = new System.Drawing.Point(49, 104);
+			this.labelSettingValue3.Name = "labelSettingValue3";
+			this.labelSettingValue3.Size = new System.Drawing.Size(46, 13);
+			this.labelSettingValue3.TabIndex = 10;
+			this.labelSettingValue3.Text = "Value 3:";
+			// 
+			// textBoxSettingValue3
+			// 
+			this.textBoxSettingValue3.Location = new System.Drawing.Point(110, 101);
+			this.textBoxSettingValue3.Name = "textBoxSettingValue3";
+			this.textBoxSettingValue3.Size = new System.Drawing.Size(108, 20);
+			this.textBoxSettingValue3.TabIndex = 9;
+			// 
+			// textBoxReadSettingValue
+			// 
+			this.textBoxReadSettingValue.Location = new System.Drawing.Point(224, 49);
+			this.textBoxReadSettingValue.Name = "textBoxReadSettingValue";
+			this.textBoxReadSettingValue.ReadOnly = true;
+			this.textBoxReadSettingValue.Size = new System.Drawing.Size(110, 20);
+			this.textBoxReadSettingValue.TabIndex = 6;
+			// 
+			// textBoxReadSettingValue2
+			// 
+			this.textBoxReadSettingValue2.Location = new System.Drawing.Point(224, 75);
+			this.textBoxReadSettingValue2.Name = "textBoxReadSettingValue2";
+			this.textBoxReadSettingValue2.ReadOnly = true;
+			this.textBoxReadSettingValue2.Size = new System.Drawing.Size(110, 20);
+			this.textBoxReadSettingValue2.TabIndex = 11;
+			// 
+			// textBoxReadSettingValue3
+			// 
+			this.textBoxReadSettingValue3.Location = new System.Drawing.Point(224, 101);
+			this.textBoxReadSettingValue3.Name = "textBoxReadSettingValue3";
+			this.textBoxReadSettingValue3.ReadOnly = true;
+			this.textBoxReadSettingValue3.Size = new System.Drawing.Size(110, 20);
+			this.textBoxReadSettingValue3.TabIndex = 12;
 			// 
 			// TestsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(511, 340);
+			this.ClientSize = new System.Drawing.Size(511, 397);
+			this.Controls.Add(this.buttonClose);
 			this.Controls.Add(this.tabControlPrimary);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "TestsForm";
 			this.Text = "Tests";
 			this.Load += new System.EventHandler(this.Tests_Load);
 			this.tabControlPrimary.ResumeLayout(false);
+			this.tabPageStatus.ResumeLayout(false);
+			this.tabPageStatus.PerformLayout();
+			this.groupBoxSettings.ResumeLayout(false);
+			this.groupBoxSettings.PerformLayout();
 			this.tabPageRaw.ResumeLayout(false);
 			this.tabPageRaw.PerformLayout();
 			this.tabPageWindow.ResumeLayout(false);
@@ -583,5 +767,22 @@
 		private System.Windows.Forms.Button buttonLoadOldScript;
 		private System.Windows.Forms.Button buttonMoveMouse;
 		private System.Windows.Forms.Button buttonClickImage;
+		private System.Windows.Forms.Button buttonSaveSetting;
+		private System.Windows.Forms.Button buttonClose;
+		private System.Windows.Forms.GroupBox groupBoxSettings;
+		private System.Windows.Forms.TextBox textBoxSettingName;
+		private System.Windows.Forms.Label labelSettingValue;
+		private System.Windows.Forms.TextBox textBoxSettingValue;
+		private System.Windows.Forms.Label labelSettingName;
+		private System.Windows.Forms.Button buttonReadSetting;
+		private System.Windows.Forms.TextBox textBoxFileName;
+		private System.Windows.Forms.Label labelFileName;
+		private System.Windows.Forms.Label labelSettingValue3;
+		private System.Windows.Forms.TextBox textBoxSettingValue3;
+		private System.Windows.Forms.Label labelSettingValue2;
+		private System.Windows.Forms.TextBox textBoxSettingValue2;
+		private System.Windows.Forms.TextBox textBoxReadSettingValue3;
+		private System.Windows.Forms.TextBox textBoxReadSettingValue2;
+		private System.Windows.Forms.TextBox textBoxReadSettingValue;
 	}
 }
