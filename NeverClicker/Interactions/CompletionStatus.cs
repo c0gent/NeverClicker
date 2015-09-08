@@ -9,6 +9,7 @@ namespace NeverClicker.Interactions {
 		Failed,
 		Immature,
 		Complete,
+		DayComplete,
 		Cancelled
 	}
 }

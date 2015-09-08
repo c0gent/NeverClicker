@@ -12,9 +12,9 @@ namespace NeverClicker {
 		public GameTaskType Type { get; private set; }
 		public uint CharacterZeroIdx { get; private set; }
 
-		public string CharacterOneIdxLabel {
+		public string CharZeroIdxLabel {
 			get {
-				return "Character " + (CharacterZeroIdx + 1).ToString();
+				return "Character " + CharacterZeroIdx.ToString();
 			}
 		}
 

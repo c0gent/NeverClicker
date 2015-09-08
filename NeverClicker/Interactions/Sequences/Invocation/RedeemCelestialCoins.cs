@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void RedeemCelestialCoins(Interactor intr) {
+		public static void RedeemCelestialCoins(Interactor intr, int item) {
 			intr.Wait(500);
 
-			int item = 1; // REPLACE WITH ENUM
+			//int item = 1; // REPLACE WITH ENUM
 
 			string cursorModeKey = intr.GameClient.GetSetting("NwCursorMode", "GameHotkeys");
 
@@ -19,10 +19,10 @@ namespace NeverClicker.Interactions {
 				intr.GameClient.GetSettingOrZero("VpMaxBlessVpY", "ClickLocations")
             );
 
-			Point VaultOpenButton = new Point(
-				intr.GameClient.GetSettingOrZero("VpButtonX", "ClickLocations"),
-				intr.GameClient.GetSettingOrZero("VpButtonY", "ClickLocations")
-            );
+			//Point VaultOpenButton = new Point(
+			//	intr.GameClient.GetSettingOrZero("VpButtonX", "ClickLocations"),
+			//	intr.GameClient.GetSettingOrZero("VpButtonY", "ClickLocations")
+   //         );
 
 			Point VaultCelestialTab = new Point(
 				intr.GameClient.GetSettingOrZero("VpCsTabX", "ClickLocations"),
@@ -36,7 +36,7 @@ namespace NeverClicker.Interactions {
 
 			Point VaultCelestialEOFPanel = new Point( // 1
 				intr.GameClient.GetSettingOrZero("VpEofPanelX", "ClickLocations"),
-				intr.GameClient.GetSettingOrZero("VpEofPanelX", "ClickLocations")
+				intr.GameClient.GetSettingOrZero("VpEofPanelY", "ClickLocations")
             );			
 
 			Point VaultCelestialRedeemButton = new Point(
@@ -63,41 +63,49 @@ namespace NeverClicker.Interactions {
 				Mouse.Click(intr, MaxBlessVaultButton);
 			} else {
 				intr.Wait(1000);
-				MoveAround(intr);
+				//if (Screen.ImageSearch(intr, "InvocationNotReady").Found ||) {
+				//MoveAround(intr);
 				Keyboard.SendKey(intr, cursorModeKey);
 				intr.Wait(500);
-				Mouse.Click(intr, VaultOpenButton);
+				//Mouse.Click(intr, VaultOpenButton);
+				bool clicked = false;
+				clicked |= Mouse.ClickImage(intr, "InvocationNotReady");
+				clicked |= Mouse.ClickImage(intr, "InvocationReady");
+
+				if (!clicked) {
+					intr.Log("Unable to click Vault of Piety button", LogEntryType.FatalWithScreenshot);
+				}
 			}
 
-			intr.WaitRand(3500, 4500);
+			intr.WaitRand(2500, 4500);
 
 			Mouse.Click(intr, VaultCelestialTab);
-			intr.Wait(1000);
+			intr.Wait(2000);
 
 			if (item == 5) {
-				intr.Wait(1500);
-
 				Mouse.Click(intr, VaultCelestialAEPanel);
-				intr.Wait(1500);
+				intr.Wait(200);
+				Mouse.Click(intr, VaultCelestialAEPanel);
+				intr.Wait(500);
 
 				Mouse.Click(intr, VaultCelestialRedeemButton);
-				intr.Wait(1500);
+				intr.Wait(500);
 
 				Mouse.Click(intr, VaultPurchaseOkButton);
-				intr.Wait(500);
+				intr.Wait(1500);
 
 				intr.Log("Vault of Piety item 5 purchased", LogEntryType.Info);
 			} else if (item == 1) {
-				intr.Wait(1500);
-
 				Mouse.Click(intr, VaultCelestialEOFPanel);
-				intr.Wait(1500);
+				intr.Wait(200);
+				Mouse.Click(intr, VaultCelestialEOFPanel);
+				intr.Wait(500);
 
 				Mouse.Click(intr, VaultCelestialRedeemButton);
-				intr.Wait(1500);
+				intr.Wait(500);
 
 				Mouse.Click(intr, VaultPurchaseAmtOkButton);
-				intr.Wait(500);
+				intr.Wait(1500);
 
 				intr.Log("Vault of Piety item 1 purchased", LogEntryType.Info);
 			}

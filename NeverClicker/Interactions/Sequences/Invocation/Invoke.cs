@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
+			public const bool ALWAYS_REDEEM = false;
+			public const int REDEMPTION_ITEM = 1;
+
 		public static CompletionStatus Invoke(Interactor intr) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
@@ -19,6 +22,12 @@ namespace NeverClicker.Interactions {
 
 			MoveAround(intr);
 
+			if (ALWAYS_REDEEM) {
+				#pragma warning disable CS0162 // Unreachable code detected
+				RedeemCelestialCoins(intr, REDEMPTION_ITEM);
+				#pragma warning restore CS0162 // Unreachable code detected
+			}
+
 			string invokeKey = intr.GameClient.GetSetting("NwInvokeKey", "GameHotkeys");
 			//Keyboard.KeyPress(intr, invokeKey);
 			//Keyboard.Send(intr, "{ " + invokeKey + " }");
@@ -27,7 +36,7 @@ namespace NeverClicker.Interactions {
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
-				RedeemCelestialCoins(intr);
+				RedeemCelestialCoins(intr, REDEMPTION_ITEM);
 				//intr.ExecuteStatement("MoveAround()");
 				MoveAround(intr);
 				//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);
@@ -40,7 +49,7 @@ namespace NeverClicker.Interactions {
 					return CompletionStatus.Immature;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
 					intr.Log("Invocation already finished for the day on this character");
-					return CompletionStatus.Complete;
+					return CompletionStatus.DayComplete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionInvokeReady").Found) {
 					intr.Wait(2000);
 					Keyboard.SendKey(intr, invokeKey);

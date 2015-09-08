@@ -8,27 +8,42 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
-		public static CompletionStatus ProcessCharacter(
+		public static void ProcessCharacter(
 					Interactor intr,
-					uint charZeroIdx
-		) {
-			intr.Log("ProcessCharacter(): Starting processing for character " + charZeroIdx + " ...", LogEntryType.Info);
+					TaskQueue queue
+		) {			
+			uint charZeroIdx = queue.NextTask.CharacterZeroIdx;
+			uint charOneIdx = charZeroIdx + 1;
+			string charZeroIdxLabel = queue.NextTask.CharZeroIdxLabel;
+            int invokesToday = intr.GameAccount.GetSettingOrZero("InvokesToday", charZeroIdxLabel);
+			DateTime invokesCompletedOn;
+			DateTime.TryParse(intr.GameAccount.GetSetting("InvokesCompleteFor", charZeroIdxLabel), out invokesCompletedOn);
+
+			intr.Log("Starting processing for character " + charZeroIdx + " ...", LogEntryType.Normal);
+
+			try {
+				
+			} catch (Exception ex) {					
+				intr.Log("Failed to parse ini setting: InvokesCompleteFor, exception: " + ex.ToString(), LogEntryType.Debug);
+			}
+
+			if ((invokesToday >= 6) && (queue.NextTask.Type == GameTaskType.Invocation)) {
+				if (invokesCompletedOn == TaskQueue.TodaysGameDate()) {
+					intr.Log(charZeroIdxLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Normal);
+					queue.Pop();
+					queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
+				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate()) {
+					intr.Log(charZeroIdxLabel + ": Resetting InvokesToday to 0.", LogEntryType.Debug);
+					invokesToday = 0;
+					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charZeroIdxLabel);
+				}
+			}
 
 			if (ProduceClientState(intr, ClientState.CharSelect)) {
-				if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
-
-				//uint vaultPurchase = 5; // CONVERT TO SETTING
-
-				// <<<<< FIX THIS LATER - GET RID OF CharOneIdx >>>>>
-				var charOneIdx = (charZeroIdx + 1).ToString();
-
-				// BREAK UP
-				//var cmdString = "EnterWorldInvoke(1, 0, " + charOneIdx + ", 0, 0, 5)";
-				//intr.Log(cmdString, LogEntryType.Debug);
-				//intr.ExecuteStatement(cmdString);
+				if (intr.CancelSource.IsCancellationRequested) { return; }
 
 				intr.Log("ProcessCharacter(): Selecting character " + charZeroIdx + " ...", LogEntryType.Info);
-				if (!SelectCharacter(intr, charZeroIdx)) { return CompletionStatus.Failed; }
+				if (!SelectCharacter(intr, charZeroIdx)) { return; }
 				
 				var invokeStatus = Invoke(intr);
 				
@@ -36,12 +51,52 @@ namespace NeverClicker.Interactions {
 				LogOut(intr);
 
 				intr.Log("ProcessCharacter(): Completion status: " + invokeStatus.ToString(), LogEntryType.Info);
-				return invokeStatus;
-			} else {
-				return CompletionStatus.Failed;
-			}		
+
+				if (invokeStatus == CompletionStatus.Complete || invokeStatus == CompletionStatus.DayComplete) {
+					//if (intr.CancelSource.IsCancellationRequested) { return; }
+					intr.Log("Task for character " + charZeroIdx.ToString() + ": Complete.");						
+					queue.Pop(); // COMPLETE
+					if (invokeStatus == CompletionStatus.DayComplete) {
+						invokesToday = 6;
+						intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charZeroIdxLabel);
+					} else {
+						invokesToday += 1; // NEED TO DETECT THIS IN-GAME
+					}
+					SaveCharacterSettings(intr, invokesToday, charZeroIdx);
+					queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
+				} else if (invokeStatus == CompletionStatus.Immature) {
+					//if (intr.CancelSource.IsCancellationRequested) { return; }
+					intr.Log("Task for character " + charZeroIdx.ToString() + ": Immature.");
+					intr.Log("Re-queuing task for character " + charZeroIdx.ToString() + ".");
+					queue.Pop();
+					queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
+				} else if (invokeStatus == CompletionStatus.Failed) {
+					intr.Log("Task for character " + charZeroIdx.ToString() + ": Failed.");
+				} else if (invokeStatus == CompletionStatus.Cancelled) {
+					intr.Log("Task for character " + charZeroIdx.ToString() + ": Cancelled.");
+				}
+			}	
 		}
 
+		// SaveCharacterSettings(): Save relevant settings to .ini file
+		public static void SaveCharacterSettings(Interactor intr, int invokesToday, uint charZeroIdx) {
+			// SAVE SETTINGS TO INI
+			// UpdateIni() <<<<< CREATE
+			string charZeroIdxLabel = "Character " + charZeroIdx.ToString();
+
+			try {
+				//string dateTimeFormattedClassic = FormatDateTimeClassic(intr, DateTime.Now);
+				intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charZeroIdxLabel);
+				intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentInvocationTime", charZeroIdxLabel);
+				intr.GameAccount.SaveSetting(charZeroIdx.ToString(), "CharZeroIdxLastInvoked", "Invocation");
+				intr.Log("Settings saved to ini for: " + charZeroIdxLabel + ".", LogEntryType.Debug);
+			} catch (Exception ex) {
+				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
+			}
+		}
+
+
+		
 	}
 }
 

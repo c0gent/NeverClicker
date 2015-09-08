@@ -25,7 +25,7 @@ namespace NeverClicker {
 		private MainForm MainForm;
 		private Interactor Itr;
 		//GameClient. GameClientInstance;
-		GameTaskQueue Queue;
+		TaskQueue Queue;
 		LogFile LogFile;
 		//Task MouseMoveTask = null;
 		//private CancellationTokenSource CancelSource;
@@ -39,7 +39,7 @@ namespace NeverClicker {
 
 			try {
 				Itr = new Interactor();
-				Queue = new GameTaskQueue();
+				Queue = new TaskQueue();
 				LogFile = new LogFile();
 			} catch (Exception ex) {
 				//MainForm.WriteLine(ex.ToString());
@@ -84,13 +84,12 @@ namespace NeverClicker {
 					SaveErrorScreenshot();
 					goto case LogEntryType.Error;
 				case LogEntryType.Fatal:					
-					//var msgBoxForm = new Form(){TopMost = true};
-					//MessageBox.Show(msgBoxForm, logMessage.Text, "NeverClicker Error");
-					MessageBox.Show(logMessage.Text, "Error - NeverClicker");
-					//Task.Delay(495000).Wait();
-					goto case LogEntryType.Normal;
+					LogFile.AppendMessage(logMessage);
+					MainForm.WriteLine(logMessage.Text);
+					MessageBox.Show(logMessage.Text, "NeverClicker - Error");
+					break;
 				case LogEntryType.Error:
-					goto case LogEntryType.Normal;				
+					//goto case LogEntryType.Normal;				
 				case LogEntryType.Warning:
 				case LogEntryType.Normal:
 					LogFile.AppendMessage(logMessage);
@@ -117,7 +116,7 @@ namespace NeverClicker {
 
 			var errMsg = "FATAL ERROR: PLEASE INVESTIGATE AND REPORT! -- IMAGE FILE: " + errorImageFileName;
 			Log(new LogMessage(errMsg, LogEntryType.Fatal));
-			MessageBox.Show(errMsg, "Error - NeverClicker");
+			//MessageBox.Show(errMsg, "NeverClicker - Error");
 		}
 
 		private Progress<LogMessage> GetLogProgress() {
