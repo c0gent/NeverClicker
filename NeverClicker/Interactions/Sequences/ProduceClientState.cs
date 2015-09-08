@@ -32,7 +32,15 @@ namespace NeverClicker.Interactions {
 
 					case ClientState.Inactive:						
 						intr.Log("Game client currently inactive. Waiting 30 seconds before re-activating...", LogEntryType.Normal);
-						intr.Wait(30000);
+
+						const int waitIncr = 5000;
+
+						for (int i = 0; i < 30000; i += waitIncr) {
+							if (!Game.IsClientState(intr, ClientState.Inactive)) { break; }
+							intr.Wait(waitIncr);
+						}
+
+						//intr.Wait(30000);
 						intr.Log("Activating Client...", LogEntryType.Normal);
 						ActivateClient(intr);
 						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState);

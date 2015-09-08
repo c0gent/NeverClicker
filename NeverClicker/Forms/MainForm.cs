@@ -37,8 +37,10 @@ namespace NeverClicker.Forms {
 				this.checkBoxBeginOnStartup.Checked = Settings.Default.BeginOnStartup;
 
 				if (this.checkBoxBeginOnStartup.Checked) {
+					int delaySecs = 10;
 					this.SetButtonStateRunning();
-					AutomationEngine.AutoCycle();
+					WriteLine("Starting AutoCycle in " + delaySecs.ToString() + " seconds...");
+					AutomationEngine.AutoCycle(delaySecs);
 				}
 			}			
 		}
@@ -164,7 +166,7 @@ namespace NeverClicker.Forms {
 
 		private void buttonAutoCycle_Click(object sender, EventArgs e) {
 			this.SetButtonStateRunning();
-			AutomationEngine.AutoCycle();
+			AutomationEngine.AutoCycle(0);
 		}
 
 

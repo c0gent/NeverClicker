@@ -141,7 +141,7 @@ namespace NeverClicker {
 				throw ex;
 			} finally {
 				Itr.Stop();
-				Log("Automation engine stopped. There may be outstanding tasks yet to terminate.");
+				Log("Stopping running tasks...");
 				MainForm.SetButtonStateStopped();
 			}
 		}
@@ -167,7 +167,7 @@ namespace NeverClicker {
 
 		public void Stop() {
 			try {
-				Log("Stopping automation...");
+				Log("Stopping automation engine...");
 				Itr.CancelSource.Cancel();
 			} catch (Exception ex) {
 				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Error));
@@ -192,10 +192,10 @@ namespace NeverClicker {
 			return Itr.State;
 		}
 
-		public async void AutoCycle() {
-			Log("AutoCycle activated.");			
-			await Run(() => Sequences.AutoCycle(Itr, Queue));
-			Log("AutoCycle terminated.");
+		public async void AutoCycle(int startDelaySec) {
+			//Log("AutoCycle activated.");			
+			await Run(() => Sequences.AutoCycle(Itr, Queue, startDelaySec));
+			Log("AutoCycle stopped.");
 		}
 	}
 }

@@ -6,11 +6,29 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Keyboard {
+		private const string DefaultSendMode = "SendInput";
+
 		public enum KeyMod {
 			Ctrl,
 			Alt,
 			Shift,
 			Win,
+		}
+
+		public enum SendMode {
+			Input,
+			Event,
+		}
+
+		public static string ResolveSendMode(SendMode mode) {
+			switch (mode) {
+				case SendMode.Input:
+					return "SendInput ";
+				case SendMode.Event:
+					return "SendEvent ";
+			}
+
+			return DefaultSendMode;
 		}
 
 		public static void Send(Interactor intr, string key) {
@@ -37,19 +55,30 @@ namespace NeverClicker.Interactions {
 			intr.Wait((int)duration * 3);
 		}
 
-		// SendKeyWithMod <<<<< TODO: CREATE MODIFIER ENUM >>>>> <<<<< TODO: HANDLE DOUBLE MODIFIER (CTRL+ALT+X) >>>>>
-		public static void SendKeyWithMod(Interactor intr, string key1, string keyMod) {			
-			var seq = @"Send { " + keyMod + @" down }
-			Sleep 20
-			Send { " + key1 + @" down }
-			Sleep 20
-			Send { " + keyMod + @" up }
-			Sleep 20
-			Send { " + key1 + @" up }
-			Sleep 20
-			";
+		public static void SendKeyWithMod(Interactor intr, string keyMod, string key) {
+			SendKeyWithMod(intr, keyMod, key, SendMode.Input);
+		}
 
-			intr.ExecuteStatement(seq);
+		// SendKeyWithMod <<<<< TODO: CREATE MODIFIER ENUM >>>>> <<<<< TODO: HANDLE DOUBLE MODIFIER (CTRL+ALT+X) >>>>>
+		public static void SendKeyWithMod(Interactor intr, string keyMod, string key, SendMode sendMode) {
+			var modeStr = ResolveSendMode(sendMode);
+			var keySeq = "{" + keyMod + " down}{" + key + "}{" + keyMod + " up}";
+
+			intr.ExecuteStatement(modeStr + keySeq);
+
+			//SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+
+			//var seq = sendModeStr + @" { " + keyMod + @" down }
+			//Sleep 60
+			//" + sendModeStr + @" { " + key + @" down }
+			//Sleep 60
+			//" + sendModeStr + @" { " + key + @" up }
+			//Sleep 60
+			//" + sendModeStr + @" { " + keyMod + @" up }
+			//Sleep 60
+			//";
+
+			//intr.ExecuteStatement(keySeq);
 		}
 
 		public static void SendInput(Interactor intr, string key) {

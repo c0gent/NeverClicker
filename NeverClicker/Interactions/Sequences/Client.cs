@@ -48,23 +48,28 @@ namespace NeverClicker.Interactions {
 
 			intr.Wait(100);
 
-			var shiftHome = @"Send {Shift down}
-			Sleep 20
-			Send { Home down}
-			Sleep 20
-			Send { Shift up}
-			Sleep 20
-			Send { Home up}
-			Sleep 20
-			";
+			//var shiftHome = @"Send {Shift down}
+			//	Sleep 20
+			//	Send { Home down}
+			//	Sleep 20
+			//	Send { Shift up}
+			//	Sleep 20
+			//	Send { Home up}
+			//	Sleep 20
+			//";
 
-			intr.ExecuteStatement(shiftHome);
+			//intr.ExecuteStatement(shiftHome);
+
+			Keyboard.SendKeyWithMod(intr, "Shift", "Home", Keyboard.SendMode.Input);
 
 			Keyboard.Send(intr, gameUserName);
+
 			Keyboard.SendKey(intr, "Tab"); 
 			intr.Wait(200);
+
 			Keyboard.Send(intr, gamePassword);
 			intr.Wait(200);
+
 			Keyboard.SendKey(intr, "Enter");
 
 			intr.Wait(3000);

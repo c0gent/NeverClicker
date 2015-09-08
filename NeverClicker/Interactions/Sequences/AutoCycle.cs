@@ -15,8 +15,12 @@ namespace NeverClicker.Interactions {
 
 		public static void AutoCycle(
 					Interactor intr,
-					GameTaskQueue queue
+					GameTaskQueue queue,
+					int startDelaySec
         ) {
+			intr.Wait(startDelaySec * 1000);
+			if (intr.CancelSource.IsCancellationRequested) { return; }
+
 			// ##### INITIALIZE #####
 			//int charOneIdxLastInvoked = 0;
 			int charsZeroIdxTotal = 0;

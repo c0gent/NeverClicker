@@ -29,7 +29,8 @@ namespace NeverClicker.Interactions {
 
 			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure)) { return false; }
 
-			Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+			Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
 			
 			Keyboard.SendInput(intr, gameUserName);
 
@@ -41,10 +42,13 @@ namespace NeverClicker.Interactions {
 
 			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure)) { return false; }
 
-			Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
 			//intr.Wait(200);
-			Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
 			//intr.Wait(200);
+
+			Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
+			Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
 
 			Keyboard.SendInput(intr, "{Enter}");
 

@@ -100,70 +100,7 @@ namespace NeverClicker.Interactions {
 
 		public void KeyboardTypeKey(string key, KeyAction action) {
 
-		}
-
-		// SHOULD BE ASYNC BUT DEPRICATING EVENTUALLY ANYWAY
-		public bool InitOldScript_DEPRICATING() {
-			VerifyRunning();
-			string scriptRoot = Settings.Default.UserRootFolderPath + "\\Assets";
-
-			if (Directory.Exists(Settings.Default.AssetsFolderPath)) {
-				scriptRoot = Settings.Default.AssetsFolderPath;
-			} else {
-				Log(Settings.Default.AssetsFolderPath + " does not exist. Using: " + Settings.Default.UserRootFolderPath + "\\Assets");
-			}
-
-			string gameExeRoot = Settings.Default.NeverwinterExePath;
-			string settingsFolder = Settings.Default.SettingsFolderPath;
-            string imagesFolder = Settings.Default.ImagesFolderPath;
-			string logsFolder = Settings.Default.LogsFolderPath;
-            string scriptFileName = "\\NW_Common.ahk";
-
-			if ((scriptRoot == "") || (gameExeRoot == "")) {
-				Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Fatal);
-				return false;
-			}
-
-			try {
-				var nwCommonFileName = scriptRoot + scriptFileName;
-
-				if (!File.Exists(nwCommonFileName)) {
-					Log("Error: " + nwCommonFileName + " does not exist.", LogEntryType.Fatal);
-					return false;
-				}
-
-				if (!LoadScript(nwCommonFileName)) {
-					return false;
-				}
-
-				AlibEng.Exec("SetWorkingDir %A_ScriptDir%");
-				//AlibEng.Exec("A_CommonDir = " + scriptRoot);
-				AlibEng.Exec("A_SettingsDir = " + settingsFolder);
-				//Log("A_ImagesDir = " + imagesFolder);
-                AlibEng.Exec("A_ImagesDir = " + imagesFolder);
-				AlibEng.Exec("A_LogsDir = " + logsFolder);
-				AlibEng.Exec("NwFolder := \"" + Path.GetDirectoryName(gameExeRoot) + "\"");
-				//AlibEng.Exec("NwExe := " + gameExeRoot);
-
-					
-
-				this.AlibEng.Exec("gcs_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
-				this.AlibEng.Exec("as_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
-				this.AlibEng.Exec("ai_log := \"" + Settings.Default.LogsFolderPath + "\"");
-
-				AlibEng.Exec("ToggleAfk := 0");
-				AlibEng.Exec("ToggleMouseDragClick := 0");
-				AlibEng.Exec("ToggleShit := 0");
-
-				AlibEng.ExecFunction("Init");
-			} catch (Exception ex) {
-				Log(ex.ToString(), LogEntryType.Error);
-				return false;
-			}
-
-			Log("Old script initialized.", LogEntryType.Debug);
-			return true;
-		}
+		}		
 
 		// CONVERT TO ASYNC
 		private bool LoadScript(string fileName) {
@@ -274,7 +211,7 @@ namespace NeverClicker.Interactions {
 				this.Wait(1000 * secondsPerIter);
 				iters += 1;
 				if (iters >= maxIters) {					
-					Sequences.LogWaitStatus(this, endState, false);
+					LogWaitStatus(this, endState, false);
 					if (doFailure != null) {
 						return doFailure(this, endState);
 					} else {
@@ -283,7 +220,7 @@ namespace NeverClicker.Interactions {
 				}				
 			}
 
-			Sequences.LogWaitStatus(this, endState, true);
+			LogWaitStatus(this, endState, true);
 			return true;
 		}
 
@@ -431,6 +368,18 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
+
+
+		public static void LogWaitStatus<TState>(Interactor intr, TState end, bool success) {
+			if (success) {
+				intr.Log("WaitUntil(): Found client state: "
+					+ " -> " + end.ToString() + ".", LogEntryType.Info);
+			} else {
+				intr.Log("WaitUntil(): Failure to find client state: "
+					+ " -> " + end.ToString() + ". Re-evaluating...", LogEntryType.Info);
+			}
+		}
+
 	}
 
 	public enum AutomationState {
@@ -456,3 +405,68 @@ namespace NeverClicker.Interactions {
 		public NotRunningException(string message, Exception inner) : base(message, inner) { }
 	}
 }
+
+
+
+// SHOULD BE ASYNC BUT DEPRICATING EVENTUALLY ANYWAY
+		//public bool InitOldScript_DEPRICATING() {
+		//	VerifyRunning();
+		//	string scriptRoot = Settings.Default.UserRootFolderPath + "\\Assets";
+
+		//	if (Directory.Exists(Settings.Default.AssetsFolderPath)) {
+		//		scriptRoot = Settings.Default.AssetsFolderPath;
+		//	} else {
+		//		Log(Settings.Default.AssetsFolderPath + " does not exist. Using: " + Settings.Default.UserRootFolderPath + "\\Assets");
+		//	}
+
+		//	string gameExeRoot = Settings.Default.NeverwinterExePath;
+		//	string settingsFolder = Settings.Default.SettingsFolderPath;
+  //          string imagesFolder = Settings.Default.ImagesFolderPath;
+		//	string logsFolder = Settings.Default.LogsFolderPath;
+  //          string scriptFileName = "\\NW_Common.ahk";
+
+		//	if ((scriptRoot == "") || (gameExeRoot == "")) {
+		//		Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Fatal);
+		//		return false;
+		//	}
+
+		//	try {
+		//		var nwCommonFileName = scriptRoot + scriptFileName;
+
+		//		if (!File.Exists(nwCommonFileName)) {
+		//			Log("Error: " + nwCommonFileName + " does not exist.", LogEntryType.Fatal);
+		//			return false;
+		//		}
+
+		//		if (!LoadScript(nwCommonFileName)) {
+		//			return false;
+		//		}
+
+		//		AlibEng.Exec("SetWorkingDir %A_ScriptDir%");
+		//		//AlibEng.Exec("A_CommonDir = " + scriptRoot);
+		//		AlibEng.Exec("A_SettingsDir = " + settingsFolder);
+		//		//Log("A_ImagesDir = " + imagesFolder);
+  //              AlibEng.Exec("A_ImagesDir = " + imagesFolder);
+		//		AlibEng.Exec("A_LogsDir = " + logsFolder);
+		//		AlibEng.Exec("NwFolder := \"" + Path.GetDirectoryName(gameExeRoot) + "\"");
+		//		//AlibEng.Exec("NwExe := " + gameExeRoot);
+
+					
+
+		//		this.AlibEng.Exec("gcs_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
+		//		this.AlibEng.Exec("as_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
+		//		this.AlibEng.Exec("ai_log := \"" + Settings.Default.LogsFolderPath + "\"");
+
+		//		AlibEng.Exec("ToggleAfk := 0");
+		//		AlibEng.Exec("ToggleMouseDragClick := 0");
+		//		AlibEng.Exec("ToggleShit := 0");
+
+		//		AlibEng.ExecFunction("Init");
+		//	} catch (Exception ex) {
+		//		Log(ex.ToString(), LogEntryType.Error);
+		//		return false;
+		//	}
+
+		//	Log("Old script initialized.", LogEntryType.Debug);
+		//	return true;
+		//}
