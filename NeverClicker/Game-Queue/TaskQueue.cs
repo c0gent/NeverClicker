@@ -114,7 +114,7 @@ namespace NeverClicker {
 		// QueueSubsequentTask(): QUEUE FOLLOW UP TASK
 		public void QueueSubsequentTask(Interactor intr, int invokesToday, uint charZeroIdx) {
 			DateTime charNextTaskTime = DateTime.Now;
-			DateTime nextThreeThirty = NextThreeThirty();
+			DateTime nextThreeThirty = NextThreeThirtyPst();
 			DateTime todaysInvokeDate = TodaysGameDate();
 			string charZeroIdxLabel = "Character " + charZeroIdx.ToString();
 			
@@ -167,24 +167,31 @@ namespace NeverClicker {
 					invokesToday = 0;
 				}
 
-				DateTime taskMatureTime = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, TaskQueue.InvokeDelays[invokesToday]);
+				DateTime taskMatureTime = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, InvokeDelays[invokesToday]);
+
+				if (invokesToday >= 6) {
+					taskMatureTime = NextThreeThirtyPst();
+				}
 
 				intr.Log("Adding task to queue for character " + (i - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Info);
 
 				this.Add(new GameTask(taskMatureTime, i, GameTaskType.Invocation));
+
+				// TEMPORARY
+				this.Add(new GameTask(DateTime.Now, i, GameTaskType.Profession));
 			}
 
 		}
 
 
 		public static DateTime TodaysGameDate() {
-			return NextThreeThirty().Date.AddDays(-1);
+			return NextThreeThirtyPst().Date.AddDays(-1);
 		}
 
-		public static DateTime NextThreeThirty() {
-			var now = DateTime.Now;
-			var todayThreeThirty = now.Date.AddHours(3).AddMinutes(30);
-			return now <= todayThreeThirty ? todayThreeThirty : todayThreeThirty.AddDays(1);
+		public static DateTime NextThreeThirtyPst() {
+			var utcNow = DateTime.UtcNow;
+			var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(30);
+			return (utcNow <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
 		}
 	}
 }

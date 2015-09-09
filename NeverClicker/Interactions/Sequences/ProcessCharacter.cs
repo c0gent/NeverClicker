@@ -18,14 +18,10 @@ namespace NeverClicker.Interactions {
             int invokesToday = intr.GameAccount.GetSettingOrZero("InvokesToday", charZeroIdxLabel);
 			DateTime invokesCompletedOn;
 			DateTime.TryParse(intr.GameAccount.GetSetting("InvokesCompleteFor", charZeroIdxLabel), out invokesCompletedOn);
+			CompletionStatus invokeStatus = CompletionStatus.None;
 
 			intr.Log("Starting processing for character " + charZeroIdx + " ...", LogEntryType.Normal);
 
-			try {
-				
-			} catch (Exception ex) {					
-				intr.Log("Failed to parse ini setting: InvokesCompleteFor, exception: " + ex.ToString(), LogEntryType.Debug);
-			}
 
 			if ((invokesToday >= 6) && (queue.NextTask.Type == GameTaskType.Invocation)) {
 				if (invokesCompletedOn == TaskQueue.TodaysGameDate()) {
@@ -39,43 +35,59 @@ namespace NeverClicker.Interactions {
 				}
 			}
 
-			if (ProduceClientState(intr, ClientState.CharSelect)) {
-				if (intr.CancelSource.IsCancellationRequested) { return; }
+			if (!ProduceClientState(intr, ClientState.CharSelect)) { return; }
 
-				intr.Log("ProcessCharacter(): Selecting character " + charZeroIdx + " ...", LogEntryType.Info);
-				if (!SelectCharacter(intr, charZeroIdx)) { return; }
-				
-				var invokeStatus = Invoke(intr);
-				
-				//ProduceClientState(intr, ClientState.CharSelect);
-				LogOut(intr);
+			if (intr.CancelSource.IsCancellationRequested) { return; }
 
-				intr.Log("ProcessCharacter(): Completion status: " + invokeStatus.ToString(), LogEntryType.Info);
+			intr.Log("ProcessCharacter(): Selecting character " + charZeroIdx + " ...", LogEntryType.Info);
+			if (!SelectCharacter(intr, charZeroIdx)) { return; }
+			
 
-				if (invokeStatus == CompletionStatus.Complete || invokeStatus == CompletionStatus.DayComplete) {
-					//if (intr.CancelSource.IsCancellationRequested) { return; }
-					intr.Log("Task for character " + charZeroIdx.ToString() + ": Complete.");						
-					queue.Pop(); // COMPLETE
-					if (invokeStatus == CompletionStatus.DayComplete) {
-						invokesToday = 6;
-						intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charZeroIdxLabel);
-					} else {
-						invokesToday += 1; // NEED TO DETECT THIS IN-GAME
-					}
-					SaveCharacterSettings(intr, invokesToday, charZeroIdx);
-					queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
-				} else if (invokeStatus == CompletionStatus.Immature) {
-					//if (intr.CancelSource.IsCancellationRequested) { return; }
-					intr.Log("Task for character " + charZeroIdx.ToString() + ": Immature.");
-					intr.Log("Re-queuing task for character " + charZeroIdx.ToString() + ".");
-					queue.Pop();
-					queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
-				} else if (invokeStatus == CompletionStatus.Failed) {
-					intr.Log("Task for character " + charZeroIdx.ToString() + ": Failed.");
-				} else if (invokeStatus == CompletionStatus.Cancelled) {
-					intr.Log("Task for character " + charZeroIdx.ToString() + ": Cancelled.");
+			// ################################### INVOCATION #####################################
+			intr.Log("ProcessCharacter(): Invoking for character " + charZeroIdx + " ...", LogEntryType.Info);
+			if (invokesToday < 6) {
+				invokeStatus = Invoke(intr);
+			}			
+
+			intr.Log("ProcessCharacter(): Completion status: " + invokeStatus.ToString(), LogEntryType.Info);
+
+			if (invokeStatus == CompletionStatus.Complete || invokeStatus == CompletionStatus.DayComplete) {
+				//if (intr.CancelSource.IsCancellationRequested) { return; }
+				intr.Log("Task for character " + charZeroIdx.ToString() + ": Complete.", LogEntryType.Normal);						
+				queue.Pop(); // COMPLETE
+				if (invokeStatus == CompletionStatus.DayComplete) {
+					invokesToday = 6;
+					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charZeroIdxLabel);
+				} else {
+					invokesToday += 1; // NEED TO DETECT THIS IN-GAME
 				}
-			}	
+				SaveCharacterSettings(intr, invokesToday, charZeroIdx);
+				queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
+			} else if (invokeStatus == CompletionStatus.Immature) {
+				//if (intr.CancelSource.IsCancellationRequested) { return; }
+				intr.Log("Task for character " + charZeroIdx.ToString() + ": Immature.", LogEntryType.Normal);
+				intr.Log("Re-queuing task for character " + charZeroIdx.ToString() + ".", LogEntryType.Normal);
+				queue.Pop();
+				queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
+			} else if (invokeStatus == CompletionStatus.Failed) {
+				intr.Log("Task for character " + charZeroIdx.ToString() + ": Failed.", LogEntryType.Normal);
+			} else if (invokeStatus == CompletionStatus.Cancelled) {
+				intr.Log("Task for character " + charZeroIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
+			}
+
+
+			// ################################## PROFESSIONS #####################################
+			intr.Log("ProcessCharacter(): Maintaining profession tasks for character " + charZeroIdx + " ...", LogEntryType.Info);
+
+			MaintainProfs(intr);
+
+
+
+
+
+
+			// #################################### LOGOUT ########################################
+			LogOut(intr);
 		}
 
 		// SaveCharacterSettings(): Save relevant settings to .ini file
@@ -91,7 +103,7 @@ namespace NeverClicker.Interactions {
 				intr.GameAccount.SaveSetting(charZeroIdx.ToString(), "CharZeroIdxLastInvoked", "Invocation");
 				intr.Log("Settings saved to ini for: " + charZeroIdxLabel + ".", LogEntryType.Debug);
 			} catch (Exception ex) {
-				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
+				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString(), LogEntryType.Error);
 			}
 		}
 

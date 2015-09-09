@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static void MoveAround(Interactor intr) {
-			string moveLeftKey = intr.GameClient.GetSetting("NwMoveLeftKey", "GameHotkeys");
-			string moveRightKey = intr.GameClient.GetSetting("NwMoveRightKey", "GameHotkeys");
+			string moveLeftKey = intr.GameAccount.GetSetting("NwMoveLeftKey", "GameHotkeys");
+			string moveRightKey = intr.GameAccount.GetSetting("NwMoveRightKey", "GameHotkeys");
 
 			intr.WaitRand(150, 350);
-			Keyboard.KeyPress(intr, moveLeftKey, 90);
-			intr.WaitRand(50, 250);
-			Keyboard.KeyPress(intr, moveRightKey, 90);
-			intr.WaitRand(50, 250);
+			Keyboard.KeyPress(intr, moveLeftKey, 40);
+			intr.WaitRand(50, 350);
+			Keyboard.KeyPress(intr, moveRightKey, 40);
+			intr.WaitRand(50, 350);
 		}
 	}
 }

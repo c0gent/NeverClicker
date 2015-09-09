@@ -47,6 +47,7 @@ namespace NeverClicker.Interactions {
 
 			//intr.Log(new LogMessage(""ImageSearch(" + imgCode + "): Executing: '" + statement + "'", LogEntryType.Detail));
 
+			intr.Wait(20);
 			intr.ExecuteStatement(statement);
 
 			int.TryParse(intr.GetVar(OUTPUT_VAR_X), out outX);
@@ -83,9 +84,10 @@ namespace NeverClicker.Interactions {
 					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Debug);
 					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };				
 				case 2:
-					throw new ProblemConductingImageSearchException();
 				default:
-					throw new ProblemConductingImageSearchException();
+					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Fatal);
+					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };
+					//throw new ProblemConductingImageSearchException();
 			}
 
 		}

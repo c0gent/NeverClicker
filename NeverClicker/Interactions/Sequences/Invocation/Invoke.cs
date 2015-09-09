@@ -28,10 +28,10 @@ namespace NeverClicker.Interactions {
 				#pragma warning restore CS0162 // Unreachable code detected
 			}
 
-			string invokeKey = intr.GameClient.GetSetting("NwInvokeKey", "GameHotkeys");
+			string invokeKey = intr.GameAccount.GetSetting("NwInvokeKey", "GameHotkeys");
 			//Keyboard.KeyPress(intr, invokeKey);
 			//Keyboard.Send(intr, "{ " + invokeKey + " }");
-			intr.Log("Performing invocation...", LogEntryType.Info);
+			//intr.Log("Performing invocation...", LogEntryType.Info);
 			Keyboard.SendKey(intr, invokeKey);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {

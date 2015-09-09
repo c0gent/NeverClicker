@@ -8,6 +8,21 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Mouse {
 
+		public static void ClickRepeat(Interactor intr, int xCoord, int yCoord, int repeats) {
+			for (int c = 0; c < repeats; c++) {
+				Click(intr, xCoord, yCoord);
+				intr.Wait(25);
+			}
+		}
+
+		public static void Click(Interactor intr, Point point, int xOfs, int yOfs) {
+			Click(intr, point.X + xOfs, point.Y + yOfs);
+		}
+
+		public static void Click(Interactor intr, int xCoord, int yCoord, int xOfs, int yOfs) {
+			Click(intr, xCoord + xOfs, yCoord + yOfs);
+		}
+
 		public static void Click(Interactor intr, Point point) {
 			Click(intr, point.X, point.Y);
 		}
@@ -37,12 +52,18 @@ namespace NeverClicker.Interactions {
 		}
 
 
-		public static void WheelUp(Interactor intr) {
-			intr.ExecuteStatement("SendEvent { Click WheelUp }");
+		public static void WheelUp(Interactor intr, int repeats) {			
+			for (int c = 0; c < repeats; c++) {
+				intr.ExecuteStatement("SendEvent { Click WheelUp }");
+				intr.Wait(15);
+			}
 		}
 
-		public static void WheelDown(Interactor intr) {
-			intr.ExecuteStatement("SendEvent { Click WheelDown }");
+		public static void WheelDown(Interactor intr, int repeats) {
+			for (int c = 0; c < repeats; c++) {
+				intr.ExecuteStatement("SendEvent { Click WheelDown }");
+				intr.Wait(15);
+			}
 		}
 
 		//public static void SendInput(Interactor intr, string key) {

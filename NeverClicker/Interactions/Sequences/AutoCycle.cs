@@ -79,7 +79,7 @@ namespace NeverClicker.Interactions {
 						Screen.Wake(intr);
 					}					
 				}
-
+				
 				// GOTTA HAVE SOME DELAY HERE OR WE CRASH -- PROBABLY NO LONGER TRUE
 				intr.Wait(100);
 				//if (intr.CancelSource.IsCancellationRequested) { return; }				

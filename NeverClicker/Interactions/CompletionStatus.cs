@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public enum CompletionStatus {
+		None,
 		Failed,
 		Immature,
+		Cancelled,
 		Complete,
-		DayComplete,
-		Cancelled
+		DayComplete,		
 	}
 }

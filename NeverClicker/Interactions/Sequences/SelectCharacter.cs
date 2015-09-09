@@ -92,9 +92,7 @@ namespace NeverClicker.Interactions {
 			//	SendEvent { Click WheelUp}
 			//	Sleep 100
 			//}
-			for (int i = 0; i < 5; i++) {
-				Mouse.WheelUp(intr);
-			}
+			Mouse.WheelUp(intr, 5);
 
 
 			//	SendEvent { Click % ClickX %, % ClickY %, 0}
@@ -110,10 +108,7 @@ namespace NeverClicker.Interactions {
 			//          }
 			//	}
 			if (mustScroll) {
-				for (int i = 0; i < scrollWheelPresses; i++) {
-					Mouse.WheelDown(intr);
-					intr.Wait(15);
-				}
+				Mouse.WheelDown(intr, scrollWheelPresses);
 			}
 
 
