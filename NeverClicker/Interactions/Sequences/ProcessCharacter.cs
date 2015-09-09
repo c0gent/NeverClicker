@@ -29,6 +29,7 @@ namespace NeverClicker.Interactions {
 					intr.Log(charZeroIdxLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Normal);
 					queue.Pop();
 					queue.QueueSubsequentTask(intr, charZeroIdx, GameTaskType.Invocation, invokesToday);
+					return;
 				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate()) {
 					intr.Log(charZeroIdxLabel + ": Resetting InvokesToday to 0.", LogEntryType.Debug);
 					invokesToday = 0;

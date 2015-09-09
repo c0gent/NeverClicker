@@ -156,20 +156,19 @@ namespace NeverClicker {
 		public void PopulateQueueProperly(Interactor intr, int charsMax) {
 			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
 				var charLabel = "Character " + charIdx.ToString();
-				DateTime mostRecentInvTime = DateTime.Now;
+
 				int invokesToday = 0;
+				int.TryParse(intr.GameAccount.GetSetting("InvokesToday", charLabel), out invokesToday);
 
-				if (!DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentInvocationTime", charLabel), out mostRecentInvTime)) {
-					mostRecentInvTime = DateTime.Now.AddHours(-24);
-                }
+				DateTime invokesCompletedOn = TodaysGameDate().AddDays(-1);
+				DateTime.TryParse(intr.GameAccount.GetSetting("InvokesCompleteFor", charLabel), out invokesCompletedOn);
 
-				if (!int.TryParse(intr.GameAccount.GetSetting("InvokesToday", charLabel), out invokesToday)) {
-					invokesToday = 0;
-				}
+				DateTime mostRecentInvTime = DateTime.Now.AddHours(-24);
+				DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentInvocationTime", charLabel), out mostRecentInvTime);
 
 				DateTime taskMatureTime = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, InvokeDelays[invokesToday]);
 
-				if (invokesToday >= 6) {
+				if (invokesToday >= 6 || invokesCompletedOn == TodaysGameDate()) {
 					taskMatureTime = NextThreeAmPst();
 				}
 
@@ -179,7 +178,7 @@ namespace NeverClicker {
 				for (var p = 0; p < 3; p++) {
 					DateTime mostRecent = DateTime.Now.AddDays(-1);
 					DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentProfTime_" + p, charLabel), out mostRecent);
-					intr.Log("Adding profession task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Debug);
+					intr.Log("Adding profession task to queue for character " + charIdx + ", matures: " + mostRecent.ToString(), LogEntryType.Debug);
 					this.Add(new GameTask(mostRecent.AddMinutes(Sequences.ProfessionTaskDurationMinutes[p]), charIdx, GameTaskType.Profession, p));					
 				}
 			}
@@ -194,7 +193,7 @@ namespace NeverClicker {
 		public static DateTime NextThreeAmPst() {
 			var utcNow = DateTime.UtcNow;
 			var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(5).ToLocalTime();
-			return (utcNow <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
+			return (utcNow.ToLocalTime() <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
 		}
 	}
 }

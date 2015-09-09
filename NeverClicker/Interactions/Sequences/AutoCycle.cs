@@ -20,7 +20,7 @@ namespace NeverClicker.Interactions {
 			int charsZeroIdxTotal = 0;
 			
 			try {
-				charsZeroIdxTotal = intr.GameAccount.GetSettingOrZero("CharZeroIdxCount", "NwAct");
+				charsZeroIdxTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
 			} catch (Exception ex) {
 				intr.Log("Interactions::Sequences::AutoCycle(): ERROR LOADING: charsTotal: " + ex.ToString(), LogEntryType.Error);
 			}
@@ -39,8 +39,8 @@ namespace NeverClicker.Interactions {
 				if (intr.CancelSource.IsCancellationRequested) { return; }
 
 				if (IsCurfew()) {
-					intr.Log("Curfew time. Sleeping for 10 minutes.");
-					intr.Wait(600000); // 10 minutes
+					intr.Log("Curfew time. Sleeping for between 10 and 60 minutes.");
+					intr.WaitRand(600000, 3300000); // 10 minutes - 55 minutes
 				}
 
 				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);

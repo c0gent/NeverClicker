@@ -23,7 +23,7 @@ namespace NeverClicker.Interactions {
 			//	intr.Log("Error retreiving setting from GameClient.ini: [ClickLocations]CharSlotX -- ex: " + ex.ToString(), LogEntryType.Fatal);
 			//}
 
-			int maxChars = intr.GameAccount.GetSettingOrZero("CharZeroIdxCount", "NwAct");
+			int maxChars = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
 
 			int charSlotX = intr.GameClient.GetSettingOrZero("CharSlotX", "ClickLocations");
 			int topSlotY = intr.GameClient.GetSettingOrZero("TopSlotY", "ClickLocations");
