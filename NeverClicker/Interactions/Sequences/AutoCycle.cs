@@ -39,8 +39,8 @@ namespace NeverClicker.Interactions {
 				if (intr.CancelSource.IsCancellationRequested) { return; }
 
 				if (IsCurfew()) {
-					intr.Log("Curfew half-hour. Sleeping for 30 minutes.");
-					intr.Wait(1800000); // 30 minutes
+					intr.Log("Curfew time. Sleeping for 10 minutes.");
+					intr.Wait(600000); // 10 minutes
 				}
 
 				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);
@@ -94,8 +94,8 @@ namespace NeverClicker.Interactions {
 		
 				
 		public static bool IsCurfew() {
-			var now = DateTime.Now;
-			return ((now > now.Date.AddHours(3)) && (now < now.Date.AddHours(3).AddMinutes(30)));
+			var utcNow = DateTime.UtcNow;
+			return ((utcNow > utcNow.Date.AddHours(10)) && (utcNow < utcNow.Date.AddHours(10).AddMinutes(10)));
 		}
 		
 

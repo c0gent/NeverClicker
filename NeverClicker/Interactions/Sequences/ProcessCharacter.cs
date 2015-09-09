@@ -18,7 +18,8 @@ namespace NeverClicker.Interactions {
             int invokesToday = intr.GameAccount.GetSettingOrZero("InvokesToday", charZeroIdxLabel);
 			DateTime invokesCompletedOn;
 			DateTime.TryParse(intr.GameAccount.GetSetting("InvokesCompleteFor", charZeroIdxLabel), out invokesCompletedOn);
-			CompletionStatus invokeStatus = CompletionStatus.None;
+			CompletionStatus invocationStatus = CompletionStatus.None;
+			CompletionStatus professionsStatus = CompletionStatus.None;
 
 			intr.Log("Starting processing for character " + charZeroIdx + " ...", LogEntryType.Normal);
 
@@ -27,7 +28,7 @@ namespace NeverClicker.Interactions {
 				if (invokesCompletedOn == TaskQueue.TodaysGameDate()) {
 					intr.Log(charZeroIdxLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Normal);
 					queue.Pop();
-					queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
+					queue.QueueSubsequentTask(intr, charZeroIdx, GameTaskType.Invocation, invokesToday);
 				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate()) {
 					intr.Log(charZeroIdxLabel + ": Resetting InvokesToday to 0.", LogEntryType.Debug);
 					invokesToday = 0;
@@ -41,53 +42,70 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("ProcessCharacter(): Selecting character " + charZeroIdx + " ...", LogEntryType.Info);
 			if (!SelectCharacter(intr, charZeroIdx)) { return; }
-			
 
+					
 			// ################################### INVOCATION #####################################
 			intr.Log("ProcessCharacter(): Invoking for character " + charZeroIdx + " ...", LogEntryType.Info);
-			if (invokesToday < 6) {
-				invokeStatus = Invoke(intr);
-			}			
+			if (queue.NextTask.Type == GameTaskType.Invocation && invokesToday < 6) {
+				invocationStatus = Invoke(intr);
+				intr.Log("ProcessCharacter(): Invocation status: " + invocationStatus.ToString(), LogEntryType.Info);
+			} else {
+				invocationStatus = CompletionStatus.None;
+			}
+			
 
-			intr.Log("ProcessCharacter(): Completion status: " + invokeStatus.ToString(), LogEntryType.Info);
+			// ################################## PROFESSIONS #####################################
+			intr.Log("ProcessCharacter(): Maintaining profession tasks for character " + charZeroIdx + " ...", LogEntryType.Info);
 
-			if (invokeStatus == CompletionStatus.Complete || invokeStatus == CompletionStatus.DayComplete) {
+			if (queue.NextTask.Type == GameTaskType.Profession) {
+				professionsStatus = MaintainProfs(intr, charZeroIdxLabel);				
+			}
+			
+			// ###################################### LOGOUT ######################################
+			LogOut(intr);
+
+
+			// ########################### INVOCATION QUEUE AND SETTINGS ##########################
+			if (invocationStatus == CompletionStatus.Complete || invocationStatus == CompletionStatus.DayComplete) {
 				//if (intr.CancelSource.IsCancellationRequested) { return; }
 				intr.Log("Task for character " + charZeroIdx.ToString() + ": Complete.", LogEntryType.Normal);						
 				queue.Pop(); // COMPLETE
-				if (invokeStatus == CompletionStatus.DayComplete) {
+				if (invocationStatus == CompletionStatus.DayComplete) {
 					invokesToday = 6;
 					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charZeroIdxLabel);
 				} else {
 					invokesToday += 1; // NEED TO DETECT THIS IN-GAME
 				}
 				SaveCharacterSettings(intr, invokesToday, charZeroIdx);
-				queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
-			} else if (invokeStatus == CompletionStatus.Immature) {
+				queue.QueueSubsequentTask(intr, charZeroIdx, GameTaskType.Invocation, invokesToday);
+			} else if (invocationStatus == CompletionStatus.Immature) {
 				//if (intr.CancelSource.IsCancellationRequested) { return; }
 				intr.Log("Task for character " + charZeroIdx.ToString() + ": Immature.", LogEntryType.Normal);
 				intr.Log("Re-queuing task for character " + charZeroIdx.ToString() + ".", LogEntryType.Normal);
 				queue.Pop();
-				queue.QueueSubsequentTask(intr, invokesToday, charZeroIdx);
-			} else if (invokeStatus == CompletionStatus.Failed) {
+				queue.QueueSubsequentTask(intr, charZeroIdx, GameTaskType.Invocation, invokesToday);
+			} else if (invocationStatus == CompletionStatus.Failed) {
 				intr.Log("Task for character " + charZeroIdx.ToString() + ": Failed.", LogEntryType.Normal);
-			} else if (invokeStatus == CompletionStatus.Cancelled) {
+			} else if (invocationStatus == CompletionStatus.Cancelled) {
 				intr.Log("Task for character " + charZeroIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
 			}
 
-
-			// ################################## PROFESSIONS #####################################
-			intr.Log("ProcessCharacter(): Maintaining profession tasks for character " + charZeroIdx + " ...", LogEntryType.Info);
-
-			MaintainProfs(intr);
-
-
-
-
-
-
-			// #################################### LOGOUT ########################################
-			LogOut(intr);
+			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
+			if (professionsStatus == CompletionStatus.Complete) {
+				//var list = new Dictionary<long, GameTask>();
+				//foreach (KeyValuePair<long, GameTask> kvp in queue.TaskList) {
+				//}
+						
+				var prevTask = queue.Pop();
+				DateTime charNextTaskTime = DateTime.Now;
+				DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentProfTime_" + prevTask.Priority, "Character " + charOneIdx), out charNextTaskTime);
+				charNextTaskTime = charNextTaskTime.AddMinutes(ProfessionTaskDurationMinutes[prevTask.Priority]);
+				
+				intr.Log("Next profession task (" + ProfessionTaskNames[prevTask.Priority] + ") for character " + charZeroIdx 
+					+ " at: " + charNextTaskTime.ToShortTimeString() + ".");					
+				queue.Add(new GameTask(charNextTaskTime.AddSeconds(charZeroIdx), charZeroIdx, GameTaskType.Profession, prevTask.Priority));
+			}
+		
 		}
 
 		// SaveCharacterSettings(): Save relevant settings to .ini file

@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static CompletionStatus MaintainProfs (Interactor intr) {
+		public static int[] ProfessionTaskDurationMinutes = { 720, 960, 1440 };
+		public static string[] ProfessionTaskNames = { "Protect Magical", "Destroy Enemy", "Battle Elemental" };
 
-			// OPEN PROFESSIONS WINDOW
+		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel) {			
+			intr.Wait(1000);
+			ClearOkButtons(intr);
+			intr.Wait(200);	
+			MoveAround(intr);
 
 			string profsWinKey = intr.GameAccount.GetSetting("NwProfessionsWindowKey", "GameHotkeys");
 
@@ -27,6 +32,11 @@ namespace NeverClicker.Interactions {
 				}
 			}
 
+
+			//ProfessionsLeadershipTileUnselected
+
+
+
 			Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile");
 			intr.Wait(200);
 
@@ -43,12 +53,15 @@ namespace NeverClicker.Interactions {
 			}
 
 			int currentPriority = 0;
+			var success = false;
 
 			for (int i = 0; i < 9; i++) {
+
+				success = false;
 				
 				Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile");
 
-				intr.Wait(100);				
+				intr.Wait(400);				
 
 				var result = Screen.ImageSearch(intr, "ProfessionsEmptySlot");
 
@@ -61,34 +74,49 @@ namespace NeverClicker.Interactions {
 
 				Mouse.Click(intr, result.Point, 30, 90);
 				intr.Wait(200);
+
+				Mouse.ClickImage(intr, "ProfessionsLeadershipTileUnselected");
+				intr.Wait(200);
 				
 				var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
 
 				if (i > 0 && taskContinueResult.Found) {
 					ContinueTask(intr, taskContinueResult.Point);
+					success = true;
 				} else {
 					switch (currentPriority) {
 						case 0:
-							if (!SelectProfTask(intr, "Protect Magical")) {
+							if (!SelectProfTask(intr, ProfessionTaskNames[currentPriority])) {
 								currentPriority += 1;
 								goto case 1;
 							} else {
+								success = true;
 								break;
 							}
 						case 1:
-							if (!SelectProfTask(intr, "Destroy Enemy")) {
+							if (!SelectProfTask(intr, ProfessionTaskNames[currentPriority])) {
 								currentPriority += 1;
 								goto case 2;
 							} else {
+								success = true;
 								break;
 							}
 						case 2:
-							if (!SelectProfTask(intr, "Battle Elemental")) {
-								intr.Log("Could not find valid professions task.", LogEntryType.Normal);								
+							if (!SelectProfTask(intr, ProfessionTaskNames[currentPriority])) {
+								intr.Log("Could not find valid professions task.", LogEntryType.Normal);
+								Mouse.ClickImage(intr, "ProfessionsWindowTitle");
+							} else {
+								success = true;
 							}
 							break;
 					}
 				}
+
+				if (success) {
+					intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime_" + currentPriority, charZeroIdxLabel);
+				}
+
+				//intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime", charZeroIdxLabel);
 
 				//if (!SelectProfTask(intr, "Protect Magical")) {
 				//	if (!SelectProfTask(intr, "Destroy Enemy")) {
@@ -160,7 +188,9 @@ namespace NeverClicker.Interactions {
 			intr.Wait(50);
 
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
-			intr.Wait(100);
+			intr.Wait(200);
+
+			//Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 		}
 	}
 }

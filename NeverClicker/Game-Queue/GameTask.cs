@@ -11,6 +11,7 @@ namespace NeverClicker {
 		public DateTime MatureTime { get; private set; }
 		public GameTaskType Type { get; private set; }
 		public uint CharacterZeroIdx { get; private set; }
+		public int Priority {get; private set; }
 
 		public string CharZeroIdxLabel {
 			get {
@@ -18,10 +19,11 @@ namespace NeverClicker {
 			}
 		}
 
-		public GameTask(DateTime matureTime, uint characterIdx, GameTaskType type) {
+		public GameTask(DateTime matureTime, uint characterIdx, GameTaskType type, int priority) {
 			this.MatureTime = matureTime;
 			this.CharacterZeroIdx = characterIdx;
 			this.Type = type;
+			this.Priority = priority;
 		}
 
 		public int CompareTo(GameTask task) {
@@ -41,6 +43,6 @@ namespace NeverClicker {
 
 	public enum GameTaskType {
 		Invocation,
-		Profession
+		Profession,
 	}
 }

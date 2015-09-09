@@ -16,10 +16,8 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
 			intr.Wait(1000);
-
 			ClearOkButtons(intr);
-			intr.Wait(200);			
-
+			intr.Wait(200);	
 			MoveAround(intr);
 
 			if (ALWAYS_REDEEM) {

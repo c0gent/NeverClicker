@@ -34,7 +34,7 @@ namespace NeverClicker {
 			var taskKind = GameTaskType.Invocation;
 
 			GameTask gameTask = new GameTask(
-				dateTime, charIdx, taskKind
+				dateTime, charIdx, taskKind, 0
 			);
 
 			try {

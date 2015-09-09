@@ -112,9 +112,9 @@ namespace NeverClicker {
 		}
 
 		// QueueSubsequentTask(): QUEUE FOLLOW UP TASK
-		public void QueueSubsequentTask(Interactor intr, int invokesToday, uint charZeroIdx) {
+		public void QueueSubsequentTask(Interactor intr, uint charZeroIdx, GameTaskType taskType, int invokesToday) {
 			DateTime charNextTaskTime = DateTime.Now;
-			DateTime nextThreeThirty = NextThreeThirtyPst();
+			DateTime nextThreeThirty = NextThreeAmPst();
 			DateTime todaysInvokeDate = TodaysGameDate();
 			string charZeroIdxLabel = "Character " + charZeroIdx.ToString();
 			
@@ -142,8 +142,8 @@ namespace NeverClicker {
 			}
 
 			try {
-				intr.Log("Next task for character at: " + charNextTaskTime.ToShortTimeString() + ".");
-				this.Add(new GameTask(charNextTaskTime.AddSeconds(charZeroIdx), charZeroIdx, GameTaskType.Invocation));
+				intr.Log("Next invocation task for character at: " + charNextTaskTime.ToShortTimeString() + ".");
+				this.Add(new GameTask(charNextTaskTime.AddSeconds(charZeroIdx), charZeroIdx, GameTaskType.Invocation, 0));
 				intr.UpdateQueueList(this.TaskList);
 			} catch (Exception ex) {
 				//System.Windows.Forms.MessageBox.Show("Error adding new task to queue: " + ex.ToString());
@@ -153,44 +153,47 @@ namespace NeverClicker {
 
 
 		// PopulateQueueProperly(): Populate queue taking in to account last invoke times
-		public void PopulateQueueProperly(Interactor intr, int charOneIdxMax) {
-			for (uint i = 0; i < charOneIdxMax; i++) {
-				var charOneIdxLabel = "Character " + (i + 1).ToString();
+		public void PopulateQueueProperly(Interactor intr, int charsMax) {
+			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
+				var charLabel = "Character " + charIdx.ToString();
 				DateTime mostRecentInvTime = DateTime.Now;
 				int invokesToday = 0;
 
-				if (!DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentInvocationTime", charOneIdxLabel), out mostRecentInvTime)) {
+				if (!DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentInvocationTime", charLabel), out mostRecentInvTime)) {
 					mostRecentInvTime = DateTime.Now.AddHours(-24);
                 }
 
-				if (!int.TryParse(intr.GameAccount.GetSetting("InvokesToday", charOneIdxLabel), out invokesToday)) {
+				if (!int.TryParse(intr.GameAccount.GetSetting("InvokesToday", charLabel), out invokesToday)) {
 					invokesToday = 0;
 				}
 
 				DateTime taskMatureTime = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, InvokeDelays[invokesToday]);
 
 				if (invokesToday >= 6) {
-					taskMatureTime = NextThreeThirtyPst();
+					taskMatureTime = NextThreeAmPst();
 				}
 
-				intr.Log("Adding task to queue for character " + (i - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Info);
-
-				this.Add(new GameTask(taskMatureTime, i, GameTaskType.Invocation));
-
-				// TEMPORARY
-				this.Add(new GameTask(DateTime.Now, i, GameTaskType.Profession));
+				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Debug);
+				this.Add(new GameTask(taskMatureTime, charIdx, GameTaskType.Invocation, 0));
+				
+				for (var p = 0; p < 3; p++) {
+					DateTime mostRecent = DateTime.Now.AddDays(-1);
+					DateTime.TryParse(intr.GameAccount.GetSetting("MostRecentProfTime_" + p, charLabel), out mostRecent);
+					intr.Log("Adding profession task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Debug);
+					this.Add(new GameTask(mostRecent.AddMinutes(Sequences.ProfessionTaskDurationMinutes[p]), charIdx, GameTaskType.Profession, p));					
+				}
 			}
 
 		}
 
 
 		public static DateTime TodaysGameDate() {
-			return NextThreeThirtyPst().Date.AddDays(-1);
+			return NextThreeAmPst().Date.AddDays(-1);
 		}
 
-		public static DateTime NextThreeThirtyPst() {
+		public static DateTime NextThreeAmPst() {
 			var utcNow = DateTime.UtcNow;
-			var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(30);
+			var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(5).ToLocalTime();
 			return (utcNow <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
 		}
 	}
