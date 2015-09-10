@@ -130,5 +130,77 @@ namespace NeverClicker.Properties {
                 this["BeginOnStartup"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UserRootFolderPathIsDefault {
+            get {
+                return ((bool)(this["UserRootFolderPathIsDefault"]));
+            }
+            set {
+                this["UserRootFolderPathIsDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SettingsFolderPathIsDefault {
+            get {
+                return ((bool)(this["SettingsFolderPathIsDefault"]));
+            }
+            set {
+                this["SettingsFolderPathIsDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ImagesFolderPathIsDefault {
+            get {
+                return ((bool)(this["ImagesFolderPathIsDefault"]));
+            }
+            set {
+                this["ImagesFolderPathIsDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LogsFolderPathIsDefault {
+            get {
+                return ((bool)(this["LogsFolderPathIsDefault"]));
+            }
+            set {
+                this["LogsFolderPathIsDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NeverClickerConfigValid {
+            get {
+                return ((bool)(this["NeverClickerConfigValid"]));
+            }
+            set {
+                this["NeverClickerConfigValid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NeverClickerFirstRun {
+            get {
+                return ((bool)(this["NeverClickerFirstRun"]));
+            }
+            set {
+                this["NeverClickerFirstRun"] = value;
+            }
+        }
     }
 }

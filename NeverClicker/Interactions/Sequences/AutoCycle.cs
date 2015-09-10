@@ -68,7 +68,7 @@ namespace NeverClicker.Interactions {
 						waitDelayMs = intr.AddRandomDelay(nextTaskWaitTime);
 						ProduceClientState(intr, ClientState.None);										
 					} else if (nextTaskWaitTime.TotalMinutes > 1) {
-						waitDelayMs = nextTaskWaitTime.Add(new TimeSpan(0, 5, 0));
+						waitDelayMs = nextTaskWaitTime.Add(new TimeSpan(0, intr.Rand(3, 11), 0));
 						//intr.Log("Minimizing client and waiting " + waitDelayMs.TotalMinutes.ToString("F0") + " minutes.");						
 						ProduceClientState(intr, ClientState.Inactive);
 					}

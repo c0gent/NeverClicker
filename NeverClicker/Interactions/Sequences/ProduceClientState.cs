@@ -31,7 +31,7 @@ namespace NeverClicker.Interactions {
 						return PatcherLogin(intr, desiredState);
 
 					case ClientState.Inactive:						
-						intr.Log("Game client currently inactive. Waiting 30 seconds before re-activating...", LogEntryType.Normal);
+						intr.Log("Game client is currently in the background. Waiting 30 seconds or until client is brought to foreground before continuing...", LogEntryType.Normal);
 
 						const int waitIncr = 5000;
 

@@ -20,7 +20,7 @@ namespace NeverClicker.ImageCompare {
 		/// <param name="filepath">The filepath.</param>
 		/// <param name="similarityThreshold">The similarity threshold.</param>
 		/// <returns>Boolean result</returns>
-		public static Boolean CompareImages(string image, string targetImage, double compareLevel, string filepath, float similarityThreshold) {
+		public static bool CompareImages(string image, string targetImage, double compareLevel, string filepath, float similarityThreshold) {
 			// Load images into bitmaps
 			var imageOne = new Bitmap(image);
 			var imageTwo = new Bitmap(targetImage);
@@ -56,7 +56,7 @@ namespace NeverClicker.ImageCompare {
 		/// <param name="name">The name.</param>
 		/// <param name="extension">The extension.</param>
 		/// <returns>Bitmap image</returns>
-		private static Bitmap SaveBitmapToFile(Bitmap image, string filepath, string name, string extension) {
+		public static Bitmap SaveBitmapToFile(Bitmap image, string filepath, string name, string extension) {
 			var savePath = string.Concat(filepath, "\\", Path.GetFileNameWithoutExtension(name), extension);
 
 			image.Save(savePath, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -70,7 +70,7 @@ namespace NeverClicker.ImageCompare {
 		/// <param name="inputImage">Bitmapped image</param>
 		/// <param name="newFormat">Bitmap format - 24bpp</param>
 		/// <returns>Bitmap image</returns>
-		private static Bitmap ChangePixelFormat(Bitmap inputImage, System.Drawing.Imaging.PixelFormat newFormat) {
+		public static Bitmap ChangePixelFormat(Bitmap inputImage, System.Drawing.Imaging.PixelFormat newFormat) {
 			return (inputImage.Clone(new Rectangle(0, 0, inputImage.Width, inputImage.Height), newFormat));
 		}
 	}

@@ -29,6 +29,13 @@
 			this.textBoxFileName = new System.Windows.Forms.TextBox();
 			this.labelFileName = new System.Windows.Forms.Label();
 			this.groupBoxSettings = new System.Windows.Forms.GroupBox();
+			this.textBoxReadSettingValue3 = new System.Windows.Forms.TextBox();
+			this.textBoxReadSettingValue2 = new System.Windows.Forms.TextBox();
+			this.labelSettingValue3 = new System.Windows.Forms.Label();
+			this.textBoxSettingValue3 = new System.Windows.Forms.TextBox();
+			this.labelSettingValue2 = new System.Windows.Forms.Label();
+			this.textBoxSettingValue2 = new System.Windows.Forms.TextBox();
+			this.textBoxReadSettingValue = new System.Windows.Forms.TextBox();
 			this.textBoxSettingName = new System.Windows.Forms.TextBox();
 			this.labelSettingValue = new System.Windows.Forms.Label();
 			this.buttonSaveSetting = new System.Windows.Forms.Button();
@@ -60,7 +67,6 @@
 			this.textBoxFindImage = new System.Windows.Forms.TextBox();
 			this.textBoxDetectWindow = new System.Windows.Forms.TextBox();
 			this.buttonFindImage = new System.Windows.Forms.Button();
-			this.labelFindImage2 = new System.Windows.Forms.Label();
 			this.labelDetectWindow = new System.Windows.Forms.Label();
 			this.buttonWindowDetect = new System.Windows.Forms.Button();
 			this.tabPageQueue = new System.Windows.Forms.TabPage();
@@ -76,16 +82,8 @@
 			this.buttonSendKeys = new System.Windows.Forms.Button();
 			this.labelSendKeys = new System.Windows.Forms.Label();
 			this.textBoxSendKeys = new System.Windows.Forms.TextBox();
-			this.buttonLoadOldScript = new System.Windows.Forms.Button();
 			this.buttonMoveMouse = new System.Windows.Forms.Button();
 			this.buttonClose = new System.Windows.Forms.Button();
-			this.labelSettingValue2 = new System.Windows.Forms.Label();
-			this.textBoxSettingValue2 = new System.Windows.Forms.TextBox();
-			this.labelSettingValue3 = new System.Windows.Forms.Label();
-			this.textBoxSettingValue3 = new System.Windows.Forms.TextBox();
-			this.textBoxReadSettingValue = new System.Windows.Forms.TextBox();
-			this.textBoxReadSettingValue2 = new System.Windows.Forms.TextBox();
-			this.textBoxReadSettingValue3 = new System.Windows.Forms.TextBox();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.groupBoxSettings.SuspendLayout();
@@ -163,6 +161,62 @@
 			this.groupBoxSettings.TabIndex = 6;
 			this.groupBoxSettings.TabStop = false;
 			this.groupBoxSettings.Text = "Settings";
+			// 
+			// textBoxReadSettingValue3
+			// 
+			this.textBoxReadSettingValue3.Location = new System.Drawing.Point(224, 101);
+			this.textBoxReadSettingValue3.Name = "textBoxReadSettingValue3";
+			this.textBoxReadSettingValue3.ReadOnly = true;
+			this.textBoxReadSettingValue3.Size = new System.Drawing.Size(110, 20);
+			this.textBoxReadSettingValue3.TabIndex = 12;
+			// 
+			// textBoxReadSettingValue2
+			// 
+			this.textBoxReadSettingValue2.Location = new System.Drawing.Point(224, 75);
+			this.textBoxReadSettingValue2.Name = "textBoxReadSettingValue2";
+			this.textBoxReadSettingValue2.ReadOnly = true;
+			this.textBoxReadSettingValue2.Size = new System.Drawing.Size(110, 20);
+			this.textBoxReadSettingValue2.TabIndex = 11;
+			// 
+			// labelSettingValue3
+			// 
+			this.labelSettingValue3.AutoSize = true;
+			this.labelSettingValue3.Location = new System.Drawing.Point(49, 104);
+			this.labelSettingValue3.Name = "labelSettingValue3";
+			this.labelSettingValue3.Size = new System.Drawing.Size(46, 13);
+			this.labelSettingValue3.TabIndex = 10;
+			this.labelSettingValue3.Text = "Value 3:";
+			// 
+			// textBoxSettingValue3
+			// 
+			this.textBoxSettingValue3.Location = new System.Drawing.Point(110, 101);
+			this.textBoxSettingValue3.Name = "textBoxSettingValue3";
+			this.textBoxSettingValue3.Size = new System.Drawing.Size(108, 20);
+			this.textBoxSettingValue3.TabIndex = 9;
+			// 
+			// labelSettingValue2
+			// 
+			this.labelSettingValue2.AutoSize = true;
+			this.labelSettingValue2.Location = new System.Drawing.Point(49, 78);
+			this.labelSettingValue2.Name = "labelSettingValue2";
+			this.labelSettingValue2.Size = new System.Drawing.Size(46, 13);
+			this.labelSettingValue2.TabIndex = 8;
+			this.labelSettingValue2.Text = "Value 2:";
+			// 
+			// textBoxSettingValue2
+			// 
+			this.textBoxSettingValue2.Location = new System.Drawing.Point(110, 75);
+			this.textBoxSettingValue2.Name = "textBoxSettingValue2";
+			this.textBoxSettingValue2.Size = new System.Drawing.Size(108, 20);
+			this.textBoxSettingValue2.TabIndex = 7;
+			// 
+			// textBoxReadSettingValue
+			// 
+			this.textBoxReadSettingValue.Location = new System.Drawing.Point(224, 49);
+			this.textBoxReadSettingValue.Name = "textBoxReadSettingValue";
+			this.textBoxReadSettingValue.ReadOnly = true;
+			this.textBoxReadSettingValue.Size = new System.Drawing.Size(110, 20);
+			this.textBoxReadSettingValue.TabIndex = 6;
 			// 
 			// textBoxSettingName
 			// 
@@ -375,7 +429,6 @@
 			this.tabPageWindow.Controls.Add(this.textBoxFindImage);
 			this.tabPageWindow.Controls.Add(this.textBoxDetectWindow);
 			this.tabPageWindow.Controls.Add(this.buttonFindImage);
-			this.tabPageWindow.Controls.Add(this.labelFindImage2);
 			this.tabPageWindow.Controls.Add(this.labelDetectWindow);
 			this.tabPageWindow.Controls.Add(this.buttonWindowDetect);
 			this.tabPageWindow.Location = new System.Drawing.Point(4, 22);
@@ -384,10 +437,11 @@
 			this.tabPageWindow.Size = new System.Drawing.Size(485, 296);
 			this.tabPageWindow.TabIndex = 1;
 			this.tabPageWindow.Text = "Window";
+			this.tabPageWindow.Click += new System.EventHandler(this.tabPageWindow_Click);
 			// 
 			// buttonClickImage
 			// 
-			this.buttonClickImage.Location = new System.Drawing.Point(393, 11);
+			this.buttonClickImage.Location = new System.Drawing.Point(404, 11);
 			this.buttonClickImage.Name = "buttonClickImage";
 			this.buttonClickImage.Size = new System.Drawing.Size(75, 23);
 			this.buttonClickImage.TabIndex = 10;
@@ -397,7 +451,7 @@
 			// 
 			// buttonWindowActivate
 			// 
-			this.buttonWindowActivate.Location = new System.Drawing.Point(150, 132);
+			this.buttonWindowActivate.Location = new System.Drawing.Point(404, 104);
 			this.buttonWindowActivate.Name = "buttonWindowActivate";
 			this.buttonWindowActivate.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowActivate.TabIndex = 9;
@@ -406,7 +460,7 @@
 			// 
 			// buttonWindowKill
 			// 
-			this.buttonWindowKill.Location = new System.Drawing.Point(312, 132);
+			this.buttonWindowKill.Location = new System.Drawing.Point(404, 130);
 			this.buttonWindowKill.Name = "buttonWindowKill";
 			this.buttonWindowKill.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowKill.TabIndex = 8;
@@ -415,7 +469,7 @@
 			// 
 			// buttonWindowMinimize
 			// 
-			this.buttonWindowMinimize.Location = new System.Drawing.Point(231, 132);
+			this.buttonWindowMinimize.Location = new System.Drawing.Point(323, 130);
 			this.buttonWindowMinimize.Name = "buttonWindowMinimize";
 			this.buttonWindowMinimize.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowMinimize.TabIndex = 7;
@@ -425,44 +479,35 @@
 			// labelFindImage1
 			// 
 			this.labelFindImage1.AutoSize = true;
-			this.labelFindImage1.Location = new System.Drawing.Point(8, 16);
+			this.labelFindImage1.Location = new System.Drawing.Point(6, 16);
 			this.labelFindImage1.Name = "labelFindImage1";
-			this.labelFindImage1.Size = new System.Drawing.Size(84, 13);
+			this.labelFindImage1.Size = new System.Drawing.Size(67, 13);
 			this.labelFindImage1.TabIndex = 6;
-			this.labelFindImage1.Text = "INI Image Code:";
+			this.labelFindImage1.Text = "Image Code:";
 			// 
 			// textBoxFindImage
 			// 
 			this.textBoxFindImage.Location = new System.Drawing.Point(98, 13);
 			this.textBoxFindImage.Name = "textBoxFindImage";
-			this.textBoxFindImage.Size = new System.Drawing.Size(144, 20);
+			this.textBoxFindImage.Size = new System.Drawing.Size(219, 20);
 			this.textBoxFindImage.TabIndex = 5;
 			// 
 			// textBoxDetectWindow
 			// 
 			this.textBoxDetectWindow.Location = new System.Drawing.Point(98, 106);
 			this.textBoxDetectWindow.Name = "textBoxDetectWindow";
-			this.textBoxDetectWindow.Size = new System.Drawing.Size(289, 20);
+			this.textBoxDetectWindow.Size = new System.Drawing.Size(219, 20);
 			this.textBoxDetectWindow.TabIndex = 2;
 			// 
 			// buttonFindImage
 			// 
-			this.buttonFindImage.Location = new System.Drawing.Point(312, 11);
+			this.buttonFindImage.Location = new System.Drawing.Point(323, 11);
 			this.buttonFindImage.Name = "buttonFindImage";
 			this.buttonFindImage.Size = new System.Drawing.Size(75, 23);
 			this.buttonFindImage.TabIndex = 4;
 			this.buttonFindImage.Text = "Find";
 			this.buttonFindImage.UseVisualStyleBackColor = true;
 			this.buttonFindImage.Click += new System.EventHandler(this.buttonFindImage_Click);
-			// 
-			// labelFindImage2
-			// 
-			this.labelFindImage2.AutoSize = true;
-			this.labelFindImage2.Location = new System.Drawing.Point(248, 16);
-			this.labelFindImage2.Name = "labelFindImage2";
-			this.labelFindImage2.Size = new System.Drawing.Size(58, 13);
-			this.labelFindImage2.TabIndex = 3;
-			this.labelFindImage2.Text = "_ImageFile";
 			// 
 			// labelDetectWindow
 			// 
@@ -475,10 +520,10 @@
 			// 
 			// buttonWindowDetect
 			// 
-			this.buttonWindowDetect.Location = new System.Drawing.Point(69, 132);
+			this.buttonWindowDetect.Location = new System.Drawing.Point(323, 104);
 			this.buttonWindowDetect.Name = "buttonWindowDetect";
 			this.buttonWindowDetect.Size = new System.Drawing.Size(75, 23);
-			this.buttonWindowDetect.TabIndex = 0;
+			this.buttonWindowDetect.TabIndex = 19;
 			this.buttonWindowDetect.Text = "Detect";
 			this.buttonWindowDetect.UseVisualStyleBackColor = true;
 			// 
@@ -574,7 +619,6 @@
 			this.tabPageOther.Controls.Add(this.buttonSendKeys);
 			this.tabPageOther.Controls.Add(this.labelSendKeys);
 			this.tabPageOther.Controls.Add(this.textBoxSendKeys);
-			this.tabPageOther.Controls.Add(this.buttonLoadOldScript);
 			this.tabPageOther.Controls.Add(this.buttonMoveMouse);
 			this.tabPageOther.Location = new System.Drawing.Point(4, 22);
 			this.tabPageOther.Name = "tabPageOther";
@@ -608,18 +652,9 @@
 			this.textBoxSendKeys.Size = new System.Drawing.Size(247, 20);
 			this.textBoxSendKeys.TabIndex = 6;
 			// 
-			// buttonLoadOldScript
-			// 
-			this.buttonLoadOldScript.Location = new System.Drawing.Point(267, 171);
-			this.buttonLoadOldScript.Name = "buttonLoadOldScript";
-			this.buttonLoadOldScript.Size = new System.Drawing.Size(124, 23);
-			this.buttonLoadOldScript.TabIndex = 3;
-			this.buttonLoadOldScript.Text = "Load Old Script";
-			this.buttonLoadOldScript.UseVisualStyleBackColor = true;
-			// 
 			// buttonMoveMouse
 			// 
-			this.buttonMoveMouse.Location = new System.Drawing.Point(3, 171);
+			this.buttonMoveMouse.Location = new System.Drawing.Point(9, 267);
 			this.buttonMoveMouse.Name = "buttonMoveMouse";
 			this.buttonMoveMouse.Size = new System.Drawing.Size(105, 23);
 			this.buttonMoveMouse.TabIndex = 5;
@@ -631,66 +666,10 @@
 			this.buttonClose.Location = new System.Drawing.Point(424, 362);
 			this.buttonClose.Name = "buttonClose";
 			this.buttonClose.Size = new System.Drawing.Size(75, 23);
-			this.buttonClose.TabIndex = 19;
+			this.buttonClose.TabIndex = 0;
 			this.buttonClose.Text = "Close";
 			this.buttonClose.UseVisualStyleBackColor = true;
 			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
-			// 
-			// labelSettingValue2
-			// 
-			this.labelSettingValue2.AutoSize = true;
-			this.labelSettingValue2.Location = new System.Drawing.Point(49, 78);
-			this.labelSettingValue2.Name = "labelSettingValue2";
-			this.labelSettingValue2.Size = new System.Drawing.Size(46, 13);
-			this.labelSettingValue2.TabIndex = 8;
-			this.labelSettingValue2.Text = "Value 2:";
-			// 
-			// textBoxSettingValue2
-			// 
-			this.textBoxSettingValue2.Location = new System.Drawing.Point(110, 75);
-			this.textBoxSettingValue2.Name = "textBoxSettingValue2";
-			this.textBoxSettingValue2.Size = new System.Drawing.Size(108, 20);
-			this.textBoxSettingValue2.TabIndex = 7;
-			// 
-			// labelSettingValue3
-			// 
-			this.labelSettingValue3.AutoSize = true;
-			this.labelSettingValue3.Location = new System.Drawing.Point(49, 104);
-			this.labelSettingValue3.Name = "labelSettingValue3";
-			this.labelSettingValue3.Size = new System.Drawing.Size(46, 13);
-			this.labelSettingValue3.TabIndex = 10;
-			this.labelSettingValue3.Text = "Value 3:";
-			// 
-			// textBoxSettingValue3
-			// 
-			this.textBoxSettingValue3.Location = new System.Drawing.Point(110, 101);
-			this.textBoxSettingValue3.Name = "textBoxSettingValue3";
-			this.textBoxSettingValue3.Size = new System.Drawing.Size(108, 20);
-			this.textBoxSettingValue3.TabIndex = 9;
-			// 
-			// textBoxReadSettingValue
-			// 
-			this.textBoxReadSettingValue.Location = new System.Drawing.Point(224, 49);
-			this.textBoxReadSettingValue.Name = "textBoxReadSettingValue";
-			this.textBoxReadSettingValue.ReadOnly = true;
-			this.textBoxReadSettingValue.Size = new System.Drawing.Size(110, 20);
-			this.textBoxReadSettingValue.TabIndex = 6;
-			// 
-			// textBoxReadSettingValue2
-			// 
-			this.textBoxReadSettingValue2.Location = new System.Drawing.Point(224, 75);
-			this.textBoxReadSettingValue2.Name = "textBoxReadSettingValue2";
-			this.textBoxReadSettingValue2.ReadOnly = true;
-			this.textBoxReadSettingValue2.Size = new System.Drawing.Size(110, 20);
-			this.textBoxReadSettingValue2.TabIndex = 11;
-			// 
-			// textBoxReadSettingValue3
-			// 
-			this.textBoxReadSettingValue3.Location = new System.Drawing.Point(224, 101);
-			this.textBoxReadSettingValue3.Name = "textBoxReadSettingValue3";
-			this.textBoxReadSettingValue3.ReadOnly = true;
-			this.textBoxReadSettingValue3.Size = new System.Drawing.Size(110, 20);
-			this.textBoxReadSettingValue3.TabIndex = 12;
 			// 
 			// TestsForm
 			// 
@@ -748,7 +727,6 @@
 		private System.Windows.Forms.TextBox textBoxFindImage;
 		private System.Windows.Forms.TextBox textBoxDetectWindow;
 		private System.Windows.Forms.Button buttonFindImage;
-		private System.Windows.Forms.Label labelFindImage2;
 		private System.Windows.Forms.Label labelDetectWindow;
 		private System.Windows.Forms.Button buttonWindowDetect;
 		private System.Windows.Forms.TabPage tabPageQueue;
@@ -764,7 +742,6 @@
 		private System.Windows.Forms.Button buttonSendKeys;
 		private System.Windows.Forms.Label labelSendKeys;
 		private System.Windows.Forms.TextBox textBoxSendKeys;
-		private System.Windows.Forms.Button buttonLoadOldScript;
 		private System.Windows.Forms.Button buttonMoveMouse;
 		private System.Windows.Forms.Button buttonClickImage;
 		private System.Windows.Forms.Button buttonSaveSetting;

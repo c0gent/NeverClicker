@@ -14,6 +14,8 @@ namespace NeverClicker.Interactions {
 			string gameUserName = intr.GameAccount.GetSetting("NwUserName", "NwAct");
 			string gamePassword = intr.GameAccount.GetSetting("NwActPwd", "NwAct");
 
+			Mouse.Move(intr, 0, 0);
+
 			if (Game.DeterminePatcherState(intr) != PatcherState.None) {
 				Screen.WindowKill(intr, Game.GAMEPATCHEREXE);
 				if (!intr.WaitUntil(15, PatcherState.None, Game.IsPatcherState, PatcherKillFailure)) { return false; }

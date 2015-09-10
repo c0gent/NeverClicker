@@ -19,7 +19,7 @@ namespace NeverClicker {
 		private XmlElement SessionElement;
 		private string LogFileName = "";
 		private const string RootElementName = "log";
-		private const string SessionPrefix = "session_";
+		private const string SessionElementName = "session";
 
 		public LogFile() {
 			
@@ -31,7 +31,8 @@ namespace NeverClicker {
 
 					// <<<<< TODO: PRUNE OLD ENTRIES >>>>>
 
-					SessionElement = LogXmlDoc.CreateElement(SessionPrefix + DateTime.Now.ToFileTime().ToString());
+					SessionElement = LogXmlDoc.CreateElement(SessionElementName);
+					SessionElement.SetAttribute("id", DateTime.Now.ToFileTime().ToString());
 					LogXmlDoc.DocumentElement.AppendChild(SessionElement);
 					//var root = LogXmlDoc.CreateElement("Log_" + DateTime.Now.ToFileTime().ToString());
 					//LogXmlDoc.AppendChild(root);
@@ -42,7 +43,9 @@ namespace NeverClicker {
 				try {
 					var root = LogXmlDoc.CreateElement(RootElementName);
 					LogXmlDoc.AppendChild(root);
-					SessionElement = LogXmlDoc.CreateElement(SessionPrefix + DateTime.Now.ToFileTime().ToString());
+					//SessionElement = LogXmlDoc.CreateElement(SessionPrefix + DateTime.Now.ToFileTime().ToString());
+					SessionElement = LogXmlDoc.CreateElement(SessionElementName);
+					SessionElement.SetAttribute("id", DateTime.Now.ToFileTime().ToString());
 					LogXmlDoc.DocumentElement.AppendChild(SessionElement);
 					LogXmlDoc.Save(LogFileName);
 				} catch (Exception ex) {

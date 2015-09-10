@@ -79,7 +79,8 @@
     <AssemblyOriginatorKeyFile>NeverClicker_Key.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>cursor-512.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AForge.Imaging">
@@ -136,8 +137,8 @@
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
     <Compile Include="Interactions\Sequences\World.cs" />
     <Compile Include="Logging.cs" />
-    <Compile Include="Game-Queue\GameTask.cs" />
-    <Compile Include="Game-Queue\TaskQueue.cs" />
+    <Compile Include="GameTask.cs" />
+    <Compile Include="TaskQueue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="Interactions\Interactor.cs" />
@@ -149,7 +150,7 @@
     <Compile Include="Interactions\Screen\ImageSearch.cs" />
     <Compile Include="Interactions\Sequences\AutoCycle.cs" />
     <Compile Include="Interactions\Sequences\MouseMoveTest.cs" />
-    <Compile Include="Game-Queue\States.cs" />
+    <Compile Include="States.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,10 +199,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Settings\NeverClicker_GameAccount.ini">
+    <None Include="DefaultSettings\NeverClicker_GameAccount.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Settings\NeverClicker_GameClient.ini">
+    <None Include="DefaultSettings\NeverClicker_GameClient.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -228,183 +229,178 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="NeverClicker-2015-08-24.vssettings">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="assets\cursor-512.ico" />
-    <Content Include="cursor-512.ico" />
-    <Content Include="Images\AbilityPanelSerpent.png">
+    <Content Include="DefaultImages\AbilityPanelSerpent.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\CharSelectOkayButton.png">
+    <Content Include="DefaultImages\CharSelectOkayButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\CharSelectOkButton.png">
+    <Content Include="DefaultImages\CharSelectOkButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\CharSelectSafeLoginButton.png">
+    <Content Include="DefaultImages\CharSelectSafeLoginButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ClientLoginAutoLoggedOutOkButton.png">
+    <Content Include="DefaultImages\ClientLoginAutoLoggedOutOkButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ClientLoginButton.png">
+    <Content Include="DefaultImages\ClientLoginButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\EnterWorldButton.png">
+    <Content Include="DefaultImages\EnterWorldButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationMaximumBlessings.png">
+    <Content Include="DefaultImages\InvocationMaximumBlessings.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationNotReady.png">
+    <Content Include="DefaultImages\InvocationNotReady.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationReady.png">
+    <Content Include="DefaultImages\InvocationReady.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationRewardsOfDevotionCloseButton.png">
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionCloseButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationRewardsOfDevotionDoneForDay.png">
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionDoneForDay.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationRewardsOfDevotionInvokeReady.png">
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionInvokeReady.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationRewardsOfDevotionPatience.png">
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionNotInRestZone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationRewardsOfDevotionWindowTitle.png">
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionPatience.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationSuccessWindowOkButton.png">
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\InvocationSuccessWindowTitle.png">
+    <Content Include="DefaultImages\InvocationSuccessWindowOkButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_altar_icon.bmp">
+    <Content Include="DefaultImages\InvocationSuccessWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_character_panel_serpent.bmp">
+    <Content Include="DefaultImages\nw_altar_icon.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_charselect_logout_button.bmp">
+    <Content Include="DefaultImages\nw_character_panel_serpent.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_connecting_to_login.bmp">
+    <Content Include="DefaultImages\nw_charselect_logout_button.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_ew_button.bmp">
+    <Content Include="DefaultImages\nw_connecting_to_login.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_ew_button_old.bmp">
+    <Content Include="DefaultImages\nw_ew_button.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_invoke_notready.bmp">
+    <Content Include="DefaultImages\nw_ew_button_old.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_invoke_ready.bmp">
+    <Content Include="DefaultImages\nw_invoke_notready.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_loginscreen_exit_button.bmp">
+    <Content Include="DefaultImages\nw_invoke_ready.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_login_button.bmp">
+    <Content Include="DefaultImages\nw_loginscreen_exit_button.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_login_button_old.bmp">
+    <Content Include="DefaultImages\nw_login_button.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_maximum_blessings.bmp">
+    <Content Include="DefaultImages\nw_login_button_old.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_maximum_blessings_new.bmp">
+    <Content Include="DefaultImages\nw_maximum_blessings.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_okay_button_upon_charselect.bmp">
+    <Content Include="DefaultImages\nw_maximum_blessings_new.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_ok_button_upon_charselect.bmp">
+    <Content Include="DefaultImages\nw_okay_button_upon_charselect.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_patcher_login_button.bmp">
+    <Content Include="DefaultImages\nw_ok_button_upon_charselect.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_patcher_play_button.bmp">
+    <Content Include="DefaultImages\nw_patcher_login_button.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_vault_piety_title.bmp">
+    <Content Include="DefaultImages\nw_patcher_play_button.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_vault_piety_title_old.bmp">
+    <Content Include="DefaultImages\nw_vault_piety_title.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\nw_vault_piety_title_yellow.bmp">
+    <Content Include="DefaultImages\nw_vault_piety_title_old.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PatcherLoginButtonPart.png">
+    <Content Include="DefaultImages\nw_vault_piety_title_yellow.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PatcherPlayButton.png">
+    <Content Include="DefaultImages\PatcherLoginButtonPart.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PatcherServerDownIndicator.png">
+    <Content Include="DefaultImages\PatcherPlayButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PatcherServerUpIndicator.png">
+    <Content Include="DefaultImages\PatcherServerDownIndicator.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\powers_reset.bmp">
+    <Content Include="DefaultImages\PatcherServerUpIndicator.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsAssetButton.png">
+    <Content Include="DefaultImages\powers_reset.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsCollectResult.png">
+    <Content Include="DefaultImages\ProfessionsAssetButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsDestroyCampRewardIcon.png">
+    <Content Include="DefaultImages\ProfessionsCollectResult.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsDestroyEnemyCampRewardIcon.png">
+    <Content Include="DefaultImages\ProfessionsDestroyCampRewardIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsEmptySlot.png">
+    <Content Include="DefaultImages\ProfessionsDestroyEnemyCampRewardIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsLeadershipTileUnselected.png">
+    <Content Include="DefaultImages\ProfessionsEmptySlot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsMercenaryIcon.png">
+    <Content Include="DefaultImages\ProfessionsLeadershipTileUnselected.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsOverviewInactiveTile.png">
+    <Content Include="DefaultImages\ProfessionsMercenaryIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsProtectMarketRewardIcon.png">
+    <Content Include="DefaultImages\ProfessionsOverviewInactiveTile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsSearchButton.png">
+    <Content Include="DefaultImages\ProfessionsProtectMarketRewardIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsStartTaskButton.png">
+    <Content Include="DefaultImages\ProfessionsSearchButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsTakeRewardsButton.png">
+    <Content Include="DefaultImages\ProfessionsStartTaskButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsTaskContinueButton.png">
+    <Content Include="DefaultImages\ProfessionsTakeRewardsButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\ProfessionsWindowTitle.png">
+    <Content Include="DefaultImages\ProfessionsTaskContinueButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DefaultImages\ProfessionsWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

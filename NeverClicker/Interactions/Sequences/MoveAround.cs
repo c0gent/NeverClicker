@@ -9,12 +9,24 @@ namespace NeverClicker.Interactions {
 		public static void MoveAround(Interactor intr) {
 			string moveLeftKey = intr.GameAccount.GetSetting("NwMoveLeftKey", "GameHotkeys");
 			string moveRightKey = intr.GameAccount.GetSetting("NwMoveRightKey", "GameHotkeys");
+			string moveForeKey = intr.GameAccount.GetSetting("NwMoveForeKey", "GameHotkeys");
+			string moveBackKey = intr.GameAccount.GetSetting("NwMoveBackKey", "GameHotkeys");
 
-			intr.WaitRand(150, 350);
-			Keyboard.KeyPress(intr, moveLeftKey, 40);
-			intr.WaitRand(50, 350);
-			Keyboard.KeyPress(intr, moveRightKey, 40);
-			intr.WaitRand(50, 350);
+			intr.WaitRand(80, 220);
+
+			int dirRand = intr.Rand(0, 6);
+
+			if (dirRand == 0 || dirRand == 1) {
+				Keyboard.KeyPress(intr, moveLeftKey, 30);
+			} else if (dirRand == 2 || dirRand == 3) {
+				Keyboard.KeyPress(intr, moveRightKey, 30);
+			} else if (dirRand == 4) {
+				Keyboard.KeyPress(intr, moveForeKey, 30);
+			} else if (dirRand == 5) {
+				Keyboard.KeyPress(intr, moveBackKey, 30);
+			}
+
+			intr.WaitRand(80, 220);
 		}
 	}
 }

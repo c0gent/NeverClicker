@@ -43,7 +43,7 @@ namespace NeverClicker {
 				LogFile = new LogFile();
 			} catch (Exception ex) {
 				//MainForm.WriteLine(ex.ToString());
-				MessageBox.Show("Error initializing AutomationEngine: " + ex.ToString());
+				MessageBox.Show(MainForm, "Error initializing AutomationEngine: " + ex.ToString());
 			}
 
 			//if (!SettingsManager.SettingsAreValid()) {
@@ -86,7 +86,7 @@ namespace NeverClicker {
 				case LogEntryType.Fatal:					
 					LogFile.AppendMessage(logMessage);
 					MainForm.WriteLine(logMessage.Text);
-					MessageBox.Show(logMessage.Text, "NeverClicker - Error");
+					MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - Error");
 					break;
 				case LogEntryType.Error:
 					//goto case LogEntryType.Normal;				
@@ -136,7 +136,7 @@ namespace NeverClicker {
 				return result;
 			} catch (Exception ex) {
 				Log(ex.ToString());
-				MessageBox.Show(ex.ToString());
+				MessageBox.Show(MainForm, ex.ToString());
 				throw ex;
 			} finally {
 				Itr.Stop();

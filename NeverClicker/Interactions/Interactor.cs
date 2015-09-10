@@ -224,6 +224,10 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
+		public int Rand(int min, int max) {
+			return Rng.Next(min, max);
+		}
+
 		public TimeSpan AddRandomDelay(TimeSpan original) {
 			var min = (int)original.TotalSeconds;
 			// MAX_DELAY = ORIG + (IF ORIG < ONE HOUR --> ORIG / 2) ELSE IF (ORIG IS >= ONE HOUR --> ONE HOUR)
@@ -259,8 +263,8 @@ namespace NeverClicker.Interactions {
 					if (x is TaskCanceledException) {						
 						return true;
 					} else {
-						Log(x.ToString());
-						MessageBox.Show(x.ToString());
+						Log("Interactor::Wait(): Error: " + x.ToString(), LogEntryType.Fatal);
+						//MessageBox.Show(x.ToString());
 						return false; // Let anything else stop the application.
 					}
 				});

@@ -17,10 +17,15 @@ namespace NeverClicker {
 		const string LOGS_FOLDER_NAME = "Logs";
 		const string ASSETS_FOLDER_NAME = "Assets";
 
-		public const string IMAGES_SUBPATH_DEFAULT = "\\" + IMAGES_FOLDER_NAME;
-		public const string SETTINGS_SUBPATH_DEFAULT = "\\" + SETTINGS_FOLDER_NAME;
-		public const string LOGS_SUBPATH_DEFAULT = "\\" + LOGS_FOLDER_NAME;
-		public const string ASSETS_SUBPATH_DEFAULT = "\\" + ASSETS_FOLDER_NAME;
+		public const string IMAGES_SUBPATH = "\\" + IMAGES_FOLDER_NAME;
+		public const string SETTINGS_SUBPATH = "\\" + SETTINGS_FOLDER_NAME;
+		public const string LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
+		public const string ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
+
+		public const string BUILTIN_IMAGES_SUBPATH = "\\" + "Default" + IMAGES_FOLDER_NAME;
+		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + "Default" + SETTINGS_FOLDER_NAME;
+		//public const string DEFAULT_LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
+		//public const string DEFAULT_ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
 
 		public const string GAME_ACCOUNT_INI_FILE_NAME = "\\NeverClicker_GameAccount.ini";
 		public const string GAME_CLIENT_INI_FILE_NAME = "\\NeverClicker_GameClient.ini";
@@ -29,6 +34,10 @@ namespace NeverClicker {
 
 		private static readonly object Locker = new object();
 		private static XmlDocument LogXmlDoc = new XmlDocument();
+
+		public static string ProgramRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
+		public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
+
 
 		public SettingsManager() {
 			//ExeConfigurationFileMap configMap = new ExeConfigurationFileMap();
@@ -39,39 +48,32 @@ namespace NeverClicker {
 		}
 
 		//public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
-		public static string DefaultUserRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
+		
 
-		public static bool SettingsAreValid() {			
-			bool settingsValid = true;
+		//public static bool SettingsAreValid() {			
+		//	bool settingsValid = true;
 
-			settingsValid &= PatcherExePathIsValid();
-			settingsValid &= UserRootFolderPathIsValid();
-			settingsValid &= InitSettingsFiles();
-			settingsValid &= ImagesFolderIsValid();
-			settingsValid &= LogsFolderIsValid();
+		//	settingsValid &= PatcherExePathIsValid();
+		//	settingsValid &= UserRootFolderPathIsValid();
+		//	settingsValid &= InitSettingsFiles();
+		//	settingsValid &= ImagesFolderIsValid();
+		//	settingsValid &= LogsFolderIsValid();
 			
-			return settingsValid;
-		}
+		//	return settingsValid;
+		//}
 
-		public static bool PatcherExePathIsValid() {
-			if (File.Exists(Settings.Default.NeverwinterExePath)) {
-				return true;
-			} else {
-				MessageBox.Show("Neverwinter.exe path: '" + Settings.Default.NeverwinterExePath + "' is invalid.");
-				return false;
-			}            
-		}
+		
 
-		public static bool UserRootFolderPathIsValid() {
-			if (Directory.Exists(Settings.Default.UserRootFolderPath)) {
-				return true;
-			} else {
-				MessageBox.Show("Neverwinter.exe path: '" + Settings.Default.NeverwinterExePath + "' is invalid.");
-				return false;
-				//Directory.CreateDirectory(DefaultUserRootFolder);
-				//return true;
-			}
-		}
+		//public static bool UserRootFolderPathIsValid() {
+		//	if (Directory.Exists(Settings.Default.UserRootFolderPath)) {
+		//		return true;
+		//	} else {
+		//		MessageBox.Show("Neverwinter.exe path: '" + Settings.Default.NeverwinterExePath + "' is invalid.");
+		//		return false;
+		//		//Directory.CreateDirectory(DefaultUserRootFolder);
+		//		//return true;
+		//	}
+		//}
 
 		//public static void InitUserFolders() {
 		//	string newFolder = "";
@@ -167,29 +169,29 @@ namespace NeverClicker {
 			}
 		}
 
-		public static void Failure() { // ***** DEPRICATE *****
-			//if (System.Windows.Forms.Application.MessageLoop) {
-			//	// WinForms app
-			//	MessageBox.Show("SettingsManager::Failure(): DEBUG: Settings invalid. Exiting application.");
-			//	System.Windows.Forms.Application.Exit();
-			//}
-		}
+		//public static void Failure() { // ***** DEPRICATE *****
+		//	//if (System.Windows.Forms.Application.MessageLoop) {
+		//	//	// WinForms app
+		//	//	MessageBox.Show("SettingsManager::Failure(): DEBUG: Settings invalid. Exiting application.");
+		//	//	System.Windows.Forms.Application.Exit();
+		//	//}
+		//}
 
-		public static bool Save() {
-			if (SettingsAreValid()) {
-				Settings.Default.Save();
-				return true;
-			} else {
-				try {
-					Directory.CreateDirectory(Settings.Default.LogsFolderPath);
-					Settings.Default.Save();
-					return true;
-				} catch (Exception ex) {
-					MessageBox.Show("Unable to save settings -- Error creating folders: " + ex.ToString());
-					return false;
-				}			
-			}
-		}
+		//public static bool Save() {
+		//	if (SettingsAreValid()) {
+		//		Settings.Default.Save();
+		//		return true;
+		//	} else {
+		//		try {
+		//			Directory.CreateDirectory(Settings.Default.LogsFolderPath);
+		//			Settings.Default.Save();
+		//			return true;
+		//		} catch (Exception ex) {
+		//			MessageBox.Show("Unable to save settings -- Error creating folders: " + ex.ToString());
+		//			return false;
+		//		}			
+		//	}
+		//}
 
 	}
 }

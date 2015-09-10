@@ -186,9 +186,9 @@
 			// checkBoxImagesFolder
 			// 
 			this.checkBoxImagesFolder.AutoSize = true;
-			this.checkBoxImagesFolder.Checked = true;
+			this.checkBoxImagesFolder.Checked = global::NeverClicker.Properties.Settings.Default.ImagesFolderPathIsDefault;
 			this.checkBoxImagesFolder.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBoxImagesFolder.Enabled = false;
+			this.checkBoxImagesFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "ImagesFolderPathDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.checkBoxImagesFolder.Location = new System.Drawing.Point(125, 97);
 			this.checkBoxImagesFolder.Name = "checkBoxImagesFolder";
 			this.checkBoxImagesFolder.Size = new System.Drawing.Size(60, 17);
@@ -271,8 +271,9 @@
 			// checkBoxUserRootFolder
 			// 
 			this.checkBoxUserRootFolder.AutoSize = true;
-			this.checkBoxUserRootFolder.Checked = true;
+			this.checkBoxUserRootFolder.Checked = global::NeverClicker.Properties.Settings.Default.UserRootFolderPathIsDefault;
 			this.checkBoxUserRootFolder.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBoxUserRootFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "UserRootFolderPathDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.checkBoxUserRootFolder.Location = new System.Drawing.Point(125, 39);
 			this.checkBoxUserRootFolder.Name = "checkBoxUserRootFolder";
 			this.checkBoxUserRootFolder.Size = new System.Drawing.Size(60, 17);
@@ -313,9 +314,9 @@
 			// checkBoxSettingsFolder
 			// 
 			this.checkBoxSettingsFolder.AutoSize = true;
-			this.checkBoxSettingsFolder.Checked = true;
+			this.checkBoxSettingsFolder.Checked = global::NeverClicker.Properties.Settings.Default.SettingsFolderPathIsDefault;
 			this.checkBoxSettingsFolder.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBoxSettingsFolder.Enabled = false;
+			this.checkBoxSettingsFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "SettingsFolderPathDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.checkBoxSettingsFolder.Location = new System.Drawing.Point(125, 68);
 			this.checkBoxSettingsFolder.Name = "checkBoxSettingsFolder";
 			this.checkBoxSettingsFolder.Size = new System.Drawing.Size(60, 17);
@@ -336,9 +337,9 @@
 			// checkBoxLogsFolder
 			// 
 			this.checkBoxLogsFolder.AutoSize = true;
-			this.checkBoxLogsFolder.Checked = true;
+			this.checkBoxLogsFolder.Checked = global::NeverClicker.Properties.Settings.Default.LogsFolderPathIsDefault;
 			this.checkBoxLogsFolder.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBoxLogsFolder.Enabled = false;
+			this.checkBoxLogsFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "LogsFolderPathDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.checkBoxLogsFolder.Location = new System.Drawing.Point(125, 126);
 			this.checkBoxLogsFolder.Name = "checkBoxLogsFolder";
 			this.checkBoxLogsFolder.Size = new System.Drawing.Size(60, 17);
@@ -514,7 +515,6 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "SettingsForm";
 			this.Text = "Settings";
-			this.Load += new System.EventHandler(this.Options_Load);
 			this.tabControlOptions.ResumeLayout(false);
 			this.tabPagePaths.ResumeLayout(false);
 			this.tabPagePaths.PerformLayout();

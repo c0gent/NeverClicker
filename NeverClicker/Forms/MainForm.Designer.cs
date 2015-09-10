@@ -67,7 +67,7 @@
 			this.buttonPause.Enabled = false;
 			this.buttonPause.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonPause.Location = new System.Drawing.Point(174, 523);
+			this.buttonPause.Location = new System.Drawing.Point(174, 563);
 			this.buttonPause.Name = "buttonPause";
 			this.buttonPause.Size = new System.Drawing.Size(75, 23);
 			this.buttonPause.TabIndex = 6;
@@ -82,7 +82,7 @@
 			this.buttonReload.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.buttonReload.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonReload.Location = new System.Drawing.Point(93, 523);
+			this.buttonReload.Location = new System.Drawing.Point(93, 563);
 			this.buttonReload.Name = "buttonReload";
 			this.buttonReload.Size = new System.Drawing.Size(75, 23);
 			this.buttonReload.TabIndex = 7;
@@ -97,7 +97,7 @@
 			this.buttonStop.Enabled = false;
 			this.buttonStop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonStop.Location = new System.Drawing.Point(12, 523);
+			this.buttonStop.Location = new System.Drawing.Point(12, 563);
 			this.buttonStop.Name = "buttonStop";
 			this.buttonStop.Size = new System.Drawing.Size(75, 23);
 			this.buttonStop.TabIndex = 8;
@@ -143,7 +143,7 @@
 			this.buttonOptionsForm.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.buttonOptionsForm.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonOptionsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonOptionsForm.Location = new System.Drawing.Point(12, 563);
+			this.buttonOptionsForm.Location = new System.Drawing.Point(12, 520);
 			this.buttonOptionsForm.Name = "buttonOptionsForm";
 			this.buttonOptionsForm.Size = new System.Drawing.Size(116, 23);
 			this.buttonOptionsForm.TabIndex = 16;
@@ -174,7 +174,7 @@
 			this.buttonTestsForm.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.buttonTestsForm.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
 			this.buttonTestsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonTestsForm.Location = new System.Drawing.Point(134, 563);
+			this.buttonTestsForm.Location = new System.Drawing.Point(134, 520);
 			this.buttonTestsForm.Name = "buttonTestsForm";
 			this.buttonTestsForm.Size = new System.Drawing.Size(115, 23);
 			this.buttonTestsForm.TabIndex = 19;

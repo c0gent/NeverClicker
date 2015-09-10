@@ -29,9 +29,13 @@ namespace NeverClicker.Forms {
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e) {			
-			if (!SettingsManager.SettingsAreValid()) {
+			//if (!SettingsManager.SettingsAreValid()) {
+			//	this.SetButtonStateAllDisabled();
+			//	this.SettingsInvalid();
+
+			if (!Settings.Default.NeverClickerConfigValid) {
 				this.SetButtonStateAllDisabled();
-				this.SettingsInvalid();
+				this.ConfigInvalid();
 			} else {
 				this.AutomationEngine = new AutomationEngine(this);
 				this.checkBoxBeginOnStartup.Checked = Settings.Default.BeginOnStartup;
@@ -49,8 +53,8 @@ namespace NeverClicker.Forms {
 			textBox1.AppendText(message + "\r\n");
 		}		
 
-		public void SettingsInvalid() {
-			MessageBox.Show("Settings not correctly configured. Opening settings menu.");
+		public void ConfigInvalid() {
+			MessageBox.Show(this, "Settings not configured properly. Opening settings menu.", "NeverClicker - Settings");
 			OpenSettingsWindow();
         }
 
@@ -60,7 +64,7 @@ namespace NeverClicker.Forms {
 			//WriteLine("Reloading settings.");
 			//SetButtonStateStopped();
 			this.SetButtonStateAllDisabled();
-			MessageBox.Show("Please restart to apply settings.");
+			MessageBox.Show(this, "Please restart to apply settings.");
 			this.Close();
 		}
 
@@ -132,11 +136,12 @@ namespace NeverClicker.Forms {
 			try {
 				this.listBoxTaskQueue.Items.Clear();
 				foreach (GameTask task in taskList.Values) {
-					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString() + "\t" + task.Type.ToString()
+					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Type.ToString() 
+						+ "\t" + task.Priority.ToString()
 						+ "\tCharacter " + task.CharacterZeroIdx.ToString());
 				}
 			} catch (Exception ex) {
-				MessageBox.Show("Error refreshing task queue: " + ex.ToString());
+				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
 			}
 
 			//AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
@@ -169,11 +174,6 @@ namespace NeverClicker.Forms {
 			AutomationEngine.AutoCycle(0);
 		}
 
-
-		private void labelTaskQueue_Click(object sender, EventArgs e) {
-
-		}
-
 		private void buttonTestsForm_Click(object sender, EventArgs e) {
 			this.OpenTestsWindow();
 		}
@@ -184,7 +184,10 @@ namespace NeverClicker.Forms {
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-			this.AutomationEngine.Log("NeverClicker Exiting.");
+			if (this.AutomationEngine != null) {
+				this.AutomationEngine.Log("NeverClicker Exiting.");
+				this.AutomationEngine.Stop();
+			}		
 		}
 	}
 }

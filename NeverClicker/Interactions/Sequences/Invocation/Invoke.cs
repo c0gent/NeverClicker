@@ -45,6 +45,9 @@ namespace NeverClicker.Interactions {
 				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
 					intr.Log("Still waiting to invoke on this character");
 					return CompletionStatus.Immature;
+				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
+					intr.Log("Character not in rest zone.", LogEntryType.Error);
+					return CompletionStatus.Complete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
 					intr.Log("Invocation already finished for the day on this character");
 					return CompletionStatus.DayComplete;

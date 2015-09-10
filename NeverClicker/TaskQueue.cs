@@ -112,15 +112,17 @@ namespace NeverClicker {
 		}
 
 		// QueueSubsequentTask(): QUEUE FOLLOW UP TASK
-		public void QueueSubsequentTask(Interactor intr, uint charZeroIdx, GameTaskType taskType, int invokesToday) {
+		public void QueueSubsequentInvocationTask(Interactor intr, uint charZeroIdx, GameTaskType taskType, int invokesToday) {
 			DateTime charNextTaskTime = DateTime.Now;
 			DateTime nextThreeThirty = NextThreeAmPst();
 			DateTime todaysInvokeDate = TodaysGameDate();
 			string charZeroIdxLabel = "Character " + charZeroIdx.ToString();
+
+			int extraTaskDelay = (invokesToday * 45000) + 180000;
 			
 			if (invokesToday < 6) { // QUEUE FOR LATER TODAY
 				// nextInvokeDelay: (Normal delay) + (3 min) + (1 sec * charIdx);
-				var nextInvokeDelay = InvokeDelays[invokesToday] + 180000 + (charZeroIdx * 1000);
+				var nextInvokeDelay = InvokeDelays[invokesToday] + (charZeroIdx * 1000) + extraTaskDelay;
 				charNextTaskTime = DateTime.Now.AddMilliseconds(nextInvokeDelay);
 
 				// IF NEXT SCHEDULED TASK IS BEYOND THE 3:30 CURFEW, RESET FOR NEXT DAY
@@ -142,7 +144,7 @@ namespace NeverClicker {
 			}
 
 			try {
-				intr.Log("Next invocation task for character at: " + charNextTaskTime.ToShortTimeString() + ".");
+				intr.Log("Next invocation task for character " + charZeroIdx + " at: " + charNextTaskTime.ToShortTimeString() + ".");
 				this.Add(new GameTask(charNextTaskTime.AddSeconds(charZeroIdx), charZeroIdx, GameTaskType.Invocation, 0));
 				intr.UpdateQueueList(this.TaskList);
 			} catch (Exception ex) {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using NeverClicker.Properties;
+using AForge.Imaging;
 
 namespace NeverClicker.Interactions {
 	public static partial class Screen {
@@ -20,6 +21,7 @@ namespace NeverClicker.Interactions {
 		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode) {
 			//ImageSearch, ImgX, ImgY, 1, 1, 1920, 1080, *40 % image_file %
 			var imageFileName = intr.GameClient.GetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
+
 			if (string.IsNullOrWhiteSpace(imageFileName)) {
 				intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file.", LogEntryType.Error);
 				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
@@ -91,6 +93,53 @@ namespace NeverClicker.Interactions {
 			}
 
 		}
+
+
+
+
+		public static ImageSearchResult ImageSearchNew(Interactor intr, string imgCode) {
+			var imageFileName = intr.GameClient.GetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
+
+			if (string.IsNullOrWhiteSpace(imageFileName)) {
+				intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file.", LogEntryType.Error);
+				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
+			}
+
+			var imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
+
+			intr.Log(new LogMessage("ImageSearchNew(" + imgCode + "): Searching for image: '" + imageFilePath,
+				LogEntryType.Info		
+			));		
+
+
+			ScreenCapture sc = new ScreenCapture();
+
+			var image1 = (Bitmap)sc.CaptureScreen();
+			var image2 = new Bitmap(imageFilePath);
+						
+			var newBitmap1 = ImageCompare.ImageComparer.ChangePixelFormat(new Bitmap(image1), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+			var newBitmap2 = ImageCompare.ImageComparer.ChangePixelFormat(new Bitmap(image2), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+			var similarityThreshold = 0.950f;
+			var compareLevel = 0.950f;
+
+			var tm = new ExhaustiveTemplateMatching(similarityThreshold);
+			//var tm = new ExhaustiveBlockMatching(8, 12);
+
+			// Process the images
+			var results = tm.ProcessImage(newBitmap1, newBitmap2);
+
+			// Compare the results, 0 indicates no match so return false
+			if (results.Length <= 0) {
+				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
+			}
+
+			// Return true if similarity score is equal or greater than the comparison level
+			var match = results[0].Similarity >= compareLevel;
+
+			return new ImageSearchResult() { Found = true, Point = new Point(0, 0) };
+		}
+
 	}
 
 	public class ImageSearchResult {

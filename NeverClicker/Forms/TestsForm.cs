@@ -32,7 +32,7 @@ namespace NeverClicker.Forms {
 				try {
 					SettingsXmlDoc.Load(SettingsFileName);
 				} catch (Exception ex) {
-					MessageBox.Show("LogFile::AppendMessage(): Error loading settings file. Please rename or delete. \r\n Error info: " + ex.ToString());
+					MessageBox.Show(this, "LogFile::AppendMessage(): Error loading settings file. Please rename or delete. \r\n Error info: " + ex.ToString());
 				}
 			} else {
 				try {
@@ -40,7 +40,7 @@ namespace NeverClicker.Forms {
 					SettingsXmlDoc.AppendChild(root);
 					SettingsXmlDoc.Save(SettingsFileName);
 				} catch (Exception ex) {
-					MessageBox.Show("LogFile::AppendMessage(): Error saving settings file: " + ex.ToString());
+					MessageBox.Show(this, "LogFile::AppendMessage(): Error saving settings file: " + ex.ToString());
 				}
 			}
 
@@ -209,6 +209,10 @@ namespace NeverClicker.Forms {
 				//this.textBoxReadSettingValue2.Text = this.textBoxSettingValue2.Text;
 				//this.textBoxReadSettingValue3.Text = this.textBoxSettingValue3.Text;
 			}
+		}
+
+		private void tabPageWindow_Click(object sender, EventArgs e) {
+
 		}
 	}
 }
