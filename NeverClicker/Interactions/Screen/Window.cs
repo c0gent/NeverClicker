@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +29,11 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static void WindowRun(Interactor intr, string windowExePath) {
-			string param = string.Format("\"{0}\"", windowExePath);
-			intr.ExecuteStatement("Run, " + param);
+			//string param = string.Format("\"{0}\"", windowExePath);
+			//string exeFolder = "\"" + Path.GetDirectoryName(windowExePath) + "\"";
+
+			string runFolder = Path.GetDirectoryName(windowExePath);
+			intr.ExecuteStatement("Run, " + windowExePath + ", " + runFolder);
 		}
 
 		public static void WindowMinimize(Interactor intr, string windowExe) {

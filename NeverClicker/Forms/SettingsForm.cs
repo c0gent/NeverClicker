@@ -25,6 +25,8 @@ namespace NeverClicker {
 			InitializeComponent();
 			this.MainForm = mainForm;
 
+			Settings.Default.Upgrade();
+
 			var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 			//MessageBox.Show(this, config.FilePath);
 			this.linkLabelUserConfigFile.Text = config.FilePath;

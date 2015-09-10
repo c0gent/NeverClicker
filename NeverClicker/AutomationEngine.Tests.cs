@@ -117,7 +117,7 @@ namespace NeverClicker {
 		}
 
 		public async void ImageSearch(string imgCode) {
-			ImageSearchResult searchResult = await Run(() => Screen.ImageSearchNew(Itr, imgCode));
+			ImageSearchResult searchResult = await Run(() => Screen.ImageSearch(Itr, imgCode));
 
 			if (searchResult.Found) {
 				Log("Image found at: " + searchResult.Point.ToString());
