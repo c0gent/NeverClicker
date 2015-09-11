@@ -60,9 +60,9 @@ namespace NeverClicker.Interactions {
 				var result = Screen.ImageSearch(intr, "ProfessionsEmptySlot");
 
 				if (result.Found) {
-					intr.Log("Empty professions slot found at: " + result.Point.ToString() + ".", LogEntryType.Debug);
+					intr.Log("Empty professions slot found at: " + result.Point.ToString() + ".", LogEntryType.Info);
 				} else {
-					intr.Log("Empty professions slot not found.", LogEntryType.Debug);
+					intr.Log("Empty professions slot not found.", LogEntryType.Info);
 					break;
 				}
 

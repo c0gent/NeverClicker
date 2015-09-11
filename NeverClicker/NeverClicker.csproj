@@ -270,6 +270,9 @@
     <Content Include="DefaultImages\InvocationRewardsOfDevotionPatience.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DefaultImages\InvocationRewardsOfDevotionPatience_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="DefaultImages\InvocationRewardsOfDevotionWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

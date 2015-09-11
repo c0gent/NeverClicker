@@ -23,7 +23,7 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 
-			if ((invokesToday >= 6) && (queue.NextTask.Type == TaskKind.Invocation)) {
+			if ((invokesToday >= 6) && (queue.NextTask.Kind == TaskKind.Invocation)) {
 				if (invokesCompletedOn == TaskQueue.TodaysGameDate()) {
 					intr.Log(charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Info);
 					queue.Pop();
@@ -71,7 +71,8 @@ namespace NeverClicker.Interactions {
 
 			var completionList = new List<int>();
 
-			professionsStatus = MaintainProfs(intr, charLabel, completionList);	
+			professionsStatus = MaintainProfs(intr, charLabel, completionList);
+			intr.Log("ProcessCharacter(): Professions status: " + professionsStatus.ToString(), LogEntryType.Info);
 
 			
 			// ###################################### LOGOUT ######################################
@@ -94,32 +95,43 @@ namespace NeverClicker.Interactions {
 				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 				SaveInvocationSettings(intr, invokesToday, charIdx);
 				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, true);
-			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Type == TaskKind.Invocation) {
+			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Immature.", LogEntryType.Normal);
 				intr.Log("Re-queuing task for character " + charIdx.ToString() + ".", LogEntryType.Info);
 				
 				//queue.Pop();
 				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
-			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Type == TaskKind.Invocation) {
+				//if ( && queue.NextTask.Type == TaskKind.Invocation) {
+					queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
+				//}
+			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);
 				
 				//queue.Pop();
 				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
-			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Type == TaskKind.Invocation) {
+				//if (&& queue.NextTask.Type == TaskKind.Invocation) {
+					queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
+				//}
+			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
 			}
 
 			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
-			if (professionsStatus == CompletionStatus.Complete ) {
+			if (professionsStatus == CompletionStatus.Complete || queue.NextTask.Kind == TaskKind.Profession) {
+				intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() 
+					+ ", items complete: " + completionList.Count, LogEntryType.Normal);
+
 				foreach (int taskId in completionList) {
 					queue.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId);
 				}
-			} else if (professionsStatus != CompletionStatus.None && queue.NextTask.Type == TaskKind.Profession) {
-				intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() + ".", LogEntryType.Normal);
+
+				var task = queue.NextTask;
+				queue.AdvanceTask(intr, task.CharIdx, task.Kind, task.TaskId);
+			} else if (queue.NextTask.Kind == TaskKind.Profession) {
+				intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() + ".", LogEntryType.Normal);				
 			}
 
+			intr.Log("Processing complete for character " + charIdx + ".", LogEntryType.Normal);
 		}
 
 

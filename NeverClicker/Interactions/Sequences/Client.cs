@@ -18,6 +18,7 @@ namespace NeverClicker.Interactions {
 
 		public static bool LogOut(Interactor intr) {
 			//intr.ExecuteStatement("Logout()");
+			intr.Log("Logging out...", LogEntryType.Info);
 
 			MoveAround(intr);
 

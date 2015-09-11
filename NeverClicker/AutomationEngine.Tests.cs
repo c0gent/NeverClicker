@@ -53,7 +53,7 @@ namespace NeverClicker {
 				nextTask = Queue.Pop();
 				Log("Processing next task for character " + nextTask.CharIdx.ToString()
 					+ "; time: " + nextTask.MatureTime.ToShortTimeString()
-					+ "; type: " + nextTask.Type.ToString() + ".");
+					+ "; type: " + nextTask.Kind.ToString() + ".");
 			} else {
 				Log("Task queue is empty.");
 			}

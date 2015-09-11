@@ -136,7 +136,7 @@ namespace NeverClicker.Forms {
 			try {
 				this.listBoxTaskQueue.Items.Clear();
 				foreach (GameTask task in taskList.Values) {
-					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Type.ToString() 
+					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Kind.ToString() 
 						+ "\t" + task.TaskId.ToString()
 						+ "\tCharacter " + task.CharIdx.ToString());
 				}

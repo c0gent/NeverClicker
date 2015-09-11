@@ -90,6 +90,12 @@ namespace NeverClicker {
 			// IF NOT ADD
 			// IF SO, CHECK TO SEE IF THAT TASK HAS MATURED
 			// IF IT HAS MATURED, ADVANCE
+			intr.Log("Advancing task: "
+				+ "[charIdx: " + charIdx 
+				+ ", taskKind: " + taskKind.ToString()
+				+ ", taskId: " + taskId + "]."				
+				, LogEntryType.Info);
+
 			var nowTicks = DateTime.Now.AddMinutes(3).Ticks;
 			long taskKey = 0;
 			bool keyExists = this.TryGetTaskKey(charIdx, taskKind, taskId, out taskKey);
@@ -97,20 +103,27 @@ namespace NeverClicker {
 			//DateTime matureTime = DateTime.Now;
 
 			if (keyExists) {
+				intr.Log("Key found for task.", LogEntryType.Debug);
 				if (taskKey < nowTicks) { // MATURE
+					intr.Log("Task is mature.", LogEntryType.Debug);
 					var oldTask = Queue[taskKey];
+					intr.Log("Removing old task.", LogEntryType.Debug);
 					Queue.Remove(taskKey); 
 
-					if (taskKind == TaskKind.Invocation) { 
+					if (taskKind == TaskKind.Invocation) {
+						intr.Log("Queuing subsequent invocation task.", LogEntryType.Debug);
 						var invokesToday = (incrementTaskId) ? oldTask.TaskId + 1 : oldTask.TaskId;
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					} else if (taskKind == TaskKind.Profession) {
+						intr.Log("Queuing subsequent professions task.", LogEntryType.Debug);
 						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 					}					
 				} else { // NOT MATURE
+					intr.Log("Task is not mature.", LogEntryType.Debug);
 					// DO NOTHING?
 				}
 			} else { // DOESN'T EXIST YET
+				intr.Log("Key not found for task.", LogEntryType.Info);
 				if (taskKind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, 1);
 				} else if (taskKind == TaskKind.Profession) {
@@ -280,13 +293,13 @@ namespace NeverClicker {
 
 			if (taskKind == TaskKind.Invocation) {
 				foreach (var kvp in this.Queue) {
-					if (kvp.Value.CharIdx == charIdx && kvp.Value.Type == taskKind) {
+					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind) {
 						taskKeys.Add(kvp.Key);
 					}
 				}
 			} else if (taskKind == TaskKind.Profession) {
 				foreach (var kvp in this.Queue) {
-					if (kvp.Value.CharIdx == charIdx && kvp.Value.Type == taskKind && kvp.Value.TaskId == taskId) {
+					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind && kvp.Value.TaskId == taskId) {
 						taskKeys.Add(kvp.Key);
 					}
 				}
