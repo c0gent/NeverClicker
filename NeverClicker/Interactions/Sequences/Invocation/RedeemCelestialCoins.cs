@@ -12,7 +12,7 @@ namespace NeverClicker.Interactions {
 
 			//int item = 1; // REPLACE WITH ENUM
 
-			string cursorModeKey = intr.GameAccount.GetSetting("NwCursorMode", "GameHotkeys");
+			string cursorModeKey = intr.GameAccount.GetSettingOrEmpty("NwCursorMode", "GameHotkeys");
 
 			Point MaxBlessVaultButton = new Point(
 				intr.GameClient.GetSettingOrZero("VpMaxBlessVpX", "ClickLocations"),

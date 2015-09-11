@@ -17,43 +17,28 @@ namespace NeverClicker.Interactions {
 			intr.Wait(startDelaySec * 1000);
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
-			int charsZeroIdxTotal = 0;
+			int charsZeroIdxTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
 			
-			try {
-				charsZeroIdxTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
-			} catch (Exception ex) {
-				intr.Log("Interactions::Sequences::AutoCycle(): ERROR LOADING: charsTotal: " + ex.ToString(), LogEntryType.Error);
-			}
-
-			if (queue.IsEmpty()) {
+			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsZeroIdxTotal).ToString() + ")");
-				queue.PopulateQueueProperly(intr, charsZeroIdxTotal);
-				intr.UpdateQueueList(queue.TaskList);
+				queue.Populate(intr, charsZeroIdxTotal);
+				intr.UpdateQueueList(queue.ListClone());
 			}
 
 			intr.Log("Beginning AutoCycle.");
 			intr.Wait(500);
 			
 			// ##### BEGIN AUTOCYCLE LOOP #####
-			while (!queue.IsEmpty() && !intr.CancelSource.IsCancellationRequested) {
-				if (intr.CancelSource.IsCancellationRequested) { return; }
-
+			while (!queue.IsEmpty && !intr.CancelSource.IsCancellationRequested) {
 				if (IsCurfew()) {
-					intr.Log("Curfew time. Sleeping for between 10 and 60 minutes.");
-					intr.WaitRand(600000, 3300000); // 10 minutes - 55 minutes
+					int sleepTime = intr.WaitRand(300000, 1800000);
+					intr.Log("Curfew time. Sleeping for " + (sleepTime / 60000).ToString() + " minutes.");					
 				}
 
 				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);
-				TimeSpan nextTaskWaitTime = queue.NextTaskWaitTime();
-				
-
-				
+				TimeSpan nextTaskWaitTime = queue.NextTaskWaitTime();				
 				
 				if (nextTaskWaitTime.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
-					// DETERMINE IF WE'VE ALREADY INVOKED ENOUGH TODAY
-					
-					
-
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
 					ProcessCharacter(intr, queue);										
 					
@@ -65,10 +50,10 @@ namespace NeverClicker.Interactions {
 
 					if (nextTaskWaitTime.TotalMinutes > 8) {
 						//waitDelayMs = nextTaskWaitTime + intr.RandomDelay(5, 25);
-						waitDelayMs = intr.AddRandomDelay(nextTaskWaitTime);
+						waitDelayMs = nextTaskWaitTime + intr.RandomDelay(5, 15);
 						ProduceClientState(intr, ClientState.None);										
 					} else if (nextTaskWaitTime.TotalMinutes > 1) {
-						waitDelayMs = nextTaskWaitTime.Add(new TimeSpan(0, intr.Rand(3, 11), 0));
+						waitDelayMs = nextTaskWaitTime.Add(new TimeSpan(0, intr.Rand(1, 2), 0));
 						//intr.Log("Minimizing client and waiting " + waitDelayMs.TotalMinutes.ToString("F0") + " minutes.");						
 						ProduceClientState(intr, ClientState.Inactive);
 					}
@@ -80,13 +65,12 @@ namespace NeverClicker.Interactions {
 					}					
 				}
 				
-				// GOTTA HAVE SOME DELAY HERE OR WE CRASH -- PROBABLY NO LONGER TRUE
 				intr.Wait(100);
 				//if (intr.CancelSource.IsCancellationRequested) { return; }				
 			}
 
-			intr.GameAccount.SaveSetting("0", "CharZeroIdxLastInvoked", "Invocation");
-			intr.Log("AutoCycle(): Returning.", LogEntryType.Info);
+			//intr.GameAccount.SaveSetting("0", "CharZeroIdxLastInvoked", "Invocation");
+			//intr.Log("AutoCycle(): Returning.", LogEntryType.Info);
 
 			// CLOSE DOWN -- TEMPORARILY DISABLED -- TRANSITION TO USING GAMESTATE TO MANAGE
 			//intr.EvaluateFunction("VigilantlyCloseClientAndExit");

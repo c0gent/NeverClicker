@@ -137,8 +137,8 @@ namespace NeverClicker.Forms {
 				this.listBoxTaskQueue.Items.Clear();
 				foreach (GameTask task in taskList.Values) {
 					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Type.ToString() 
-						+ "\t" + task.Priority.ToString()
-						+ "\tCharacter " + task.CharacterZeroIdx.ToString());
+						+ "\t" + task.TaskId.ToString()
+						+ "\tCharacter " + task.CharIdx.ToString());
 				}
 			} catch (Exception ex) {
 				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());

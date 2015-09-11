@@ -65,11 +65,11 @@ namespace NeverClicker.Interactions {
 		//}
 
 		// UpdateQueueList(): MAKE THIS ASYNC
-		public void UpdateQueueList(SortedList<long, GameTask> taskListOrig) {
-			Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
-			var taskList = new SortedList<long, GameTask>(taskListOrig);
-			QueueList.Report(taskList);
-			Wait(50);
+		public void UpdateQueueList(SortedList<long, GameTask> taskListCopy) {
+			//Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
+			//var taskList = new SortedList<long, GameTask>(taskListOrig);
+			QueueList.Report(taskListCopy);
+			//Wait(50);
 		}
 
 		public void Log(string message) {

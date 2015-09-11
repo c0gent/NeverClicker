@@ -6,17 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
-	public static partial class Sequences {
-		public static int[] ProfessionTaskDurationMinutes = { 720, 960, 1440 };
-		public static string[] ProfessionTaskNames = { "Protect Magical", "Destroy Enemy", "Battle Elemental" };
+	public static partial class Sequences {	
 
-		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel) {			
-			intr.Wait(1000);
-			ClearOkButtons(intr);
-			intr.Wait(200);	
-			MoveAround(intr);
+		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {			
+			//intr.Wait(1000);
+			//ClearOkButtons(intr);
+			//intr.Wait(200);	
+			//MoveAround(intr);
 
-			string profsWinKey = intr.GameAccount.GetSetting("NwProfessionsWindowKey", "GameHotkeys");
+			string profsWinKey = intr.GameAccount.GetSettingOrEmpty("NwProfessionsWindowKey", "GameHotkeys");
 
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
@@ -27,24 +25,20 @@ namespace NeverClicker.Interactions {
 				intr.Wait(200);
 
 				if (!Screen.ImageSearch(intr, "ProfessionsWindowTitle").Found) {
-					intr.Log("Unable to open professions window", LogEntryType.Error);
+					intr.Log("Unable to open professions window", LogEntryType.FatalWithScreenshot);
 					return CompletionStatus.Failed ;
 				}
 			}
 
-
-			//ProfessionsLeadershipTileUnselected
-
-
-
-			Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile");
-			intr.Wait(200);
+			if (Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile")) {
+				intr.Wait(1000);
+			}
 
 			for (int i = 0; i < 9; i++) {
-				intr.Wait(500);
+				//intr.Wait(200);
 
 				if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
-					intr.Wait(1000);
+					intr.Wait(2500);
 					Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
 					intr.Wait(2000);
 				} else {
@@ -52,16 +46,16 @@ namespace NeverClicker.Interactions {
 				}				
 			}
 
-			int currentPriority = 0;
+			int currentTask = 0;
 			var success = false;
 
 			for (int i = 0; i < 9; i++) {
 
 				success = false;
 				
-				Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile");
-
-				intr.Wait(400);				
+				if (Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile")) {
+					intr.Wait(400);
+				}
 
 				var result = Screen.ImageSearch(intr, "ProfessionsEmptySlot");
 
@@ -84,36 +78,63 @@ namespace NeverClicker.Interactions {
 					ContinueTask(intr, taskContinueResult.Point);
 					success = true;
 				} else {
-					switch (currentPriority) {
-						case 0:
-							if (!SelectProfTask(intr, ProfessionTaskNames[currentPriority])) {
-								currentPriority += 1;
-								goto case 1;
-							} else {
+					while(true) {
+						if (currentTask < TaskQueue.ProfessionTaskNames.Length) {
+							if (SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
 								success = true;
-								break;
-							}
-						case 1:
-							if (!SelectProfTask(intr, ProfessionTaskNames[currentPriority])) {
-								currentPriority += 1;
-								goto case 2;
+								break;								
 							} else {
-								success = true;
-								break;
+								currentTask += 1;
+								continue;
 							}
-						case 2:
-							if (!SelectProfTask(intr, ProfessionTaskNames[currentPriority])) {
-								intr.Log("Could not find valid professions task.", LogEntryType.Normal);
-								Mouse.ClickImage(intr, "ProfessionsWindowTitle");
-							} else {
-								success = true;
-							}
+						} else {
+							intr.Log("Could not find valid professions task.", LogEntryType.Normal);
+							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 							break;
+						}
 					}
+
+
+					//switch (currentTask) {
+					//	case 0:
+					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
+					//			currentTask += 1;
+					//			goto case 1;
+					//		} else {
+					//			success = true;
+					//			break;
+					//		}
+					//	case 1:
+					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
+					//			currentTask += 1;
+					//			goto case 2;
+					//		} else {
+					//			success = true;
+					//			break;
+					//		}
+					//	case 2:
+					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
+					//			currentTask += 1;
+					//			goto case 3;
+					//		} else {
+					//			success = true;
+					//			break;
+					//		}
+					//	case 3:
+					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
+					//			intr.Log("Could not find valid professions task.", LogEntryType.Normal);
+					//			Mouse.ClickImage(intr, "ProfessionsWindowTitle");
+					//		} else {
+					//			success = true;
+					//		}
+					//		break;
+					//}
 				}
 
 				if (success) {
-					intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime_" + currentPriority, charZeroIdxLabel);
+					completionList.Add(currentTask);
+					//intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime_" + currentTask, charZeroIdxLabel);
+					//intr.GameAccount.SaveSetting(currentTask.ToString(), "MostRecentProfTask_" + currentTask, charZeroIdxLabel);
 				}
 
 				//intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime", charZeroIdxLabel);

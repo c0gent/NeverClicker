@@ -31,7 +31,7 @@ namespace NeverClicker {
 
 		public void AddGameTask(uint charIdx, int delaySec) {
 			var dateTime = DateTime.Now.AddSeconds(delaySec);
-			var taskKind = GameTaskType.Invocation;
+			var taskKind = TaskKind.Invocation;
 
 			GameTask gameTask = new GameTask(
 				dateTime, charIdx, taskKind, 0
@@ -49,9 +49,9 @@ namespace NeverClicker {
 		public void ProcessNextGameTask() {
 			GameTask nextTask;
 
-			if (!Queue.IsEmpty()) {
+			if (!Queue.IsEmpty) {
 				nextTask = Queue.Pop();
-				Log("Processing next task for character " + nextTask.CharacterZeroIdx.ToString()
+				Log("Processing next task for character " + nextTask.CharIdx.ToString()
 					+ "; time: " + nextTask.MatureTime.ToShortTimeString()
 					+ "; type: " + nextTask.Type.ToString() + ".");
 			} else {

@@ -51,7 +51,7 @@ namespace NeverClicker.Forms {
 		}
 
 		private void Tests_Load(object sender, EventArgs e) {
-			comboBoxGameTaskType.DataSource = Enum.GetValues(typeof(GameTaskType));
+			comboBoxGameTaskType.DataSource = Enum.GetValues(typeof(TaskKind));
 			textBoxFileName.Text = SettingsFileName;
 		}
 
@@ -114,7 +114,7 @@ namespace NeverClicker.Forms {
 				return;
 			}
 
-			GameTaskType taskType;
+			TaskKind taskType;
 			Enum.TryParse(this.comboBoxGameTaskType.SelectedValue.ToString(), out taskType);
 
 			MainForm.AutomationEngine.AddGameTask((uint)charIdx, delaySec);

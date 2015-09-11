@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace NeverClicker {
 	public class IniFile {
 		private FileIniDataParser Parser = new FileIniDataParser();
-		//private IniData Data;
+		private IniData Data;
 		private string IniFileName;
 
 		public IniFile(string fileName) {
@@ -22,67 +22,91 @@ namespace NeverClicker {
 			} else {
 				MessageBox.Show(fileName + " does not exist.");
 				return;
-			}			
+			}
+
+			try {
+				Data = Parser.ReadFile(IniFileName);
+			} catch (Exception ex) {
+				MessageBox.Show("Error reading ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
+				return;
+			}
 		}
 
-		public string GetSetting(string settingName, string sectionName) {
+		public string GetSettingOrEmpty(string settingName, string sectionName) {
+			string settingVal = null;
+
 			try {
-				var data = Parser.ReadFile(IniFileName);
-				if (data[sectionName][settingName] == null) {
-					//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
-					return "";
-				} else {
-					return data[sectionName][settingName].Trim();
-				}
-			} catch (Exception) {
-				MessageBox.Show("Problem loading ini files. Please check settings.");
+				settingVal = Data[sectionName][settingName];
+			} catch (NullReferenceException) {
+				settingVal = null;
+			}
+
+			if (settingVal != null) {
+				return settingVal.Trim();					
+			} else {
 				return "";
-			}					
+			}				
 		}
 
 		public int GetSettingOrZero(string settingName, string sectionName) {
-			IniData data;
+			//IniData data;
 
-			try {
-				data = Parser.ReadFile(IniFileName);
-			} catch (Exception) {
-				MessageBox.Show("Problem loading ini files. Please check settings.");
-				return 0;
-			}
+			//try {
+			//	Data = Parser.ReadFile(IniFileName);
+			//} catch (Exception) {
+			//	MessageBox.Show("Problem loading ini files. Please check settings.");
+			//	return 0;
+			//}
 			
 			int number;
-			string settingString = null;
+			string settingVal = null;
 
 			try {
-				settingString = data[sectionName][settingName];
+				settingVal = Data[sectionName][settingName];
 			} catch (NullReferenceException) {
-				settingString = null;
+				settingVal = null;
 			}
 
-			if (settingString == null) {
+			if (settingVal == null) {
 				return 0;
 			}			
 
-			if (int.TryParse(data[sectionName][settingName], out number)) {
+			if (int.TryParse(Data[sectionName][settingName], out number)) {
 				return number;
 			} else {
 				return 0;
 			}				
 		}
 
-		public void SaveSetting(string settingVal, string settingName, string sectionName) {
-			IniData data;
+		public bool SettingExists(string settingName, string sectionName) {
+			string settingVal = null;
 
 			try {
-				data = Parser.ReadFile(IniFileName);
-			} catch (Exception ex) {
-				MessageBox.Show("Error reading ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
-				return;
+				settingVal = Data[sectionName][settingName];
+			} catch (NullReferenceException) {
+				settingVal = null;
 			}
 
+			if (settingVal != null) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public void SaveSetting(string settingVal, string settingName, string sectionName) {
+			//IniData data;
+
+			//try {
+			//	data = Parser.ReadFile(IniFileName);
+			//} catch (Exception ex) {
+			//	MessageBox.Show("Error reading ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
+			//	return;
+			//}
+
 			try {
-				data[sectionName][settingName] = settingVal;
-				Parser.WriteFile(IniFileName, data);
+				Data[sectionName][settingName] = settingVal;
+				Parser.WriteFile(IniFileName, Data);
 			} catch (Exception ex) {
 				MessageBox.Show("Error writing ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
 			}
@@ -94,6 +118,16 @@ namespace NeverClicker {
 			//	data[sectionName][settingName] = settingVal;
 			//	Parser.WriteFile(IniFileName, data);
 			//}
+		}
+
+		public bool RemoveSetting(string settingName, string sectionName) {
+			try {
+				Data[sectionName].RemoveKey(settingName);
+			} catch (Exception) {
+				return false;
+			}
+
+			return true;
 		}
 
 		//private IniData ReadFile() {

@@ -10,15 +10,10 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 			public const bool ALWAYS_REDEEM = false;
-			public const int REDEMPTION_ITEM = 1;
+			public const int REDEMPTION_ITEM = 5;
 
 		public static CompletionStatus Invoke(Interactor intr) {
-			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
-
-			intr.Wait(1000);
-			ClearOkButtons(intr);
-			intr.Wait(200);	
-			MoveAround(intr);
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
 
 			if (ALWAYS_REDEEM) {
 				#pragma warning disable CS0162 // Unreachable code detected
@@ -26,7 +21,7 @@ namespace NeverClicker.Interactions {
 				#pragma warning restore CS0162 // Unreachable code detected
 			}
 
-			string invokeKey = intr.GameAccount.GetSetting("NwInvokeKey", "GameHotkeys");
+			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");
 			//Keyboard.KeyPress(intr, invokeKey);
 			//Keyboard.Send(intr, "{ " + invokeKey + " }");
 			//intr.Log("Performing invocation...", LogEntryType.Info);
@@ -55,7 +50,7 @@ namespace NeverClicker.Interactions {
 					intr.Wait(2000);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log("(1)NEEDS HANDLING -- Unable to invoke -- investigate reason in log screenshot!", LogEntryType.FatalWithScreenshot);
+					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke -- investigate reason in log screenshot!", LogEntryType.FatalWithScreenshot);
 					//intr.SaveErrorScreenshot();
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
@@ -78,7 +73,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {
-				intr.Log("(2)NEEDS HANDLING -- Unable to invoke -- investigate reason in log screenshot!", LogEntryType.FatalWithScreenshot);
+				intr.Log("[FINAL_1]NEEDS HANDLING -- Unable to invoke -- investigate reason in log screenshot!", LogEntryType.FatalWithScreenshot);
 				//intr.SaveErrorScreenshot();				
 				intr.Wait(30000);	// TEMP
 				return CompletionStatus.Failed;
