@@ -204,11 +204,12 @@ namespace NeverClicker {
 				var invokesCompletedOn = TodaysGameDate().AddDays(-1);
 				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charSettingSection), out invokesCompletedOn);
 
-				var mostRecentInvTime = now.AddHours(-24);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentInvocationTime", charSettingSection), out mostRecentInvTime);
+				var mostRecent = now.AddHours(-24);
+				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentInvocationTime", charSettingSection), out mostRecent);
 
-				var mostRecentInvExp = mostRecentInvTime + new TimeSpan(0, 0, 0, 0, InvokeDelays[invokesToday]);
-				DateTime taskMatureTime = (mostRecentInvExp < now) ? now : mostRecentInvTime;
+				var mostRecentExp = mostRecent.AddMilliseconds(InvokeDelays[invokesToday]);
+				var taskMatureTime = (mostRecentExp < now) ? now : mostRecent;
+				taskMatureTime = taskMatureTime.AddMilliseconds(charIdx);
 
 				if (invokesToday >= 6) {
 					if (invokesCompletedOn < TodaysGameDate()) { // START FRESH DAY
@@ -218,13 +219,14 @@ namespace NeverClicker {
 					} else { // DONE FOR THE DAY
 						taskMatureTime = NextThreeAmPst();
 					}
-				}				
+				}
 
 				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Info);
 				this.Add(new GameTask(taskMatureTime.AddMilliseconds(charIdx), charIdx, TaskKind.Invocation, invokesToday));
 
 
 				// ################################## PROFESSIONS #####################################
+
 				// CLEAN OUT TASKS MORE THAN ONE DAY OLD				
 				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
 					var settingKey = "MostRecentProfTime_" + p;
@@ -243,7 +245,7 @@ namespace NeverClicker {
 
 				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
 					var settingKey = "MostRecentProfTime_" + p;
-					DateTime mostRecent = now.AddDays(-1);			
+					mostRecent = now.AddDays(-1);			
 
 					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out mostRecent)) {
 						intr.Log("Adding profession task to queue for character " + charIdx 
@@ -251,12 +253,16 @@ namespace NeverClicker {
 							+ ", taskId: " + p.ToString() + ".", 
 							LogEntryType.Info);
 
-						this.Add(new GameTask(mostRecent.AddMinutes(ProfessionTaskDurationMinutes[p]), charIdx, TaskKind.Profession, p));
+						mostRecentExp = mostRecent.AddMinutes(ProfessionTaskDurationMinutes[p]);
+						taskMatureTime = (mostRecentExp < now) ? now : mostRecent;
+						taskMatureTime = taskMatureTime.AddMilliseconds(charIdx);
+
+						this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, p));
 						tasksQueued += 1;
 					}									
 				}
 
-				intr.Log(tasksQueued.ToString() + " profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
+				intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
 			}
 		}
 
