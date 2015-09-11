@@ -95,7 +95,6 @@ namespace NeverClicker.Interactions {
 								
 				//queue.Pop(); // COMPLETE
 				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-				SaveInvocationSettings(intr, invokesToday, charIdx);
 				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, true);
 			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Immature.", LogEntryType.Normal);
@@ -138,32 +137,13 @@ namespace NeverClicker.Interactions {
 				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
 			}
 
-			intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
 			if (!processingFailure) {
+				intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
 				queue.AdvanceMatured(intr, charIdx);
 			}
 
 			intr.Log("Processing complete for character " + charIdx + ".", LogEntryType.Normal);
 		}
-
-
-		// SaveCharacterSettings(): Save relevant settings to .ini file
-		public static void SaveInvocationSettings(Interactor intr, int invokesToday, uint charIdx) {
-			// SAVE SETTINGS TO INI
-			// UpdateIni() <<<<< CREATE
-			string charLabel = "Character " + charIdx.ToString();
-
-			try {
-				//string dateTimeFormattedClassic = FormatDateTimeClassic(intr, DateTime.Now);
-				intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
-				intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentInvocationTime", charLabel);
-				intr.GameAccount.SaveSetting(charIdx.ToString(), "CharZeroIdxLastInvoked", "Invocation");
-				intr.Log("Settings saved to ini for: " + charLabel + ".", LogEntryType.Debug);
-			} catch (Exception ex) {
-				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString(), LogEntryType.Error);
-			}
-		}
-
 
 		
 	}
