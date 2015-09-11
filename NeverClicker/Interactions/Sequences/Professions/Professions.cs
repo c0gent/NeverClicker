@@ -48,8 +48,10 @@ namespace NeverClicker.Interactions {
 
 			int currentTask = 0;
 			var success = false;
+			var anySuccess = false;
 
 			for (int i = 0; i < 9; i++) {
+				if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; };
 
 				success = false;
 				
@@ -95,61 +97,24 @@ namespace NeverClicker.Interactions {
 					}
 
 
-					//switch (currentTask) {
-					//	case 0:
-					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
-					//			currentTask += 1;
-					//			goto case 1;
-					//		} else {
-					//			success = true;
-					//			break;
-					//		}
-					//	case 1:
-					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
-					//			currentTask += 1;
-					//			goto case 2;
-					//		} else {
-					//			success = true;
-					//			break;
-					//		}
-					//	case 2:
-					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
-					//			currentTask += 1;
-					//			goto case 3;
-					//		} else {
-					//			success = true;
-					//			break;
-					//		}
-					//	case 3:
-					//		if (!SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
-					//			intr.Log("Could not find valid professions task.", LogEntryType.Normal);
-					//			Mouse.ClickImage(intr, "ProfessionsWindowTitle");
-					//		} else {
-					//			success = true;
-					//		}
-					//		break;
-					//}
 				}
 
 				if (success) {
 					completionList.Add(currentTask);
+					anySuccess = true;					
 					//intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime_" + currentTask, charZeroIdxLabel);
 					//intr.GameAccount.SaveSetting(currentTask.ToString(), "MostRecentProfTask_" + currentTask, charZeroIdxLabel);
-				}
-
-				//intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime", charZeroIdxLabel);
-
-				//if (!SelectProfTask(intr, "Protect Magical")) {
-				//	if (!SelectProfTask(intr, "Destroy Enemy")) {
-				//		if (!SelectProfTask(intr, "Battle Elemental")) {
-				//			intr.Log("Could not find valid professions task.", LogEntryType.Normal);
-				//			break;
-				//		}
-				//	}
-				//}
+				} 
 			}
+
+			if (anySuccess) {
+				return CompletionStatus.Complete;
+			} else {
+				return CompletionStatus.Immature;
+			}
+
 			
-			intr.Wait(1000);
+			//intr.Wait(1000);
 
 			//Keyboard.SendKey(intr, profsWinKey);
 
@@ -167,7 +132,7 @@ namespace NeverClicker.Interactions {
 			// STORE A LIST OF WHAT WAS QUEUED
 
 
-			return CompletionStatus.Complete; // ***** TEMP
+			 // ***** TEMP
 		}
 
 

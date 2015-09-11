@@ -14,8 +14,8 @@ namespace NeverClicker {
 		public static int[] InvokeDelays = { 0, 900000, 1800000, 2700000, 3600000, 5400000, 0, 0 };
 
 		//public static int[] ProfessionTaskDurationMinutes = { 720, 600, 960, 1440 };
-		public static int[] ProfessionTaskDurationMinutes = { 690, 575, 920, 1375 };
-		public static string[] ProfessionTaskNames = { "Protect Magical", "Deliver Metals", "Destroy Enemy", "Battle Elemental" };
+		public static int[] ProfessionTaskDurationMinutes = { 920, 690, 575, 920, 1375, 690 };
+		public static string[] ProfessionTaskNames = { "Escort a Wizard", "Kill a Young Dragon", "Deliver Metals", "Destroy Enemy", "Battle Elemental", "Protect Magical" };
 
 		private SortedList<long, GameTask> Queue { get; set; }		
 
@@ -203,6 +203,34 @@ namespace NeverClicker {
 		}
 
 
+		// AdvanceTasks(): ADVANCE ANY EXPIRED TASKS FOR A GIVEN CHARACTER AND TASK TYPE
+		public void AdvanceMatured(Interactor intr, uint charIdx) {
+			var nowTicks = DateTime.Now.Ticks;
+
+			List<long> taskKeys = new List<long>(10);
+
+			foreach (var kvp in this.Queue) {
+				if (kvp.Value.CharIdx == charIdx && kvp.Key < nowTicks) {
+					taskKeys.Add(kvp.Key);
+				}
+			}
+
+			foreach (long idx in taskKeys) {
+				// WE ONLY WANT TO DEAL WITH TASKS WHICH HAVE ALREADY MATURED
+				if (idx < nowTicks) {
+					var prevTask = this.Queue[idx];
+					this.Queue.Remove(idx);
+
+					if (prevTask.Kind == TaskKind.Invocation) {
+						this.QueueSubsequentInvocationTask(intr, charIdx, prevTask.TaskId + 1);
+					} else if (prevTask.Kind == TaskKind.Profession) {
+						this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
+					}
+				}
+			}
+		}
+
+
 		// POPULATE(): Populate queue taking in to account last invoke times
 		public void Populate(Interactor intr, int charsMax) {
 			var now = DateTime.Now;
@@ -371,22 +399,3 @@ namespace NeverClicker {
 
 
 
-//// AdvanceTasks(): ADVANCE ANY EXPIRED TASKS FOR A GIVEN CHARACTER AND TASK TYPE
-//		public void AdvanceTasks_Unimplemented(uint charIdx, TaskKind taskKind) {
-//			var nowTicks = DateTime.Now.Ticks;
-//			//var forRemoval = this.GetTaskKey(charIdx, taskKind);
-
-//			//if (idx < nowTicks) {
-//			//	var prevTask = this.TaskList[idx];
-//			//	this.TaskList.Remove(idx);
-//			//}
-
-//			//foreach (long idx in forRemoval) {
-//			//	// WE ONLY WANT TO DEAL WITH TASKS WHICH HAVE ALREADY MATURED
-						
-
-//			//	//figure out mature time based on task type and priority...
-
-//			//	//this.Add(new GameTask(newMatureTime, prevTask.CharIdx, prevTask.Type, prevTask.Priority));
-//			//}
-//		}

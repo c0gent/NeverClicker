@@ -21,6 +21,8 @@ namespace NeverClicker.Interactions {
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
 
+			bool processingFailure = false;
+
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 
 			if ((invokesToday >= 6) && (queue.NextTask.Kind == TaskKind.Invocation)) {
@@ -106,29 +108,39 @@ namespace NeverClicker.Interactions {
 				//}
 			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);
-				
+				processingFailure = true;
 				//queue.Pop();
 				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 				//if (&& queue.NextTask.Type == TaskKind.Invocation) {
-					queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
+				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
 				//}
 			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
+				processingFailure = true;
 			}
 
 			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
-			if (professionsStatus == CompletionStatus.Complete || queue.NextTask.Kind == TaskKind.Profession) {
-				intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() 
+			intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() 
 					+ ", items complete: " + completionList.Count, LogEntryType.Normal);
-
+			if (professionsStatus == CompletionStatus.Complete) {
 				foreach (int taskId in completionList) {
 					queue.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId);
 				}
 
-				var task = queue.NextTask;
-				queue.AdvanceTask(intr, task.CharIdx, task.Kind, task.TaskId);
+				if (queue.NextTask.Kind == TaskKind.Profession) {
+					queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);	// SAME
+				}
+			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) {	// UNUSED
+				queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
 			} else if (queue.NextTask.Kind == TaskKind.Profession) {
-				intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() + ".", LogEntryType.Normal);				
+				processingFailure = true;
+				// CANCELLED OR FAILED
+				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
+			}
+
+			intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
+			if (!processingFailure) {
+				queue.AdvanceMatured(intr, charIdx);
 			}
 
 			intr.Log("Processing complete for character " + charIdx + ".", LogEntryType.Normal);

@@ -37,6 +37,8 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
+				intr.Wait(500);
+
 				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
 					intr.Log("Still waiting to invoke on this character");
 					return CompletionStatus.Immature;
@@ -50,30 +52,32 @@ namespace NeverClicker.Interactions {
 					intr.Wait(2000);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke -- investigate reason in log screenshot!", LogEntryType.FatalWithScreenshot);
+					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
 					//intr.SaveErrorScreenshot();
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
 				}
             }
 
-			intr.Wait(3500);
+			intr.Wait(3500);			
 			
 
-			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {
+			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {				
 				// check for findmaxblessings
-				Keyboard.SendKey(intr, invokeKey);
+				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
+				MoveAround(intr);		
 			}
+
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Info);
 				//intr.ExecuteStatement("FindAndClick(\"InvocationRewardsOfDevotionCloseButton.png\")");
-				Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
+				//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
 			}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {
-				intr.Log("[FINAL_1]NEEDS HANDLING -- Unable to invoke -- investigate reason in log screenshot!", LogEntryType.FatalWithScreenshot);
+				intr.Log("[FINAL_1]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
 				//intr.SaveErrorScreenshot();				
 				intr.Wait(30000);	// TEMP
 				return CompletionStatus.Failed;
