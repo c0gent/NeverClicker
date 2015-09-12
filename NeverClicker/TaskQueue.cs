@@ -378,7 +378,7 @@ namespace NeverClicker {
 			return nextTask.Value;
 		}
 
-		public TimeSpan NextTaskWaitTime() {
+		public TimeSpan NextTaskWaitDelay() {
 			//var nextTask = TaskList.First();
 			//return new TimeSpan(nextTask.Value.MatureTime.CompareTo(DateTime.Now));
 			return Queue.First().Value.MatureTime - DateTime.Now;

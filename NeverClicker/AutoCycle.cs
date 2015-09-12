@@ -36,31 +36,31 @@ namespace NeverClicker.Interactions {
 				}
 
 				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);
-				TimeSpan nextTaskWaitTime = queue.NextTaskWaitTime();				
+				TimeSpan nextTaskWaitDelay = queue.NextTaskWaitDelay();				
 				
-				if (nextTaskWaitTime.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
+				if (nextTaskWaitDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
 					ProcessCharacter(intr, queue);										
 					
 				} else { // TASK TIMER NOT MATURE YET -> WAIT
-					intr.Wait(100);
-					intr.Log("Next task matures in " + nextTaskWaitTime.TotalMinutes.ToString("F0") + " minutes.");
+					intr.Wait(1000);
+					intr.Log("Next task matures in " + nextTaskWaitDelay.TotalMinutes.ToString("F0") + " minutes.");
 
-					TimeSpan waitDelayMs = new TimeSpan(0);
+					TimeSpan waitDelay = nextTaskWaitDelay;
 
-					if (nextTaskWaitTime.TotalMinutes > 8) {
+					if (nextTaskWaitDelay.TotalMinutes > 8) {
 						//waitDelayMs = nextTaskWaitTime + intr.RandomDelay(5, 25);
-						waitDelayMs = nextTaskWaitTime + intr.RandomDelay(5, 15);
+						waitDelay = nextTaskWaitDelay + intr.RandomDelay(4, 9);
 						ProduceClientState(intr, ClientState.None);										
-					} else if (nextTaskWaitTime.TotalMinutes > 1) {
-						waitDelayMs = nextTaskWaitTime.Add(new TimeSpan(0, intr.Rand(1, 2), 0));
-						//intr.Log("Minimizing client and waiting " + waitDelayMs.TotalMinutes.ToString("F0") + " minutes.");						
+					} else if (nextTaskWaitDelay.TotalMinutes > 1) {
+						waitDelay = nextTaskWaitDelay + intr.RandomDelay(2, 3);
+						intr.Log("Minimizing client and waiting " + waitDelay.TotalMinutes.ToString("F0") + " minutes.");						
 						ProduceClientState(intr, ClientState.Inactive);
 					}
 
-					if (waitDelayMs.TotalMilliseconds > 1000) {
-						intr.Log("Sleeping for " + waitDelayMs.TotalMinutes.ToString("F0") + " minutes before continuing...");
-						intr.Wait(waitDelayMs);
+					if (waitDelay.TotalSeconds > 60) {
+						intr.Log("Sleeping for " + waitDelay.TotalMinutes.ToString("F0") + " minutes before continuing...");
+						intr.Wait(waitDelay);
 						Screen.Wake(intr);
 					}					
 				}

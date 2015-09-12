@@ -20,8 +20,8 @@ namespace NeverClicker.Interactions {
 			DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charLabel), out invokesCompletedOn);
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
-
-			bool processingFailure = false;
+			var professionsCompleted = new List<int>();
+			bool processingIncomplete = false;
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 
@@ -50,39 +50,28 @@ namespace NeverClicker.Interactions {
 			intr.Log("ProcessCharacter(): Selecting character " + charIdx + " ...", LogEntryType.Info);
 			if (!SelectCharacter(intr, charIdx)) { return; }
 
-			// ################################### CLEAR AND MOVE #####################################
+			// ################################## CLEAR AND MOVE ##################################
 			intr.Wait(1000);
 			ClearOkButtons(intr);
 			intr.Wait(200);	
 			MoveAround(intr);
 								
-			// ################################### INVOCATION #####################################
+			// #################################### INVOCATION ####################################
 			intr.Log("ProcessCharacter(): Invoking for character " + charIdx + " ...", LogEntryType.Info);
 			invocationStatus = Invoke(intr);
 			intr.Log("ProcessCharacter(): Invocation status: " + invocationStatus.ToString(), LogEntryType.Info);
 
-			//if (queue.NextTask.Type == GameTaskType.Invocation) {
-				
-			//} else {
-			//	invocationStatus = CompletionStatus.None;
-			//}
-			
-
-			// ################################## PROFESSIONS #####################################
+			// ################################### PROFESSIONS ####################################
 			intr.Log("ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...", LogEntryType.Info);
-
-			var completionList = new List<int>();
-
-			professionsStatus = MaintainProfs(intr, charLabel, completionList);
+			professionsStatus = MaintainProfs(intr, charLabel, professionsCompleted);
 			intr.Log("ProcessCharacter(): Professions status: " + professionsStatus.ToString(), LogEntryType.Info);
 
 			
-			// ###################################### LOGOUT ######################################
+			// ##################################### LOG OUT ######################################
 			LogOut(intr);
 
 
 			// ########################### INVOCATION QUEUE AND SETTINGS ##########################
-
 			if (invocationStatus == CompletionStatus.Complete || invocationStatus == CompletionStatus.DayComplete) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Complete.", LogEntryType.Normal);						
 				
@@ -92,37 +81,26 @@ namespace NeverClicker.Interactions {
 				} else {
 					invokesToday += 1; // NEED TO DETECT THIS IN-GAME
 				}
-								
-				//queue.Pop(); // COMPLETE
-				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
+
 				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, true);
 			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Immature.", LogEntryType.Normal);
 				intr.Log("Re-queuing task for character " + charIdx.ToString() + ".", LogEntryType.Info);
-				
-				//queue.Pop();
-				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-				//if ( && queue.NextTask.Type == TaskKind.Invocation) {
-					queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
-				//}
+				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);				
 			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
-				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);
-				processingFailure = true;
-				//queue.Pop();
-				//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-				//if (&& queue.NextTask.Type == TaskKind.Invocation) {
+				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);				
 				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
-				//}
+				processingIncomplete = true;
 			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
-				processingFailure = true;
+				processingIncomplete = true;
 			}
 
 			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
 			intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() 
-					+ ", items complete: " + completionList.Count, LogEntryType.Normal);
+					+ ", items complete: " + professionsCompleted.Count, LogEntryType.Normal);
 			if (professionsStatus == CompletionStatus.Complete) {
-				foreach (int taskId in completionList) {
+				foreach (int taskId in professionsCompleted) {
 					queue.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId);
 				}
 
@@ -132,12 +110,12 @@ namespace NeverClicker.Interactions {
 			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) {	// UNUSED
 				queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
 			} else if (queue.NextTask.Kind == TaskKind.Profession) {
-				processingFailure = true;
+				processingIncomplete = true;
 				// CANCELLED OR FAILED
 				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
 			}
 
-			if (!processingFailure) {
+			if (!processingIncomplete) {
 				intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
 				queue.AdvanceMatured(intr, charIdx);
 			}

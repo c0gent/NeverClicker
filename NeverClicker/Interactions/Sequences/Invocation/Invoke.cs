@@ -22,9 +22,6 @@ namespace NeverClicker.Interactions {
 			}
 
 			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");
-			//Keyboard.KeyPress(intr, invokeKey);
-			//Keyboard.Send(intr, "{ " + invokeKey + " }");
-			//intr.Log("Performing invocation...", LogEntryType.Info);
 			Keyboard.SendKey(intr, invokeKey);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
@@ -53,22 +50,18 @@ namespace NeverClicker.Interactions {
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
 					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
-					//intr.SaveErrorScreenshot();
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
 				}
             }
 
 			intr.Wait(3500);			
-			
 
 			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {				
-				// check for findmaxblessings
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
 				MoveAround(intr);		
 			}
-
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Info);
@@ -85,29 +78,22 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Invocation successful. Continuing...", LogEntryType.Info);
 
-			//
-
-			//Keyboard.Send(intr, "{ " + invokeKey + " }");
+			// BRING BACK ALTAR DEPLOYMENT:
 
 			//if (FindMaxBlessings()) {
 			//	Redeem(vault_purchase)
-   //         }
-
+			//}
 			//if (couldn't invoke) {
-   //             MoveAround()
-   //             DeployAltar()
-   //         }
-
+			//             MoveAround()
+			//             DeployAltar()
+			//}
 			//Sleep 200
 			//Send {% NwInvokeKey %}
 
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
+
 			return CompletionStatus.Complete;
 		}
-
-		//public static bool InvocationFailure<TState>(Interactor intr, TState state) {
-
-		//}
-
 	}
 }
 

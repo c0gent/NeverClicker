@@ -9,11 +9,6 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {	
 
 		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {			
-			//intr.Wait(1000);
-			//ClearOkButtons(intr);
-			//intr.Wait(200);	
-			//MoveAround(intr);
-
 			string profsWinKey = intr.GameAccount.GetSettingOrEmpty("NwProfessionsWindowKey", "GameHotkeys");
 
 			Keyboard.SendKey(intr, profsWinKey);
@@ -35,8 +30,6 @@ namespace NeverClicker.Interactions {
 			}
 
 			for (int i = 0; i < 9; i++) {
-				//intr.Wait(200);
-
 				if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
 					intr.Wait(2500);
 					Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
@@ -95,44 +88,21 @@ namespace NeverClicker.Interactions {
 							break;
 						}
 					}
-
-
 				}
 
 				if (success) {
 					completionList.Add(currentTask);
-					anySuccess = true;					
-					//intr.GameAccount.SaveSetting(DateTime.Now.ToString(), "MostRecentProfTime_" + currentTask, charZeroIdxLabel);
-					//intr.GameAccount.SaveSetting(currentTask.ToString(), "MostRecentProfTask_" + currentTask, charZeroIdxLabel);
+					anySuccess = true;
 				} 
 			}
+
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
 			if (anySuccess) {
 				return CompletionStatus.Complete;
 			} else {
 				return CompletionStatus.Immature;
 			}
-
-			
-			//intr.Wait(1000);
-
-			//Keyboard.SendKey(intr, profsWinKey);
-
-			//Keyboard.SendKey(intr, "Escape");
-
-			// DETECT COMPLETE SLOT
-			// COLLECT REWARDS
-			// REPEAT
-
-			// DETECT EMPTY SLOT
-			// SEARCH FOR HIGHEST PRIORITY TASK
-			// IF FOUND -> QUEUE
-			// IF NOT, SEARCH FOR NEXT HIGHEST PRIORITY
-
-			// STORE A LIST OF WHAT WAS QUEUED
-
-
-			 // ***** TEMP
 		}
 
 
@@ -170,6 +140,7 @@ namespace NeverClicker.Interactions {
 			Mouse.ClickImage(intr, "ProfessionsAssetButton");
 			intr.Wait(50);
 
+			// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
 			Mouse.ClickImage(intr, "ProfessionsMercenaryIcon");
 			intr.Wait(50);
 

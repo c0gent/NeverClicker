@@ -119,9 +119,7 @@
     <Compile Include="Interactions\Sequences\ClearSafeLogin.cs" />
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
-    <Compile Include="Interactions\Sequences\EnterWorld.cs" />
     <Compile Include="Interactions\Sequences\Invocation\Invoke.cs" />
-    <Compile Include="Interactions\Sequences\LogWaitStatus.cs" />
     <Compile Include="Interactions\Sequences\MoveAround.cs" />
     <Compile Include="Interactions\Sequences\Patcher.cs" />
     <Compile Include="Interactions\Sequences\ProduceClientState.cs" />
@@ -141,7 +139,7 @@
     <Compile Include="Alib\AlibUtil.cs" />
     <Compile Include="AutomationEngine.cs" />
     <Compile Include="Interactions\Screen\ImageSearch.cs" />
-    <Compile Include="Interactions\Sequences\AutoCycle.cs" />
+    <Compile Include="AutoCycle.cs" />
     <Compile Include="Interactions\Sequences\MouseMoveTest.cs" />
     <Compile Include="States.cs" />
     <Compile Include="Forms\MainForm.cs">
