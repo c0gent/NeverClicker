@@ -1,5 +1,6 @@
 ﻿using IniParser;
 using IniParser.Model;
+using NeverClicker.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +21,9 @@ namespace NeverClicker {
 				//MessageBox.Show(fileName + " exists.");
 				IniFileName = fileName;
 			} else {
-				MessageBox.Show(fileName + " does not exist.");
+				var builtinSettingsFolder = SettingsForm.ProgramRootFolder + SettingsForm.BUILTIN_SETTINGS_SUBPATH;
+				SettingsForm.DirectoryCopy(builtinSettingsFolder, Settings.Default.SettingsFolderPath, false);
+				MessageBox.Show(fileName + " does not exist.", "NeverClicker Settings File Error");
 				return;
 			}
 

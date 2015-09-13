@@ -23,7 +23,7 @@ namespace NeverClicker {
 
 		public LogFile() {
 			
-			LogFileName = Settings.Default.LogsFolderPath + SettingsManager.LOG_FILE_NAME;
+			LogFileName = Settings.Default.LogsFolderPath + SettingsForm.LOG_FILE_NAME;
 
 			if (File.Exists(LogFileName)) {
 				try {

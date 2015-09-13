@@ -17,7 +17,7 @@ namespace NeverClicker.Interactions {
 
 			if (ALWAYS_REDEEM) {
 				#pragma warning disable CS0162 // Unreachable code detected
-				RedeemCelestialCoins(intr, REDEMPTION_ITEM);
+				Redeem(intr, REDEMPTION_ITEM);
 				#pragma warning restore CS0162 // Unreachable code detected
 			}
 
@@ -26,7 +26,7 @@ namespace NeverClicker.Interactions {
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
-				RedeemCelestialCoins(intr, REDEMPTION_ITEM);
+				Redeem(intr, REDEMPTION_ITEM);
 				//intr.ExecuteStatement("MoveAround()");
 				MoveAround(intr);
 				//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);

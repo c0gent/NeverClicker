@@ -24,10 +24,6 @@ namespace NeverClicker.Forms {
 			//Settings.Default.AssetsFolderPath = Settings.Default.UserRootFolderPath + "\\Assets";
 		}
 
-		private void MainForm_Load(object sender, EventArgs e) {
-				
-		}
-
 		private void MainForm_Shown(object sender, EventArgs e) {			
 			//if (!SettingsManager.SettingsAreValid()) {
 			//	this.SetButtonStateAllDisabled();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void RedeemCelestialCoins(Interactor intr, int item) {
+		public static void Redeem(Interactor intr, int item) {
 			intr.Wait(500);
 
 			//int item = 1; // REPLACE WITH ENUM

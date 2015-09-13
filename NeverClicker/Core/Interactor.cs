@@ -43,8 +43,8 @@ namespace NeverClicker.Interactions {
 			//	return false;
 			//}
 
-			this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsManager.GAME_ACCOUNT_INI_FILE_NAME);
-			this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsManager.GAME_CLIENT_INI_FILE_NAME);
+			this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
+			this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);
 
 			InitAlibEng();
 			return true;

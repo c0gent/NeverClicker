@@ -114,24 +114,26 @@
     <Compile Include="Interactions\Mouse\Mouse.cs" />
     <Compile Include="Interactions\Screen\Wake.cs" />
     <Compile Include="Interactions\Screen\Window.cs" />
+    <Compile Include="Interactions\Sequences\ActivateClient.cs" />
     <Compile Include="Interactions\Sequences\ClearOkButtons.cs" />
     <Compile Include="Interactions\Sequences\ClearSafeLogin.cs" />
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
     <Compile Include="Interactions\Sequences\Invocation\Invoke.cs" />
+    <Compile Include="Interactions\Sequences\LogOut.cs" />
     <Compile Include="Interactions\Sequences\MoveAround.cs" />
     <Compile Include="Interactions\Sequences\Patcher.cs" />
     <Compile Include="Interactions\Sequences\ProduceClientState.cs" />
     <Compile Include="Interactions\Sequences\Professions\Professions.cs" />
-    <Compile Include="Interactions\Sequences\Invocation\RedeemCelestialCoins.cs" />
+    <Compile Include="Interactions\Sequences\Invocation\Redeem.cs" />
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
     <Compile Include="Interactions\Sequences\World.cs" />
     <Compile Include="Core\Logging.cs" />
     <Compile Include="Core\GameTask.cs" />
     <Compile Include="Core\TaskQueue.cs" />
-    <Compile Include="Core\GlobalSuppressions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Core\IniFile.cs" />
-    <Compile Include="Interactions\Interactor.cs" />
+    <Compile Include="Core\Interactor.cs" />
     <Compile Include="Alib\AlibDll.cs" />
     <Compile Include="Alib\AlibEngine.cs" />
     <Compile Include="Alib\AlibSafeLibraryHandle.cs" />
@@ -153,14 +155,14 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interactions\Sequences\ProcessCharacter.cs" />
+    <Compile Include="Core\ProcessCharacter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Core\ScreenCapture.cs" />
-    <Compile Include="Core\SettingsManager.cs" />
+    <Compile Include="Core\SettingsManager_DEPRICATE.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\TestsForm.resx">
@@ -219,9 +221,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="assets\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="cursor-512.ico" />
     <Content Include="DefaultImages\AbilityPanelSerpent.png">

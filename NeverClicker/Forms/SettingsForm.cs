@@ -226,7 +226,7 @@ namespace NeverClicker {
 				Settings.Default.Save();
 				return true;
 			} else {
-				MessageBox.Show(this, "Unable to save settings. Please try again.");
+				MessageBox.Show(this, "Unable to save settings. Please try again.", "NeverClicker Settings Error");
 				return false;		
 			}
 		}
@@ -265,7 +265,7 @@ namespace NeverClicker {
 					Settings.Default.UserRootFolderPath = folderBrowserDialog1.SelectedPath;
 					//InitUserFolders();
 				} else {
-					MessageBox.Show(this, "Settings folder does not exist. Please choose a valid folder.");
+					MessageBox.Show(this, "Settings folder does not exist. Please choose a valid folder.", "NeverClicker Error");
 				}
 			}
 		}
@@ -289,15 +289,6 @@ namespace NeverClicker {
 		private void linkLabelUserConfigFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			Process.Start(Path.GetDirectoryName(linkLabelUserConfigFile.Text));
 		}
-
-		private void tabControlOptions_Selected(object sender, TabControlEventArgs e) {
-			//using (StreamReader sr = File.OpenText(Settings.Default.SettingsFolderPath + "\\yamlTest.yaml")) {
-
-			//}
-			//var input = new 
-			//this.textBoxTestFileContents = YamlDotNet.Serialization.
-		}
-
 
 		private bool ValidateCreateFolder(string textBoxText, bool isDefault) {
 			return ValidateCreateFolder(textBoxText, isDefault, false, "");
@@ -324,7 +315,7 @@ namespace NeverClicker {
 		}
 
 
-		private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs) {
+		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs) {
 			// Get the subdirectories for the specified directory.
 			DirectoryInfo dir = new DirectoryInfo(sourceDirName);
 			DirectoryInfo[] dirs = dir.GetDirectories();
