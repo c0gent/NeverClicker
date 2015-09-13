@@ -16,7 +16,8 @@ Automated invocation and leadership queueing.
   - Obviously, use whatever single-key binding you prefer.
   - This keybind can be configured in addition to your present key binding in the game options so that you don't need to re-learn a new binding.
   
-- *You must configure the .ini configuration files manually* before activating Auto-Cycle. Otherwise the keybinds will all be incorrect. You can access the files from within the settings menu for convenience. 
+- **You must configure the .ini configuration files manually** before activating Auto-Cycle. Otherwise the keybinds and other settings will all be incorrect. You can access the files from within the settings menu for convenience. 
+  - You must enter your neverwinter username and password into the appropriate ini file. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attemp to fail, then type your username and password in manually. Things will continue normally after this point.
 
 - Currently mercenaries are the only optional assets which can be added to leadership tasks.
 
