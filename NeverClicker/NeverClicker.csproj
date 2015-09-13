@@ -79,8 +79,7 @@
     <AssemblyOriginatorKeyFile>NeverClicker_Key.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>cursor-512.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="INIFileParser, Version=2.2.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
@@ -101,14 +100,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutomationEngine.Tests.cs" />
+    <Compile Include="Core\AutomationEngine.Tests.cs" />
     <Compile Include="Forms\TestsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\TestsForm.Designer.cs">
       <DependentUpon>TestsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageCompare.cs" />
+    <Compile Include="Core\ImageCompare.cs" />
     <Compile Include="Interactions\CompletionStatus.cs" />
     <Compile Include="Interactions\Keyboard\Keyboard.cs" />
     <Compile Include="Interactions\Mouse\ClickImage.cs" />
@@ -127,21 +126,21 @@
     <Compile Include="Interactions\Sequences\Invocation\RedeemCelestialCoins.cs" />
     <Compile Include="Interactions\Sequences\SelectCharacter.cs" />
     <Compile Include="Interactions\Sequences\World.cs" />
-    <Compile Include="Logging.cs" />
-    <Compile Include="GameTask.cs" />
-    <Compile Include="TaskQueue.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IniFile.cs" />
+    <Compile Include="Core\Logging.cs" />
+    <Compile Include="Core\GameTask.cs" />
+    <Compile Include="Core\TaskQueue.cs" />
+    <Compile Include="Core\GlobalSuppressions.cs" />
+    <Compile Include="Core\IniFile.cs" />
     <Compile Include="Interactions\Interactor.cs" />
     <Compile Include="Alib\AlibDll.cs" />
     <Compile Include="Alib\AlibEngine.cs" />
     <Compile Include="Alib\AlibSafeLibraryHandle.cs" />
     <Compile Include="Alib\AlibUtil.cs" />
-    <Compile Include="AutomationEngine.cs" />
+    <Compile Include="Core\AutomationEngine.cs" />
     <Compile Include="Interactions\Screen\ImageSearch.cs" />
-    <Compile Include="AutoCycle.cs" />
+    <Compile Include="Core\AutoCycle.cs" />
     <Compile Include="Interactions\Sequences\MouseMoveTest.cs" />
-    <Compile Include="States.cs" />
+    <Compile Include="Core\States.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,8 +159,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="ScreenCapture.cs" />
-    <Compile Include="SettingsManager.cs" />
+    <Compile Include="Core\ScreenCapture.cs" />
+    <Compile Include="Core\SettingsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\TestsForm.resx">
@@ -220,9 +219,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="assets\cursor-512.ico" />
+    <Folder Include="assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cursor-512.ico" />
     <Content Include="DefaultImages\AbilityPanelSerpent.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

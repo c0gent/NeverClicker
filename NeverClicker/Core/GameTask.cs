@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NeverClicker {
 	[Serializable]
-	public struct GameTask : IComparable<GameTask>, ISerializable {
+	public class GameTask : IComparable<GameTask>, ISerializable {
 		public DateTime MatureTime;
 		public TaskKind Kind;
 		public uint CharIdx;

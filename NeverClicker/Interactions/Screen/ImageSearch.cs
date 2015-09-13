@@ -80,7 +80,7 @@ namespace NeverClicker.Interactions {
 
 			switch (errorLevel) {
 				case 0:
-					intr.Log("ImageSearch(" + imgCode + "): Found.", LogEntryType.Info);
+					intr.Log("ImageSearch(" + imgCode + "): Found.", LogEntryType.Debug);
 					return new ImageSearchResult() { Found = true, Point = new Point(outX, outY) };
 				case 1:
 					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Debug);

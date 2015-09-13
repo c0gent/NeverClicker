@@ -123,6 +123,7 @@ namespace NeverClicker {
 		public bool RemoveSetting(string settingName, string sectionName) {
 			try {
 				Data[sectionName].RemoveKey(settingName);
+				Parser.WriteFile(IniFileName, Data);
 			} catch (Exception) {
 				return false;
 			}

@@ -12,31 +12,31 @@ using System.Xml;
 
 namespace NeverClicker {
 	class SettingsManager {
-		const string IMAGES_FOLDER_NAME = "Images";
-		const string SETTINGS_FOLDER_NAME = "Settings";
-		const string LOGS_FOLDER_NAME = "Logs";
-		const string ASSETS_FOLDER_NAME = "Assets";
+		//const string IMAGES_FOLDER_NAME = "Images";
+		//const string SETTINGS_FOLDER_NAME = "Settings";
+		//const string LOGS_FOLDER_NAME = "Logs";
+		//const string ASSETS_FOLDER_NAME = "Assets";
 
-		public const string IMAGES_SUBPATH = "\\" + IMAGES_FOLDER_NAME;
-		public const string SETTINGS_SUBPATH = "\\" + SETTINGS_FOLDER_NAME;
-		public const string LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
-		public const string ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
+		//public const string IMAGES_SUBPATH = "\\" + IMAGES_FOLDER_NAME;
+		//public const string SETTINGS_SUBPATH = "\\" + SETTINGS_FOLDER_NAME;
+		//public const string LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
+		//public const string ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
 
-		public const string BUILTIN_IMAGES_SUBPATH = "\\" + "Default" + IMAGES_FOLDER_NAME;
-		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + "Default" + SETTINGS_FOLDER_NAME;
-		//public const string DEFAULT_LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
-		//public const string DEFAULT_ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
+		//public const string BUILTIN_IMAGES_SUBPATH = "\\" + "Default" + IMAGES_FOLDER_NAME;
+		//public const string BUILTIN_SETTINGS_SUBPATH = "\\" + "Default" + SETTINGS_FOLDER_NAME;
+		////public const string DEFAULT_LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
+		////public const string DEFAULT_ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
 
-		public const string GAME_ACCOUNT_INI_FILE_NAME = "\\NeverClicker_GameAccount.ini";
-		public const string GAME_CLIENT_INI_FILE_NAME = "\\NeverClicker_GameClient.ini";
-		public const string LOG_FILE_NAME = "\\NeverClicker_Log.txt";
-		public const string OLD_AHK_SCRIPT_FILE_NAME = "\\NW_Common.ahk";
+		//public const string GAME_ACCOUNT_INI_FILE_NAME = "\\NeverClicker_GameAccount.ini";
+		//public const string GAME_CLIENT_INI_FILE_NAME = "\\NeverClicker_GameClient.ini";
+		//public const string LOG_FILE_NAME = "\\NeverClicker_Log.txt";
+		//public const string OLD_AHK_SCRIPT_FILE_NAME = "\\NW_Common.ahk";
 
-		private static readonly object Locker = new object();
-		private static XmlDocument LogXmlDoc = new XmlDocument();
+		//private static readonly object Locker = new object();
+		//private static XmlDocument LogXmlDoc = new XmlDocument();
 
-		public static string ProgramRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
-		public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
+		//public static string ProgramRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
+		//public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
 
 
 		public SettingsManager() {
@@ -103,71 +103,71 @@ namespace NeverClicker {
 		//	}						
 		//}
 
-		public static bool InitSettingsFiles() {
-			var settingsFolderPath = Settings.Default.SettingsFolderPath;
-			bool valid = true;
+		//public static bool InitSettingsFiles() {
+		//	var settingsFolderPath = Settings.Default.SettingsFolderPath;
+		//	bool valid = true;
 
-			if (Directory.Exists(settingsFolderPath)) {
-				if (File.Exists(settingsFolderPath + "\\" + GAME_ACCOUNT_INI_FILE_NAME)) {
-					//MessageBox.Show(GAME_ACCOUNT_INI_FILE_NAME + " exists.");					
-				} else {
-					MessageBox.Show(GAME_ACCOUNT_INI_FILE_NAME + " not found");
-					valid = false;
-					// CREATE OR COPY INI FILE
-				}
+		//	if (Directory.Exists(settingsFolderPath)) {
+		//		if (File.Exists(settingsFolderPath + "\\" + GAME_ACCOUNT_INI_FILE_NAME)) {
+		//			//MessageBox.Show(GAME_ACCOUNT_INI_FILE_NAME + " exists.");					
+		//		} else {
+		//			MessageBox.Show(GAME_ACCOUNT_INI_FILE_NAME + " not found");
+		//			valid = false;
+		//			// CREATE OR COPY INI FILE
+		//		}
 
-				// VERIFY VALIDITY AND RECREATE IF NECESSARY
+		//		// VERIFY VALIDITY AND RECREATE IF NECESSARY
 
-				if (File.Exists(settingsFolderPath + "\\" + GAME_CLIENT_INI_FILE_NAME)) {
-					//MessageBox.Show(GAME_CLIENT_INI_FILE_NAME + " exists.");
-				} else {
-					MessageBox.Show(GAME_CLIENT_INI_FILE_NAME + " not found");
-					valid = false;
-					// CREATE OR COPY INI FILE
-				}
-			} else {
-				MessageBox.Show("Error: settings folder: '" + settingsFolderPath + "' not found.");
-				valid = false;
+		//		if (File.Exists(settingsFolderPath + "\\" + GAME_CLIENT_INI_FILE_NAME)) {
+		//			//MessageBox.Show(GAME_CLIENT_INI_FILE_NAME + " exists.");
+		//		} else {
+		//			MessageBox.Show(GAME_CLIENT_INI_FILE_NAME + " not found");
+		//			valid = false;
+		//			// CREATE OR COPY INI FILE
+		//		}
+		//	} else {
+		//		MessageBox.Show("Error: settings folder: '" + settingsFolderPath + "' not found.");
+		//		valid = false;
 
-				// ACTUALLY CREATE THEM
+		//		// ACTUALLY CREATE THEM
 
-			}
-			// LOAD UP BOTH/ALL INI FILES AND VERIFY THAT THEY ARE VALID;
-			//	IF THEY ARE NOT VALID:
-			//		CREATE THE DIRECTORIES
-			//		CREATE THE FILES
-			//		CREATE THE SECTIONS
-			return valid;
-		}
+		//	}
+		//	// LOAD UP BOTH/ALL INI FILES AND VERIFY THAT THEY ARE VALID;
+		//	//	IF THEY ARE NOT VALID:
+		//	//		CREATE THE DIRECTORIES
+		//	//		CREATE THE FILES
+		//	//		CREATE THE SECTIONS
+		//	return valid;
+		//}
 
 		//public void CreateUserRootSubpaths() {
 
 		//}
 
-		public static bool ImagesFolderIsValid() {
-			if (Directory.Exists(Settings.Default.ImagesFolderPath)) {
-				return true;
-			} else {
-				MessageBox.Show("Images folder does not exist.");
-				// CREATE DIRECTORY
-				// COPY IMAGE FILES
-				// VERIFY THEIR EXISTENCE
-				// RETURN TRUE;
-				return false;
-			}
-			// CHECK THAT IMAGE FILES EXIST
-			// PARSE INI?			
-		}
+		//public static bool ImagesFolderIsValid() {
+		//	if (Directory.Exists(Settings.Default.ImagesFolderPath)) {
+		//		return true;
+		//	} else {
+		//		MessageBox.Show("Images folder does not exist.");
+		//		// CREATE DIRECTORY
+		//		// COPY IMAGE FILES
+		//		// VERIFY THEIR EXISTENCE
+		//		// RETURN TRUE;
+		//		return false;
+		//	}
+		//	// CHECK THAT IMAGE FILES EXIST
+		//	// PARSE INI?			
+		//}
 
-		public static bool LogsFolderIsValid() {
-			//return LogFile.InitLogFile(Settings.Default.LogsFolderPath);
-			if (Directory.Exists(Settings.Default.LogsFolderPath)) {
-				return true;
-			} else {
-				MessageBox.Show("Logs folder does not exist.");
-				return false;
-			}
-		}
+		//public static bool LogsFolderIsValid() {
+		//	//return LogFile.InitLogFile(Settings.Default.LogsFolderPath);
+		//	if (Directory.Exists(Settings.Default.LogsFolderPath)) {
+		//		return true;
+		//	} else {
+		//		MessageBox.Show("Logs folder does not exist.");
+		//		return false;
+		//	}
+		//}
 
 		//public static void Failure() { // ***** DEPRICATE *****
 		//	//if (System.Windows.Forms.Application.MessageLoop) {

@@ -78,19 +78,31 @@
 			this.labelGameTaskCharacterIdx = new System.Windows.Forms.Label();
 			this.buttonNextTask = new System.Windows.Forms.Button();
 			this.buttonAddCharIdx = new System.Windows.Forms.Button();
-			this.tabPageOther = new System.Windows.Forms.TabPage();
+			this.tabPageInput = new System.Windows.Forms.TabPage();
 			this.buttonSendKeys = new System.Windows.Forms.Button();
 			this.labelSendKeys = new System.Windows.Forms.Label();
 			this.textBoxSendKeys = new System.Windows.Forms.TextBox();
 			this.buttonMoveMouse = new System.Windows.Forms.Button();
 			this.buttonClose = new System.Windows.Forms.Button();
+			this.tabPageSettings = new System.Windows.Forms.TabPage();
+			this.textBoxTestReadValue = new System.Windows.Forms.TextBox();
+			this.textBoxTestReadName = new System.Windows.Forms.TextBox();
+			this.textBoxTestFileName = new System.Windows.Forms.TextBox();
+			this.textBoxTestFileContents = new System.Windows.Forms.TextBox();
+			this.textBoxTestStoreName = new System.Windows.Forms.TextBox();
+			this.textBoxTestStoreValue = new System.Windows.Forms.TextBox();
+			this.buttonTestReadValue = new System.Windows.Forms.Button();
+			this.labelTestProperty = new System.Windows.Forms.Label();
+			this.labelTestFileName = new System.Windows.Forms.Label();
+			this.buttonTestStore = new System.Windows.Forms.Button();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.groupBoxSettings.SuspendLayout();
 			this.tabPageRaw.SuspendLayout();
 			this.tabPageWindow.SuspendLayout();
 			this.tabPageQueue.SuspendLayout();
-			this.tabPageOther.SuspendLayout();
+			this.tabPageInput.SuspendLayout();
+			this.tabPageSettings.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControlPrimary
@@ -101,13 +113,14 @@
 			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
 			this.tabControlPrimary.Controls.Add(this.tabPageWindow);
 			this.tabControlPrimary.Controls.Add(this.tabPageQueue);
-			this.tabControlPrimary.Controls.Add(this.tabPageOther);
-			this.tabControlPrimary.Location = new System.Drawing.Point(9, 27);
+			this.tabControlPrimary.Controls.Add(this.tabPageSettings);
+			this.tabControlPrimary.Controls.Add(this.tabPageInput);
+			this.tabControlPrimary.Location = new System.Drawing.Point(9, 9);
 			this.tabControlPrimary.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControlPrimary.Name = "tabControlPrimary";
 			this.tabControlPrimary.Padding = new System.Drawing.Point(0, 0);
 			this.tabControlPrimary.SelectedIndex = 0;
-			this.tabControlPrimary.Size = new System.Drawing.Size(493, 322);
+			this.tabControlPrimary.Size = new System.Drawing.Size(493, 340);
 			this.tabControlPrimary.TabIndex = 18;
 			// 
 			// tabPageStatus
@@ -117,9 +130,9 @@
 			this.tabPageStatus.Controls.Add(this.labelFileName);
 			this.tabPageStatus.Controls.Add(this.groupBoxSettings);
 			this.tabPageStatus.Location = new System.Drawing.Point(4, 22);
+			this.tabPageStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageStatus.Name = "tabPageStatus";
-			this.tabPageStatus.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageStatus.Size = new System.Drawing.Size(485, 296);
+			this.tabPageStatus.Size = new System.Drawing.Size(485, 314);
 			this.tabPageStatus.TabIndex = 4;
 			this.tabPageStatus.Text = "Config";
 			// 
@@ -134,7 +147,7 @@
 			// labelFileName
 			// 
 			this.labelFileName.AutoSize = true;
-			this.labelFileName.Location = new System.Drawing.Point(16, 15);
+			this.labelFileName.Location = new System.Drawing.Point(13, 12);
 			this.labelFileName.Name = "labelFileName";
 			this.labelFileName.Size = new System.Drawing.Size(57, 13);
 			this.labelFileName.TabIndex = 8;
@@ -289,16 +302,16 @@
 			this.tabPageRaw.Controls.Add(this.labelEvaluateVariable);
 			this.tabPageRaw.Controls.Add(this.buttonExecuteFunction);
 			this.tabPageRaw.Location = new System.Drawing.Point(4, 22);
+			this.tabPageRaw.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageRaw.Name = "tabPageRaw";
-			this.tabPageRaw.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageRaw.Size = new System.Drawing.Size(485, 296);
+			this.tabPageRaw.Size = new System.Drawing.Size(485, 314);
 			this.tabPageRaw.TabIndex = 0;
 			this.tabPageRaw.Text = "Raw";
 			// 
 			// labelFunctionParensClose
 			// 
 			this.labelFunctionParensClose.AutoSize = true;
-			this.labelFunctionParensClose.Location = new System.Drawing.Point(242, 62);
+			this.labelFunctionParensClose.Location = new System.Drawing.Point(244, 64);
 			this.labelFunctionParensClose.Name = "labelFunctionParensClose";
 			this.labelFunctionParensClose.Size = new System.Drawing.Size(10, 13);
 			this.labelFunctionParensClose.TabIndex = 21;
@@ -307,7 +320,7 @@
 			// labelFunctionParensOpen
 			// 
 			this.labelFunctionParensOpen.AutoSize = true;
-			this.labelFunctionParensOpen.Location = new System.Drawing.Point(239, 10);
+			this.labelFunctionParensOpen.Location = new System.Drawing.Point(241, 12);
 			this.labelFunctionParensOpen.Name = "labelFunctionParensOpen";
 			this.labelFunctionParensOpen.Size = new System.Drawing.Size(10, 13);
 			this.labelFunctionParensOpen.TabIndex = 20;
@@ -315,49 +328,49 @@
 			// 
 			// textBoxExecuteStatement
 			// 
-			this.textBoxExecuteStatement.Location = new System.Drawing.Point(80, 152);
+			this.textBoxExecuteStatement.Location = new System.Drawing.Point(85, 157);
 			this.textBoxExecuteStatement.Name = "textBoxExecuteStatement";
 			this.textBoxExecuteStatement.Size = new System.Drawing.Size(202, 20);
 			this.textBoxExecuteStatement.TabIndex = 18;
 			// 
 			// textBox_var
 			// 
-			this.textBox_var.Location = new System.Drawing.Point(102, 108);
+			this.textBox_var.Location = new System.Drawing.Point(107, 113);
 			this.textBox_var.Name = "textBox_var";
 			this.textBox_var.Size = new System.Drawing.Size(180, 20);
 			this.textBox_var.TabIndex = 4;
 			// 
 			// textBoxExecuteFunction
 			// 
-			this.textBoxExecuteFunction.Location = new System.Drawing.Point(80, 7);
+			this.textBoxExecuteFunction.Location = new System.Drawing.Point(85, 12);
 			this.textBoxExecuteFunction.Name = "textBoxExecuteFunction";
 			this.textBoxExecuteFunction.Size = new System.Drawing.Size(156, 20);
 			this.textBoxExecuteFunction.TabIndex = 6;
 			// 
 			// textBoxExecuteFunctionP1
 			// 
-			this.textBoxExecuteFunctionP1.Location = new System.Drawing.Point(80, 33);
+			this.textBoxExecuteFunctionP1.Location = new System.Drawing.Point(85, 38);
 			this.textBoxExecuteFunctionP1.Name = "textBoxExecuteFunctionP1";
 			this.textBoxExecuteFunctionP1.Size = new System.Drawing.Size(156, 20);
 			this.textBoxExecuteFunctionP1.TabIndex = 8;
 			// 
 			// textBoxExecuteFunctionP2
 			// 
-			this.textBoxExecuteFunctionP2.Location = new System.Drawing.Point(242, 33);
+			this.textBoxExecuteFunctionP2.Location = new System.Drawing.Point(247, 38);
 			this.textBoxExecuteFunctionP2.Name = "textBoxExecuteFunctionP2";
 			this.textBoxExecuteFunctionP2.Size = new System.Drawing.Size(155, 20);
 			this.textBoxExecuteFunctionP2.TabIndex = 9;
 			// 
 			// textBoxExecuteFunctionP3
 			// 
-			this.textBoxExecuteFunctionP3.Location = new System.Drawing.Point(80, 59);
+			this.textBoxExecuteFunctionP3.Location = new System.Drawing.Point(85, 64);
 			this.textBoxExecuteFunctionP3.Name = "textBoxExecuteFunctionP3";
 			this.textBoxExecuteFunctionP3.Size = new System.Drawing.Size(156, 20);
 			this.textBoxExecuteFunctionP3.TabIndex = 10;
 			// 
 			// buttonExecuteStatement
 			// 
-			this.buttonExecuteStatement.Location = new System.Drawing.Point(288, 150);
+			this.buttonExecuteStatement.Location = new System.Drawing.Point(293, 155);
 			this.buttonExecuteStatement.Name = "buttonExecuteStatement";
 			this.buttonExecuteStatement.Size = new System.Drawing.Size(109, 23);
 			this.buttonExecuteStatement.TabIndex = 17;
@@ -367,7 +380,7 @@
 			// labelExecuteStatement
 			// 
 			this.labelExecuteStatement.AutoSize = true;
-			this.labelExecuteStatement.Location = new System.Drawing.Point(6, 155);
+			this.labelExecuteStatement.Location = new System.Drawing.Point(8, 157);
 			this.labelExecuteStatement.Name = "labelExecuteStatement";
 			this.labelExecuteStatement.Size = new System.Drawing.Size(58, 13);
 			this.labelExecuteStatement.TabIndex = 19;
@@ -376,7 +389,7 @@
 			// labelFunctionParameters
 			// 
 			this.labelFunctionParameters.AutoSize = true;
-			this.labelFunctionParameters.Location = new System.Drawing.Point(6, 36);
+			this.labelFunctionParameters.Location = new System.Drawing.Point(8, 38);
 			this.labelFunctionParameters.Name = "labelFunctionParameters";
 			this.labelFunctionParameters.Size = new System.Drawing.Size(63, 13);
 			this.labelFunctionParameters.TabIndex = 16;
@@ -385,7 +398,7 @@
 			// labelFunctionName
 			// 
 			this.labelFunctionName.AutoSize = true;
-			this.labelFunctionName.Location = new System.Drawing.Point(6, 10);
+			this.labelFunctionName.Location = new System.Drawing.Point(8, 12);
 			this.labelFunctionName.Name = "labelFunctionName";
 			this.labelFunctionName.Size = new System.Drawing.Size(51, 13);
 			this.labelFunctionName.TabIndex = 15;
@@ -393,7 +406,7 @@
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(288, 106);
+			this.button3.Location = new System.Drawing.Point(293, 111);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(109, 23);
 			this.button3.TabIndex = 3;
@@ -403,7 +416,7 @@
 			// labelEvaluateVariable
 			// 
 			this.labelEvaluateVariable.AutoSize = true;
-			this.labelEvaluateVariable.Location = new System.Drawing.Point(6, 111);
+			this.labelEvaluateVariable.Location = new System.Drawing.Point(8, 113);
 			this.labelEvaluateVariable.Name = "labelEvaluateVariable";
 			this.labelEvaluateVariable.Size = new System.Drawing.Size(79, 13);
 			this.labelEvaluateVariable.TabIndex = 14;
@@ -411,7 +424,7 @@
 			// 
 			// buttonExecuteFunction
 			// 
-			this.buttonExecuteFunction.Location = new System.Drawing.Point(288, 59);
+			this.buttonExecuteFunction.Location = new System.Drawing.Point(293, 64);
 			this.buttonExecuteFunction.Name = "buttonExecuteFunction";
 			this.buttonExecuteFunction.Size = new System.Drawing.Size(109, 23);
 			this.buttonExecuteFunction.TabIndex = 7;
@@ -432,16 +445,16 @@
 			this.tabPageWindow.Controls.Add(this.labelDetectWindow);
 			this.tabPageWindow.Controls.Add(this.buttonWindowDetect);
 			this.tabPageWindow.Location = new System.Drawing.Point(4, 22);
+			this.tabPageWindow.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageWindow.Name = "tabPageWindow";
-			this.tabPageWindow.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageWindow.Size = new System.Drawing.Size(485, 296);
+			this.tabPageWindow.Size = new System.Drawing.Size(485, 314);
 			this.tabPageWindow.TabIndex = 1;
 			this.tabPageWindow.Text = "Window";
 			this.tabPageWindow.Click += new System.EventHandler(this.tabPageWindow_Click);
 			// 
 			// buttonClickImage
 			// 
-			this.buttonClickImage.Location = new System.Drawing.Point(404, 11);
+			this.buttonClickImage.Location = new System.Drawing.Point(398, 11);
 			this.buttonClickImage.Name = "buttonClickImage";
 			this.buttonClickImage.Size = new System.Drawing.Size(75, 23);
 			this.buttonClickImage.TabIndex = 10;
@@ -451,7 +464,7 @@
 			// 
 			// buttonWindowActivate
 			// 
-			this.buttonWindowActivate.Location = new System.Drawing.Point(404, 104);
+			this.buttonWindowActivate.Location = new System.Drawing.Point(398, 104);
 			this.buttonWindowActivate.Name = "buttonWindowActivate";
 			this.buttonWindowActivate.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowActivate.TabIndex = 9;
@@ -460,7 +473,7 @@
 			// 
 			// buttonWindowKill
 			// 
-			this.buttonWindowKill.Location = new System.Drawing.Point(404, 130);
+			this.buttonWindowKill.Location = new System.Drawing.Point(398, 130);
 			this.buttonWindowKill.Name = "buttonWindowKill";
 			this.buttonWindowKill.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowKill.TabIndex = 8;
@@ -469,7 +482,7 @@
 			// 
 			// buttonWindowMinimize
 			// 
-			this.buttonWindowMinimize.Location = new System.Drawing.Point(323, 130);
+			this.buttonWindowMinimize.Location = new System.Drawing.Point(317, 130);
 			this.buttonWindowMinimize.Name = "buttonWindowMinimize";
 			this.buttonWindowMinimize.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowMinimize.TabIndex = 7;
@@ -479,7 +492,7 @@
 			// labelFindImage1
 			// 
 			this.labelFindImage1.AutoSize = true;
-			this.labelFindImage1.Location = new System.Drawing.Point(6, 16);
+			this.labelFindImage1.Location = new System.Drawing.Point(9, 13);
 			this.labelFindImage1.Name = "labelFindImage1";
 			this.labelFindImage1.Size = new System.Drawing.Size(67, 13);
 			this.labelFindImage1.TabIndex = 6;
@@ -487,21 +500,21 @@
 			// 
 			// textBoxFindImage
 			// 
-			this.textBoxFindImage.Location = new System.Drawing.Point(98, 13);
+			this.textBoxFindImage.Location = new System.Drawing.Point(104, 13);
 			this.textBoxFindImage.Name = "textBoxFindImage";
-			this.textBoxFindImage.Size = new System.Drawing.Size(219, 20);
+			this.textBoxFindImage.Size = new System.Drawing.Size(207, 20);
 			this.textBoxFindImage.TabIndex = 5;
 			// 
 			// textBoxDetectWindow
 			// 
-			this.textBoxDetectWindow.Location = new System.Drawing.Point(98, 106);
+			this.textBoxDetectWindow.Location = new System.Drawing.Point(104, 106);
 			this.textBoxDetectWindow.Name = "textBoxDetectWindow";
-			this.textBoxDetectWindow.Size = new System.Drawing.Size(219, 20);
+			this.textBoxDetectWindow.Size = new System.Drawing.Size(207, 20);
 			this.textBoxDetectWindow.TabIndex = 2;
 			// 
 			// buttonFindImage
 			// 
-			this.buttonFindImage.Location = new System.Drawing.Point(323, 11);
+			this.buttonFindImage.Location = new System.Drawing.Point(317, 11);
 			this.buttonFindImage.Name = "buttonFindImage";
 			this.buttonFindImage.Size = new System.Drawing.Size(75, 23);
 			this.buttonFindImage.TabIndex = 4;
@@ -512,7 +525,7 @@
 			// labelDetectWindow
 			// 
 			this.labelDetectWindow.AutoSize = true;
-			this.labelDetectWindow.Location = new System.Drawing.Point(6, 109);
+			this.labelDetectWindow.Location = new System.Drawing.Point(9, 106);
 			this.labelDetectWindow.Name = "labelDetectWindow";
 			this.labelDetectWindow.Size = new System.Drawing.Size(73, 13);
 			this.labelDetectWindow.TabIndex = 1;
@@ -520,7 +533,7 @@
 			// 
 			// buttonWindowDetect
 			// 
-			this.buttonWindowDetect.Location = new System.Drawing.Point(323, 104);
+			this.buttonWindowDetect.Location = new System.Drawing.Point(317, 104);
 			this.buttonWindowDetect.Name = "buttonWindowDetect";
 			this.buttonWindowDetect.Size = new System.Drawing.Size(75, 23);
 			this.buttonWindowDetect.TabIndex = 19;
@@ -539,16 +552,16 @@
 			this.tabPageQueue.Controls.Add(this.buttonNextTask);
 			this.tabPageQueue.Controls.Add(this.buttonAddCharIdx);
 			this.tabPageQueue.Location = new System.Drawing.Point(4, 22);
+			this.tabPageQueue.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageQueue.Name = "tabPageQueue";
-			this.tabPageQueue.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageQueue.Size = new System.Drawing.Size(485, 296);
+			this.tabPageQueue.Size = new System.Drawing.Size(485, 314);
 			this.tabPageQueue.TabIndex = 2;
 			this.tabPageQueue.Text = "Queue";
 			// 
 			// labelGameTaskType
 			// 
 			this.labelGameTaskType.AutoSize = true;
-			this.labelGameTaskType.Location = new System.Drawing.Point(6, 61);
+			this.labelGameTaskType.Location = new System.Drawing.Point(7, 62);
 			this.labelGameTaskType.Name = "labelGameTaskType";
 			this.labelGameTaskType.Size = new System.Drawing.Size(34, 13);
 			this.labelGameTaskType.TabIndex = 7;
@@ -558,7 +571,7 @@
 			// 
 			this.comboBoxGameTaskType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGameTaskType.FormattingEnabled = true;
-			this.comboBoxGameTaskType.Location = new System.Drawing.Point(77, 58);
+			this.comboBoxGameTaskType.Location = new System.Drawing.Point(81, 62);
 			this.comboBoxGameTaskType.Name = "comboBoxGameTaskType";
 			this.comboBoxGameTaskType.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxGameTaskType.TabIndex = 6;
@@ -566,7 +579,7 @@
 			// labelGameTaskDelaySec
 			// 
 			this.labelGameTaskDelaySec.AutoSize = true;
-			this.labelGameTaskDelaySec.Location = new System.Drawing.Point(6, 35);
+			this.labelGameTaskDelaySec.Location = new System.Drawing.Point(7, 36);
 			this.labelGameTaskDelaySec.Name = "labelGameTaskDelaySec";
 			this.labelGameTaskDelaySec.Size = new System.Drawing.Size(63, 13);
 			this.labelGameTaskDelaySec.TabIndex = 5;
@@ -574,14 +587,14 @@
 			// 
 			// textBoxGameTaskDelaySec
 			// 
-			this.textBoxGameTaskDelaySec.Location = new System.Drawing.Point(77, 32);
+			this.textBoxGameTaskDelaySec.Location = new System.Drawing.Point(81, 36);
 			this.textBoxGameTaskDelaySec.Name = "textBoxGameTaskDelaySec";
 			this.textBoxGameTaskDelaySec.Size = new System.Drawing.Size(121, 20);
 			this.textBoxGameTaskDelaySec.TabIndex = 4;
 			// 
 			// textBoxGameTaskCharIdx
 			// 
-			this.textBoxGameTaskCharIdx.Location = new System.Drawing.Point(77, 6);
+			this.textBoxGameTaskCharIdx.Location = new System.Drawing.Point(81, 10);
 			this.textBoxGameTaskCharIdx.Name = "textBoxGameTaskCharIdx";
 			this.textBoxGameTaskCharIdx.Size = new System.Drawing.Size(178, 20);
 			this.textBoxGameTaskCharIdx.TabIndex = 0;
@@ -589,7 +602,7 @@
 			// labelGameTaskCharacterIdx
 			// 
 			this.labelGameTaskCharacterIdx.AutoSize = true;
-			this.labelGameTaskCharacterIdx.Location = new System.Drawing.Point(6, 9);
+			this.labelGameTaskCharacterIdx.Location = new System.Drawing.Point(7, 10);
 			this.labelGameTaskCharacterIdx.Name = "labelGameTaskCharacterIdx";
 			this.labelGameTaskCharacterIdx.Size = new System.Drawing.Size(56, 13);
 			this.labelGameTaskCharacterIdx.TabIndex = 3;
@@ -597,7 +610,7 @@
 			// 
 			// buttonNextTask
 			// 
-			this.buttonNextTask.Location = new System.Drawing.Point(180, 90);
+			this.buttonNextTask.Location = new System.Drawing.Point(184, 94);
 			this.buttonNextTask.Name = "buttonNextTask";
 			this.buttonNextTask.Size = new System.Drawing.Size(75, 23);
 			this.buttonNextTask.TabIndex = 2;
@@ -606,26 +619,26 @@
 			// 
 			// buttonAddCharIdx
 			// 
-			this.buttonAddCharIdx.Location = new System.Drawing.Point(3, 90);
+			this.buttonAddCharIdx.Location = new System.Drawing.Point(7, 94);
 			this.buttonAddCharIdx.Name = "buttonAddCharIdx";
 			this.buttonAddCharIdx.Size = new System.Drawing.Size(171, 23);
 			this.buttonAddCharIdx.TabIndex = 1;
 			this.buttonAddCharIdx.Text = "Queue Task";
 			this.buttonAddCharIdx.UseVisualStyleBackColor = true;
 			// 
-			// tabPageOther
+			// tabPageInput
 			// 
-			this.tabPageOther.BackColor = System.Drawing.Color.Transparent;
-			this.tabPageOther.Controls.Add(this.buttonSendKeys);
-			this.tabPageOther.Controls.Add(this.labelSendKeys);
-			this.tabPageOther.Controls.Add(this.textBoxSendKeys);
-			this.tabPageOther.Controls.Add(this.buttonMoveMouse);
-			this.tabPageOther.Location = new System.Drawing.Point(4, 22);
-			this.tabPageOther.Name = "tabPageOther";
-			this.tabPageOther.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageOther.Size = new System.Drawing.Size(485, 296);
-			this.tabPageOther.TabIndex = 3;
-			this.tabPageOther.Text = "Other";
+			this.tabPageInput.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageInput.Controls.Add(this.buttonSendKeys);
+			this.tabPageInput.Controls.Add(this.labelSendKeys);
+			this.tabPageInput.Controls.Add(this.textBoxSendKeys);
+			this.tabPageInput.Controls.Add(this.buttonMoveMouse);
+			this.tabPageInput.Location = new System.Drawing.Point(4, 22);
+			this.tabPageInput.Margin = new System.Windows.Forms.Padding(0);
+			this.tabPageInput.Name = "tabPageInput";
+			this.tabPageInput.Size = new System.Drawing.Size(485, 314);
+			this.tabPageInput.TabIndex = 3;
+			this.tabPageInput.Text = "Input";
 			// 
 			// buttonSendKeys
 			// 
@@ -639,7 +652,7 @@
 			// labelSendKeys
 			// 
 			this.labelSendKeys.AutoSize = true;
-			this.labelSendKeys.Location = new System.Drawing.Point(6, 11);
+			this.labelSendKeys.Location = new System.Drawing.Point(3, 8);
 			this.labelSendKeys.Name = "labelSendKeys";
 			this.labelSendKeys.Size = new System.Drawing.Size(61, 13);
 			this.labelSendKeys.TabIndex = 7;
@@ -671,6 +684,105 @@
 			this.buttonClose.UseVisualStyleBackColor = true;
 			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
 			// 
+			// tabPageSettings
+			// 
+			this.tabPageSettings.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageSettings.Controls.Add(this.textBoxTestReadValue);
+			this.tabPageSettings.Controls.Add(this.textBoxTestReadName);
+			this.tabPageSettings.Controls.Add(this.textBoxTestFileName);
+			this.tabPageSettings.Controls.Add(this.textBoxTestFileContents);
+			this.tabPageSettings.Controls.Add(this.textBoxTestStoreName);
+			this.tabPageSettings.Controls.Add(this.textBoxTestStoreValue);
+			this.tabPageSettings.Controls.Add(this.buttonTestReadValue);
+			this.tabPageSettings.Controls.Add(this.labelTestProperty);
+			this.tabPageSettings.Controls.Add(this.labelTestFileName);
+			this.tabPageSettings.Controls.Add(this.buttonTestStore);
+			this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
+			this.tabPageSettings.Margin = new System.Windows.Forms.Padding(0);
+			this.tabPageSettings.Name = "tabPageSettings";
+			this.tabPageSettings.Size = new System.Drawing.Size(485, 314);
+			this.tabPageSettings.TabIndex = 5;
+			this.tabPageSettings.Text = "Settings";
+			// 
+			// textBoxTestReadValue
+			// 
+			this.textBoxTestReadValue.Location = new System.Drawing.Point(338, 65);
+			this.textBoxTestReadValue.Name = "textBoxTestReadValue";
+			this.textBoxTestReadValue.Size = new System.Drawing.Size(100, 20);
+			this.textBoxTestReadValue.TabIndex = 19;
+			// 
+			// textBoxTestReadName
+			// 
+			this.textBoxTestReadName.Location = new System.Drawing.Point(78, 65);
+			this.textBoxTestReadName.Name = "textBoxTestReadName";
+			this.textBoxTestReadName.Size = new System.Drawing.Size(173, 20);
+			this.textBoxTestReadName.TabIndex = 18;
+			// 
+			// textBoxTestFileName
+			// 
+			this.textBoxTestFileName.Location = new System.Drawing.Point(78, 11);
+			this.textBoxTestFileName.Name = "textBoxTestFileName";
+			this.textBoxTestFileName.Size = new System.Drawing.Size(360, 20);
+			this.textBoxTestFileName.TabIndex = 14;
+			// 
+			// textBoxTestFileContents
+			// 
+			this.textBoxTestFileContents.Location = new System.Drawing.Point(9, 91);
+			this.textBoxTestFileContents.Multiline = true;
+			this.textBoxTestFileContents.Name = "textBoxTestFileContents";
+			this.textBoxTestFileContents.Size = new System.Drawing.Size(429, 87);
+			this.textBoxTestFileContents.TabIndex = 13;
+			// 
+			// textBoxTestStoreName
+			// 
+			this.textBoxTestStoreName.Location = new System.Drawing.Point(78, 39);
+			this.textBoxTestStoreName.Name = "textBoxTestStoreName";
+			this.textBoxTestStoreName.Size = new System.Drawing.Size(173, 20);
+			this.textBoxTestStoreName.TabIndex = 12;
+			// 
+			// textBoxTestStoreValue
+			// 
+			this.textBoxTestStoreValue.Location = new System.Drawing.Point(257, 39);
+			this.textBoxTestStoreValue.Name = "textBoxTestStoreValue";
+			this.textBoxTestStoreValue.Size = new System.Drawing.Size(100, 20);
+			this.textBoxTestStoreValue.TabIndex = 11;
+			// 
+			// buttonTestReadValue
+			// 
+			this.buttonTestReadValue.Location = new System.Drawing.Point(257, 63);
+			this.buttonTestReadValue.Name = "buttonTestReadValue";
+			this.buttonTestReadValue.Size = new System.Drawing.Size(75, 23);
+			this.buttonTestReadValue.TabIndex = 17;
+			this.buttonTestReadValue.Text = "Read";
+			this.buttonTestReadValue.UseVisualStyleBackColor = true;
+			// 
+			// labelTestProperty
+			// 
+			this.labelTestProperty.AutoSize = true;
+			this.labelTestProperty.Location = new System.Drawing.Point(9, 42);
+			this.labelTestProperty.Name = "labelTestProperty";
+			this.labelTestProperty.Size = new System.Drawing.Size(49, 13);
+			this.labelTestProperty.TabIndex = 16;
+			this.labelTestProperty.Text = "Property:";
+			// 
+			// labelTestFileName
+			// 
+			this.labelTestFileName.AutoSize = true;
+			this.labelTestFileName.Location = new System.Drawing.Point(9, 14);
+			this.labelTestFileName.Name = "labelTestFileName";
+			this.labelTestFileName.Size = new System.Drawing.Size(52, 13);
+			this.labelTestFileName.TabIndex = 15;
+			this.labelTestFileName.Text = "Yaml File:";
+			// 
+			// buttonTestStore
+			// 
+			this.buttonTestStore.Location = new System.Drawing.Point(363, 37);
+			this.buttonTestStore.Name = "buttonTestStore";
+			this.buttonTestStore.Size = new System.Drawing.Size(75, 23);
+			this.buttonTestStore.TabIndex = 10;
+			this.buttonTestStore.Text = "Store";
+			this.buttonTestStore.UseVisualStyleBackColor = true;
+			// 
 			// TestsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -693,8 +805,10 @@
 			this.tabPageWindow.PerformLayout();
 			this.tabPageQueue.ResumeLayout(false);
 			this.tabPageQueue.PerformLayout();
-			this.tabPageOther.ResumeLayout(false);
-			this.tabPageOther.PerformLayout();
+			this.tabPageInput.ResumeLayout(false);
+			this.tabPageInput.PerformLayout();
+			this.tabPageSettings.ResumeLayout(false);
+			this.tabPageSettings.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -738,7 +852,7 @@
 		private System.Windows.Forms.Label labelGameTaskCharacterIdx;
 		private System.Windows.Forms.Button buttonNextTask;
 		private System.Windows.Forms.Button buttonAddCharIdx;
-		private System.Windows.Forms.TabPage tabPageOther;
+		private System.Windows.Forms.TabPage tabPageInput;
 		private System.Windows.Forms.Button buttonSendKeys;
 		private System.Windows.Forms.Label labelSendKeys;
 		private System.Windows.Forms.TextBox textBoxSendKeys;
@@ -761,5 +875,16 @@
 		private System.Windows.Forms.TextBox textBoxReadSettingValue3;
 		private System.Windows.Forms.TextBox textBoxReadSettingValue2;
 		private System.Windows.Forms.TextBox textBoxReadSettingValue;
+		private System.Windows.Forms.TabPage tabPageSettings;
+		private System.Windows.Forms.TextBox textBoxTestReadValue;
+		private System.Windows.Forms.TextBox textBoxTestReadName;
+		private System.Windows.Forms.TextBox textBoxTestFileName;
+		private System.Windows.Forms.TextBox textBoxTestFileContents;
+		private System.Windows.Forms.TextBox textBoxTestStoreName;
+		private System.Windows.Forms.TextBox textBoxTestStoreValue;
+		private System.Windows.Forms.Button buttonTestReadValue;
+		private System.Windows.Forms.Label labelTestProperty;
+		private System.Windows.Forms.Label labelTestFileName;
+		private System.Windows.Forms.Button buttonTestStore;
 	}
 }

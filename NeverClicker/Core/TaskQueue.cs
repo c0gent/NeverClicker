@@ -96,7 +96,7 @@ namespace NeverClicker {
 				+ ", taskId: " + taskId + "]."				
 				, LogEntryType.Info);
 
-			var nowTicks = DateTime.Now.AddMinutes(3).Ticks;
+			var nowTicks = DateTime.Now.AddSeconds(1).Ticks;
 			long taskKey = 0;
 			bool keyExists = this.TryGetTaskKey(charIdx, taskKind, taskId, out taskKey);
 
@@ -213,27 +213,23 @@ namespace NeverClicker {
 
 		// AdvanceTasks(): ADVANCE ANY EXPIRED TASKS FOR A GIVEN CHARACTER AND TASK TYPE
 		public void AdvanceMatured(Interactor intr, uint charIdx) {
-			var nowTicks = DateTime.Now.Ticks;
-
-			List<long> taskKeys = new List<long>(10);
+			var nowTicks = DateTime.Now.AddSeconds(1).Ticks;
+			List<long> maturedTaskKeys = new List<long>(10);
 
 			foreach (var kvp in this.Queue) {
 				if (kvp.Value.CharIdx == charIdx && kvp.Key < nowTicks) {
-					taskKeys.Add(kvp.Key);
+					maturedTaskKeys.Add(kvp.Key);
 				}
 			}
 
-			foreach (long idx in taskKeys) {
-				// WE ONLY WANT TO DEAL WITH TASKS WHICH HAVE ALREADY MATURED
-				if (idx < nowTicks) {
-					var prevTask = this.Queue[idx];
-					this.Queue.Remove(idx);
+			foreach (long idx in maturedTaskKeys) {
+				var prevTask = this.Queue[idx];
+				this.Queue.Remove(idx);
 
-					if (prevTask.Kind == TaskKind.Invocation) {
-						this.QueueSubsequentInvocationTask(intr, charIdx, prevTask.TaskId + 1);
-					} else if (prevTask.Kind == TaskKind.Profession) {
-						this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
-					}
+				if (prevTask.Kind == TaskKind.Invocation) {
+					this.QueueSubsequentInvocationTask(intr, charIdx, prevTask.TaskId + 1);
+				} else if (prevTask.Kind == TaskKind.Profession) {
+					this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
 				}
 			}
 		}
@@ -274,18 +270,16 @@ namespace NeverClicker {
 
 
 				// ################################## PROFESSIONS #####################################
-
-				// CLEAN OUT TASKS MORE THAN ONE DAY OLD				
 				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
 					var settingKey = "MostRecentProfTime_" + p;
-					var oneDayAgo = now.AddDays(-1);
+					var oldTaskThreshold = now.AddDays(-2);
 					var TaskMatureTime = now;
 
 					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out taskMatureTime)) {
 						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + taskMatureTime.ToString() + ".", LogEntryType.Info);
 					}
 
-					if (taskMatureTime < oneDayAgo) {
+					if (taskMatureTime < oldTaskThreshold) {
 						intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Info);
 						intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
 					}

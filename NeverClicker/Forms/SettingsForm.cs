@@ -12,14 +12,43 @@ using NeverClicker.Forms;
 using System.IO;
 using System.Configuration;
 using System.Diagnostics;
+using System.Xml;
 
 namespace NeverClicker {
 	public partial class SettingsForm: Form {
 		MainForm MainForm;
 
+		const string IMAGES_FOLDER_NAME = "Images";
+		const string SETTINGS_FOLDER_NAME = "Settings";
+		const string LOGS_FOLDER_NAME = "Logs";
+		const string ASSETS_FOLDER_NAME = "Assets";
+
+		public const string IMAGES_SUBPATH = "\\" + IMAGES_FOLDER_NAME;
+		public const string SETTINGS_SUBPATH = "\\" + SETTINGS_FOLDER_NAME;
+		public const string LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
+		public const string ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
+
+		public const string BUILTIN_IMAGES_SUBPATH = "\\" + "Default" + IMAGES_FOLDER_NAME;
+		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + "Default" + SETTINGS_FOLDER_NAME;
+		//public const string DEFAULT_LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
+		//public const string DEFAULT_ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
+
+		public const string GAME_ACCOUNT_INI_FILE_NAME = "\\NeverClicker_GameAccount.ini";
+		public const string GAME_CLIENT_INI_FILE_NAME = "\\NeverClicker_GameClient.ini";
+		public const string LOG_FILE_NAME = "\\NeverClicker_Log.txt";
+		public const string OLD_AHK_SCRIPT_FILE_NAME = "\\NW_Common.ahk";
+
+		private static readonly object Locker = new object();
+		private static XmlDocument LogXmlDoc = new XmlDocument();
+
+		public static string ProgramRootFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Lo‌​cation);
+		public static string DefaultUserRootFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\NeverClicker";
+
+
 		//public SettingsForm() {
 		//	InitializeComponent();
 		//}
+
 
 		public SettingsForm(MainForm mainForm) {
 			InitializeComponent();
@@ -30,6 +59,8 @@ namespace NeverClicker {
 			var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 			//MessageBox.Show(this, config.FilePath);
 			this.linkLabelUserConfigFile.Text = config.FilePath;
+			this.linkLabelAccountIniFile.Text = Settings.Default.SettingsFolderPath;
+			this.linkLabelClientIniFile.Text = Settings.Default.SettingsFolderPath;
 
 			if (Settings.Default.NeverClickerConfigValid) {
 				this.textBoxPatcherExePath.Text = Settings.Default.NeverwinterExePath;
@@ -41,14 +72,15 @@ namespace NeverClicker {
 
 			} else if (Settings.Default.NeverClickerFirstRun) {
 				this.textBoxPatcherExePath.Text = "";
-				this.textBoxUserRootFolder.Text = SettingsManager.DefaultUserRootFolder;
-				this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH;
-				this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.SETTINGS_SUBPATH;
-				this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.LOGS_SUBPATH;
+				this.textBoxUserRootFolder.Text = DefaultUserRootFolder;
+				this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + IMAGES_SUBPATH;
+				this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SETTINGS_SUBPATH;
+				this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + LOGS_SUBPATH;
 				this.textBoxImageShadeVariation.Text = "60";
 			}
 		}
 
+		private void SettingsForm_Load(object sender, EventArgs e) { }
 
 		public bool ValidateNeverwinterExePath() {
 			if (File.Exists(this.textBoxPatcherExePath.Text)) {
@@ -78,14 +110,14 @@ namespace NeverClicker {
 
 		public bool ValidateSettingsFolderPath() {
 			//var textBoxText = this.textBoxSettingsFolder.Text;
-			//var subpathDefault = SettingsManager.SETTINGS_SUBPATH;
+			//var subpathDefault = SETTINGS_SUBPATH;
 			//var isDefault = Settings.Default.SettingsFolderPathIsDefault;			
 
 			//if (Directory.Exists(this.textBoxSettingsFolder.Text)) {
 			//	return true;
 			//} else {
 			//	if (Settings.Default.NeverClickerFirstRun && isDefault) {
-			//		DirectoryCopy(SettingsManager.ProgramRootFolder + subpathDefault,
+			//		DirectoryCopy(ProgramRootFolder + subpathDefault,
 			//			textBoxText, true);
 			//		//Directory.CreateDirectory(this.textBoxUserRootFolder.Text);
 			//		//Settings.Default.SettingsFolderPath = this.textBoxUserRootFolder.Text;
@@ -99,7 +131,7 @@ namespace NeverClicker {
 			return this.ValidateCreateFolder(this.textBoxSettingsFolder.Text, 
 				Settings.Default.SettingsFolderPathIsDefault, 
 				true,
-				SettingsManager.BUILTIN_SETTINGS_SUBPATH
+				BUILTIN_SETTINGS_SUBPATH
             );
 		}
 
@@ -107,7 +139,7 @@ namespace NeverClicker {
 			return this.ValidateCreateFolder(this.textBoxImagesFolder.Text, 
 				Settings.Default.ImagesFolderPathIsDefault,
 				true,
-				SettingsManager.BUILTIN_IMAGES_SUBPATH
+				BUILTIN_IMAGES_SUBPATH
             );
 		}
 
@@ -172,7 +204,7 @@ namespace NeverClicker {
 			//else {
 			//	// ***** BUILD SETTINGS FILES *****
 			//	//MessageBox.Show(this, "Settings invalid. Can not save."); // ***** TEMP *****
-			//	//SettingsManager.Failure(); // ***** DEPRICATE *****
+			//	//Failure(); // ***** DEPRICATE *****
 			//}
 		}
 
@@ -231,7 +263,7 @@ namespace NeverClicker {
 				if (Directory.Exists(textBoxSettingsFolder.Text)) {
 					textBoxUserRootFolder.Text = folderBrowserDialog1.SelectedPath;
 					Settings.Default.UserRootFolderPath = folderBrowserDialog1.SelectedPath;
-					//SettingsManager.InitUserFolders();
+					//InitUserFolders();
 				} else {
 					MessageBox.Show(this, "Settings folder does not exist. Please choose a valid folder.");
 				}
@@ -244,14 +276,14 @@ namespace NeverClicker {
 			this.buttonUserRootFolder.Enabled = !this.checkBoxUserRootFolder.Checked;
 
 			if (this.checkBoxUserRootFolder.Checked) {
-				this.textBoxUserRootFolder.Text = SettingsManager.DefaultUserRootFolder;
+				this.textBoxUserRootFolder.Text = DefaultUserRootFolder;
 			}
 		}
 
 		private void textBoxUserRootFolder_TextChanged(object sender, EventArgs e) {
-			this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH;
-			this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.SETTINGS_SUBPATH;
-			this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.LOGS_SUBPATH;
+			this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + IMAGES_SUBPATH;
+			this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SETTINGS_SUBPATH;
+			this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + LOGS_SUBPATH;
 		}
 
 		private void linkLabelUserConfigFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
@@ -277,7 +309,7 @@ namespace NeverClicker {
 			} else {
 				if (Settings.Default.NeverClickerFirstRun && isDefault) {
 					if (copyBuiltin) {
-						DirectoryCopy(SettingsManager.ProgramRootFolder + builtinSubpath,
+						DirectoryCopy(ProgramRootFolder + builtinSubpath,
 							textBoxText, true);
 					} else {
 						Directory.CreateDirectory(textBoxText);
@@ -325,16 +357,13 @@ namespace NeverClicker {
 		}
 
 
-
-
-
 		//private void checkBoxSettingsFolder_CheckedChanged(object sender, EventArgs e) {
 		//	bool boxChecked = this.checkBoxSettingsFolder.Checked;
 		//  this.textBoxSettingsFolder.ReadOnly = boxChecked;
 		//	this.buttonSettingsFolder.Enabled = !boxChecked;
 
 		//	if (boxChecked) {
-		//		this.textBoxSettingsFolder.Text = SettingsManager.DefaultUserRootFolder + SettingsManager.SETTINGS_SUBPATH_DEFAULT;
+		//		this.textBoxSettingsFolder.Text = DefaultUserRootFolder + SETTINGS_SUBPATH_DEFAULT;
 		//	}
 		//}
 
@@ -359,7 +388,7 @@ namespace NeverClicker {
 
 
 //// ##### PATCHER #####
-//if (SettingsManager.PatcherExePathIsValid()) {
+//if (PatcherExePathIsValid()) {
 //	this.textBoxPatcherExePath.Text = Settings.Default.NeverwinterExePath;
 //} else {
 //	this.textBoxPatcherExePath.Text = "";
@@ -369,36 +398,36 @@ namespace NeverClicker {
 //if (Directory.Exists(Settings.Default.UserRootFolderPath)) {
 //	this.textBoxUserRootFolder.Text = Settings.Default.UserRootFolderPath;
 //} else {
-//	this.textBoxUserRootFolder.Text = SettingsManager.DefaultUserRootFolder;
+//	this.textBoxUserRootFolder.Text = DefaultUserRootFolder;
 //}
 
 //// ##### IMAGES #####
 ////if (Directory.Exists(Settings.Default.UserRootFolderPath)) {
 ////	this.textBoxImagesFolder.Text = Settings.Default.ImagesFolderPath;
 ////} else {
-////	this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH_DEFAULT;
+////	this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + IMAGES_SUBPATH_DEFAULT;
 ////}
-//if (SettingsManager.ImagesFolderIsValid()) {
+//if (ImagesFolderIsValid()) {
 //	this.textBoxImagesFolder.Text = Settings.Default.ImagesFolderPath;
 //} else {
-//	this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.IMAGES_SUBPATH_DEFAULT;
+//	this.textBoxImagesFolder.Text = this.textBoxUserRootFolder.Text + IMAGES_SUBPATH_DEFAULT;
 //}
 
 //// ##### SETTINGS #####
 //if (Directory.Exists(Settings.Default.SettingsFolderPath)) {
 //	this.textBoxSettingsFolder.Text = Settings.Default.SettingsFolderPath;
 //} else {
-//	this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.SETTINGS_SUBPATH_DEFAULT;
+//	this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SETTINGS_SUBPATH_DEFAULT;
 //}
-////this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.SETTINGS_SUBPATH_DEFAULT;
+////this.textBoxSettingsFolder.Text = this.textBoxUserRootFolder.Text + SETTINGS_SUBPATH_DEFAULT;
 
 //// ##### LOGS #####
 //if (Directory.Exists(Settings.Default.LogsFolderPath)) {
 //	this.textBoxLogsFolder.Text = Settings.Default.LogsFolderPath;
 //} else {
-//	this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.LOGS_SUBPATH_DEFAULT;
+//	this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + LOGS_SUBPATH_DEFAULT;
 //}
-////this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + SettingsManager.LOGS_SUBPATH_DEFAULT;
+////this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + LOGS_SUBPATH_DEFAULT;
 
 
 //this.textBoxImageShadeVariation.Text = Settings.Default.ImageShadeVariation.ToString();
