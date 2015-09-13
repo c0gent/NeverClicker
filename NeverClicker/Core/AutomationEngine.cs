@@ -20,7 +20,7 @@ namespace NeverClicker {
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
 	public partial class AutomationEngine {
 		//const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; 
-		const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make a user setting
+		//const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make a user setting
 
 		private MainForm MainForm;
 		private Interactor Itr;
@@ -99,10 +99,7 @@ namespace NeverClicker {
 					LogFile.AppendMessage(logMessage);
 					break;
 				case LogEntryType.Debug:
-					#pragma warning disable CS0162 // Unreachable code detected
-					//if (SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX) { MainForm.WriteLine(logMessage.Text); }					
-					if (PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE) { LogFile.AppendMessage(logMessage); }
-#					pragma warning restore CS0162 // Unreachable code detected
+					if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
 					break;				
 			}
 		}

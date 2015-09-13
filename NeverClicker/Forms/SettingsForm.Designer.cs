@@ -40,6 +40,8 @@
 			this.linkLabelAccountIniFile = new System.Windows.Forms.LinkLabel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.tabPagePaths = new System.Windows.Forms.TabPage();
+			this.labelLogDebug = new System.Windows.Forms.Label();
+			this.checkBoxLogDebug = new System.Windows.Forms.CheckBox();
 			this.textBoxImageShadeVariation = new System.Windows.Forms.TextBox();
 			this.textBoxUserRootFolder = new System.Windows.Forms.TextBox();
 			this.textBoxLogsFolder = new System.Windows.Forms.TextBox();
@@ -157,6 +159,8 @@
 			// tabPagePaths
 			// 
 			this.tabPagePaths.BackColor = System.Drawing.Color.Transparent;
+			this.tabPagePaths.Controls.Add(this.labelLogDebug);
+			this.tabPagePaths.Controls.Add(this.checkBoxLogDebug);
 			this.tabPagePaths.Controls.Add(this.textBoxImageShadeVariation);
 			this.tabPagePaths.Controls.Add(this.textBoxUserRootFolder);
 			this.tabPagePaths.Controls.Add(this.textBoxLogsFolder);
@@ -186,9 +190,29 @@
 			this.tabPagePaths.TabIndex = 0;
 			this.tabPagePaths.Text = "Paths";
 			// 
+			// labelLogDebug
+			// 
+			this.labelLogDebug.AutoSize = true;
+			this.labelLogDebug.Location = new System.Drawing.Point(6, 210);
+			this.labelLogDebug.Name = "labelLogDebug";
+			this.labelLogDebug.Size = new System.Drawing.Size(114, 13);
+			this.labelLogDebug.TabIndex = 31;
+			this.labelLogDebug.Text = "Log Debug Messages:";
+			// 
+			// checkBoxLogDebug
+			// 
+			this.checkBoxLogDebug.AutoSize = true;
+			this.checkBoxLogDebug.Location = new System.Drawing.Point(141, 209);
+			this.checkBoxLogDebug.Name = "checkBoxLogDebug";
+			this.checkBoxLogDebug.Size = new System.Drawing.Size(65, 17);
+			this.checkBoxLogDebug.TabIndex = 30;
+			this.checkBoxLogDebug.Text = "Enabled";
+			this.checkBoxLogDebug.UseVisualStyleBackColor = true;
+			this.checkBoxLogDebug.CheckedChanged += new System.EventHandler(this.checkBoxLogDebug_CheckedChanged);
+			// 
 			// textBoxImageShadeVariation
 			// 
-			this.textBoxImageShadeVariation.Location = new System.Drawing.Point(191, 183);
+			this.textBoxImageShadeVariation.Location = new System.Drawing.Point(141, 183);
 			this.textBoxImageShadeVariation.Name = "textBoxImageShadeVariation";
 			this.textBoxImageShadeVariation.Size = new System.Drawing.Size(93, 20);
 			this.textBoxImageShadeVariation.TabIndex = 29;
@@ -473,5 +497,7 @@
 		private System.Windows.Forms.TabControl tabControlOptions;
 		private System.Windows.Forms.LinkLabel linkLabelClientIniFile;
 		private System.Windows.Forms.LinkLabel linkLabelAccountIniFile;
+		private System.Windows.Forms.Label labelLogDebug;
+		private System.Windows.Forms.CheckBox checkBoxLogDebug;
 	}
 }

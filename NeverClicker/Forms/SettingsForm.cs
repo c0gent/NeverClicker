@@ -78,6 +78,8 @@ namespace NeverClicker {
 				this.textBoxLogsFolder.Text = this.textBoxUserRootFolder.Text + LOGS_SUBPATH;
 				this.textBoxImageShadeVariation.Text = "60";
 			}
+
+			this.checkBoxLogDebug.Checked = Settings.Default.LogDebugMessages;
 		}
 
 		private void SettingsForm_Load(object sender, EventArgs e) { }
@@ -233,6 +235,7 @@ namespace NeverClicker {
 
 
 		private void buttonCancel_Click(object sender, EventArgs e) {
+			Settings.Default.Reload();
 			Close();
 		}
 
@@ -345,6 +348,11 @@ namespace NeverClicker {
 					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
 				}
 			}
+		}
+
+		private void checkBoxLogDebug_CheckedChanged(object sender, EventArgs e) {
+			Settings.Default.LogDebugMessages = this.checkBoxLogDebug.Checked;
+			//Settings.Default.Save();
 		}
 
 

@@ -202,5 +202,17 @@ namespace NeverClicker.Properties {
                 this["NeverClickerFirstRun"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogDebugMessages {
+            get {
+                return ((bool)(this["LogDebugMessages"]));
+            }
+            set {
+                this["LogDebugMessages"] = value;
+            }
+        }
     }
 }

@@ -58,17 +58,17 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static bool PatcherKillFailure<TState>(Interactor intr, TState state) {
-			intr.Log("Failed to launch Patcher, unable to close existing process. Patcher state: " + state.ToString(), LogEntryType.Fatal);
+			intr.Log("Failed to launch Patcher, unable to close existing process. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}
 
 		public static bool PatcherRunFailure<TState>(Interactor intr, TState state) {
-			intr.Log("Failed to launch Patcher, login button not found. Patcher state: " + state.ToString(), LogEntryType.Fatal);
+			intr.Log("Failed to launch Patcher, login button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}
 
 		public static bool PatcherLogInFailure<TState>(Interactor intr, TState state) {
-			intr.Log("Failed to log in using patcher, play button not found. Patcher state: " + state.ToString(), LogEntryType.Fatal);
+			intr.Log("Failed to log in using patcher, play button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}
 	}
