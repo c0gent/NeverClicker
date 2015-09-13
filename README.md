@@ -32,7 +32,7 @@ Automated invocation and leadership queueing.
 	  * Open the images folder (default location is C:\Users\\*{your windows user name}*\Documents\NeverClicker\Images) and take a look at the corresponding image.
 	  * Take an in-game screenshot (Ctrl-PrintScr) and crop it appropriately, making sure your image is the same size (or within a few pixels). Do not include extraneous parts of the image such as button borders, etc.
 	3. Either overwrite your new cropped screenshot image over the default image file (be sure it's .png) or create an original file name and edit the game client ini and update the file name there.
-  - If you still can't determine why you're stuck *please file an issue* with appropriate lines from your log file and any other relevant information such as what was happening in-game.
+  - If you still can't determine why you're stuck **please file an issue here on Github** with appropriate lines from your log file and any other relevant information such as what was happening in-game.
   
 	
   
