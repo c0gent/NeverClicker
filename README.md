@@ -1,5 +1,5 @@
 ﻿# NeverClicker
-Automated invocation and leadership queueing.
+Automated invocation and leadership queueing. Currently in an alpha state. Will eat your laundry.
 
 ## Caveats and Current Issues
 - Client must run in 'Windowed Maximized' mode at 1920x1080.
@@ -22,6 +22,8 @@ Automated invocation and leadership queueing.
 - Currently mercenaries are the only optional assets which can be added to leadership tasks.
 
 ## Troubleshooting
+NeverClicker is very much a work in progress. You will run in to problems. Please help us fix those.
+
 - If there are any problems you will need to do some troubleshooting:
   - Activate 'Log Debug Messages' in the options menu.
   - Consult the log file (default location is C:\Users\\*{your windows user name}*\Documents\NeverClicker\Logs) to determine where the script is stuck.
@@ -32,7 +34,11 @@ Automated invocation and leadership queueing.
 	  * Open the images folder (default location is C:\Users\\*{your windows user name}*\Documents\NeverClicker\Images) and take a look at the corresponding image.
 	  * Take an in-game screenshot (Ctrl-PrintScr) and crop it appropriately, making sure your image is the same size (or within a few pixels). Do not include extraneous parts of the image such as button borders, etc.
 	3. Either overwrite your new cropped screenshot image over the default image file (be sure it's .png) or create an original file name and edit the game client ini and update the file name there.
-  - If you still can't determine why you're stuck **please file an issue here on Github** with appropriate lines from your log file and any other relevant information such as what was happening in-game.
+  - If you still can't determine why you're stuck **please file an issue here on Github** with appropriate lines from your log file, settings files (be sure to erase your username and password!), and any other relevant information such as what was happening in-game.
+    - Please follow these three simple universal rules for filing bug reports:
+	  1. The complete steps to reproduce the bug: Relevant lines from your log file (not the whole thing, you need to do some work yourself)
+      2. The expected behavior: What were you expecting to see happen in the game client?
+      3. The observed behavior: What actually happened. 99% of the time this answer will be 'nothing' or 'an error message'. Please include this information.
   
 	
   
