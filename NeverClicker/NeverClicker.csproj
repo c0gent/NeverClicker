@@ -197,6 +197,7 @@
     <None Include="DefaultSettings\NeverClicker_GameClient.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
