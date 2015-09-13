@@ -3,7 +3,7 @@ Automated invocation and leadership queueing. Currently in an alpha state. Will 
 
 ## Installation and Caveats
 1. [Download the latest alpha.](https://github.com/nsan1129/NeverClicker/releases/download/Alpha/NeverClicker_0.2.1.7z)
-2. [Download 7zip](http://www.7-zip.org/download.html) and unzip to any directory you want to run it from. C:\NeverClicker, C:\Program Files\NeverClicker, whatever.
+2. [Download 7zip](http://www.7-zip.org/download.html) and unzip to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
 3. Run NeverClicker.exe (you might want to make a shortcut). The options menu will open on your first run. Do what it says.
 
 - Client must run in 'Windowed Maximized' mode at 1920x1080.
@@ -24,6 +24,7 @@ Automated invocation and leadership queueing. Currently in an alpha state. Will 
   - You must enter your username and password into the appropriate ini file. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually. Things will continue normally after this point.
 
 - Currently mercenaries are the only optional assets which can be added to leadership tasks.
+- You can't have characters on your account which are unable to invoke. Level the damn thing up for christ's sake.
 
 ## Troubleshooting
 NeverClicker is very much a work in progress. You will run in to problems. Please help us fix those.
