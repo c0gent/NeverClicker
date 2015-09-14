@@ -47,16 +47,18 @@ namespace NeverClicker {
 
 
 		public void ProcessNextGameTask() {
-			GameTask nextTask;
+			throw new NotImplementedException();
 
-			if (!Queue.IsEmpty) {
-				nextTask = Queue.Pop();
-				Log("Processing next task for character " + nextTask.CharIdx.ToString()
-					+ "; time: " + nextTask.MatureTime.ToShortTimeString()
-					+ "; type: " + nextTask.Kind.ToString() + ".");
-			} else {
-				Log("Task queue is empty.");
-			}
+			//GameTask nextTask;
+		
+			//if (!Queue.IsEmpty) {
+			//	nextTask = Queue.NextTask;
+			//	Log("Processing next task for character " + nextTask.CharIdx.ToString()
+			//		+ "; time: " + nextTask.MatureTime.ToShortTimeString()
+			//		+ "; type: " + nextTask.Kind.ToString() + ".");
+			//} else {
+			//	Log("Task queue is empty.");
+			//}
 
 			//EXECUTE TASK
 			// SET TIMER FOR NEXT TASK

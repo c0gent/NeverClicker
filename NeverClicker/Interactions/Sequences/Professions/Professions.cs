@@ -30,13 +30,9 @@ namespace NeverClicker.Interactions {
 			}
 
 			for (int i = 0; i < 9; i++) {
-				if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
-					intr.Wait(2500);
-					Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
-					intr.Wait(2000);
-				} else {
+				if (!CollectCompleted(intr)) {
 					break;
-				}				
+				}
 			}
 
 			int currentTask = 0;
@@ -84,13 +80,14 @@ namespace NeverClicker.Interactions {
 							}
 						} else {
 							intr.Log("Could not find valid professions task.", LogEntryType.Normal);
+							CollectCompleted(intr);
 							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 							break;
 						}
 					}
 				}
 
-				if (success) {
+				if (success && currentTask < TaskQueue.ProfessionTaskNames.Length) {
 					completionList.Add(currentTask);
 					anySuccess = true;
 				} 
@@ -105,6 +102,17 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
+
+		private static bool CollectCompleted(Interactor intr) {
+			if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
+				intr.Wait(2500);
+				Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
+				intr.Wait(2000);
+				return true;
+			} else {
+				return false;
+			}
+		}
 
 
 		private static bool SelectProfTask(Interactor intr, string taskName) {
@@ -141,7 +149,12 @@ namespace NeverClicker.Interactions {
 			intr.Wait(50);
 
 			// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
-			Mouse.ClickImage(intr, "ProfessionsMercenaryIcon");
+			if (!Mouse.ClickImage(intr, "ProfessionsMercenaryIcon")) {
+				if (!Mouse.ClickImage(intr, "ProfessionsManAtArmsIcon")) {
+					Mouse.ClickImage(intr, "ProfessionsGuardIcon");
+				}
+			}
+
 			intr.Wait(50);
 
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");

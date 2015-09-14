@@ -25,11 +25,11 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 
-			if ((invokesToday >= 6) && (queue.NextTask.Kind == TaskKind.Invocation)) {
+			if ((invokesToday >= 6)) { // && (queue.NextTask.Kind == TaskKind.Invocation)
 				if (invokesCompletedOn == TaskQueue.TodaysGameDate()) {
 					intr.Log(charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Info);
-					queue.Pop();
-					queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
+					queue.AdvanceInvocationTask(intr, charIdx, false);
+					//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					return;
 				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate()) {
 					intr.Log(charLabel + ": Resetting InvokesToday to 0.", LogEntryType.Info);
@@ -44,8 +44,6 @@ namespace NeverClicker.Interactions {
 			//	IF SO -> CONTINUE
 
 			if (!ProduceClientState(intr, ClientState.CharSelect)) { return; }
-
-			if (intr.CancelSource.IsCancellationRequested) { return; }
 
 			intr.Log("ProcessCharacter(): Selecting character " + charIdx + " ...", LogEntryType.Info);
 			if (!SelectCharacter(intr, charIdx)) { return; }
@@ -82,14 +80,14 @@ namespace NeverClicker.Interactions {
 					invokesToday += 1; // NEED TO DETECT THIS IN-GAME
 				}
 
-				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, true);
+				queue.AdvanceInvocationTask(intr, charIdx, true);
 			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Immature.", LogEntryType.Normal);
 				intr.Log("Re-queuing task for character " + charIdx.ToString() + ".", LogEntryType.Info);
-				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);				
+				queue.AdvanceInvocationTask(intr, charIdx, false);				
 			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);				
-				queue.AdvanceTask(intr, charIdx, TaskKind.Invocation, false);
+				queue.AdvanceInvocationTask(intr, charIdx, false);
 				processingIncomplete = true;
 			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
@@ -101,15 +99,15 @@ namespace NeverClicker.Interactions {
 					+ ", items complete: " + professionsCompleted.Count, LogEntryType.Normal);
 			if (professionsStatus == CompletionStatus.Complete) {
 				foreach (int taskId in professionsCompleted) {
-					queue.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId);
+					queue.AdvanceProfessionsTask(intr, charIdx, taskId);
 				}
 
-				if (queue.NextTask.Kind == TaskKind.Profession) {
-					queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);	// SAME
+				if (queue.NextTask.Kind == TaskKind.Professions) {
+					queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);	// SAME
 				}
-			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) {	// UNUSED
-				queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
-			} else if (queue.NextTask.Kind == TaskKind.Profession) {
+			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Professions) {	// UNUSED
+				queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);		// SAME
+			} else if (queue.NextTask.Kind == TaskKind.Professions) {
 				processingIncomplete = true;
 				// CANCELLED OR FAILED
 				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME

@@ -68,24 +68,28 @@ namespace NeverClicker {
 		}
 
 		// FOR INVOCATION
-		public void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, bool incrementTaskId) {
-			if (taskKind == TaskKind.Profession) {
-				throw new Exception("TaskQueue::AdvanceTask(): Profession tasks must specify a taskId as the fourth parameter");
-			} else {
-				this.AdvanceTask(intr, charIdx, taskKind, 999, incrementTaskId);
-			}
+		public void AdvanceInvocationTask(Interactor intr, uint charIdx, bool incrementInvokes) {
+			//if (taskKind == TaskKind.Profession) {
+			//	throw new Exception("TaskQueue::AdvanceTask(): Profession tasks must specify a taskId as the fourth parameter");
+			//} else {
+			//	this.AdvanceTask(intr, charIdx, taskKind, 999, incrementInvokes);
+			//}
+
+			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, 999, incrementInvokes);
 		}
 
 		// FOR PROFESSIONS
-		public void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId) {	
-			if (taskKind == TaskKind.Invocation) {
-				throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify whether or not to increment daily invokes as fourth parameter.");
-			} else {
-				this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
-			}
+		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId) {	
+			//if (taskKind == TaskKind.Invocation) {
+			//	throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify whether or not to increment daily invokes as fourth parameter.");
+			//} else {
+			//	this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
+			//}
+
+			this.AdvanceTask(intr, charIdx, TaskKind.Professions, taskId, false);
 		}
 
-		public void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId, bool incrementTaskId) {
+		private void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId, bool incrementTaskId) {
 			// CHECK TO SEE IF THAT TASK IS ALREADY IN QUEUE, 
 			// IF NOT ADD
 			// IF SO, CHECK TO SEE IF THAT TASK HAS MATURED
@@ -114,7 +118,7 @@ namespace NeverClicker {
 						intr.Log("Queuing subsequent invocation task.", LogEntryType.Debug);
 						var invokesToday = (incrementTaskId) ? oldTask.TaskId + 1 : oldTask.TaskId;
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-					} else if (taskKind == TaskKind.Profession) {
+					} else if (taskKind == TaskKind.Professions) {
 						intr.Log("Queuing subsequent professions task.", LogEntryType.Debug);
 						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 					}					
@@ -126,7 +130,7 @@ namespace NeverClicker {
 				intr.Log("Key not found for task.", LogEntryType.Info);
 				if (taskKind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, 1);
-				} else if (taskKind == TaskKind.Profession) {
+				} else if (taskKind == TaskKind.Professions) {
 					this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 				}	
 			}
@@ -134,7 +138,7 @@ namespace NeverClicker {
 
 						
 		// QUEUESUBSEQUENTINVOCATIONTASK(): QUEUE FOLLOW UP TASK
-		public void QueueSubsequentInvocationTask(Interactor intr, uint charIdx, int invokesToday) {
+		private void QueueSubsequentInvocationTask(Interactor intr, uint charIdx, int invokesToday) {
 			var now = DateTime.Now;
 			DateTime taskMatureTime = now;
 			DateTime nextThreeThirty = NextThreeAmPst();
@@ -181,7 +185,7 @@ namespace NeverClicker {
 
 
 		// QUEUESUBSEQUENTPROFESSIONTASK(): QUEUE FOLLOW UP TASK
-		public void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
+		private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
 			var now = DateTime.Now;
 			var charLabel = "Character " + charIdx.ToString();
 			
@@ -196,24 +200,24 @@ namespace NeverClicker {
 			if (mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]) < now) {
 				//intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);				
 				//taskMatureTime = now.AddMinutes(ProfessionTaskDurationMinutes[taskId]);
-				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Profession, taskId);		
+				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Professions, taskId);		
 			} else {
 				//taskMatureTime = mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]);	
-				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Profession, taskId);
+				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Professions, taskId);
 			}
 				
 			intr.Log("Next profession task (" + ProfessionTaskNames[taskId] + ") for character " + charIdx 
 				+ " at: " + taskMatureTime.ToShortTimeString() + ".");
 
 			intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);
-			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));
+			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
 			intr.UpdateQueueList(this.ListClone());
 		}
 
 
 		// AdvanceTasks(): ADVANCE ANY EXPIRED TASKS FOR A GIVEN CHARACTER AND TASK TYPE
 		public void AdvanceMatured(Interactor intr, uint charIdx) {
-			var nowTicks = DateTime.Now.AddSeconds(1).Ticks;
+			var nowTicks = DateTime.Now.AddMinutes(-1).Ticks;
 			List<long> maturedTaskKeys = new List<long>(10);
 
 			foreach (var kvp in this.Queue) {
@@ -228,7 +232,7 @@ namespace NeverClicker {
 
 				if (prevTask.Kind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, prevTask.TaskId + 1);
-				} else if (prevTask.Kind == TaskKind.Profession) {
+				} else if (prevTask.Kind == TaskKind.Professions) {
 					this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
 				}
 			}
@@ -295,10 +299,10 @@ namespace NeverClicker {
 						intr.Log("Adding profession task to queue for character " + charIdx 
 							+ ", matures: " + mostRecent.ToString()	+ ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 
-						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Profession, taskId);
+						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Professions, taskId);
 						taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
 
-                        this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));
+                        this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
 						tasksQueued += 1;
 					}						
 				}
@@ -315,7 +319,7 @@ namespace NeverClicker {
 				case TaskKind.Invocation:
 					taskMatureTime = startTime.AddMinutes(InvokeDelayMinutes[taskId]);
 					break;
-				case TaskKind.Profession:
+				case TaskKind.Professions:
 					taskMatureTime = startTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]);
 					break;
 				default:
@@ -328,7 +332,7 @@ namespace NeverClicker {
 
 
 		public bool TryGetTaskKey(uint charIdx, TaskKind taskKind, out long taskKey) {
-			if (taskKind == TaskKind.Profession) {
+			if (taskKind == TaskKind.Professions) {
 				throw new Exception("TaskQueue::GetTaskKey(): Profession tasks must specify a taskId as the third parameter");
 			} else {
 				return this.TryGetTaskKey(charIdx, taskKind, 999, out taskKey);
@@ -344,7 +348,7 @@ namespace NeverClicker {
 						taskKeys.Add(kvp.Key);
 					}
 				}
-			} else if (taskKind == TaskKind.Profession) {
+			} else if (taskKind == TaskKind.Professions) {
 				foreach (var kvp in this.Queue) {
 					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind && kvp.Value.TaskId == taskId) {
 						taskKeys.Add(kvp.Key);
@@ -366,7 +370,7 @@ namespace NeverClicker {
 			}			
 		}
 
-		public GameTask Pop() {
+		private GameTask Pop() {
 			var nextTask = Queue.First();
 			Queue.Remove(nextTask.Key);
 			return nextTask.Value;

@@ -127,7 +127,7 @@ namespace NeverClicker.Forms {
 		}
 		
 		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
-			//AutomationEngine.Log(new LogMessage("Refreshing task queue", LogEntryType.Debug));
+			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
@@ -140,7 +140,7 @@ namespace NeverClicker.Forms {
 				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
 			}
 
-			//AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
+			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
 
 			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
 			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();
@@ -184,6 +184,10 @@ namespace NeverClicker.Forms {
 				this.AutomationEngine.Log("NeverClicker Exiting.");
 				this.AutomationEngine.Stop();
 			}		
+		}
+
+		private void MainForm_Load(object sender, EventArgs e) {
+
 		}
 	}
 }
