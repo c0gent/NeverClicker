@@ -355,6 +355,14 @@ namespace NeverClicker {
 			//Settings.Default.Save();
 		}
 
+		private void linkLabelAccountIniFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+			Process.Start(linkLabelAccountIniFile.Text);
+		}
+
+		private void linkLabelClientIniFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+			Process.Start(linkLabelClientIniFile.Text);
+		}
+
 
 		//private void checkBoxSettingsFolder_CheckedChanged(object sender, EventArgs e) {
 		//	bool boxChecked = this.checkBoxSettingsFolder.Checked;

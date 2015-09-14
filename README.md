@@ -3,8 +3,9 @@ Automated invocation and leadership queueing. Currently in an alpha state. Will 
 
 ## Installation
 1. [Download the latest alpha](https://github.com/nsan1129/NeverClicker/releases/download/0.2.3-alpha/NeverClicker_0.2.3.7z).
-2. [Download 7-zip](http://www.7-zip.org/download.html) and unzip to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
+2. [Download 7-zip](http://www.7-zip.org/download.html) and unzip NeverClicker to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
 3. Run NeverClicker.exe (you might want to make a shortcut). The options menu will open on your first run. Do what it says.
+4. Ensure your configuration is correct by reading the following section and making any changes necessary.
 
 ## Caveats
 - Client must run in 'Windowed Maximized' mode at 1920x1080.
@@ -21,7 +22,7 @@ Automated invocation and leadership queueing. Currently in an alpha state. Will 
   - Obviously, use whatever other *single-key* binding you prefer.
   - This keybind can be configured in addition to your present key binding in the game options so that you don't need to re-learn a new binding.
   
-- **You must configure the .ini configuration files manually** before activating Auto-Cycle. Otherwise the keybinds and other settings will all be incorrect. You can access the files from within the settings menu for convenience. 
+- **You must configure the .ini configuration files manually** before activating Auto-Cycle (a windows forms interface for this is coming). Otherwise the keybinds and other settings will all be incorrect. You can access the files from within the settings menu for convenience. 
   - You must enter your username and password into the appropriate ini file. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually. Things will continue normally after this point.
 
 - Only tasks for leadership 20+ are loaded. This may change soon (depending on what happens with the profession) and the list of tasks would be customizable.

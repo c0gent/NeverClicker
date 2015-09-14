@@ -116,6 +116,7 @@
 			this.linkLabelClientIniFile.TabStop = true;
 			this.linkLabelClientIniFile.Text = "linkLabel2";
 			this.linkLabelClientIniFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.linkLabelClientIniFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelClientIniFile_LinkClicked);
 			// 
 			// label1
 			// 
@@ -146,6 +147,7 @@
 			this.linkLabelAccountIniFile.TabStop = true;
 			this.linkLabelAccountIniFile.Text = "linkLabel1";
 			this.linkLabelAccountIniFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.linkLabelAccountIniFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAccountIniFile_LinkClicked);
 			// 
 			// label2
 			// 
