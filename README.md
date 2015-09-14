@@ -2,8 +2,8 @@
 Automated invocation and leadership queueing. Currently in an alpha state. Will eat your laundry.
 
 ## Installation
-1. [Download the latest alpha.](https://github.com/nsan1129/NeverClicker/releases/download/v0.2.2-alpha/NeverClicker_0.2.2.7z)
-2. [Download 7zip](http://www.7-zip.org/download.html) and unzip to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
+1. [Download the latest alpha](https://github.com/nsan1129/NeverClicker/releases/download/0.2.3-alpha/NeverClicker_0.2.3.7z).
+2. [Download 7-zip](http://www.7-zip.org/download.html) and unzip to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
 3. Run NeverClicker.exe (you might want to make a shortcut). The options menu will open on your first run. Do what it says.
 
 ## Caveats
