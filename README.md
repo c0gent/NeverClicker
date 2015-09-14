@@ -24,7 +24,8 @@ Automated invocation and leadership queueing. Currently in an alpha state. Will 
 - **You must configure the .ini configuration files manually** before activating Auto-Cycle. Otherwise the keybinds and other settings will all be incorrect. You can access the files from within the settings menu for convenience. 
   - You must enter your username and password into the appropriate ini file. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually. Things will continue normally after this point.
 
-- Currently mercenaries are the only optional assets which are used in leadership tasks.
+- Only tasks for leadership 20+ are loaded. This may change soon (depending on what happens with the profession) and the list of tasks would be customizable.
+- Currently mercenaries, guards, and man-at-arms are the only optional assets which are used in leadership tasks.
 - You can't have characters on your account which are unable to invoke because they are too low level. Level the damn thing up for christ's sake.
 
 ## Troubleshooting
