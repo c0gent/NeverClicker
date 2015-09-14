@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 namespace NeverClicker {
 	[Serializable]
 	public struct GameTask : IComparable<GameTask>, ISerializable {
-		public DateTime MatureTime;
-		public TaskKind Kind;
-		public uint CharIdx;
-		public int TaskId;
+		public DateTime MatureTime { get; private set; }
+		public TaskKind Kind { get; private set; }
+		public uint CharIdx { get; private set; }
+		public int TaskId { get; private set; }
 
 		public string CharZeroIdxLabel { get { return "Character " + CharIdx.ToString(); } }
 
-		public GameTask(DateTime matureTime, uint characterIdx, TaskKind kind, int priority) {
+		public GameTask(DateTime matureTime, uint characterIdx, TaskKind kind, int taskId) {
 			this.MatureTime = matureTime;
 			this.CharIdx = characterIdx;
 			this.Kind = kind;
-			this.TaskId = priority;
+			this.TaskId = taskId;
 		}
 
 		public int CompareTo(GameTask task) {

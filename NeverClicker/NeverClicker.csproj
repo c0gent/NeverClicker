@@ -378,6 +378,9 @@
     <Content Include="DefaultImages\ProfessionsEmptySlot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DefaultImages\ProfessionsGuardIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="DefaultImages\ProfessionsLeadershipTileUnselected.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

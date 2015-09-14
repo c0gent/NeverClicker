@@ -141,8 +141,8 @@ namespace NeverClicker {
 		private void QueueSubsequentInvocationTask(Interactor intr, uint charIdx, int invokesToday) {
 			var now = DateTime.Now;
 			DateTime taskMatureTime = now;
-			DateTime nextThreeThirty = NextThreeAmPst();
-			DateTime todaysInvokeDate = TodaysGameDate();
+			DateTime nextThreeThirty = NextThreeAmPst;
+			DateTime todaysInvokeDate = TodaysGameDate;
 			string charLabel = "Character " + charIdx.ToString();			
 			
             if (invokesToday < 6) { // QUEUE FOR LATER
@@ -238,6 +238,22 @@ namespace NeverClicker {
 			}
 		}
 
+		public void PostponeUntilNextInvoke(Interactor intr, uint charIdx) {
+			var invKey = GetTaskKeys(charIdx, TaskKind.Invocation);
+			var profKeys = GetTaskKeys(charIdx, TaskKind.Professions);
+			
+			if (invKey.Count == 1) {
+				foreach (var key in profKeys) {
+					var oldProfTask = Queue[key];
+					Queue.Remove(key);
+					var newMatureTime = key + 1 + oldProfTask.TaskId;
+					Queue.Add(newMatureTime, new GameTask(new DateTime(newMatureTime), charIdx, TaskKind.Professions, oldProfTask.TaskId));
+				}
+			} else {
+				intr.Log("TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation task item for character " + charIdx + ".", LogEntryType.Fatal);
+			}
+		}
+
 
 		// POPULATE(): Populate queue taking in to account last invoke times
 		public void Populate(Interactor intr, int charsMax) {
@@ -250,7 +266,7 @@ namespace NeverClicker {
 				int invokesToday = 0;
 				int.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesToday", charSettingSection), out invokesToday);
 
-				var invokesCompletedOn = TodaysGameDate().AddDays(-1);
+				var invokesCompletedOn = TodaysGameDate.AddDays(-1);
 				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charSettingSection), out invokesCompletedOn);
 
 				var mostRecent = now.AddHours(-24);
@@ -260,12 +276,12 @@ namespace NeverClicker {
 				taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
 
 				if (invokesToday >= 6) {
-					if (invokesCompletedOn < TodaysGameDate()) { // START FRESH DAY
+					if (invokesCompletedOn < TodaysGameDate) { // START FRESH DAY
 						intr.GameAccount.SaveSetting("0", "InvokesToday", charSettingSection);
 						invokesToday = 0;
 						taskMatureTime = now;
 					} else { // DONE FOR THE DAY
-						taskMatureTime = NextThreeAmPst();
+						taskMatureTime = NextThreeAmPst;
 					}
 				}
 
@@ -370,6 +386,26 @@ namespace NeverClicker {
 			}			
 		}
 
+		public List<long> GetTaskKeys(uint charIdx, TaskKind taskKind) {
+			List<long> taskKeys = new List<long>(10);
+
+			if (taskKind == TaskKind.Invocation) {
+				foreach (var kvp in this.Queue) {
+					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind) {
+						taskKeys.Add(kvp.Key);
+					}
+				}
+			} else if (taskKind == TaskKind.Professions) {
+				foreach (var kvp in this.Queue) {
+					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind) {
+						taskKeys.Add(kvp.Key);
+					}
+				}
+			}
+			
+			return taskKeys;		
+		}
+
 		private GameTask Pop() {
 			var nextTask = Queue.First();
 			Queue.Remove(nextTask.Key);
@@ -383,14 +419,16 @@ namespace NeverClicker {
 		}
 
 
-		public static DateTime TodaysGameDate() {
-			return NextThreeAmPst().Date.AddDays(-1);
+		public static DateTime TodaysGameDate {
+			get { return NextThreeAmPst.Date.AddDays(-1); }
 		}
 
-		public static DateTime NextThreeAmPst() {
-			var utcNow = DateTime.UtcNow;
-			var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(5).ToLocalTime();
-			return (utcNow.ToLocalTime() <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
+		public static DateTime NextThreeAmPst {
+			get {
+				var utcNow = DateTime.UtcNow;
+				var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(5).ToLocalTime();
+				return (utcNow.ToLocalTime() <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
+			}
 		}
 
 

@@ -49,11 +49,15 @@ namespace NeverClicker.Interactions {
 					TimeSpan waitDelay = nextTaskWaitDelay;
 
 					if (nextTaskWaitDelay.TotalMinutes > 8) {
-						//waitDelayMs = nextTaskWaitTime + intr.RandomDelay(5, 25);
-						waitDelay = nextTaskWaitDelay + intr.RandomDelay(4, 9);
+						if (queue.NextTask.Kind == TaskKind.Professions) {
+							waitDelay = nextTaskWaitDelay + intr.RandomDelay(15, 55);
+						} else {
+							waitDelay = nextTaskWaitDelay + intr.RandomDelay(5, 20);
+						}
+
 						ProduceClientState(intr, ClientState.None);										
 					} else if (nextTaskWaitDelay.TotalMinutes > 1) {
-						waitDelay = nextTaskWaitDelay + intr.RandomDelay(2, 3);
+						waitDelay = nextTaskWaitDelay + intr.RandomDelay(2, 5);
 						intr.Log("Minimizing client and waiting " + waitDelay.TotalMinutes.ToString("F0") + " minutes.");						
 						ProduceClientState(intr, ClientState.Inactive);
 					}

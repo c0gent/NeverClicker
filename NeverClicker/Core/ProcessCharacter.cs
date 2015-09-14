@@ -25,18 +25,24 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 
-			if ((invokesToday >= 6)) { // && (queue.NextTask.Kind == TaskKind.Invocation)
-				if (invokesCompletedOn == TaskQueue.TodaysGameDate()) {
+			
+			if ((invokesToday >= 6)) {
+				if (invokesCompletedOn == TaskQueue.TodaysGameDate && queue.NextTask.Kind == TaskKind.Invocation) {
 					intr.Log(charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Info);
 					queue.AdvanceInvocationTask(intr, charIdx, false);
 					//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					return;
-				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate()) {
+				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate) {
 					intr.Log(charLabel + ": Resetting InvokesToday to 0.", LogEntryType.Info);
 					invokesToday = 0;
 					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
 				}
+			} else {
+				if (queue.NextTask.Kind == TaskKind.Professions) {
+					queue.PostponeUntilNextInvoke(intr, charIdx);
+				}
 			}
+
 
 			// CHECK TO SEE IF THERE ARE ANY UPCOMING TASKS FOR CHARACTER IN THE NEXT 29:59 MINUTES
 			// IF SO -> CHECK TO SEE IF THERE ARE ANY TASKS IN THE 29:59 (TOTAL 59:59) MINUTES AFTER THAT
