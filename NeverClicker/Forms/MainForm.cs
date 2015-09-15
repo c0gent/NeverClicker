@@ -127,20 +127,23 @@ namespace NeverClicker.Forms {
 		}
 		
 		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
-			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
+			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Info));
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
 				foreach (GameTask task in taskList.Values) {
+					string taskIdName = (task.Kind == TaskKind.Professions) 
+						? TaskQueue.ProfessionTaskNames[task.TaskId] + "\t" 
+						: task.TaskId.ToString() + "\t\t";
 					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Kind.ToString() 
-						+ "\t" + task.TaskId.ToString()
+						+ "\t" + taskIdName
 						+ "\tCharacter " + task.CharIdx.ToString());
 				}
 			} catch (Exception ex) {
 				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
 			}
 
-			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
+			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Info));
 
 			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
 			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();

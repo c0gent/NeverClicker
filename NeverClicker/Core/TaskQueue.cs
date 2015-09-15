@@ -14,8 +14,8 @@ namespace NeverClicker {
 		public static int[] InvokeDelayMinutes = { 0, 15, 30, 45, 60, 90, 0, 0, 0, 0 };
 
 		//public static int[] ProfessionTaskDurationMinutes = { 720, 600, 960, 1440 };
-		public static int[] ProfessionTaskDurationMinutes = { 920, 690, 575, 920, 1375, 690 };
-		public static string[] ProfessionTaskNames = { "Escort a Wizard", "Kill a Young Dragon", "Deliver Metals", "Destroy Enemy", "Battle Elemental", "Protect Magical" };
+		public static int[] ProfessionTaskDurationMinutes = { 235, 920, 690, 690, 1375 };
+		public static string[] ProfessionTaskNames = { "Guard Young Noble", "Escort a Wizard", "Kill a Young Dragon", "Protect Magical", "Battle Elemental" };
 
 		private SortedList<long, GameTask> Queue { get; set; }		
 
@@ -243,11 +243,13 @@ namespace NeverClicker {
 			var profKeys = GetTaskKeys(charIdx, TaskKind.Professions);
 			
 			if (invKey.Count == 1) {
-				foreach (var key in profKeys) {
-					var oldProfTask = Queue[key];
-					Queue.Remove(key);
-					var newMatureTime = key + 1 + oldProfTask.TaskId;
-					Queue.Add(newMatureTime, new GameTask(new DateTime(newMatureTime), charIdx, TaskKind.Professions, oldProfTask.TaskId));
+				foreach (var pk in profKeys) {
+					if (pk < invKey[0]) {
+						var oldProfTask = Queue[pk];
+						Queue.Remove(pk);
+						var newMatureTime = pk + 1 + oldProfTask.TaskId;
+						Queue.Add(newMatureTime, new GameTask(new DateTime(newMatureTime), charIdx, TaskKind.Professions, oldProfTask.TaskId));
+					}
 				}
 			} else {
 				intr.Log("TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation task item for character " + charIdx + ".", LogEntryType.Fatal);
@@ -256,10 +258,10 @@ namespace NeverClicker {
 
 
 		// POPULATE(): Populate queue taking in to account last invoke times
-		public void Populate(Interactor intr, int charsMax) {
+		public void Populate(Interactor intr, int charsMax, bool resetDay) {
 			var now = DateTime.Now;
 
-			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
+			for (uint charIdx = 0; charIdx <= charsMax; charIdx++) {
 				var charSettingSection = "Character " + charIdx.ToString();
 
 				// ################################### INVOCATION #####################################
@@ -285,14 +287,22 @@ namespace NeverClicker {
 					}
 				}
 
+				if (resetDay) {
+					intr.GameAccount.SaveSetting("0", "InvokesToday", charSettingSection);
+					intr.GameAccount.SaveSetting(TodaysGameDate.AddHours(-2).ToString(), "MostRecentInvocationTime", charSettingSection);
+					invokesToday = 0;
+					taskMatureTime = now;
+				}
+
 				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Info);
 				this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
 
 
 				// ################################## PROFESSIONS #####################################
+				// REMOVE OLD
 				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
 					var settingKey = "MostRecentProfTime_" + p;
-					var oldTaskThreshold = now.AddDays(-2);
+					var oldTaskThreshold = now.AddDays(0);
 					var TaskMatureTime = now;
 
 					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out taskMatureTime)) {
@@ -305,25 +315,26 @@ namespace NeverClicker {
 					}
 				}
 
-				int tasksQueued = 0;
 
-				for (var taskId = 0; taskId < ProfessionTaskNames.Length; taskId++) {
-					var settingKey = "MostRecentProfTime_" + taskId;
-					mostRecent = now.AddDays(-1);			
+				//int tasksQueued = 0;
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out mostRecent)) {
-						intr.Log("Adding profession task to queue for character " + charIdx 
-							+ ", matures: " + mostRecent.ToString()	+ ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
+				//for (var taskId = 0; taskId < ProfessionTaskNames.Length; taskId++) {
+				//	var settingKey = "MostRecentProfTime_" + taskId;
+				//	mostRecent = now.AddDays(-1);			
 
-						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Professions, taskId);
-						taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
+				//	if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out mostRecent)) {
+				//		intr.Log("Adding profession task to queue for character " + charIdx 
+				//			+ ", matures: " + mostRecent.ToString()	+ ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 
-                        this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
-						tasksQueued += 1;
-					}						
-				}
+				//		taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Professions, taskId);
+				//		taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
 
-				intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
+    //                    this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
+				//		tasksQueued += 1;
+				//	}						
+				//}
+
+				//intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
 			}
 		}
 

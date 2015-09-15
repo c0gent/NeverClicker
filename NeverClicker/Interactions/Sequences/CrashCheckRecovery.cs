@@ -13,7 +13,7 @@ namespace NeverClicker.Interactions {
 
 			Mouse.Move(intr, 1, 1);
 
-			intr.Wait(2000);
+			intr.Wait(5000);
 
 			switch (Game.DetermineGameState(intr)) {
 				case GameState.Closed:
@@ -24,11 +24,12 @@ namespace NeverClicker.Interactions {
 
 				case GameState.Unknown:
 				case GameState.ClientActive:
-					// CHECK FOR POPUP WINDOWS ETC.
-					// CHECK FOR CRASH
-					KillAll(intr);
+					if (!ProduceClientState(intr, desiredState)) {
+						// CHECK FOR POPUP WINDOWS ETC.
+						// CHECK FOR CRASH
+						KillAll(intr);						
+					}
 					return ProduceClientState(intr, desiredState);
-
 				default:
 					intr.Log("ProduceClientState(): Unable to produce desired client state.");
 					//throw new NotImplementedException("ProduceClientState(): Unable to produce desired client state.");

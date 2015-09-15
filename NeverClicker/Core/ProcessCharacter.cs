@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
+		const bool ENTER_WORLD = true;
+
 		public static void ProcessCharacter(
 					Interactor intr,
 					TaskQueue queue
@@ -19,9 +21,9 @@ namespace NeverClicker.Interactions {
 			DateTime invokesCompletedOn;
 			DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charLabel), out invokesCompletedOn);
 			CompletionStatus invocationStatus = CompletionStatus.None;
-			CompletionStatus professionsStatus = CompletionStatus.None;
-			var professionsCompleted = new List<int>();
-			bool processingIncomplete = false;
+			//CompletionStatus professionsStatus = CompletionStatus.None;
+			//var professionsCompleted = new List<int>();
+			//bool processingIncomplete = false;
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 
@@ -52,7 +54,14 @@ namespace NeverClicker.Interactions {
 			if (!ProduceClientState(intr, ClientState.CharSelect)) { return; }
 
 			intr.Log("ProcessCharacter(): Selecting character " + charIdx + " ...", LogEntryType.Info);
-			if (!SelectCharacter(intr, charIdx)) { return; }
+			if (!SelectCharacter(intr, charIdx, ENTER_WORLD)) { return; }
+
+			if (!ENTER_WORLD) {
+				#pragma warning disable CS0162 // Unreachable code detected
+				queue.AdvanceInvocationTask(intr, charIdx, false);
+				#pragma warning restore CS0162 // Unreachable code detected
+				return;
+			}
 
 			// ################################## CLEAR AND MOVE ##################################
 			intr.Wait(1000);
@@ -66,9 +75,9 @@ namespace NeverClicker.Interactions {
 			intr.Log("ProcessCharacter(): Invocation status: " + invocationStatus.ToString(), LogEntryType.Info);
 
 			// ################################### PROFESSIONS ####################################
-			intr.Log("ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...", LogEntryType.Info);
-			professionsStatus = MaintainProfs(intr, charLabel, professionsCompleted);
-			intr.Log("ProcessCharacter(): Professions status: " + professionsStatus.ToString(), LogEntryType.Info);
+			//intr.Log("ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...", LogEntryType.Info);
+			//professionsStatus = MaintainProfs(intr, charLabel, professionsCompleted);
+			//intr.Log("ProcessCharacter(): Professions status: " + professionsStatus.ToString(), LogEntryType.Info);
 
 			
 			// ##################################### LOG OUT ######################################
@@ -94,35 +103,35 @@ namespace NeverClicker.Interactions {
 			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);				
 				queue.AdvanceInvocationTask(intr, charIdx, false);
-				processingIncomplete = true;
+				//processingIncomplete = true;
 			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Cancelled.", LogEntryType.Normal);
-				processingIncomplete = true;
+				//processingIncomplete = true;
 			}
 
 			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
-			intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() 
-					+ ", items complete: " + professionsCompleted.Count, LogEntryType.Normal);
-			if (professionsStatus == CompletionStatus.Complete) {
-				foreach (int taskId in professionsCompleted) {
-					queue.AdvanceProfessionsTask(intr, charIdx, taskId);
-				}
+			//intr.Log("Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString() 
+			//		+ ", items complete: " + professionsCompleted.Count, LogEntryType.Normal);
+			//if (professionsStatus == CompletionStatus.Complete) {
+			//	foreach (int taskId in professionsCompleted) {
+			//		queue.AdvanceProfessionsTask(intr, charIdx, taskId);
+			//	}
 
-				if (queue.NextTask.Kind == TaskKind.Professions) {
-					queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);	// SAME
-				}
-			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Professions) {	// UNUSED
-				queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);		// SAME
-			} else if (queue.NextTask.Kind == TaskKind.Professions) {
-				processingIncomplete = true;
-				// CANCELLED OR FAILED
-				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
-			}
+			//	if (queue.NextTask.Kind == TaskKind.Professions) {
+			//		queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);	// SAME
+			//	}
+			//} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Professions) {	// UNUSED
+			//	queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);		// SAME
+			//} else if (queue.NextTask.Kind == TaskKind.Professions) {
+			//	processingIncomplete = true;
+			//	// CANCELLED OR FAILED
+			//	//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
+			//}
 
-			if (!processingIncomplete) {
-				intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
-				queue.AdvanceMatured(intr, charIdx);
-			}
+			//if (!processingIncomplete) {
+			//	intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
+			//	queue.AdvanceMatured(intr, charIdx);
+			//}
 
 			intr.Log("Processing complete for character " + charIdx + ".", LogEntryType.Normal);
 		}

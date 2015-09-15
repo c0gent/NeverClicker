@@ -7,10 +7,14 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
-		public static bool SelectCharacter(Interactor intr, uint charZeroIdx) {
+		const int SCROLLS_PER_TILE = 4;
+		//const int SCROLLS_TO_CENTER_BOTTOM = 2;
+		const int TILE_SIZE = 80;
+
+		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld) {
 			if (intr.CancelSource.IsCancellationRequested) { return false; }
 
-			intr.Log("Selecting character " + charZeroIdx.ToString() + " ...", LogEntryType.Info);
+			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
 
 			// OLD
 			//intr.ExecuteStatement("SelectCharacter(" + (charZeroIdx + 1).ToString() + ", 1, 0)");
@@ -27,52 +31,60 @@ namespace NeverClicker.Interactions {
 
 			int charSlotX = intr.GameClient.GetSettingOrZero("CharSlotX", "ClickLocations");
 			int topSlotY = intr.GameClient.GetSettingOrZero("TopSlotY", "ClickLocations");
-			int clickableSlots = intr.GameClient.GetSettingOrZero("VisibleCharacterSelectSlots", "KeyBindAndUi");
+			int visibleSlots = intr.GameClient.GetSettingOrZero("VisibleCharacterSelectSlots", "KeyBindAndUi");
+			int scrollsAlignBot = intr.GameClient.GetSettingOrZero("ScrollsToAlignBottomSlot", "KeyBindAndUi");
 			int scrollBarTopX = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopX", "KeyBindAndUi");
 			int scrollBarTopY = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopY", "KeyBindAndUi");
 
-			if ((maxChars == 0) || (charSlotX == 0) || (topSlotY == 0) || (clickableSlots == 0)
+			if ((maxChars == 0) || (charSlotX == 0) || (topSlotY == 0) || (visibleSlots == 0)
 						|| (scrollBarTopX == 0) || (scrollBarTopY == 0)) {
 				intr.Log("SelectCharacter(): Error loading ini file settings", LogEntryType.Fatal);
 				return false;
 			}
 
-			//BotSlotY := TopSlotY + 45 + (70 * (clickable_slots - 1))
-			int botSlotY = topSlotY + 45 + (70 * (clickableSlots - 1));
-
+			//int scrollChunks = 0;
+			//int slotPosition = 0;
+			int botSlotY = topSlotY + (TILE_SIZE * (visibleSlots - 1)) - (TILE_SIZE / 2);
 			bool mustScroll = false;
-
-			if (charZeroIdx >= clickableSlots) {
-				mustScroll = true;
-			}
-
-			int scrollChunks = 0;
-			int slotPosition = 0;
-			int scrollWheelPresses = 0;
+			int scrolls = 0;
 			int clickY = 0;
-			const int tileSize = 70;
 
-			if (mustScroll) {
-				//scrollChunks = Math.Floor(((float)charZeroIdx - ((float)clickableSlots + 1)) / 2);
-				scrollChunks = ((int)charZeroIdx - clickableSlots) / 2;
-
-				//Position:= Mod(n_invoke, 2)
-				// 0 for 2nd to last, 1 for last
-				slotPosition = (int)charZeroIdx % 2;
-
-				//scroll_count:= (7 * ScrollChunks) + 5
-				scrollWheelPresses = (7 * scrollChunks) + 5;
-
-				//ClickY:= (BotSlotY - (70 * Position))
-				if (((maxChars - charZeroIdx) <= 1) && ((maxChars % 2) == 1)) {
-					clickY = botSlotY;
-				} else {
-					clickY = (botSlotY - tileSize) + (tileSize * slotPosition);
-				}
+			if (charIdx < (visibleSlots - 1)) {
+				clickY = topSlotY + (TILE_SIZE * ((int)charIdx));				
 			} else {
-				//ClickY:= TopSlotY + (70 * (n_invoke - 1))
-				clickY = topSlotY + (tileSize * ((int)charZeroIdx));
+				mustScroll = true;				
+				clickY = botSlotY;
+				scrolls = (SCROLLS_PER_TILE * ((int)charIdx - (visibleSlots - 1))) + scrollsAlignBot;
 			}
+
+			//if (mustScroll) {
+			//	//scrollChunks = Math.Floor(((float)charZeroIdx - ((float)clickableSlots + 1)) / 2);
+			//	//scrollChunks = ((int)charZeroIdx - clickableSlots) / 2;
+
+			//	//Position:= Mod(n_invoke, 2)
+			//	// 0 for 2nd to last, 1 for last
+			//	//slotPosition = (int)charZeroIdx % 2;
+
+			//	//scroll_count:= (7 * ScrollChunks) + 5
+			//	//scrollWheelPresses = (7 * scrollChunks) + 5;
+				
+
+
+
+			//	//ClickY:= (BotSlotY - (70 * Position))
+			//	//if (((maxChars - charZeroIdx) <= 1) && ((maxChars % 2) == 1)) {
+			//	//	clickY = botSlotY;
+			//	//} else {
+			//	//	clickY = (botSlotY - TILE_SIZE) + (TILE_SIZE * slotPosition);
+			//	//}
+
+			//	if (charIdx >= visibleSlots) {
+					
+			//	}
+			//} else {
+			//	//ClickY:= TopSlotY + (70 * (n_invoke - 1))
+				
+			//}
 
 			//Sleep 150
            // intr.Wait(150);
@@ -108,11 +120,13 @@ namespace NeverClicker.Interactions {
 			//          }
 			//	}
 			if (mustScroll) {
-				Mouse.WheelDown(intr, scrollWheelPresses);
+				Mouse.WheelDown(intr, scrolls);
 			}
 
+			if (!enterWorld) { return true; }
 
 			Mouse.DoubleClick(intr, charSlotX, clickY);
+
 
 
 
@@ -148,7 +162,7 @@ namespace NeverClicker.Interactions {
 
 			if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure)) {
 				ProduceClientState(intr, ClientState.CharSelect);
-				SelectCharacter(intr, charZeroIdx);
+				SelectCharacter(intr, charIdx, enterWorld);
 			}
 
 			return true;

@@ -8,6 +8,8 @@ using IniParser;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
+
+		const bool RESET_DAY = false;
 		
 		public static void AutoCycle(
 					Interactor intr,
@@ -17,11 +19,11 @@ namespace NeverClicker.Interactions {
 			intr.Wait(startDelaySec * 1000);
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
-			int charsZeroIdxTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
+			int charsTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
 			
 			if (queue.IsEmpty) {
-				intr.Log("Auto-populating task queue: (0 -> " + (charsZeroIdxTotal).ToString() + ")");
-				queue.Populate(intr, charsZeroIdxTotal);
+				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
+				queue.Populate(intr, charsTotal, RESET_DAY);
 				intr.UpdateQueueList(queue.ListClone());
 			}
 
@@ -50,9 +52,9 @@ namespace NeverClicker.Interactions {
 
 					if (nextTaskWaitDelay.TotalMinutes > 8) {
 						if (queue.NextTask.Kind == TaskKind.Professions) {
-							waitDelay = nextTaskWaitDelay + intr.RandomDelay(15, 55);
+							waitDelay = nextTaskWaitDelay + intr.RandomDelay(45, 75);
 						} else {
-							waitDelay = nextTaskWaitDelay + intr.RandomDelay(5, 20);
+							waitDelay = nextTaskWaitDelay + intr.RandomDelay(5, 15);
 						}
 
 						ProduceClientState(intr, ClientState.None);										

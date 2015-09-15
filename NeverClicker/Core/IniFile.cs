@@ -127,7 +127,8 @@ namespace NeverClicker {
 			try {
 				Data[sectionName].RemoveKey(settingName);
 				Parser.WriteFile(IniFileName, Data);
-			} catch (Exception) {
+			} catch (Exception ex) {
+				MessageBox.Show("Failed to remove ini file setting: " + ex.ToString());
 				return false;
 			}
 

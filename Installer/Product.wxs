@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Installer" Language="1033" Version="0.2.3.0" Manufacturer="Cogciprocate" UpgradeCode="72813971-280f-4658-87bd-7cd02e746b3c">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ApplicationShortcut" />
+		</Feature>
+
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="865E6EF6-4436-4671-9AD3-B66B8E33BE22">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="NeverClicker"
+                  Description="Automated Invocation and Leadership"
+                  Target="[#NeverClicker.exe]"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Microsoft\NeverClicker" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="NeverClicker" />
+			</Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="NeverClicker"/>
+      </Directory>
+		</Directory>
+  </Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			 <!--TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer.--> 
+			 <!--<Component Id="ProductComponent">
+			 </Component>--> 
+		</ComponentGroup>
+	</Fragment>
+  
+
+</Wix>

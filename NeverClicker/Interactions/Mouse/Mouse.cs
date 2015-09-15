@@ -55,14 +55,14 @@ namespace NeverClicker.Interactions {
 		public static void WheelUp(Interactor intr, int repeats) {			
 			for (int c = 0; c < repeats; c++) {
 				intr.ExecuteStatement("SendEvent { Click WheelUp }");
-				intr.Wait(15);
+				intr.Wait(5);
 			}
 		}
 
 		public static void WheelDown(Interactor intr, int repeats) {
 			for (int c = 0; c < repeats; c++) {
 				intr.ExecuteStatement("SendEvent { Click WheelDown }");
-				intr.Wait(15);
+				intr.Wait(5);
 			}
 		}
 

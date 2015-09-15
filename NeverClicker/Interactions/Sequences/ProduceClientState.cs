@@ -13,6 +13,7 @@ namespace NeverClicker.Interactions {
 			intr.Log("Attempting to produce client state: " + desiredState.ToString(), LogEntryType.Info);
 
 			if (Game.IsClientState(intr, desiredState)) {
+				intr.Log("Client state is already: " + desiredState.ToString(), LogEntryType.Info);
 				return true;
 			} else if (desiredState == ClientState.Inactive) {
 				if (Game.IsGameState(intr, GameState.ClientActive)) {
@@ -55,12 +56,20 @@ namespace NeverClicker.Interactions {
 						ClientSignIn(intr);
 						return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
 
+					case ClientState.Unknown:
 					default:				
-						intr.Wait(1000);
-						if (!intr.WaitUntil(60, ClientState.CharSelect, Game.IsClientState, null)) {
+						intr.Wait(5000);
+
+						if (!intr.WaitUntil(20, ClientState.CharSelect, Game.IsClientState, null)) {
 							intr.Log("Client state unknown. Attempting crash recovery...", LogEntryType.Info);
-							CrashCheckRecovery(intr);
-							return false;
+							var curState = Game.DetermineClientState(intr);
+
+							if (curState == ClientState.Unknown) {
+								//CrashCheckRecovery(intr);
+								return CrashCheckRecovery(intr);
+							} else {
+								return ProduceClientState(intr, desiredState);
+							}					
 						} else {
 							return true;
 						}
