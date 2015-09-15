@@ -261,7 +261,7 @@ namespace NeverClicker {
 		public void Populate(Interactor intr, int charsMax, bool resetDay) {
 			var now = DateTime.Now;
 
-			for (uint charIdx = 0; charIdx <= charsMax; charIdx++) {
+			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
 				var charSettingSection = "Character " + charIdx.ToString();
 
 				// ################################### INVOCATION #####################################
