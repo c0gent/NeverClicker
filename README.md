@@ -7,7 +7,7 @@ Automated invocation and leadership queueing. Currently in an alpha state. Will 
 3. Run NeverClicker.exe (you might want to make a shortcut). The options menu will open on your first run. Do what it says.
 4. Ensure your configuration is correct by reading the following section and making any changes necessary.
 
-## Caveats *professions are currently disabled due to recent changes*
+## Caveats - *professions are currently disabled due to recent changes*
 - Client must run in 'Windowed Maximized' mode at 1920x1080.
 - Client must be running DirectX 9 (there is little reason to run DirectX 11 anyway).
 - Keyboard bindings (keybinds) must be configured in the game client for:
