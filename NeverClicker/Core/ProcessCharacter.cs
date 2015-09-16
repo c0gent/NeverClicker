@@ -15,9 +15,8 @@ namespace NeverClicker.Interactions {
 					TaskQueue queue
 		) {			
 			uint charIdx = queue.NextTask.CharIdx;
-			//uint charOneIdx = charZeroIdx + 1;
 			string charLabel = queue.NextTask.CharZeroIdxLabel;
-            int invokesToday = intr.GameAccount.GetSettingOrZero("InvokesToday", charLabel);
+			int invokesToday = intr.GameAccount.GetSettingOrZero("InvokesToday", charLabel);
 			DateTime invokesCompletedOn;
 			DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charLabel), out invokesCompletedOn);
 			CompletionStatus invocationStatus = CompletionStatus.None;
@@ -26,12 +25,11 @@ namespace NeverClicker.Interactions {
 			//bool processingIncomplete = false;
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
-
 			
 			if ((invokesToday >= 6)) {
-				if (invokesCompletedOn == TaskQueue.TodaysGameDate && queue.NextTask.Kind == TaskKind.Invocation) {
+				if (invokesCompletedOn == TaskQueue.TodaysGameDate) {
 					intr.Log(charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Info);
-					queue.AdvanceInvocationTask(intr, charIdx, false);
+					queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 					//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					return;
 				} else if (invokesCompletedOn < TaskQueue.TodaysGameDate) {
@@ -58,14 +56,14 @@ namespace NeverClicker.Interactions {
 
 			if (!ENTER_WORLD) {
 				#pragma warning disable CS0162 // Unreachable code detected
-				queue.AdvanceInvocationTask(intr, charIdx, false);
+				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 				#pragma warning restore CS0162 // Unreachable code detected
 				return;
 			}
 
 			// ################################## CLEAR AND MOVE ##################################
 			intr.Wait(1000);
-			ClearOkButtons(intr);
+			ClearDialogues(intr);
 			intr.Wait(200);	
 			MoveAround(intr);
 								
@@ -95,14 +93,14 @@ namespace NeverClicker.Interactions {
 					invokesToday += 1; // NEED TO DETECT THIS IN-GAME
 				}
 
-				queue.AdvanceInvocationTask(intr, charIdx, true);
+				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, true);
 			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Immature.", LogEntryType.Normal);
 				intr.Log("Re-queuing task for character " + charIdx.ToString() + ".", LogEntryType.Info);
-				queue.AdvanceInvocationTask(intr, charIdx, false);				
+				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);				
 			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Failed.", LogEntryType.Normal);				
-				queue.AdvanceInvocationTask(intr, charIdx, false);
+				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 				//processingIncomplete = true;
 			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Cancelled.", LogEntryType.Normal);

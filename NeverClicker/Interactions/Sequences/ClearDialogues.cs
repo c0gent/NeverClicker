@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void ClearOkButtons(Interactor intr) {
+		public static void ClearDialogues(Interactor intr) {
 			Mouse.ClickImage(intr, "CharSelectOkayButton");
 			Mouse.ClickImage(intr, "CharSelectOkButton");
+			Mouse.ClickImage(intr, "DeclineButton");
 		}
 	}
 }

@@ -156,7 +156,7 @@ namespace NeverClicker.Interactions {
 			//intr.ExecuteStatement("ClearSafeLogin()");			
 			//intr.ExecuteStatement("ClearOkPopupBullshit()");
 			ClearSafeLogin(intr);
-			ClearOkButtons(intr);
+			ClearDialogues(intr);			
 
 			intr.Wait(3000);
 
@@ -164,6 +164,8 @@ namespace NeverClicker.Interactions {
 				ProduceClientState(intr, ClientState.CharSelect);
 				SelectCharacter(intr, charIdx, enterWorld);
 			}
+
+			ClearDialogues(intr);
 
 			return true;
 		}

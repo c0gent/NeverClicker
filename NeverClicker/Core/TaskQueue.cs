@@ -68,14 +68,14 @@ namespace NeverClicker {
 		}
 
 		// FOR INVOCATION
-		public void AdvanceInvocationTask(Interactor intr, uint charIdx, bool incrementInvokes) {
+		public void AdvanceInvocationTask(Interactor intr, uint charIdx, int invokesToday, bool incrementInvokes) {
 			//if (taskKind == TaskKind.Profession) {
 			//	throw new Exception("TaskQueue::AdvanceTask(): Profession tasks must specify a taskId as the fourth parameter");
 			//} else {
-			//	this.AdvanceTask(intr, charIdx, taskKind, 999, incrementInvokes);
+			//	this.AdvanceTask(intr, charIdx, taskKind, invokesToday, incrementInvokes);
 			//}
 
-			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, 999, incrementInvokes);
+			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, incrementInvokes);
 		}
 
 		// FOR PROFESSIONS
@@ -162,7 +162,7 @@ namespace NeverClicker {
 						+ charIdx + " on: " + todaysInvokeDate, LogEntryType.Debug);
 					intr.GameAccount.SaveSetting(todaysInvokeDate.ToString(), "InvokesCompleteFor", charLabel);
 					taskMatureTime = nextThreeThirty;
-					invokesToday = 6;
+					//invokesToday = 6;
 				} catch (Exception ex) {
                     intr.Log("Error saving InvokesCompleteFor" + ex.ToString(), LogEntryType.Error);
 				}
@@ -353,7 +353,7 @@ namespace NeverClicker {
 					return DateTime.Now;
 			}
 
-			taskMatureTime = taskMatureTime.AddTicks(10000 * charIdx).AddTicks(100 * taskId);
+			taskMatureTime = taskMatureTime.AddTicks(10000 * charIdx).AddTicks(10 * taskId);
 			return taskMatureTime;
 		}
 

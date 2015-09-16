@@ -115,7 +115,7 @@
     <Compile Include="Interactions\Screen\Wake.cs" />
     <Compile Include="Interactions\Screen\Window.cs" />
     <Compile Include="Interactions\Sequences\ActivateClient.cs" />
-    <Compile Include="Interactions\Sequences\ClearOkButtons.cs" />
+    <Compile Include="Interactions\Sequences\ClearDialogues.cs" />
     <Compile Include="Interactions\Sequences\ClearSafeLogin.cs" />
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
@@ -241,6 +241,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DefaultImages\ClientLoginButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DefaultImages\DeclineButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DefaultImages\EnterWorldButton.png">
