@@ -149,18 +149,18 @@ namespace NeverClicker {
 				//int extraTaskDelay = (invokesToday * 45000) + (charZeroIdx * 1000) + 180000;
 				// EXTRA DELAY REMOVED
 				//var nextInvokeDelay = InvokeDelays[invokesToday];
-				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Invocation, invokesToday);
-
+				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Invocation, invokesToday);				
 				// IF NEXT SCHEDULED TASK IS BEYOND THE 3:30 CURFEW, RESET FOR NEXT DAY
 				if (taskMatureTime > nextThreeThirty) {
 					invokesToday = 6;
 					taskMatureTime = nextThreeThirty;
 				}
-			} else { // QUEUE FOR TOMORROW
+			} else { // (INVOKES >= 6) QUEUE FOR TOMORROW
 				try {
 					intr.Log("Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
 						+ charIdx + " on: " + todaysInvokeDate, LogEntryType.Debug);
 					intr.GameAccount.SaveSetting(todaysInvokeDate.ToString(), "InvokesCompleteFor", charLabel);
+					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
 					taskMatureTime = nextThreeThirty;
 					//invokesToday = 6;
 				} catch (Exception ex) {
