@@ -2,19 +2,19 @@
 Automated invocation and leadership queueing. Currently in an alpha state. Will eat your laundry.
 
 ## Installation
-1. [Download the latest alpha](https://github.com/nsan1129/NeverClicker/releases/download/0.3.0-alpha/NeverClicker_0.3.0.7z).
-2. [Download 7-zip](http://www.7-zip.org/download.html) and unzip NeverClicker to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
+1. [Download the latest alpha](https://github.com/nsan1129/NeverClicker/releases) (download the latest NeverClicker_*.*.*.7z file).
+2. [Download 7-zip](http://www.7-zip.org/download.html). Install 7-zip. Unzip NeverClicker to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.
 3. Run NeverClicker.exe (you might want to make a shortcut). The options menu will open on your first run. Do what it says.
 4. Ensure your configuration is correct by reading the following section and making any changes necessary.
 
 ## Caveats - *professions are currently disabled due to recent changes*
-- Client must run in 'Windowed Maximized' mode at 1920x1080.
+- Client should be run in 'Windowed Maximized' mode at 1920x1080.
 - Client must be running DirectX 9 (there is little reason to run DirectX 11 anyway).
 - Keyboard bindings (keybinds) must be configured in the game client for:
   - Invocation
   - Inventory
   - Professions
-- Keybinds must be a single keyboard key (such as '9' or 'v') and **cannot** require modifiers (ALT, CTRL, etc.).
+- Keybinds must be a single keyboard key (such as '9' or 'v') and currently **cannot** require modifiers (ALT, CTRL, etc.).
   - One method is to bind:
     - Invocation to '8'
 	- Professions to '9'

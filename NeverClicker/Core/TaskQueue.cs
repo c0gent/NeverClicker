@@ -110,13 +110,13 @@ namespace NeverClicker {
 				intr.Log("Key found for task.", LogEntryType.Debug);
 				if (taskKey < nowTicks) { // MATURE
 					intr.Log("Task is mature.", LogEntryType.Debug);
-					var oldTask = Queue[taskKey];
+					//var oldTask = Queue[taskKey];
 					intr.Log("Removing old task.", LogEntryType.Debug);
 					Queue.Remove(taskKey); 
 
 					if (taskKind == TaskKind.Invocation) {
 						intr.Log("Queuing subsequent invocation task.", LogEntryType.Debug);
-						var invokesToday = (incrementTaskId) ? oldTask.TaskId + 1 : oldTask.TaskId;
+						var invokesToday = (incrementTaskId) ? taskId + 1 : taskId;
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					} else if (taskKind == TaskKind.Professions) {
 						intr.Log("Queuing subsequent professions task.", LogEntryType.Debug);
@@ -437,8 +437,8 @@ namespace NeverClicker {
 		public static DateTime NextThreeAmPst {
 			get {
 				var utcNow = DateTime.UtcNow;
-				var todayThreeThirtyPst = utcNow.Date.AddHours(10).AddMinutes(5).ToLocalTime();
-				return (utcNow.ToLocalTime() <= todayThreeThirtyPst ? todayThreeThirtyPst : todayThreeThirtyPst.AddDays(1));
+				var todayThreeAmPst = utcNow.Date.AddHours(10).AddMinutes(5).ToLocalTime();
+				return (utcNow.ToLocalTime() <= todayThreeAmPst ? todayThreeAmPst : todayThreeAmPst.AddDays(1));
 			}
 		}
 
