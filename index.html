@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Neverclicker by nsan1129</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Neverclicker</h1>
+        <h2>Game Automation Engine</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/nsan1129/NeverClicker/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/nsan1129/NeverClicker/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/nsan1129/NeverClicker" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="neverclicker" class="anchor" href="#neverclicker" aria-hidden="true"><span class="octicon octicon-link"></span></a>NeverClicker</h1>
+
+<p>Automated invocation and leadership queueing. Currently in an alpha state. Will eat your laundry.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<ol>
+<li>
+<a href="https://github.com/nsan1129/NeverClicker/releases">Download the latest alpha</a> (download the latest NeverClicker_<em>.</em>.*.7z file).</li>
+<li>
+<a href="http://www.7-zip.org/download.html">Download 7-zip</a>. Install 7-zip. Unzip NeverClicker to any directory you want to run it from. C:\NeverClicker\, C:\Program Files\NeverClicker\, whatever.</li>
+<li>Run NeverClicker.exe (you might want to make a shortcut). The options menu will open on your first run. Do what it says.</li>
+<li>Ensure your configuration is correct by reading the following section and making any changes necessary.</li>
+</ol>
+
+<h2>
+<a id="caveats---professions-are-currently-disabled-due-to-recent-changes" class="anchor" href="#caveats---professions-are-currently-disabled-due-to-recent-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Caveats - <em>professions are currently disabled due to recent changes</em>
+</h2>
+
+<ul>
+<li>Client should be run in 'Windowed Maximized' mode at 1920x1080.</li>
+<li>Client must be running DirectX 9 (there is little reason to run DirectX 11 anyway).</li>
+<li>Keyboard bindings (keybinds) must be configured in the game client for:
+
+<ul>
+<li>Invocation</li>
+<li>Inventory</li>
+<li>Professions</li>
+</ul>
+</li>
+<li>
+<p>Keybinds must be a single keyboard key (such as '9' or 'v') and currently <strong>cannot</strong> require modifiers (ALT, CTRL, etc.).</p>
+
+<ul>
+<li>One method is to bind:
+
+<ul>
+<li>Invocation to '8'</li>
+<li>Professions to '9'</li>
+<li>and Inventory to '0'</li>
+</ul>
+</li>
+<li>Obviously, use whatever other <em>single-key</em> binding you prefer.</li>
+<li>This keybind can be configured in addition to your present key binding in the game options so that you don't need to re-learn a new binding.</li>
+</ul>
+</li>
+<li>
+<p><strong>You must configure the .ini configuration files manually</strong> before activating Auto-Cycle (a windows forms interface for this is coming). Otherwise the keybinds and other settings will all be incorrect. You can access the files from within the settings menu for convenience. </p>
+
+<ul>
+<li>You must enter your username and password into the appropriate ini file. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually. Things will continue normally after this point.</li>
+</ul>
+</li>
+<li><p>Only tasks for leadership 20+ are loaded. This may change soon (depending on what happens with the profession) and the list of tasks would be customizable.</p></li>
+<li>Currently mercenaries, guards, and man-at-arms are the only optional assets which are used in leadership tasks.</li>
+<li>You can't have characters on your account which are unable to invoke because they are too low level. Level the damn thing up for christ's sake.</li>
+</ul>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<p>NeverClicker is very much a work in progress. You will run in to problems. Please help us fix those.</p>
+
+<ul>
+<li>If there are any problems you will need to do some troubleshooting:
+
+<ul>
+<li>Activate 'Log Debug Messages' in the options menu.</li>
+<li>Consult the log file (default location is C:\Users\<em>{your windows user name}</em>\Documents\NeverClicker\Logs) to determine where the script is stuck.</li>
+<li>95% of the time it will be stuck on an image it cannot detect. This will be for one of two reasons:
+
+<ol>
+<li>Your key bindings are not set up properly (see above).</li>
+<li>You need to customize the default images NeverClicker uses to detect screen elements. To modify these:
+
+<ul>
+<li>Figure out where you're stuck (consult the log -- be sure 'Log Debug Messages' is enabled).</li>
+<li>Open the images folder (default location is C:\Users\<em>{your windows user name}</em>\Documents\NeverClicker\Images) and take a look at the corresponding image.</li>
+<li>Take an in-game screenshot (Ctrl-PrintScr) and crop it appropriately, making sure your image is the same size (or within a few pixels). Do not include extraneous parts of the image such as button borders, etc.</li>
+</ul>
+</li>
+<li>Either overwrite your new cropped screenshot image over the default image file (be sure it's .png) or create an original file name and edit the game client ini and update the file name there.</li>
+</ol>
+</li>
+<li>If you still can't determine why you're stuck <strong>please file an issue here on Github</strong> with appropriate lines from your log file, settings files (be sure to erase your username and password!), and any other relevant information such as what was happening in-game.
+
+<ul>
+<li>Please follow these three simple universal rules for filing bug reports:
+
+<ol>
+<li>The complete steps to reproduce the bug: Relevant lines from your log file (not the whole thing, you need to do some work yourself)</li>
+<li>The expected behavior: What were you expecting to see happen in the game client?</li>
+<li>The observed behavior: What actually happened. 99% of the time this answer will be 'nothing' or 'an error message'. Please include this information.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
