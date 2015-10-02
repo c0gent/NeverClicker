@@ -10,6 +10,7 @@ namespace NeverClicker.Interactions {
 			Mouse.ClickImage(intr, "CharSelectOkayButton");
 			Mouse.ClickImage(intr, "CharSelectOkButton");
 			Mouse.ClickImage(intr, "DeclineButton");
+			Mouse.ClickImage(intr, "DeclineButton_2");
 		}
 	}
 }

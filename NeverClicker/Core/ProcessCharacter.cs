@@ -83,11 +83,11 @@ namespace NeverClicker.Interactions {
 
 
 			// ########################### INVOCATION QUEUE AND SETTINGS ##########################
-			if (invocationStatus == CompletionStatus.Complete || invocationStatus == CompletionStatus.DayComplete) {
+			if (invocationStatus == CompletionStatus.Complete) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Complete.", LogEntryType.Normal);
 				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, true);
-			} else if (invocationStatus == CompletionStatus.Complete || invocationStatus == CompletionStatus.DayComplete) {
-				intr.Log("Daily invocations for character " + charIdx.ToString() + ": Detected Finished.", LogEntryType.Normal);
+			} else if (invocationStatus == CompletionStatus.DayComplete) {
+				intr.Log("Daily invocations for character " + charIdx.ToString() + ": Complete for day.", LogEntryType.Normal);
 				queue.AdvanceInvocationTask(intr, charIdx, 6, true);
 			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Immature.", LogEntryType.Normal);

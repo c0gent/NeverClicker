@@ -50,6 +50,7 @@ namespace NeverClicker.Interactions {
 					intr.Log("Invocation already finished for the day on this character");
 					return CompletionStatus.DayComplete;				
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
+					intr.Log("Items in overflow bag are preventing invocation. Attempting to move to regular inventory...", LogEntryType.Error);
 					intr.Wait(2000);
 					MoveAround(intr);	
 					Keyboard.SendKey(intr, openInventoryKey);
@@ -58,6 +59,7 @@ namespace NeverClicker.Interactions {
 					MoveAround(intr);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
+					intr.Wait(5000);
 					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
 					//ClearDialogues(intr);
 					intr.Wait(30000);

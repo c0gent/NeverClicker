@@ -42,6 +42,10 @@ namespace NeverClicker.Interactions {
 
 			//intr.ExecuteStatement("ClientLogin()");
 
+			intr.Wait(2000);
+
+			ClearDialogues(intr);
+
 			if (!intr.WaitUntil(15, ClientState.LogIn, Game.IsClientState, null)) { return false; }
 
 			string gameUserName = intr.GameAccount.GetSettingOrEmpty("NwUserName", "NwAct");
@@ -74,6 +78,8 @@ namespace NeverClicker.Interactions {
 			Keyboard.SendKey(intr, "Enter");
 
 			intr.Wait(3000);
+
+			ClearDialogues(intr);
 
 			return true;
 
