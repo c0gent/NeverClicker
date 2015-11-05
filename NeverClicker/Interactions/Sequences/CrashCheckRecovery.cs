@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static bool CrashCheckRecovery(Interactor intr) {
-			var desiredState = ClientState.CharSelect;
+		public static bool CrashCheckRecovery(Interactor intr, int prev_tries_unimplemented) {
+			intr.Log("CrashCheckRecovery(): Initiating...", LogEntryType.Info);
 
 			Screen.Wake(intr);
 
@@ -15,26 +15,31 @@ namespace NeverClicker.Interactions {
 
 			intr.Wait(5000);
 
-			switch (Game.DetermineGameState(intr)) {
-				case GameState.Closed:
-					return ProduceClientState(intr, desiredState);
+			ClearDialogues(intr);
 
-				case GameState.Patcher:
-					return ProduceClientState(intr, desiredState);
+			intr.Wait(2000);
 
-				case GameState.Unknown:
-				case GameState.ClientActive:
-					if (!ProduceClientState(intr, desiredState)) {
-						// CHECK FOR POPUP WINDOWS ETC.
-						// CHECK FOR CRASH
-						KillAll(intr);						
-					}
-					return ProduceClientState(intr, desiredState);
-				default:
-					intr.Log("ProduceClientState(): Unable to produce desired client state.");
-					//throw new NotImplementedException("ProduceClientState(): Unable to produce desired client state.");
-					return false;
-			}
+			KillAll(intr);
+
+			return true;
+
+			//switch (Game.DetermineGameState(intr)) {
+			//	case GameState.Closed:
+			//		intr.Log("CrashCheckRecovery(): GameState == Closed. Calling ProduceClientState().", LogEntryType.Info);
+			//		return ProduceClientState(intr, ClientState.CharSelect);
+			//	case GameState.Patcher:
+			//		intr.Log("CrashCheckRecovery(): GameState == Closed. Calling ProduceClientState().", LogEntryType.Info);
+			//		return ProduceClientState(intr, ClientState.CharSelect);
+			//	case GameState.ClientActive:
+			//		intr.Log("CrashCheckRecovery(): GameState == Closed. Killing all then calling ProduceClientState().", LogEntryType.Info);
+			//		KillAll(intr);
+			//		return ProduceClientState(intr, ClientState.CharSelect);
+			//	case GameState.Unknown:
+			//	default:
+			//		intr.Log("CrashCheckRecovery(): GameState unknown. Killing all.");
+			//		KillAll(intr);
+			//		return false;
+			//}
 		}
 	}
 }

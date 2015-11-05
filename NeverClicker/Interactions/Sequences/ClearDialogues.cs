@@ -9,6 +9,7 @@ namespace NeverClicker.Interactions {
 		public static void ClearDialogues(Interactor intr) {
 			Mouse.ClickImage(intr, "CharSelectOkayButton");
 			Mouse.ClickImage(intr, "CharSelectOkButton");
+			Mouse.ClickImage(intr, "CharSelectOkButton_3");
 			Mouse.ClickImage(intr, "DeclineButton");
 			Mouse.ClickImage(intr, "DeclineButton_2");
 		}
