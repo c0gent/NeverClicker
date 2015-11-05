@@ -19,6 +19,20 @@ namespace NeverClicker.Interactions {
 		//}
 
 		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode) {
+			int scrWidth;
+			int scrHeight;
+			bool success;
+			success = int.TryParse(intr.GetVar("A_ScreenWidth"), out scrWidth);
+			success &= int.TryParse(intr.GetVar("A_ScreenHeight"), out scrHeight);
+
+			if (success) {
+				return ImageSearch(intr, imgCode, new Point(0, 0), new Point(scrWidth, scrHeight);
+			} else {
+				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
+			}
+		}
+
+		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode, Point topLeft, Point botRight) {
 			//ImageSearch, ImgX, ImgY, 1, 1, 1920, 1080, *40 % image_file %
 			var imageFileName = intr.GameClient.GetSettingOrEmpty(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 
@@ -29,9 +43,9 @@ namespace NeverClicker.Interactions {
 
 			var imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
 
-			intr.Log(new LogMessage("ImageSearch(" + imgCode + "): Searching for image: '" + imageFilePath
-				+ "' [ScreenWidth:" + intr.GetVar("A_ScreenWidth")
-				+ " ScreenHeight:" + intr.GetVar("A_ScreenHeight") + "]",
+			intr.Log(new LogMessage("ImageSearch(" + imgCode + "): Searching for image: '" + imageFilePath + "'"
+				+ " [TopLeft:" + topLeft.ToString()
+				+ " BotRight:" + botRight.ToString() + "]",
 				LogEntryType.Debug			
 			));
 
@@ -45,7 +59,8 @@ namespace NeverClicker.Interactions {
 			intr.SetVar(OUTPUT_VAR_Y, outY.ToString());
 
 			var statement = string.Format("ImageSearch, {0}, {1}, {2}, {3}, {4}, {5}, {6} {7}",
-				 OUTPUT_VAR_X, OUTPUT_VAR_Y, "0", "0", "A_ScreenWidth", "A_ScreenHeight", "*" + imgSrcOptions, imageFilePath);
+				 OUTPUT_VAR_X, OUTPUT_VAR_Y, topLeft.X.ToString(), topLeft.Y.ToString(), 
+				 botRight.X.ToString(), botRight.Y.ToString(), "*" + imgSrcOptions, imageFilePath);
 
 			//intr.Log(new LogMessage(""ImageSearch(" + imgCode + "): Executing: '" + statement + "'", LogEntryType.Detail));
 
