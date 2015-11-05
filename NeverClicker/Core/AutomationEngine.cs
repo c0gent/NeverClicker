@@ -14,6 +14,7 @@ using NeverClicker.Properties;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Collections.Immutable;
 
 namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
@@ -119,8 +120,8 @@ namespace NeverClicker {
 			return new Progress<LogMessage>(l => Log(l));
 		}
 
-		private Progress<SortedList<long, GameTask>> GetTaskQueueProgress() {
-			return new Progress<SortedList<long, GameTask>>(sl => MainForm.RefreshTaskQueue(sl));
+		private Progress<ImmutableSortedDictionary<long, GameTask>> GetTaskQueueProgress() {
+			return new Progress<ImmutableSortedDictionary<long, GameTask>>(sl => MainForm.RefreshTaskQueue(sl));
 		}
 
 		public async Task<TResult> Run<TResult>(Func<TResult> action) {

@@ -16,19 +16,24 @@ namespace NeverClicker.Interactions {
 					TaskQueue queue,
 					int startDelaySec
         ) {
-			intr.Wait(startDelaySec * 1000);
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
 			int charsTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
-			
+		
 			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
 				queue.Populate(intr, charsTotal, RESET_DAY);
-				intr.UpdateQueueList(queue.ListClone());
-			}
+				//intr.Log("Calling intr.UpdateQueueList()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
+				// Move this somewhere else?
+				intr.UpdateQueueList(queue.ListClone());
+            }
+
+			intr.Log("End AutoCycle Init: " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
+
+			intr.Wait(startDelaySec * 1000);
 			intr.Log("Beginning AutoCycle.");
-			intr.Wait(500);
+			
 			
 			// ##### BEGIN AUTOCYCLE LOOP #####
 			while (!queue.IsEmpty && !intr.CancelSource.IsCancellationRequested) {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,16 @@ namespace NeverClicker.Interactions {
 	public static partial class Mouse {
 		public static bool ClickImage(Interactor intr, string imgCode) {
 			return ClickImage(intr, imgCode, 0, 0);
+		}
+
+		public static bool ClickImage(Interactor intr, string imgCode, int xOfs, int yOfs, Point topLeft, Point botRight) {
+			var result = Screen.ImageSearch(intr, imgCode, topLeft, botRight);
+			if (result.Found) {
+				Click(intr, result.Point.X + topLeft.X + 5, result.Point.Y + topLeft.Y + 5);
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public static bool ClickImage(Interactor intr, string imgCode, int xOfs, int yOfs) {

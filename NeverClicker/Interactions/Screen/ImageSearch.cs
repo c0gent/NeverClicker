@@ -26,7 +26,7 @@ namespace NeverClicker.Interactions {
 			success &= int.TryParse(intr.GetVar("A_ScreenHeight"), out scrHeight);
 
 			if (success) {
-				return ImageSearch(intr, imgCode, new Point(0, 0), new Point(scrWidth, scrHeight);
+				return ImageSearch(intr, imgCode, new Point(0, 0), new Point(scrWidth, scrHeight));
 			} else {
 				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
 			}

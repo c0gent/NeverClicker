@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Threading;
 using NeverClicker.Properties;
 using System.Collections;
+using System.Collections.Immutable;
 
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
@@ -126,15 +127,19 @@ namespace NeverClicker.Forms {
 			OpenSettingsWindow();
 		}
 		
-		public void RefreshTaskQueue(SortedList<long, GameTask> taskList) {
+		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
 			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Info));
+
+			WriteLine("Beginning TaskQueue Refresh... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
+
 				foreach (GameTask task in taskList.Values) {
 					string taskIdName = (task.Kind == TaskKind.Professions) 
 						? TaskQueue.ProfessionTaskNames[task.TaskId] + "\t" 
 						: task.TaskId.ToString() + "\t\t";
+
 					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Kind.ToString() 
 						+ "\t" + taskIdName
 						+ "\tCharacter " + task.CharIdx.ToString());
@@ -144,6 +149,9 @@ namespace NeverClicker.Forms {
 			}
 
 			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Info));
+
+			var endTime = DateTime.Now; // ***** DEBUG *****
+			WriteLine("End TaskQueue Refresh: " + endTime.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
 			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
 			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();

@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static void ClearDialogues(Interactor intr) {
-			Mouse.ClickImage(intr, "CharSelectOkayButton");
-			Mouse.ClickImage(intr, "CharSelectOkButton");
-			Mouse.ClickImage(intr, "CharSelectOkButton_3");
-			Mouse.ClickImage(intr, "DeclineButton");
-			Mouse.ClickImage(intr, "DeclineButton_2");
+			Point topLeft = new Point(680, 400);
+			Point botRight = new Point(1240, 680);
+
+			Mouse.ClickImage(intr, "CharSelectOkayButton", 0, 0, topLeft, botRight);
+			Mouse.ClickImage(intr, "CharSelectOkButton", 0, 0, topLeft, botRight);
+			Mouse.ClickImage(intr, "CharSelectOkButton_3", 0, 0, topLeft, botRight);
+			Mouse.ClickImage(intr, "DeclineButton", 0, 0, topLeft, botRight);
+			Mouse.ClickImage(intr, "DeclineButton_2", 0, 0, topLeft, botRight);
 		}
 	}
 }

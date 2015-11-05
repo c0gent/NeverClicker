@@ -13,6 +13,7 @@ using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.Collections.Immutable;
 
 namespace NeverClicker.Interactions {
 	// INTERACTOR: MANAGES ALIBENGINE
@@ -23,7 +24,7 @@ namespace NeverClicker.Interactions {
 		public Random Rng = new Random();
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
 		public IProgress<LogMessage> ProgressLog { get; private set; }
-		public IProgress<SortedList<long, GameTask>> QueueList { get; private set; }
+		public IProgress<ImmutableSortedDictionary<long, GameTask>> QueueList { get; private set; }
 		public CancellationTokenSource CancelSource { get; private set; }
 		public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
 		public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
@@ -65,9 +66,10 @@ namespace NeverClicker.Interactions {
 		//}
 
 		// UpdateQueueList(): MAKE THIS ASYNC
-		public void UpdateQueueList(SortedList<long, GameTask> taskListCopy) {
+		public void UpdateQueueList(ImmutableSortedDictionary<long, GameTask> taskListCopy) {
 			//Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
 			//var taskList = new SortedList<long, GameTask>(taskListOrig);
+			Log("Calling (intr.)QueueList.Report()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 			QueueList.Report(taskListCopy);
 			//Wait(50);
 		}
@@ -126,7 +128,7 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
-		public CancellationToken Start(IProgress<LogMessage> log, IProgress<SortedList<long, GameTask>> queueList) {
+		public CancellationToken Start(IProgress<LogMessage> log, IProgress<ImmutableSortedDictionary<long, GameTask>> queueList) {
 		//public CancellationToken Start(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = log;
