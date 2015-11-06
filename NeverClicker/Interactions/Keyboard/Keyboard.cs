@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,12 +9,14 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Keyboard {
 		private const string DefaultSendMode = "SendInput";
+		static string[] KeyModList = { "^", "!", "+" };
 
 		public enum KeyMod {
 			Ctrl,
 			Alt,
 			Shift,
 			Win,
+			None,
 		}
 
 		public enum SendMode {
@@ -34,9 +38,18 @@ namespace NeverClicker.Interactions {
 		public static void Send(Interactor intr, string key) {
 			SendInput(intr, key);
 		}
-
+		
+		// Can handle modifiers if they belong to the list below:
 		public static void SendKey(Interactor intr, string key) {
-			SendInput(intr, "{ " + key + " }");
+			if (KeyModList.Any(key.Contains)) {
+				SendKeyWithMod(intr, "", key, SendMode.Event);
+			} else {
+				SendInput(intr, "{ " + key + " }");
+			}		
+		}
+
+		public static void SendKey(Interactor intr, string keyMod, string key) {
+			SendKeyWithMod(intr, keyMod, key, SendMode.Event);
 		}
 
 		public static void KeyPress(Interactor intr, string key, uint duration) {
@@ -55,15 +68,41 @@ namespace NeverClicker.Interactions {
 			intr.Wait((int)duration * 3);
 		}
 
-		public static void SendKeyWithMod(Interactor intr, string keyMod, string key) {
-			SendKeyWithMod(intr, keyMod, key, SendMode.Input);
+		// TryParseKeyMod(): Really cheesy, needs to do more checking, etc.
+		public static bool TryParseKeyMod(Interactor intr, string keyIn, out string keyStr, out string keyModStr) {
+			if (keyIn.Contains("^")) {
+				keyModStr = "Ctrl";
+				keyStr = keyIn.Substring(keyIn.IndexOf("^") + 1);
+			} else if (keyIn.Contains("!")) {
+				keyModStr = "Alt";
+				keyStr = keyIn.Substring(keyIn.IndexOf("!") + 1);
+			} else if (keyIn.Contains("+")) {
+				keyModStr = "Shift";
+				keyStr = keyIn.Substring(keyIn.IndexOf("+") + 1);
+			} else {
+				keyModStr = "";
+				keyStr = keyIn;
+				return false;
+			}
+
+			return true;
 		}
 
-		// SendKeyWithMod <<<<< TODO: CREATE MODIFIER ENUM >>>>> <<<<< TODO: HANDLE DOUBLE MODIFIER (CTRL+ALT+X) >>>>>
-		public static void SendKeyWithMod(Interactor intr, string keyMod, string key, SendMode sendMode) {
+		// SendKeyWithMod <<<<< TODO: HANDLE DOUBLE MODIFIER (CTRL+ALT+X) >>>>>
+		//		- Really cheesy and basically just hopes the caller has a valid keymod and key;
+		public static void SendKeyWithMod(Interactor intr, string keyModIn, string keyIn, SendMode sendMode) {
 			var modeStr = ResolveSendMode(sendMode);
-			var keySeq = "{" + keyMod + " down}{" + key + "}{" + keyMod + " up}";
 
+			string keyModStr;
+			string keyStr;
+			if (!TryParseKeyMod(intr, keyIn, out keyStr, out keyModStr)) {
+				keyModStr = keyModIn;
+				keyStr = keyIn;
+			}
+
+			var keySeq = "{" + keyModStr + " down}{" + keyStr + "}{" + keyModStr + " up}";
+
+			intr.Log("SendKeyWithMod(): Executing: '"+ modeStr + keySeq + "' ...", LogEntryType.Debug);
 			intr.ExecuteStatement(modeStr + keySeq);
 
 			//SendEvent(intr, "{Shift down}{Tab}{Shift up}");

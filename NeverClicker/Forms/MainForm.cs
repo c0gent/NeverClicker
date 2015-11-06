@@ -40,7 +40,6 @@ namespace NeverClicker.Forms {
 				if (this.checkBoxBeginOnStartup.Checked) {
 					int delaySecs = 10;
 					this.SetButtonStateRunning();
-					WriteLine("Starting AutoCycle in " + delaySecs.ToString() + " seconds...");
 					AutomationEngine.AutoCycle(delaySecs);
 				}
 			}			
@@ -130,7 +129,7 @@ namespace NeverClicker.Forms {
 		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
 			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Info));
 
-			WriteLine("Beginning TaskQueue Refresh... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
+			//WriteLine("Beginning TaskQueue Refresh... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
@@ -151,7 +150,7 @@ namespace NeverClicker.Forms {
 			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Info));
 
 			var endTime = DateTime.Now; // ***** DEBUG *****
-			WriteLine("End TaskQueue Refresh: " + endTime.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
+			//WriteLine("End TaskQueue Refresh: " + endTime.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
 			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
 			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();

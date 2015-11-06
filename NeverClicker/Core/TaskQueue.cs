@@ -11,19 +11,16 @@ using System.Collections.Immutable;
 namespace NeverClicker {
 	[Serializable]
 	public class TaskQueue : ISerializable {
+		// DEPRICATE:
 		//									     15min,   30min,   45min,   60min,   90min,
 		public static int[] InvokeDelayMinutes = { 0, 15, 30, 45, 60, 90, 0, 0, 0, 0 };
-
 		//public static int[] ProfessionTaskDurationMinutes = { 720, 600, 960, 1440 };
 		public static int[] ProfessionTaskDurationMinutes = { 235, 920, 690, 690, 1375 };
 		public static string[] ProfessionTaskNames = { "Guard Young Noble", "Escort a Wizard", "Kill a Young Dragon", "Protect Magical", "Battle Elemental" };
 
-		private SortedList<long, GameTask> Queue { get; set; }		
-
+		private SortedList<long, GameTask> Queue { get; set; }
 		public GameTask NextTask { get { return Queue.First().Value; } }
-
 		public bool IsEmpty { get { return Queue.Count == 0; } }
-
 
 		public TaskQueue() {
 			Queue = new SortedList<long, GameTask>(300);
@@ -295,26 +292,26 @@ namespace NeverClicker {
 					taskMatureTime = now;
 				}
 
-				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Info);
+				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Debug);
 				this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
 
 
 				// ################################## PROFESSIONS #####################################
 				// REMOVE OLD
-				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
-					var settingKey = "MostRecentProfTime_" + p;
-					var oldTaskThreshold = now.AddDays(0);
-					var TaskMatureTime = now;
+				//for (var p = 0; p < ProfessionTaskNames.Length; p++) {
+				//	var settingKey = "MostRecentProfTime_" + p;
+				//	var oldTaskThreshold = now.AddDays(0);
+				//	var TaskMatureTime = now;
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out taskMatureTime)) {
-						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + taskMatureTime.ToString() + ".", LogEntryType.Info);
-					}
+				//	if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out taskMatureTime)) {
+				//		intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + taskMatureTime.ToString() + ".", LogEntryType.Info);
+				//	}
 
-					if (taskMatureTime < oldTaskThreshold) {
-						intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Info);
-						intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
-					}
-				}
+				//	if (taskMatureTime < oldTaskThreshold) {
+				//		intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Info);
+				//		intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
+				//	}
+				//}
 
 
 				//int tasksQueued = 0;

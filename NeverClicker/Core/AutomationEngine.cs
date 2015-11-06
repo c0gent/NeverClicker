@@ -84,12 +84,13 @@ namespace NeverClicker {
 				case LogEntryType.FatalWithScreenshot:					
 					LogFile.AppendMessage(logMessage);
 					MainForm.WriteLine(logMessage.Text);
-					SaveErrorScreenshot();
+					MessageBox.Show(MainForm, logMessage.Text + " -- " 
+						+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
 					break;
 				case LogEntryType.Fatal:					
 					LogFile.AppendMessage(logMessage);
 					MainForm.WriteLine(logMessage.Text);
-					MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - Error");
+					MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
 					break;
 				case LogEntryType.Error:
 				case LogEntryType.Warning:
@@ -106,14 +107,15 @@ namespace NeverClicker {
 			}
 		}
 
-		public void SaveErrorScreenshot() {			
-			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "ERROR_SCREENSHOT_PLEASE_INVESTIGATE"
+		private string SaveErrorScreenshot() {			
+			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "FATAL_ERROR_"
 				+ DateTime.Now.ToFileTime().ToString() + ".png";
-			var errMsg = "FATAL ERROR: PLEASE INVESTIGATE AND REPORT! -- IMAGE FILE: " + errorImageFileName;
-			Log(new LogMessage(errMsg, LogEntryType.Fatal));
+			var errMsg = "FATAL ERROR: Please investigate! Image file: " + errorImageFileName;
+			//Log(new LogMessage(errMsg, LogEntryType.Fatal));
 			ScreenCapture sc = new ScreenCapture();
 			Image img = sc.CaptureScreen();
-			img.Save(errorImageFileName, ImageFormat.Png);			
+			img.Save(errorImageFileName, ImageFormat.Png);
+			return errMsg;
 		}
 
 		private Progress<LogMessage> GetLogProgress() {

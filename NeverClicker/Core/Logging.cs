@@ -138,8 +138,8 @@ namespace NeverClicker {
 	}
 
 	public struct LogMessage {
-		public string Text;
-		public LogEntryType Type;
+		public readonly string Text;
+		public readonly LogEntryType Type;
 
 		public LogMessage(string message) {
 			Text = message;

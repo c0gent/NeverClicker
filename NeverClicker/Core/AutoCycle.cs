@@ -19,6 +19,7 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
 			int charsTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
+			bool enchKeyIsPending = IsEnchantedKeyPending(intr);
 		
 			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
@@ -29,8 +30,8 @@ namespace NeverClicker.Interactions {
 				intr.UpdateQueueList(queue.ListClone());
             }
 
-			intr.Log("End AutoCycle Init: " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
-
+			//intr.Log("End AutoCycle Init: " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
+			intr.Log("Starting AutoCycle in " + startDelaySec.ToString() + " seconds...");
 			intr.Wait(startDelaySec * 1000);
 			intr.Log("Beginning AutoCycle.");
 			
@@ -47,7 +48,7 @@ namespace NeverClicker.Interactions {
 				
 				if (nextTaskWaitDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
-					ProcessCharacter(intr, queue);										
+					ProcessCharacter(intr, queue, enchKeyIsPending);										
 					
 				} else { // TASK TIMER NOT MATURE YET -> WAIT
 					intr.Wait(1000);
@@ -73,6 +74,7 @@ namespace NeverClicker.Interactions {
 						intr.Log("Sleeping for " + waitDelay.TotalMinutes.ToString("F0") + " minutes before continuing...");
 						intr.Wait(waitDelay);
 						Screen.Wake(intr);
+						enchKeyIsPending = IsEnchantedKeyPending(intr);
 					}					
 				}
 				

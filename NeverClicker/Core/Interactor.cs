@@ -69,7 +69,7 @@ namespace NeverClicker.Interactions {
 		public void UpdateQueueList(ImmutableSortedDictionary<long, GameTask> taskListCopy) {
 			//Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
 			//var taskList = new SortedList<long, GameTask>(taskListOrig);
-			Log("Calling (intr.)QueueList.Report()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
+			//Log("Calling (intr.)QueueList.Report()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 			QueueList.Report(taskListCopy);
 			//Wait(50);
 		}

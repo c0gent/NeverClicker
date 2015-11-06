@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
-		const bool ENTER_WORLD = true;
+		const bool ENTER_WORLD = true;		
 
 		public static void ProcessCharacter(
 					Interactor intr,
-					TaskQueue queue
+					TaskQueue queue,
+					bool enchKeyIsPending
 		) {			
 			uint charIdx = queue.NextTask.CharIdx;
 			string charLabel = queue.NextTask.CharZeroIdxLabel;
@@ -64,12 +65,12 @@ namespace NeverClicker.Interactions {
 			// ################################## CLEAR AND MOVE ##################################
 			intr.Wait(1000);
 			ClearDialogues(intr);
-			intr.Wait(200);	
+			intr.Wait(200);
 			MoveAround(intr);
 								
 			// #################################### INVOCATION ####################################
 			intr.Log("ProcessCharacter(): Invoking for character " + charIdx + " ...", LogEntryType.Info);
-			invocationStatus = Invoke(intr);
+			invocationStatus = Invoke(intr, enchKeyIsPending);
 			intr.Log("ProcessCharacter(): Invocation status: " + invocationStatus.ToString(), LogEntryType.Info);
 
 			// ################################### PROFESSIONS ####################################

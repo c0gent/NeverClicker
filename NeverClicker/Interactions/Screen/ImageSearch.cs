@@ -34,11 +34,13 @@ namespace NeverClicker.Interactions {
 
 		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode, Point topLeft, Point botRight) {
 			//ImageSearch, ImgX, ImgY, 1, 1, 1920, 1080, *40 % image_file %
-			var imageFileName = intr.GameClient.GetSettingOrEmpty(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
+			string imageFileName;
+			//var imageFileName = intr.GameClient.GetSettingOrEmpty(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 
-			if (string.IsNullOrWhiteSpace(imageFileName)) {
-				intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file.", LogEntryType.Error);
-				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
+			if (!intr.GameClient.TryGetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles", out imageFileName)) {
+				//intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file. Creating.", LogEntryType.Debug);
+				imageFileName = imgCode + ".png";
+				intr.GameClient.SaveSetting(imageFileName, imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 			}
 
 			var imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
@@ -101,6 +103,8 @@ namespace NeverClicker.Interactions {
 					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Debug);
 					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };				
 				case 2:
+					intr.Log("ImageSearch(" + imgCode + "): FATAL ERROR. UNABLE TO FIND IMAGE OR BAD OPTION FORMAT.", LogEntryType.Fatal);
+					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };
 				default:
 					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Fatal);
 					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };

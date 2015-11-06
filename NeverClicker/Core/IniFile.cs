@@ -35,6 +35,21 @@ namespace NeverClicker {
 			}
 		}
 
+		public bool TryGetSetting(string settingName, string sectionName, out string settingVal) {
+			try {
+				settingVal = Data[sectionName][settingName].Trim();
+				if (string.IsNullOrWhiteSpace(settingVal)) {
+					settingVal = "";
+					return false;
+				} else {
+					return true;
+				}
+			} catch (NullReferenceException) {
+				settingVal = "";
+				return false;
+			}
+		}
+
 		public string GetSettingOrEmpty(string settingName, string sectionName) {
 			string settingVal = null;
 
@@ -97,30 +112,29 @@ namespace NeverClicker {
 			}
 		}
 
-		public void SaveSetting(string settingVal, string settingName, string sectionName) {
-			//IniData data;
-
-			//try {
-			//	data = Parser.ReadFile(IniFileName);
-			//} catch (Exception ex) {
-			//	MessageBox.Show("Error reading ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
-			//	return;
-			//}
-
+		public bool SaveSetting(string settingVal, string settingName, string sectionName) {
 			try {
 				Data[sectionName][settingName] = settingVal;
 				Parser.WriteFile(IniFileName, Data);
-			} catch (Exception ex) {
-				MessageBox.Show("Error writing ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
-			}
+				return true;
+			} catch (Exception) {
+				if (!Data.Sections.ContainsSection(sectionName)) {
+					Data.Sections.AddSection(sectionName);
+				}
 
-			//if (data[sectionName][settingName] == null) {
-			//	data[sectionName][settingName] = settingVal;
-			//	//throw new InvalidIniSettingSectionException("settingName: " + settingName + ", sectionName: " + sectionName);
-			//} else {
-			//	data[sectionName][settingName] = settingVal;
-			//	Parser.WriteFile(IniFileName, data);
-			//}
+				if (!Data.Sections.GetSectionData(sectionName).Keys.ContainsKey(settingName)) {					
+					try {
+						Data.Sections.GetSectionData(sectionName).Keys.AddKey(settingName, settingVal);
+						return true;
+					} catch (Exception ex) {
+						MessageBox.Show("Error writing ini file: '" + IniFileName + "' -- Error information: " + ex.ToString());
+						return false;
+					}
+				} else {
+					System.Diagnostics.Debug.Fail("Unreachable code reached");
+					throw new InvalidOperationException();
+				}
+			}
 		}
 
 		public bool RemoveSetting(string settingName, string sectionName) {

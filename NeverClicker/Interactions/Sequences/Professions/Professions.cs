@@ -122,7 +122,7 @@ namespace NeverClicker.Interactions {
 			Mouse.Click(intr, searchButton.Point, -100, 0);
 			intr.Wait(50);
 				
-			Keyboard.SendKeyWithMod(intr, "Shift", "Home");
+			Keyboard.SendKey(intr, "Shift", "Home");
 			intr.Wait(50);
 
 			Keyboard.Send(intr, taskName);

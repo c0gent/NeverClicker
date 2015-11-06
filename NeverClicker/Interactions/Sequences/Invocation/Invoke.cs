@@ -12,7 +12,7 @@ namespace NeverClicker.Interactions {
 			public const bool ALWAYS_REDEEM = false;
 			public const int REDEMPTION_ITEM = 5;
 
-		public static CompletionStatus Invoke(Interactor intr) {
+		public static CompletionStatus Invoke(Interactor intr, bool enchKeyIsPending) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
 
 			if (ALWAYS_REDEEM) {
@@ -23,6 +23,17 @@ namespace NeverClicker.Interactions {
 
 			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");
 			string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
+
+			// Collect Enchanted Key
+			if (enchKeyIsPending) {
+				if (!ClaimEnchantedKey(intr)) {
+					// ***** Can Remove This *****
+					if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
+					intr.Log("Unable to collect Enchanted Key", LogEntryType.FatalWithScreenshot);
+				}
+			}			
+
+			// First Invoke Attempt
 			Keyboard.SendKey(intr, invokeKey);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
@@ -35,31 +46,31 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
-				intr.Wait(500);
+				intr.Wait(900);
 
-				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
-					intr.Log("Still waiting to invoke on this character");
-					return CompletionStatus.Immature;
-				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionInvokeReady").Found) {
+				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionInvokeReady").Found) {
 					intr.Wait(2000);
+					//Invoke
 					Keyboard.SendKey(intr, invokeKey);
-				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
-					intr.Log("Character not in rest zone.", LogEntryType.Error);
-					return CompletionStatus.Complete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
 					intr.Log("Invocation already finished for the day on this character");
-					return CompletionStatus.DayComplete;				
+					return CompletionStatus.DayComplete;
+				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
+					intr.Log("Still waiting to invoke on this character");
+					return CompletionStatus.Immature;
+				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
+					intr.Log("Character not in rest zone.", LogEntryType.Fatal);
+					return CompletionStatus.Complete;			
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
 					intr.Log("Items in overflow bag are preventing invocation. Attempting to move to regular inventory...", LogEntryType.Error);
 					intr.Wait(2000);
 					MoveAround(intr);	
 					Keyboard.SendKey(intr, openInventoryKey);
+					intr.Wait(300);
 					Mouse.ClickImage(intr, "InventoryOverflowTransferButton");
-					intr.Wait(100);
 					MoveAround(intr);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Wait(5000);
 					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
 					//ClearDialogues(intr);
 					intr.Wait(30000);
@@ -67,6 +78,7 @@ namespace NeverClicker.Interactions {
 				}
             }
 
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 			intr.Wait(3500);			
 
 			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {				

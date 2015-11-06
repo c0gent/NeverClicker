@@ -31,16 +31,21 @@ namespace NeverClicker.Interactions {
 
 			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure)) { return false; }
 
-			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
-			Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
+
+			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null)) {
+				//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+				Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
 			
-			Keyboard.SendInput(intr, gameUserName);
+				Keyboard.SendInput(intr, gameUserName);
 
-			Keyboard.SendInput(intr, "{Tab}");
+				Keyboard.SendInput(intr, "{Tab}");
 
-			Keyboard.SendInput(intr, gamePassword);
+				Keyboard.SendInput(intr, gamePassword);
 
-			Keyboard.SendInput(intr, "{Enter}");
+				Keyboard.SendInput(intr, "{Enter}");
+
+				intr.Wait(2000);
+			}			
 
 			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure)) { return false; }
 

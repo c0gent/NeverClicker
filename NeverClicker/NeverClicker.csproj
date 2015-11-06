@@ -123,6 +123,7 @@
     <Compile Include="Interactions\Sequences\ClearSafeLogin.cs" />
     <Compile Include="Interactions\Sequences\Client.cs" />
     <Compile Include="Interactions\Sequences\CrashCheckRecovery.cs" />
+    <Compile Include="Interactions\Sequences\EnchantedKey.cs" />
     <Compile Include="Interactions\Sequences\Invocation\Invoke.cs" />
     <Compile Include="Interactions\Sequences\LogOut.cs" />
     <Compile Include="Interactions\Sequences\MoveAround.cs" />
@@ -201,7 +202,6 @@
     <None Include="DefaultSettings\NeverClicker_GameClient.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -260,6 +260,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DefaultImages\InventoryOverflowTransferButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DefaultImages\InventoryVipAccountRewardsIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DefaultImages\InvocationMaximumBlessings.png">
