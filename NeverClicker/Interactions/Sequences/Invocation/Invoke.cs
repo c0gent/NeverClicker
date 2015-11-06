@@ -12,7 +12,7 @@ namespace NeverClicker.Interactions {
 			public const bool ALWAYS_REDEEM = false;
 			public const int REDEMPTION_ITEM = 5;
 
-		public static CompletionStatus Invoke(Interactor intr, bool enchKeyIsPending) {
+		public static CompletionStatus Invoke(Interactor intr, uint charIdx, bool enchKeyIsPending) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
 
 			if (ALWAYS_REDEEM) {
@@ -29,7 +29,8 @@ namespace NeverClicker.Interactions {
 				if (!ClaimEnchantedKey(intr)) {
 					// ***** Can Remove This *****
 					if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
-					intr.Log("Unable to collect Enchanted Key", LogEntryType.FatalWithScreenshot);
+					intr.Log("Unable to collect enchanted key for character " + charIdx + ".", 
+						LogEntryType.FatalWithScreenshot);
 				}
 			}			
 
@@ -37,7 +38,8 @@ namespace NeverClicker.Interactions {
 			Keyboard.SendKey(intr, invokeKey);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
-				intr.Log("Maximum blessings reached. Redeeming through Vault of Piety...", LogEntryType.Info);
+				intr.Log("Maximum blessings reached for character " + charIdx 
+					+ ". Redeeming through Vault of Piety...", LogEntryType.Info);
 				Redeem(intr, REDEMPTION_ITEM);
 				//intr.ExecuteStatement("MoveAround()");
 				MoveAround(intr);
@@ -53,16 +55,17 @@ namespace NeverClicker.Interactions {
 					//Invoke
 					Keyboard.SendKey(intr, invokeKey);
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
-					intr.Log("Invocation already finished for the day on this character");
+					intr.Log("Invocation already finished for the day on character " + charIdx);
 					return CompletionStatus.DayComplete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
-					intr.Log("Still waiting to invoke on this character");
+					intr.Log("Still waiting to invoke on character " + charIdx);
 					return CompletionStatus.Immature;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
-					intr.Log("Character not in rest zone.", LogEntryType.Fatal);
+					intr.Log("Character " + charIdx + " not in rest zone.", LogEntryType.Fatal);
 					return CompletionStatus.Complete;			
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
-					intr.Log("Items in overflow bag are preventing invocation. Attempting to move to regular inventory...", LogEntryType.Error);
+					intr.Log("Items in overflow bag are preventing invocation for character " 
+						+ charIdx + ". Attempting to move to regular inventory...", LogEntryType.Error);
 					intr.Wait(2000);
 					MoveAround(intr);	
 					Keyboard.SendKey(intr, openInventoryKey);
@@ -71,7 +74,8 @@ namespace NeverClicker.Interactions {
 					MoveAround(intr);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
+					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke for character " + charIdx 
+						+ ".", LogEntryType.FatalWithScreenshot);
 					//ClearDialogues(intr);
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
@@ -88,7 +92,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
-				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Info);
+				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Debug);
 				//intr.ExecuteStatement("FindAndClick(\"InvocationRewardsOfDevotionCloseButton.png\")");
 				//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
 			}

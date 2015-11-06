@@ -127,7 +127,7 @@ namespace NeverClicker.Forms {
 		}
 		
 		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
-			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Info));
+			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
 
 			//WriteLine("Beginning TaskQueue Refresh... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
@@ -147,7 +147,7 @@ namespace NeverClicker.Forms {
 				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
 			}
 
-			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Info));
+			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
 
 			var endTime = DateTime.Now; // ***** DEBUG *****
 			//WriteLine("End TaskQueue Refresh: " + endTime.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****

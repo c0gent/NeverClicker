@@ -52,7 +52,11 @@ namespace NeverClicker.Interactions {
 			SendKeyWithMod(intr, keyMod, key, SendMode.Event);
 		}
 
-		public static void KeyPress(Interactor intr, string key, uint duration) {
+		public static void KeyPress(Interactor intr, string key) {
+			KeyPress(intr, key, 10);
+		}
+
+		public static void KeyPress(Interactor intr, string key, int duration) {
 			//intr.ExecuteStatement("SendInput { " + key + " down }");
 			//intr.Wait((int)duration + 180);
 			//intr.ExecuteStatement("SendInput { " + key + " up }");
@@ -65,7 +69,7 @@ namespace NeverClicker.Interactions {
 			";
 
 			intr.ExecuteStatement(cmd);
-			intr.Wait((int)duration * 3);
+			intr.Wait(duration * 3);
 		}
 
 		// TryParseKeyMod(): Really cheesy, needs to do more checking, etc.

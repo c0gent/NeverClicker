@@ -59,9 +59,8 @@ namespace NeverClicker.Interactions {
 					case ClientState.Unknown:
 					default:
 						ClearDialogues(intr);
-						intr.Wait(5000);
 
-						if (!intr.WaitUntil(20, ClientState.CharSelect, Game.IsClientState, null)) {
+						if (!intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, null)) {
 							intr.Log("Client state unknown. Attempting crash recovery...", LogEntryType.Info);
 
 							CrashCheckRecovery(intr, 0);

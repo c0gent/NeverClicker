@@ -46,9 +46,29 @@ namespace NeverClicker.Interactions {
 			intr.ExecuteStatement("WinActivate, " + param);
 		}
 
+		// Need to figure these two out and simplify...
 		public static void WindowKill(Interactor intr, string windowExe) {
 			string param = string.Format("ahk_exe {0}", windowExe);
+			intr.ExecuteStatement("WinClose, " + param);
+			intr.ExecuteStatement("WinClose, " + windowExe);
 			intr.ExecuteStatement("WinKill, " + param);
+			intr.ExecuteStatement("WinKill, " + windowExe);
+		}
+
+		public static void WindowKillClass(Interactor intr, string windowClass) {
+			string param = string.Format("ahk_class {0}", windowClass);
+			intr.ExecuteStatement("WinClose, " + param);
+			intr.ExecuteStatement("WinClose, " + windowClass);
+			intr.ExecuteStatement("WinKill, " + param);
+			intr.ExecuteStatement("WinKill, " + windowClass);
+		}
+
+		public static void WindowKillTitle(Interactor intr, string windowTitle) {
+			string param = string.Format("ahk_class {0}", windowTitle);
+			intr.ExecuteStatement("WinClose, " + param);
+			intr.ExecuteStatement("WinClose, " + windowTitle);
+			intr.ExecuteStatement("WinKill, " + param);
+			intr.ExecuteStatement("WinKill, " + windowTitle);
 		}
 	}
 

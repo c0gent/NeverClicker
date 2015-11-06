@@ -70,7 +70,7 @@ namespace NeverClicker.Interactions {
 								
 			// #################################### INVOCATION ####################################
 			intr.Log("ProcessCharacter(): Invoking for character " + charIdx + " ...", LogEntryType.Info);
-			invocationStatus = Invoke(intr, enchKeyIsPending);
+			invocationStatus = Invoke(intr, charIdx, enchKeyIsPending);
 			intr.Log("ProcessCharacter(): Invocation status: " + invocationStatus.ToString(), LogEntryType.Info);
 
 			// ################################### PROFESSIONS ####################################

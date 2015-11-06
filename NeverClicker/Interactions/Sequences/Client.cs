@@ -125,6 +125,8 @@ namespace NeverClicker.Interactions {
 
 			Screen.WindowKill(intr, "Neverwinter.exe");
 			Screen.WindowKill(intr, "GameClient.exe");
+			Screen.WindowKillClass(intr, "CrypticWindowClass");
+			Screen.WindowKillClass(intr, "Neverwinter");
 
 			//VigilantlyCloseClientAndExit() {
 			//	global

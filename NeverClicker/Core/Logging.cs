@@ -74,9 +74,15 @@ namespace NeverClicker {
 			lock (Locker) {
 				//var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
 				var entry = (XmlElement)SessionElement.AppendChild(LogXmlDoc.CreateElement("entry"));
-				entry.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
-				entry.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
-				entry.SetAttribute("text", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
+
+				//entry.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
+				//entry.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
+				//entry.SetAttribute("text", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
+
+				entry.SetAttribute("time", DateTime.Now.ToString());
+				entry.SetAttribute("type", logMessage.Type.ToString());
+				entry.SetAttribute("text", logMessage.Text);
+
 				try {
 					LogXmlDoc.Save(LogFileName);
 				} catch (Exception ex) {

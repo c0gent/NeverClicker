@@ -12,21 +12,23 @@ namespace NeverClicker.Interactions {
 			string moveForeKey = intr.GameAccount.GetSettingOrEmpty("NwMoveForeKey", "GameHotkeys");
 			string moveBackKey = intr.GameAccount.GetSettingOrEmpty("NwMoveBackKey", "GameHotkeys");
 
-			intr.WaitRand(80, 220);
+			intr.WaitRand(40, 120);
 
 			int dirRand = intr.Rand(0, 6);
+			
+			int keyDelay = 40;
 
 			if (dirRand == 0 || dirRand == 1) {
-				Keyboard.KeyPress(intr, moveLeftKey, 30);
+				Keyboard.KeyPress(intr, moveLeftKey, keyDelay);
 			} else if (dirRand == 2 || dirRand == 3) {
-				Keyboard.KeyPress(intr, moveRightKey, 30);
+				Keyboard.KeyPress(intr, moveRightKey, keyDelay);
 			} else if (dirRand == 4) {
-				Keyboard.KeyPress(intr, moveForeKey, 30);
+				Keyboard.KeyPress(intr, moveForeKey, keyDelay);
 			} else if (dirRand == 5) {
-				Keyboard.KeyPress(intr, moveBackKey, 30);
+				Keyboard.KeyPress(intr, moveBackKey, keyDelay);
 			}
 
-			intr.WaitRand(80, 220);
+			intr.WaitRand(120, 220);
 		}
 	}
 }

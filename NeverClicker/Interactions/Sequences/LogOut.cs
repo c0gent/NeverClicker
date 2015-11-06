@@ -31,7 +31,7 @@ namespace NeverClicker.Interactions {
 			Keyboard.SendKey(intr, "Enter");
 			intr.Wait(100);
 
-			intr.Wait(3000);
+			//intr.Wait(3000);
 
 			return true;
 		}

@@ -205,7 +205,7 @@ namespace NeverClicker.Interactions {
 			int maxIters = maxWaitSeconds / secondsPerIter;
 			int iters = 0;
 
-			this.Log("Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.", LogEntryType.Info);
+			this.Log("Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.", LogEntryType.Debug);
 
 			while (!(isState(this, endState))) {
 				if (CancelSource.IsCancellationRequested) { return false; }
@@ -375,17 +375,15 @@ namespace NeverClicker.Interactions {
 		}
 
 
-
 		public static void LogWaitStatus<TState>(Interactor intr, TState end, bool success) {
 			if (success) {
 				intr.Log("WaitUntil(): Found client state: "
-					+ " -> " + end.ToString() + ".", LogEntryType.Info);
+					+ " -> " + end.ToString() + ".", LogEntryType.Debug);
 			} else {
 				intr.Log("WaitUntil(): Failure to find client state: "
-					+ " -> " + end.ToString() + ". Re-evaluating...", LogEntryType.Info);
+					+ " -> " + end.ToString() + ". Re-evaluating...", LogEntryType.Debug);
 			}
 		}
-
 	}
 
 	public enum AutomationState {

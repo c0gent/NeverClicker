@@ -26,10 +26,14 @@ namespace NeverClicker.Interactions {
 			if (!intr.WaitUntil(90, GameState.Patcher, Game.IsGameState, PatcherRunFailure)) { return false; }
 
 			intr.Wait(4000);
+			// Set focus on patcher:
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 			intr.Wait(1000);
 
 			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure)) { return false; }
+
+			// Set focus on patcher:
+			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
 
 			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null)) {
@@ -45,7 +49,10 @@ namespace NeverClicker.Interactions {
 				Keyboard.SendInput(intr, "{Enter}");
 
 				intr.Wait(2000);
-			}			
+			}
+
+			// Set focus on patcher:
+			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
 			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure)) { return false; }
 
