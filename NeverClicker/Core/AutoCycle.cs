@@ -19,7 +19,6 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
 			int charsTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
-			bool enchKeyIsPending = IsEnchantedKeyPending(intr);
 		
 			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
@@ -48,7 +47,7 @@ namespace NeverClicker.Interactions {
 				
 				if (nextTaskWaitDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
-					ProcessCharacter(intr, queue, enchKeyIsPending);										
+					ProcessCharacter(intr, queue);
 					
 				} else { // TASK TIMER NOT MATURE YET -> WAIT
 					intr.Wait(1000);
@@ -77,7 +76,6 @@ namespace NeverClicker.Interactions {
 						intr.Log("Sleeping for " + waitDelay.TotalMinutes.ToString("F0") + " minutes before continuing...");
 						intr.Wait(waitDelay);
 						Screen.Wake(intr);
-						enchKeyIsPending = IsEnchantedKeyPending(intr);
 					}					
 				}
 				

@@ -12,8 +12,7 @@ namespace NeverClicker.Interactions {
 
 		public static void ProcessCharacter(
 					Interactor intr,
-					TaskQueue queue,
-					bool enchKeyIsPending
+					TaskQueue queue
 		) {			
 			uint charIdx = queue.NextTask.CharIdx;
 			string charLabel = queue.NextTask.CharZeroIdxLabel;
@@ -24,6 +23,7 @@ namespace NeverClicker.Interactions {
 			//CompletionStatus professionsStatus = CompletionStatus.None;
 			//var professionsCompleted = new List<int>();
 			//bool processingIncomplete = false;
+			bool enchKeyIsPending = IsEnchantedKeyPending(intr);
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 			

@@ -16,7 +16,7 @@ namespace NeverClicker.Interactions {
 
 			int dirRand = intr.Rand(0, 6);
 			
-			int keyDelay = 40;
+			int keyDelay = 20;
 
 			if (dirRand == 0 || dirRand == 1) {
 				Keyboard.KeyPress(intr, moveLeftKey, keyDelay);
