@@ -51,7 +51,7 @@ namespace NeverClicker {
 				}
 
 				if (taskMatureTimeUnique == false) {
-					gameTask.AddTicks(1);
+					gameTask = gameTask.AddTicks(1);
 				} else {
 					return;
 				}

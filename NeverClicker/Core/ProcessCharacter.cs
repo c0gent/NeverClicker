@@ -63,9 +63,8 @@ namespace NeverClicker.Interactions {
 			}
 
 			// ################################## CLEAR AND MOVE ##################################
-			intr.Wait(1000);
+			intr.Wait(1500);
 			ClearDialogues(intr);
-			intr.Wait(200);
 			MoveAround(intr);
 								
 			// #################################### INVOCATION ####################################

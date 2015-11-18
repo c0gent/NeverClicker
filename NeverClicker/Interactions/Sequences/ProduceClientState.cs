@@ -49,18 +49,27 @@ namespace NeverClicker.Interactions {
 						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 
 					case ClientState.InWorld:
-						if (attemptCount >= 5) { KillAll(intr); return false; }
-						intr.Log("Logging out...", LogEntryType.Normal);
-						LogOut(intr);
-						return intr.WaitUntil(45, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
-
+						if (attemptCount >= 10) {
+							intr.Log("Stuck at in world. Killing all and restarting.", LogEntryType.FatalWithScreenshot);
+							KillAll(intr);
+							intr.Wait(5000);
+							return ProduceClientState(intr, ClientState.CharSelect, 0);
+						} else {
+							intr.Log("Logging out...", LogEntryType.Normal);
+							LogOut(intr);
+							return intr.WaitUntil(45, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
+						}
 					case ClientState.LogIn:
-						if (attemptCount >= 3) { intr.Log("Stuck at client login screen.", LogEntryType.FatalWithScreenshot); }
-						if (attemptCount >= 10) { KillAll(intr); return false; }
-						intr.Log("Client open, at login screen.", LogEntryType.Normal);
-						ClientSignIn(intr);
-						return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
-
+						if (attemptCount >= 10) {
+							intr.Log("Stuck at client login screen. Killing all and restarting.", LogEntryType.FatalWithScreenshot);
+							KillAll(intr);
+							intr.Wait(5000);
+							return ProduceClientState(intr, ClientState.CharSelect, 0);
+						} else {
+							intr.Log("Client open, at login screen.", LogEntryType.Normal);
+							ClientSignIn(intr);
+							return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
+						}
 					case ClientState.Unknown:
 					default:						
 						ClearDialogues(intr);

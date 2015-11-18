@@ -52,6 +52,27 @@ namespace NeverClicker.Interactions {
 			SendKeyWithMod(intr, keyMod, key, SendMode.Event);
 		}
 
+		public static void SendKey(Interactor intr, KeyMod keyMod, string key) {
+			string keyModStr;
+
+			switch (keyMod) {
+				case KeyMod.Ctrl:
+					keyModStr = "Ctrl";
+					break;
+				case KeyMod.Alt:
+					keyModStr = "Alt";
+					break;
+				case KeyMod.Shift:
+					keyModStr = "Shift";
+					break;
+				default:
+					keyModStr = "";
+					break;					
+			}
+
+			SendKeyWithMod(intr, keyModStr, key, SendMode.Event);
+		}
+
 		public static void KeyPress(Interactor intr, string key) {
 			KeyPress(intr, key, 10);
 		}
