@@ -199,8 +199,8 @@ namespace NeverClicker.Interactions {
 
 		//public bool WaitUntil(int maxWaitSeconds, Func<bool> condition, Enum endState, ) {
         public bool WaitUntil<TState>(int maxWaitSeconds, TState endState, Func<Interactor, TState, bool> isState,  
-						Func<Interactor, TState, bool> doFailure
-		) where TState : struct {
+						Func<Interactor, TState, int, bool> doFailure, int attemptCount) where TState : struct 
+		{
 			const int secondsPerIter = 1;
 			int maxIters = maxWaitSeconds / secondsPerIter;
 			int iters = 0;
@@ -215,7 +215,7 @@ namespace NeverClicker.Interactions {
 				if (iters >= maxIters) {					
 					LogWaitStatus(this, endState, false);
 					if (doFailure != null) {
-						return doFailure(this, endState);
+						return doFailure(this, endState, attemptCount);
 					} else {
 						return false;
 					}

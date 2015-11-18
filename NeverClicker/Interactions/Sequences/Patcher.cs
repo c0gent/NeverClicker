@@ -18,25 +18,25 @@ namespace NeverClicker.Interactions {
 
 			if (Game.DeterminePatcherState(intr) != PatcherState.None) {
 				Screen.WindowKill(intr, Game.GAMEPATCHEREXE);
-				if (!intr.WaitUntil(15, PatcherState.None, Game.IsPatcherState, PatcherKillFailure)) { return false; }
+				if (!intr.WaitUntil(15, PatcherState.None, Game.IsPatcherState, PatcherKillFailure, 0)) { return false; }
 			}
 
 			Screen.WindowRun(intr, Properties.Settings.Default.NeverwinterExePath);
 
-			if (!intr.WaitUntil(90, GameState.Patcher, Game.IsGameState, PatcherRunFailure)) { return false; }
+			if (!intr.WaitUntil(90, GameState.Patcher, Game.IsGameState, PatcherRunFailure, 0)) { return false; }
 
 			intr.Wait(4000);
 			// Set focus on patcher:
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 			intr.Wait(1000);
 
-			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure)) { return false; }
+			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure, 0)) { return false; }
 
 			// Set focus on patcher:
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
 
-			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null)) {
+			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {
 				//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
 				Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
 			
@@ -54,7 +54,7 @@ namespace NeverClicker.Interactions {
 			// Set focus on patcher:
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
-			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure)) { return false; }
+			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure, 0)) { return false; }
 
 			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
 			//intr.Wait(200);
@@ -66,20 +66,20 @@ namespace NeverClicker.Interactions {
 
 			Keyboard.SendInput(intr, "{Enter}");
 
-			return intr.WaitUntil(60, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
+			return intr.WaitUntil(60, ClientState.CharSelect, Game.IsClientState, ProduceClientState, 0);
 		}
 
-		public static bool PatcherKillFailure<TState>(Interactor intr, TState state) {
+		public static bool PatcherKillFailure<TState>(Interactor intr, TState state, int attemptCount) {
 			intr.Log("Failed to launch Patcher, unable to close existing process. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}
 
-		public static bool PatcherRunFailure<TState>(Interactor intr, TState state) {
+		public static bool PatcherRunFailure<TState>(Interactor intr, TState state, int attemptCount) {
 			intr.Log("Failed to launch Patcher, login button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}
 
-		public static bool PatcherLogInFailure<TState>(Interactor intr, TState state) {
+		public static bool PatcherLogInFailure<TState>(Interactor intr, TState state, int attemptCount) {
 			intr.Log("Failed to log in using patcher, play button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}

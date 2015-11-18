@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
-		public static bool ProduceClientState(Interactor intr, ClientState desiredState) {
+		public static bool ProduceClientState(Interactor intr, ClientState desiredState, int attemptCount) {
 			if (intr.CancelSource.Token.IsCancellationRequested) { return false; }
+
+			attemptCount += 1;
 
 			intr.Log("Attempting to produce client state: " + desiredState.ToString(), LogEntryType.Info);
 
@@ -44,27 +46,30 @@ namespace NeverClicker.Interactions {
 						//intr.Wait(30000);
 						intr.Log("Activating Client...", LogEntryType.Normal);
 						ActivateClient(intr);
-						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
+						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 
 					case ClientState.InWorld:
+						if (attemptCount >= 5) { KillAll(intr); return false; }
 						intr.Log("Logging out...", LogEntryType.Normal);
 						LogOut(intr);
-						return intr.WaitUntil(45, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
+						return intr.WaitUntil(45, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 
 					case ClientState.LogIn:
+						if (attemptCount >= 3) { intr.Log("Stuck at client login screen.", LogEntryType.FatalWithScreenshot); }
+						if (attemptCount >= 10) { KillAll(intr); return false; }
 						intr.Log("Client open, at login screen.", LogEntryType.Normal);
 						ClientSignIn(intr);
-						return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState);
+						return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 
 					case ClientState.Unknown:
-					default:
+					default:						
 						ClearDialogues(intr);
 
-						if (!intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, null)) {
+						if (!intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, null, attemptCount)) {
 							intr.Log("Client state unknown. Attempting crash recovery...", LogEntryType.Info);
 
 							CrashCheckRecovery(intr, 0);
-							return ProduceClientState(intr, desiredState);
+							return ProduceClientState(intr, desiredState, attemptCount);
 
 							//var curState = Game.DetermineClientState(intr);
 

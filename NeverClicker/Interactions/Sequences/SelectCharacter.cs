@@ -11,7 +11,7 @@ namespace NeverClicker.Interactions {
 		//const int SCROLLS_TO_CENTER_BOTTOM = 2;
 		const int TILE_SIZE = 80;
 
-		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld) {
+		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld, int loginAttemptCount) {
 			if (intr.CancelSource.IsCancellationRequested) { return false; }
 
 			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
@@ -160,9 +160,9 @@ namespace NeverClicker.Interactions {
 
 			intr.Wait(3000);
 
-			if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure)) {
-				ProduceClientState(intr, ClientState.CharSelect);
-				SelectCharacter(intr, charIdx, enterWorld);
+			if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure, loginAttemptCount)) {
+				ProduceClientState(intr, ClientState.CharSelect, loginAttemptCount);
+				SelectCharacter(intr, charIdx, enterWorld, loginAttemptCount);
 			}
 
 			ClearDialogues(intr);
@@ -171,7 +171,7 @@ namespace NeverClicker.Interactions {
 		}
 
 
-		public static bool CharSelectFailure<TState>(Interactor intr, TState state) {
+		public static bool CharSelectFailure<TState>(Interactor intr, TState state, int attemptCount) {
 			intr.Log("Failure to select character. Retrying...");
 			return false;
 		}

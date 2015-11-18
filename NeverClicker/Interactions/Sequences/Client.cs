@@ -42,11 +42,11 @@ namespace NeverClicker.Interactions {
 
 			//intr.ExecuteStatement("ClientLogin()");
 
-			intr.Wait(2000);
+			intr.Wait(5000);
 
 			ClearDialogues(intr);
 
-			if (!intr.WaitUntil(15, ClientState.LogIn, Game.IsClientState, null)) { return false; }
+			//if (!intr.WaitUntil(15, ClientState.LogIn, Game.IsClientState, null, 0)) { return false; }
 
 			string gameUserName = intr.GameAccount.GetSettingOrEmpty("NwUserName", "NwAct");
 			string gamePassword = intr.GameAccount.GetSettingOrEmpty("NwActPwd", "NwAct");

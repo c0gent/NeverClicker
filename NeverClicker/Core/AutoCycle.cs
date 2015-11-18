@@ -62,11 +62,11 @@ namespace NeverClicker.Interactions {
 							waitDelay = nextTaskWaitDelay + intr.RandomDelay(5, 15);
 						}
 
-						ProduceClientState(intr, ClientState.None);										
+						ProduceClientState(intr, ClientState.None, 0);										
 					} else if (nextTaskWaitDelay.TotalMinutes > 1) {
 						waitDelay = nextTaskWaitDelay + intr.RandomDelay(2, 5);
 						intr.Log("Minimizing client and waiting " + waitDelay.TotalMinutes.ToString("F0") + " minutes.");						
-						ProduceClientState(intr, ClientState.Inactive);
+						ProduceClientState(intr, ClientState.Inactive, 0);
 					} else if (nextTaskWaitDelay.TotalSeconds > 1) {
 						// Delay more than 1 sec, let the train catch up...
 						waitDelay = nextTaskWaitDelay + intr.RandomDelay(1, 3);

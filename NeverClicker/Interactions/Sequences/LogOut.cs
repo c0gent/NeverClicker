@@ -20,6 +20,8 @@ namespace NeverClicker.Interactions {
 			//intr.ExecuteStatement("Logout()");
 			intr.Log("Logging out...", LogEntryType.Info);
 
+			ClearDialogues(intr);
+
 			MoveAround(intr);
 
 			Keyboard.SendKey(intr, "Enter");

@@ -85,7 +85,7 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 			intr.Wait(3500);			
 
-			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {				
+			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {				
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
 				MoveAround(intr);		
@@ -97,7 +97,7 @@ namespace NeverClicker.Interactions {
 				//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
 			}
 
-			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null)) {
+			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
 				intr.Log("[FINAL_1]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
 				//intr.SaveErrorScreenshot();				
 				intr.Wait(30000);	// TEMP

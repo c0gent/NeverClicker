@@ -50,10 +50,10 @@ namespace NeverClicker.Interactions {
 			//	IF NOT -> MERGE TASKS
 			//	IF SO -> CONTINUE
 
-			if (!ProduceClientState(intr, ClientState.CharSelect)) { return; }
+			if (!ProduceClientState(intr, ClientState.CharSelect, 0)) { return; }
 
 			intr.Log("ProcessCharacter(): Selecting character " + charIdx + " ...", LogEntryType.Info);
-			if (!SelectCharacter(intr, charIdx, ENTER_WORLD)) { return; }
+			if (!SelectCharacter(intr, charIdx, ENTER_WORLD, 0)) { return; }
 
 			if (!ENTER_WORLD) {
 				#pragma warning disable CS0162 // Unreachable code detected

@@ -20,15 +20,15 @@ NeverClicker is very much a work in progress. You will run in to problems. Pleas
 
 - If there is a problem please do some troubleshooting:
   - Activate 'Log Debug Messages' in the options menu.
-  - Consult the log file (default location is `C:\Users\\*{your windows user name}*\Documents\NeverClicker\Logs`) to determine where the script is stuck.
+  - Consult the log file (default location is `C:\Users\{your windows user name}\Documents\NeverClicker\Logs`) to determine where the script is stuck.
   - 95% of the time it will be stuck on an image it cannot detect. This will be for one of two reasons:
     1. Your key bindings are not set up properly (see above).
 	2. You need to customize the default images NeverClicker uses to detect screen elements. To modify these:
 	  * Figure out where you're stuck (consult the log -- be sure 'Log Debug Messages' is enabled).
-	  * Open the images folder (default location is `C:\Users\\*{your windows user name}*\Documents\NeverClicker\Images`) and take a look at the corresponding image.
+	  * Open the images folder (default location is `C:\Users\{your windows user name}\Documents\NeverClicker\Images`) and take a look at the corresponding image.
 	  * Take an in-game screenshot (Ctrl-PrintScr) and crop it appropriately, making sure your image is the same size (or within a few pixels). Do not include extraneous parts of the image such as button borders, etc.
 	3. Either overwrite your new cropped screenshot image over the default image file (be sure it's .png) or create an original file name and edit the game client ini and update the file name there.
-  - If you still can't determine why you're stuck please [file an issue here] (https://github.com/c0gent/NeverClicker/issues) with the appropriate lines from your log file, settings files (be sure to erase your username and password!), and any other relevant information such as what was happening in-game.
+  - If you still can't determine why you're stuck [please file an issue here] (https://github.com/c0gent/NeverClicker/issues) with the appropriate lines from your log file, settings files (be sure to erase your username and password!), and any other relevant information such as what was happening in-game.
     - Please follow these three simple universal rules for filing bug reports:
 	  1. The complete steps to reproduce the bug: Relevant lines from your log file (not the whole thing, you need to do some pruning)
       2. The expected behavior: What were you expecting to see happen in the game client?
