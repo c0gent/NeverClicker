@@ -82,6 +82,10 @@ namespace NeverClicker {
 			this.checkBoxLogDebug.Checked = Settings.Default.LogDebugMessages;
 		}
 
+		private void SettingsForm_Shown(object sender, EventArgs e) {
+			this.checkBoxBeginOnStartup.Checked = Settings.Default.BeginOnStartup;
+		}
+
 		private void SettingsForm_Load(object sender, EventArgs e) { }
 
 		public bool ValidateNeverwinterExePath() {
@@ -275,10 +279,20 @@ namespace NeverClicker {
 
 
 		private void checkBoxUserRootFolder_CheckedChanged(object sender, EventArgs e) {
-			this.textBoxUserRootFolder.ReadOnly = this.checkBoxUserRootFolder.Checked;
-			this.buttonUserRootFolder.Enabled = !this.checkBoxUserRootFolder.Checked;
+			var chkd = this.checkBoxUserRootFolder.Checked;
 
-			if (this.checkBoxUserRootFolder.Checked) {
+			// TODO: CLEAN THIS UP LATER --- CHECKBOXES FOR THESE ITEMS ARE CURRENTLY PRETTY IRRELEVANT
+			// this.checkBoxSettingsFolder.Enabled = !chkd;
+			// this.checkBoxImagesFolder.Enabled = !chkd;
+			// this.checkBoxLogsFolder.Enabled = !chkd;
+			
+
+
+			this.textBoxUserRootFolder.ReadOnly = chkd;
+			this.textBoxUserRootFolder.Enabled = !chkd;
+			this.buttonUserRootFolder.Enabled = !chkd;
+
+			if (chkd) {
 				this.textBoxUserRootFolder.Text = DefaultUserRootFolder;
 			}
 		}
@@ -362,6 +376,11 @@ namespace NeverClicker {
 		private void linkLabelClientIniFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			Process.Start(linkLabelClientIniFile.Text);
 		}
+
+		private void checkBoxBeginOnStartup_CheckedChanged(object sender, EventArgs e) {
+			Settings.Default.BeginOnStartup = this.checkBoxBeginOnStartup.Checked;
+			Settings.Default.Save();
+		}		
 
 
 		//private void checkBoxSettingsFolder_CheckedChanged(object sender, EventArgs e) {

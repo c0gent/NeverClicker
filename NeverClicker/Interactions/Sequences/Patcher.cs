@@ -37,6 +37,8 @@ namespace NeverClicker.Interactions {
 
 
 			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {
+
+				
 				//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
 				Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
 			
@@ -45,6 +47,14 @@ namespace NeverClicker.Interactions {
 				Keyboard.SendInput(intr, "{Tab}");
 
 				Keyboard.SendInput(intr, gamePassword);
+
+				if (gameUserName == "enter_user_name" || gameUserName == ""
+						|| gamePassword == "enter_password" || gamePassword == "")
+				{
+					intr.Log("Username and/or Password not set. Please edit NeverClicker_GameAccount.ini and set them.", LogEntryType.Fatal);
+					intr.CancelSource.Cancel();
+					return false;
+				}
 
 				Keyboard.SendInput(intr, "{Enter}");
 

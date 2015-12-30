@@ -65,6 +65,7 @@
 			this.buttonSettingsFolder = new System.Windows.Forms.Button();
 			this.labelImagesFolder = new System.Windows.Forms.Label();
 			this.tabControlOptions = new System.Windows.Forms.TabControl();
+			this.checkBoxBeginOnStartup = new System.Windows.Forms.CheckBox();
 			this.tabPageClient.SuspendLayout();
 			this.tabPageAccount.SuspendLayout();
 			this.tabPagePaths.SuspendLayout();
@@ -161,6 +162,7 @@
 			// tabPagePaths
 			// 
 			this.tabPagePaths.BackColor = System.Drawing.Color.Transparent;
+			this.tabPagePaths.Controls.Add(this.checkBoxBeginOnStartup);
 			this.tabPagePaths.Controls.Add(this.labelLogDebug);
 			this.tabPagePaths.Controls.Add(this.checkBoxLogDebug);
 			this.tabPagePaths.Controls.Add(this.textBoxImageShadeVariation);
@@ -195,7 +197,7 @@
 			// labelLogDebug
 			// 
 			this.labelLogDebug.AutoSize = true;
-			this.labelLogDebug.Location = new System.Drawing.Point(6, 210);
+			this.labelLogDebug.Location = new System.Drawing.Point(6, 263);
 			this.labelLogDebug.Name = "labelLogDebug";
 			this.labelLogDebug.Size = new System.Drawing.Size(114, 13);
 			this.labelLogDebug.TabIndex = 31;
@@ -204,7 +206,7 @@
 			// checkBoxLogDebug
 			// 
 			this.checkBoxLogDebug.AutoSize = true;
-			this.checkBoxLogDebug.Location = new System.Drawing.Point(141, 209);
+			this.checkBoxLogDebug.Location = new System.Drawing.Point(141, 262);
 			this.checkBoxLogDebug.Name = "checkBoxLogDebug";
 			this.checkBoxLogDebug.Size = new System.Drawing.Size(65, 17);
 			this.checkBoxLogDebug.TabIndex = 30;
@@ -214,14 +216,15 @@
 			// 
 			// textBoxImageShadeVariation
 			// 
-			this.textBoxImageShadeVariation.Location = new System.Drawing.Point(141, 183);
+			this.textBoxImageShadeVariation.Location = new System.Drawing.Point(141, 236);
 			this.textBoxImageShadeVariation.Name = "textBoxImageShadeVariation";
 			this.textBoxImageShadeVariation.Size = new System.Drawing.Size(93, 20);
 			this.textBoxImageShadeVariation.TabIndex = 29;
 			// 
 			// textBoxUserRootFolder
 			// 
-			this.textBoxUserRootFolder.Location = new System.Drawing.Point(191, 37);
+			this.textBoxUserRootFolder.Enabled = false;
+			this.textBoxUserRootFolder.Location = new System.Drawing.Point(191, 90);
 			this.textBoxUserRootFolder.Name = "textBoxUserRootFolder";
 			this.textBoxUserRootFolder.ReadOnly = true;
 			this.textBoxUserRootFolder.Size = new System.Drawing.Size(556, 20);
@@ -230,7 +233,8 @@
 			// 
 			// textBoxLogsFolder
 			// 
-			this.textBoxLogsFolder.Location = new System.Drawing.Point(191, 124);
+			this.textBoxLogsFolder.Enabled = false;
+			this.textBoxLogsFolder.Location = new System.Drawing.Point(191, 177);
 			this.textBoxLogsFolder.Name = "textBoxLogsFolder";
 			this.textBoxLogsFolder.ReadOnly = true;
 			this.textBoxLogsFolder.Size = new System.Drawing.Size(556, 20);
@@ -238,7 +242,8 @@
 			// 
 			// textBoxSettingsFolder
 			// 
-			this.textBoxSettingsFolder.Location = new System.Drawing.Point(191, 66);
+			this.textBoxSettingsFolder.Enabled = false;
+			this.textBoxSettingsFolder.Location = new System.Drawing.Point(191, 119);
 			this.textBoxSettingsFolder.Name = "textBoxSettingsFolder";
 			this.textBoxSettingsFolder.ReadOnly = true;
 			this.textBoxSettingsFolder.Size = new System.Drawing.Size(556, 20);
@@ -246,14 +251,15 @@
 			// 
 			// textBoxPatcherExePath
 			// 
-			this.textBoxPatcherExePath.Location = new System.Drawing.Point(191, 8);
+			this.textBoxPatcherExePath.Location = new System.Drawing.Point(191, 61);
 			this.textBoxPatcherExePath.Name = "textBoxPatcherExePath";
 			this.textBoxPatcherExePath.Size = new System.Drawing.Size(556, 20);
 			this.textBoxPatcherExePath.TabIndex = 3;
 			// 
 			// textBoxImagesFolder
 			// 
-			this.textBoxImagesFolder.Location = new System.Drawing.Point(191, 95);
+			this.textBoxImagesFolder.Enabled = false;
+			this.textBoxImagesFolder.Location = new System.Drawing.Point(191, 148);
 			this.textBoxImagesFolder.Name = "textBoxImagesFolder";
 			this.textBoxImagesFolder.ReadOnly = true;
 			this.textBoxImagesFolder.Size = new System.Drawing.Size(556, 20);
@@ -262,7 +268,7 @@
 			// labelImageShadeVariation
 			// 
 			this.labelImageShadeVariation.AutoSize = true;
-			this.labelImageShadeVariation.Location = new System.Drawing.Point(6, 186);
+			this.labelImageShadeVariation.Location = new System.Drawing.Point(6, 239);
 			this.labelImageShadeVariation.Name = "labelImageShadeVariation";
 			this.labelImageShadeVariation.Size = new System.Drawing.Size(120, 13);
 			this.labelImageShadeVariation.TabIndex = 28;
@@ -285,7 +291,7 @@
 			this.checkBoxUserRootFolder.Checked = global::NeverClicker.Properties.Settings.Default.UserRootFolderPathIsDefault;
 			this.checkBoxUserRootFolder.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxUserRootFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "UserRootFolderPathIsDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.checkBoxUserRootFolder.Location = new System.Drawing.Point(125, 39);
+			this.checkBoxUserRootFolder.Location = new System.Drawing.Point(125, 92);
 			this.checkBoxUserRootFolder.Name = "checkBoxUserRootFolder";
 			this.checkBoxUserRootFolder.Size = new System.Drawing.Size(60, 17);
 			this.checkBoxUserRootFolder.TabIndex = 24;
@@ -296,7 +302,7 @@
 			// labelUserRootFolder
 			// 
 			this.labelUserRootFolder.AutoSize = true;
-			this.labelUserRootFolder.Location = new System.Drawing.Point(6, 40);
+			this.labelUserRootFolder.Location = new System.Drawing.Point(6, 93);
 			this.labelUserRootFolder.Name = "labelUserRootFolder";
 			this.labelUserRootFolder.Size = new System.Drawing.Size(90, 13);
 			this.labelUserRootFolder.TabIndex = 23;
@@ -305,7 +311,7 @@
 			// buttonUserRootFolder
 			// 
 			this.buttonUserRootFolder.Enabled = false;
-			this.buttonUserRootFolder.Location = new System.Drawing.Point(753, 35);
+			this.buttonUserRootFolder.Location = new System.Drawing.Point(753, 88);
 			this.buttonUserRootFolder.Name = "buttonUserRootFolder";
 			this.buttonUserRootFolder.Size = new System.Drawing.Size(68, 23);
 			this.buttonUserRootFolder.TabIndex = 26;
@@ -319,22 +325,25 @@
 			this.checkBoxSettingsFolder.Checked = global::NeverClicker.Properties.Settings.Default.SettingsFolderPathIsDefault;
 			this.checkBoxSettingsFolder.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxSettingsFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "SettingsFolderPathIsDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.checkBoxSettingsFolder.Location = new System.Drawing.Point(125, 68);
+			this.checkBoxSettingsFolder.Enabled = false;
+			this.checkBoxSettingsFolder.Location = new System.Drawing.Point(125, 121);
 			this.checkBoxSettingsFolder.Name = "checkBoxSettingsFolder";
 			this.checkBoxSettingsFolder.Size = new System.Drawing.Size(60, 17);
 			this.checkBoxSettingsFolder.TabIndex = 5;
 			this.checkBoxSettingsFolder.Text = "Default";
 			this.checkBoxSettingsFolder.UseVisualStyleBackColor = true;
+			this.checkBoxSettingsFolder.Visible = false;
 			// 
 			// buttonLogsFolder
 			// 
 			this.buttonLogsFolder.Enabled = false;
-			this.buttonLogsFolder.Location = new System.Drawing.Point(753, 122);
+			this.buttonLogsFolder.Location = new System.Drawing.Point(753, 175);
 			this.buttonLogsFolder.Name = "buttonLogsFolder";
 			this.buttonLogsFolder.Size = new System.Drawing.Size(68, 23);
 			this.buttonLogsFolder.TabIndex = 13;
 			this.buttonLogsFolder.Text = "Browse...";
 			this.buttonLogsFolder.UseVisualStyleBackColor = true;
+			this.buttonLogsFolder.Visible = false;
 			// 
 			// checkBoxLogsFolder
 			// 
@@ -342,17 +351,20 @@
 			this.checkBoxLogsFolder.Checked = global::NeverClicker.Properties.Settings.Default.LogsFolderPathIsDefault;
 			this.checkBoxLogsFolder.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxLogsFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "LogsFolderPathIsDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.checkBoxLogsFolder.Location = new System.Drawing.Point(125, 126);
+			this.checkBoxLogsFolder.Enabled = false;
+			this.checkBoxLogsFolder.Location = new System.Drawing.Point(125, 179);
 			this.checkBoxLogsFolder.Name = "checkBoxLogsFolder";
 			this.checkBoxLogsFolder.Size = new System.Drawing.Size(60, 17);
 			this.checkBoxLogsFolder.TabIndex = 11;
 			this.checkBoxLogsFolder.Text = "Default";
 			this.checkBoxLogsFolder.UseVisualStyleBackColor = true;
+			this.checkBoxLogsFolder.Visible = false;
 			// 
 			// labelLogsFolder
 			// 
 			this.labelLogsFolder.AutoSize = true;
-			this.labelLogsFolder.Location = new System.Drawing.Point(23, 127);
+			this.labelLogsFolder.Enabled = false;
+			this.labelLogsFolder.Location = new System.Drawing.Point(35, 180);
 			this.labelLogsFolder.Name = "labelLogsFolder";
 			this.labelLogsFolder.Size = new System.Drawing.Size(65, 13);
 			this.labelLogsFolder.TabIndex = 22;
@@ -361,7 +373,8 @@
 			// labelSettingsFolder
 			// 
 			this.labelSettingsFolder.AutoSize = true;
-			this.labelSettingsFolder.Location = new System.Drawing.Point(23, 69);
+			this.labelSettingsFolder.Enabled = false;
+			this.labelSettingsFolder.Location = new System.Drawing.Point(35, 122);
 			this.labelSettingsFolder.Name = "labelSettingsFolder";
 			this.labelSettingsFolder.Size = new System.Drawing.Size(80, 13);
 			this.labelSettingsFolder.TabIndex = 0;
@@ -370,17 +383,18 @@
 			// buttonImagesFolder
 			// 
 			this.buttonImagesFolder.Enabled = false;
-			this.buttonImagesFolder.Location = new System.Drawing.Point(753, 93);
+			this.buttonImagesFolder.Location = new System.Drawing.Point(753, 146);
 			this.buttonImagesFolder.Name = "buttonImagesFolder";
 			this.buttonImagesFolder.Size = new System.Drawing.Size(68, 23);
 			this.buttonImagesFolder.TabIndex = 10;
 			this.buttonImagesFolder.Text = "Browse...";
 			this.buttonImagesFolder.UseVisualStyleBackColor = true;
+			this.buttonImagesFolder.Visible = false;
 			// 
 			// labelPatcherExePath
 			// 
 			this.labelPatcherExePath.AutoSize = true;
-			this.labelPatcherExePath.Location = new System.Drawing.Point(6, 11);
+			this.labelPatcherExePath.Location = new System.Drawing.Point(6, 64);
 			this.labelPatcherExePath.Name = "labelPatcherExePath";
 			this.labelPatcherExePath.Size = new System.Drawing.Size(133, 13);
 			this.labelPatcherExePath.TabIndex = 4;
@@ -392,16 +406,18 @@
 			this.checkBoxImagesFolder.Checked = global::NeverClicker.Properties.Settings.Default.ImagesFolderPathIsDefault;
 			this.checkBoxImagesFolder.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxImagesFolder.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::NeverClicker.Properties.Settings.Default, "ImagesFolderPathIsDefault", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.checkBoxImagesFolder.Location = new System.Drawing.Point(125, 97);
+			this.checkBoxImagesFolder.Enabled = false;
+			this.checkBoxImagesFolder.Location = new System.Drawing.Point(125, 150);
 			this.checkBoxImagesFolder.Name = "checkBoxImagesFolder";
 			this.checkBoxImagesFolder.Size = new System.Drawing.Size(60, 17);
 			this.checkBoxImagesFolder.TabIndex = 8;
 			this.checkBoxImagesFolder.Text = "Default";
 			this.checkBoxImagesFolder.UseVisualStyleBackColor = true;
+			this.checkBoxImagesFolder.Visible = false;
 			// 
 			// buttonPatcherExePath
 			// 
-			this.buttonPatcherExePath.Location = new System.Drawing.Point(753, 6);
+			this.buttonPatcherExePath.Location = new System.Drawing.Point(753, 59);
 			this.buttonPatcherExePath.Name = "buttonPatcherExePath";
 			this.buttonPatcherExePath.Size = new System.Drawing.Size(68, 23);
 			this.buttonPatcherExePath.TabIndex = 4;
@@ -412,17 +428,19 @@
 			// buttonSettingsFolder
 			// 
 			this.buttonSettingsFolder.Enabled = false;
-			this.buttonSettingsFolder.Location = new System.Drawing.Point(753, 64);
+			this.buttonSettingsFolder.Location = new System.Drawing.Point(753, 117);
 			this.buttonSettingsFolder.Name = "buttonSettingsFolder";
 			this.buttonSettingsFolder.Size = new System.Drawing.Size(68, 23);
 			this.buttonSettingsFolder.TabIndex = 7;
 			this.buttonSettingsFolder.Text = "Browse...";
 			this.buttonSettingsFolder.UseVisualStyleBackColor = true;
+			this.buttonSettingsFolder.Visible = false;
 			// 
 			// labelImagesFolder
 			// 
 			this.labelImagesFolder.AutoSize = true;
-			this.labelImagesFolder.Location = new System.Drawing.Point(23, 98);
+			this.labelImagesFolder.Enabled = false;
+			this.labelImagesFolder.Location = new System.Drawing.Point(35, 151);
 			this.labelImagesFolder.Name = "labelImagesFolder";
 			this.labelImagesFolder.Size = new System.Drawing.Size(76, 13);
 			this.labelImagesFolder.TabIndex = 10;
@@ -439,6 +457,18 @@
 			this.tabControlOptions.Size = new System.Drawing.Size(835, 485);
 			this.tabControlOptions.TabIndex = 22;
 			// 
+			// checkBoxBeginOnStartup
+			// 
+			this.checkBoxBeginOnStartup.AutoSize = true;
+			this.checkBoxBeginOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.checkBoxBeginOnStartup.Location = new System.Drawing.Point(9, 7);
+			this.checkBoxBeginOnStartup.Name = "checkBoxBeginOnStartup";
+			this.checkBoxBeginOnStartup.Size = new System.Drawing.Size(212, 17);
+			this.checkBoxBeginOnStartup.TabIndex = 32;
+			this.checkBoxBeginOnStartup.Text = "Start AutoCycle on NeverClicker Startup";
+			this.checkBoxBeginOnStartup.UseVisualStyleBackColor = true;
+			this.checkBoxBeginOnStartup.CheckedChanged += new System.EventHandler(this.checkBoxBeginOnStartup_CheckedChanged);
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -453,6 +483,7 @@
 			this.Name = "SettingsForm";
 			this.Text = "Settings";
 			this.Load += new System.EventHandler(this.SettingsForm_Load);
+			this.Shown += new System.EventHandler(this.SettingsForm_Shown);
 			this.tabPageClient.ResumeLayout(false);
 			this.tabPageClient.PerformLayout();
 			this.tabPageAccount.ResumeLayout(false);
@@ -501,5 +532,6 @@
 		private System.Windows.Forms.LinkLabel linkLabelAccountIniFile;
 		private System.Windows.Forms.Label labelLogDebug;
 		private System.Windows.Forms.CheckBox checkBoxLogDebug;
+		private System.Windows.Forms.CheckBox checkBoxBeginOnStartup;
 	}
 }

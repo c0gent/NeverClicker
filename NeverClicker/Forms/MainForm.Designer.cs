@@ -41,7 +41,6 @@
 			this.buttonTestsForm = new System.Windows.Forms.Button();
 			this.listBoxTaskQueue = new System.Windows.Forms.ListBox();
 			this.labelTaskQueue = new System.Windows.Forms.Label();
-			this.checkBoxBeginOnStartup = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// textBox1
@@ -207,25 +206,12 @@
 			this.labelTaskQueue.TabIndex = 20;
 			this.labelTaskQueue.Text = "Task Queue";
 			// 
-			// checkBoxBeginOnStartup
-			// 
-			this.checkBoxBeginOnStartup.AutoSize = true;
-			this.checkBoxBeginOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxBeginOnStartup.Location = new System.Drawing.Point(176, 60);
-			this.checkBoxBeginOnStartup.Name = "checkBoxBeginOnStartup";
-			this.checkBoxBeginOnStartup.Size = new System.Drawing.Size(102, 17);
-			this.checkBoxBeginOnStartup.TabIndex = 22;
-			this.checkBoxBeginOnStartup.Text = "Begin on Startup";
-			this.checkBoxBeginOnStartup.UseVisualStyleBackColor = true;
-			this.checkBoxBeginOnStartup.CheckedChanged += new System.EventHandler(this.checkBoxBeginOnStartup_CheckedChanged);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(450, 598);
-			this.Controls.Add(this.checkBoxBeginOnStartup);
 			this.Controls.Add(this.listBoxTaskQueue);
 			this.Controls.Add(this.labelTaskQueue);
 			this.Controls.Add(this.buttonTestsForm);
@@ -263,6 +249,5 @@
 		private System.Windows.Forms.Button buttonTestsForm;
 		private System.Windows.Forms.ListBox listBoxTaskQueue;
 		private System.Windows.Forms.Label labelTaskQueue;
-		private System.Windows.Forms.CheckBox checkBoxBeginOnStartup;
 	}
 }

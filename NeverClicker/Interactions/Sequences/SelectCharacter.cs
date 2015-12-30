@@ -150,9 +150,7 @@ namespace NeverClicker.Interactions {
 			//		Sleep 170
 			//        return 0
 			//    }
-
-
-
+			
 			//intr.ExecuteStatement("ClearSafeLogin()");			
 			//intr.ExecuteStatement("ClearOkPopupBullshit()");
 			ClearSafeLogin(intr);
