@@ -47,7 +47,9 @@ namespace NeverClicker {
 
 
 		public void ProcessNextGameTask() {
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+
+			Log("Manually removing tasks has been disabled.");
 
 			//GameTask nextTask;
 		
@@ -90,14 +92,14 @@ namespace NeverClicker {
 		}
 
 
-		public async void ExecuteStatementAsync(string statement) {
+		public async void ExecuteStatement(string statement) {
 			Log(string.Format("Evaluating '{0}'()...", statement));
 			await Run(() => Itr.ExecuteStatement(statement));
 			Log(string.Format("'{0}' complete.", statement));
 		}
 
 
-		public async Task<bool> DetectWindowAsync(string windowExe) {
+		public async Task<bool> DetectWindow(string windowExe) {
 			Log(string.Format("Detecting: '{0}'...", windowExe));
 			var result = await Run(() => Screen.WindowDetectExist(Itr, windowExe));
 			return result;

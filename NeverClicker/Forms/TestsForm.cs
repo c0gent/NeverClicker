@@ -56,7 +56,7 @@ namespace NeverClicker.Forms {
 		}
 
 		private void buttonExecuteStatement_Click(object sender, EventArgs e) {
-			MainForm.AutomationEngine.ExecuteStatementAsync(textBoxExecuteStatement.Text);
+			MainForm.AutomationEngine.ExecuteStatement(textBoxExecuteStatement.Text);
 		}
 
 		private void buttonCheckVar_Click(object sender, EventArgs e) {
@@ -74,7 +74,7 @@ namespace NeverClicker.Forms {
 
 		private async void buttonWindowDetect_Click(object sender, EventArgs e) {
 			string resultText;
-			if (await MainForm.AutomationEngine.DetectWindowAsync(textBoxDetectWindow.Text)) {
+			if (await MainForm.AutomationEngine.DetectWindow(textBoxDetectWindow.Text)) {
 				resultText = "Found!";
 			} else {
 				resultText = "Not Found";
@@ -146,6 +146,10 @@ namespace NeverClicker.Forms {
 			MainForm.AutomationEngine.WindowKill(textBoxDetectWindow.Text);
 		}
 
+		private void buttonWindowMinimize_Click(object sender, EventArgs e) {
+			MainForm.AutomationEngine.WindowMinimize(textBoxDetectWindow.Text);
+		}
+
 		private void buttonSendKeys_Click(object sender, EventArgs e) {
 			MainForm.AutomationEngine.SendKeys(textBoxSendKeys.Text);
             //Interactions.Keyboard.Send();
@@ -172,8 +176,7 @@ namespace NeverClicker.Forms {
 			}
 		}
 
-		private void buttonSaveSetting_Click(object sender, EventArgs e) {
-			
+		private void buttonSaveSetting_Click(object sender, EventArgs e) {			
 			if (!string.IsNullOrWhiteSpace(this.textBoxSettingName.Text)) {
 				XmlNode selectedNode = SettingsXmlDoc.DocumentElement.SelectSingleNode(this.textBoxSettingName.Text);
 
@@ -211,8 +214,10 @@ namespace NeverClicker.Forms {
 			}
 		}
 
-		private void tabPageWindow_Click(object sender, EventArgs e) {
+		private void button3_Click(object sender, EventArgs e) {
 
 		}
+
+
 	}
 }

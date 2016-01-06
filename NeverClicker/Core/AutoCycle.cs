@@ -14,12 +14,12 @@ namespace NeverClicker.Interactions {
 		public static void AutoCycle(
 					Interactor intr,
 					TaskQueue queue,
-					int startDelaySec
-        ) {
+					int startDelaySec)
+        {
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
 			int charsTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
-		
+
 			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
 				queue.Populate(intr, charsTotal, RESET_DAY);

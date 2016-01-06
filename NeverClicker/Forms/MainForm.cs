@@ -15,20 +15,14 @@ using System.Collections.Immutable;
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
 		public AutomationEngine AutomationEngine;
-		private void buttonExit_Click(object sender, EventArgs e) => Close();
-		
+		private void buttonExit_Click(object sender, EventArgs e) => Close();		
 
 		public MainForm() {
 			InitializeComponent();
-
-			Settings.Default.Upgrade();
-			//Settings.Default.AssetsFolderPath = Settings.Default.UserRootFolderPath + "\\Assets";
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e) {			
-			//if (!SettingsManager.SettingsAreValid()) {
-			//	this.SetButtonStateAllDisabled();
-			//	this.SettingsInvalid();
+			Settings.Default.Upgrade();
 
 			if (!Settings.Default.NeverClickerConfigValid) {
 				this.SetButtonStateAllDisabled();
@@ -119,7 +113,6 @@ namespace NeverClicker.Forms {
 			this.buttonStop.Enabled = false;
 			//this.tabControlPrimary.Enabled = false;
 		}
-		
 
 		private void buttonOptions_Click(object sender, EventArgs e) {
 			OpenSettingsWindow();
@@ -148,11 +141,7 @@ namespace NeverClicker.Forms {
 
 			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
 
-			var endTime = DateTime.Now; // ***** DEBUG *****
-			//WriteLine("End TaskQueue Refresh: " + endTime.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
-
-			// DEPRICATED this.listBoxTaskQueue.DataSource = taskList.AsEnumerable();
-			// DEPRICATED this.listBoxTaskQueue.DisplayMember = taskList.Values[0].ToString();
+			var endTime = DateTime.Now;
 		}
 
 		private void buttonMoveMouse_Click(object sender, EventArgs e) {
@@ -188,10 +177,6 @@ namespace NeverClicker.Forms {
 				this.AutomationEngine.Log("NeverClicker Exiting.");
 				this.AutomationEngine.Stop();
 			}		
-		}
-
-		private void MainForm_Load(object sender, EventArgs e) {
-
 		}
 	}
 }

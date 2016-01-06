@@ -42,22 +42,6 @@
 			this.textBoxSettingValue = new System.Windows.Forms.TextBox();
 			this.labelSettingName = new System.Windows.Forms.Label();
 			this.buttonReadSetting = new System.Windows.Forms.Button();
-			this.tabPageRaw = new System.Windows.Forms.TabPage();
-			this.labelFunctionParensClose = new System.Windows.Forms.Label();
-			this.labelFunctionParensOpen = new System.Windows.Forms.Label();
-			this.textBoxExecuteStatement = new System.Windows.Forms.TextBox();
-			this.textBox_var = new System.Windows.Forms.TextBox();
-			this.textBoxExecuteFunction = new System.Windows.Forms.TextBox();
-			this.textBoxExecuteFunctionP1 = new System.Windows.Forms.TextBox();
-			this.textBoxExecuteFunctionP2 = new System.Windows.Forms.TextBox();
-			this.textBoxExecuteFunctionP3 = new System.Windows.Forms.TextBox();
-			this.buttonExecuteStatement = new System.Windows.Forms.Button();
-			this.labelExecuteStatement = new System.Windows.Forms.Label();
-			this.labelFunctionParameters = new System.Windows.Forms.Label();
-			this.labelFunctionName = new System.Windows.Forms.Label();
-			this.button3 = new System.Windows.Forms.Button();
-			this.labelEvaluateVariable = new System.Windows.Forms.Label();
-			this.buttonExecuteFunction = new System.Windows.Forms.Button();
 			this.tabPageWindow = new System.Windows.Forms.TabPage();
 			this.buttonClickImage = new System.Windows.Forms.Button();
 			this.buttonWindowActivate = new System.Windows.Forms.Button();
@@ -78,12 +62,6 @@
 			this.labelGameTaskCharacterIdx = new System.Windows.Forms.Label();
 			this.buttonNextTask = new System.Windows.Forms.Button();
 			this.buttonAddCharIdx = new System.Windows.Forms.Button();
-			this.tabPageInput = new System.Windows.Forms.TabPage();
-			this.buttonSendKeys = new System.Windows.Forms.Button();
-			this.labelSendKeys = new System.Windows.Forms.Label();
-			this.textBoxSendKeys = new System.Windows.Forms.TextBox();
-			this.buttonMoveMouse = new System.Windows.Forms.Button();
-			this.buttonClose = new System.Windows.Forms.Button();
 			this.tabPageSettings = new System.Windows.Forms.TabPage();
 			this.textBoxTestReadValue = new System.Windows.Forms.TextBox();
 			this.textBoxTestReadName = new System.Windows.Forms.TextBox();
@@ -95,14 +73,36 @@
 			this.labelTestProperty = new System.Windows.Forms.Label();
 			this.labelTestFileName = new System.Windows.Forms.Label();
 			this.buttonTestStore = new System.Windows.Forms.Button();
+			this.tabPageInput = new System.Windows.Forms.TabPage();
+			this.buttonSendKeys = new System.Windows.Forms.Button();
+			this.labelSendKeys = new System.Windows.Forms.Label();
+			this.textBoxSendKeys = new System.Windows.Forms.TextBox();
+			this.buttonMoveMouse = new System.Windows.Forms.Button();
+			this.tabPageRaw = new System.Windows.Forms.TabPage();
+			this.labelFunctionParensClose = new System.Windows.Forms.Label();
+			this.labelFunctionParensOpen = new System.Windows.Forms.Label();
+			this.textBoxExecuteStatement = new System.Windows.Forms.TextBox();
+			this.textBox_var = new System.Windows.Forms.TextBox();
+			this.textBoxExecuteFunction = new System.Windows.Forms.TextBox();
+			this.textBoxExecuteFunctionP1 = new System.Windows.Forms.TextBox();
+			this.textBoxExecuteFunctionP2 = new System.Windows.Forms.TextBox();
+			this.textBoxExecuteFunctionP3 = new System.Windows.Forms.TextBox();
+			this.buttonExecuteStatement = new System.Windows.Forms.Button();
+			this.labelExecuteStatement = new System.Windows.Forms.Label();
+			this.labelFunctionParameters = new System.Windows.Forms.Label();
+			this.labelFunctionName = new System.Windows.Forms.Label();
+			this.button3 = new System.Windows.Forms.Button();
+			this.labelEvaluateVariable = new System.Windows.Forms.Label();
+			this.buttonEvaluateFunction = new System.Windows.Forms.Button();
+			this.buttonClose = new System.Windows.Forms.Button();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.groupBoxSettings.SuspendLayout();
-			this.tabPageRaw.SuspendLayout();
 			this.tabPageWindow.SuspendLayout();
 			this.tabPageQueue.SuspendLayout();
-			this.tabPageInput.SuspendLayout();
 			this.tabPageSettings.SuspendLayout();
+			this.tabPageInput.SuspendLayout();
+			this.tabPageRaw.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControlPrimary
@@ -110,11 +110,11 @@
 			this.tabControlPrimary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControlPrimary.Controls.Add(this.tabPageStatus);
-			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
 			this.tabControlPrimary.Controls.Add(this.tabPageWindow);
 			this.tabControlPrimary.Controls.Add(this.tabPageQueue);
-			this.tabControlPrimary.Controls.Add(this.tabPageSettings);
 			this.tabControlPrimary.Controls.Add(this.tabPageInput);
+			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
+			this.tabControlPrimary.Controls.Add(this.tabPageSettings);
 			this.tabControlPrimary.Location = new System.Drawing.Point(9, 9);
 			this.tabControlPrimary.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControlPrimary.Name = "tabControlPrimary";
@@ -283,154 +283,6 @@
 			this.buttonReadSetting.UseVisualStyleBackColor = true;
 			this.buttonReadSetting.Click += new System.EventHandler(this.buttonReadSetting_Click);
 			// 
-			// tabPageRaw
-			// 
-			this.tabPageRaw.BackColor = System.Drawing.Color.Transparent;
-			this.tabPageRaw.Controls.Add(this.labelFunctionParensClose);
-			this.tabPageRaw.Controls.Add(this.labelFunctionParensOpen);
-			this.tabPageRaw.Controls.Add(this.textBoxExecuteStatement);
-			this.tabPageRaw.Controls.Add(this.textBox_var);
-			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunction);
-			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP1);
-			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP2);
-			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP3);
-			this.tabPageRaw.Controls.Add(this.buttonExecuteStatement);
-			this.tabPageRaw.Controls.Add(this.labelExecuteStatement);
-			this.tabPageRaw.Controls.Add(this.labelFunctionParameters);
-			this.tabPageRaw.Controls.Add(this.labelFunctionName);
-			this.tabPageRaw.Controls.Add(this.button3);
-			this.tabPageRaw.Controls.Add(this.labelEvaluateVariable);
-			this.tabPageRaw.Controls.Add(this.buttonExecuteFunction);
-			this.tabPageRaw.Location = new System.Drawing.Point(4, 22);
-			this.tabPageRaw.Margin = new System.Windows.Forms.Padding(0);
-			this.tabPageRaw.Name = "tabPageRaw";
-			this.tabPageRaw.Size = new System.Drawing.Size(485, 314);
-			this.tabPageRaw.TabIndex = 0;
-			this.tabPageRaw.Text = "Raw";
-			// 
-			// labelFunctionParensClose
-			// 
-			this.labelFunctionParensClose.AutoSize = true;
-			this.labelFunctionParensClose.Location = new System.Drawing.Point(244, 64);
-			this.labelFunctionParensClose.Name = "labelFunctionParensClose";
-			this.labelFunctionParensClose.Size = new System.Drawing.Size(10, 13);
-			this.labelFunctionParensClose.TabIndex = 21;
-			this.labelFunctionParensClose.Text = ")";
-			// 
-			// labelFunctionParensOpen
-			// 
-			this.labelFunctionParensOpen.AutoSize = true;
-			this.labelFunctionParensOpen.Location = new System.Drawing.Point(241, 12);
-			this.labelFunctionParensOpen.Name = "labelFunctionParensOpen";
-			this.labelFunctionParensOpen.Size = new System.Drawing.Size(10, 13);
-			this.labelFunctionParensOpen.TabIndex = 20;
-			this.labelFunctionParensOpen.Text = "(";
-			// 
-			// textBoxExecuteStatement
-			// 
-			this.textBoxExecuteStatement.Location = new System.Drawing.Point(85, 157);
-			this.textBoxExecuteStatement.Name = "textBoxExecuteStatement";
-			this.textBoxExecuteStatement.Size = new System.Drawing.Size(202, 20);
-			this.textBoxExecuteStatement.TabIndex = 18;
-			// 
-			// textBox_var
-			// 
-			this.textBox_var.Location = new System.Drawing.Point(107, 113);
-			this.textBox_var.Name = "textBox_var";
-			this.textBox_var.Size = new System.Drawing.Size(180, 20);
-			this.textBox_var.TabIndex = 4;
-			// 
-			// textBoxExecuteFunction
-			// 
-			this.textBoxExecuteFunction.Location = new System.Drawing.Point(85, 12);
-			this.textBoxExecuteFunction.Name = "textBoxExecuteFunction";
-			this.textBoxExecuteFunction.Size = new System.Drawing.Size(156, 20);
-			this.textBoxExecuteFunction.TabIndex = 6;
-			// 
-			// textBoxExecuteFunctionP1
-			// 
-			this.textBoxExecuteFunctionP1.Location = new System.Drawing.Point(85, 38);
-			this.textBoxExecuteFunctionP1.Name = "textBoxExecuteFunctionP1";
-			this.textBoxExecuteFunctionP1.Size = new System.Drawing.Size(156, 20);
-			this.textBoxExecuteFunctionP1.TabIndex = 8;
-			// 
-			// textBoxExecuteFunctionP2
-			// 
-			this.textBoxExecuteFunctionP2.Location = new System.Drawing.Point(247, 38);
-			this.textBoxExecuteFunctionP2.Name = "textBoxExecuteFunctionP2";
-			this.textBoxExecuteFunctionP2.Size = new System.Drawing.Size(155, 20);
-			this.textBoxExecuteFunctionP2.TabIndex = 9;
-			// 
-			// textBoxExecuteFunctionP3
-			// 
-			this.textBoxExecuteFunctionP3.Location = new System.Drawing.Point(85, 64);
-			this.textBoxExecuteFunctionP3.Name = "textBoxExecuteFunctionP3";
-			this.textBoxExecuteFunctionP3.Size = new System.Drawing.Size(156, 20);
-			this.textBoxExecuteFunctionP3.TabIndex = 10;
-			// 
-			// buttonExecuteStatement
-			// 
-			this.buttonExecuteStatement.Location = new System.Drawing.Point(293, 155);
-			this.buttonExecuteStatement.Name = "buttonExecuteStatement";
-			this.buttonExecuteStatement.Size = new System.Drawing.Size(109, 23);
-			this.buttonExecuteStatement.TabIndex = 17;
-			this.buttonExecuteStatement.Text = "Execute";
-			this.buttonExecuteStatement.UseVisualStyleBackColor = true;
-			// 
-			// labelExecuteStatement
-			// 
-			this.labelExecuteStatement.AutoSize = true;
-			this.labelExecuteStatement.Location = new System.Drawing.Point(8, 157);
-			this.labelExecuteStatement.Name = "labelExecuteStatement";
-			this.labelExecuteStatement.Size = new System.Drawing.Size(58, 13);
-			this.labelExecuteStatement.TabIndex = 19;
-			this.labelExecuteStatement.Text = "Statement:";
-			// 
-			// labelFunctionParameters
-			// 
-			this.labelFunctionParameters.AutoSize = true;
-			this.labelFunctionParameters.Location = new System.Drawing.Point(8, 38);
-			this.labelFunctionParameters.Name = "labelFunctionParameters";
-			this.labelFunctionParameters.Size = new System.Drawing.Size(63, 13);
-			this.labelFunctionParameters.TabIndex = 16;
-			this.labelFunctionParameters.Text = "Parameters:";
-			// 
-			// labelFunctionName
-			// 
-			this.labelFunctionName.AutoSize = true;
-			this.labelFunctionName.Location = new System.Drawing.Point(8, 12);
-			this.labelFunctionName.Name = "labelFunctionName";
-			this.labelFunctionName.Size = new System.Drawing.Size(51, 13);
-			this.labelFunctionName.TabIndex = 15;
-			this.labelFunctionName.Text = "Function:";
-			// 
-			// button3
-			// 
-			this.button3.Location = new System.Drawing.Point(293, 111);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(109, 23);
-			this.button3.TabIndex = 3;
-			this.button3.Text = "Evaluate";
-			this.button3.UseVisualStyleBackColor = true;
-			// 
-			// labelEvaluateVariable
-			// 
-			this.labelEvaluateVariable.AutoSize = true;
-			this.labelEvaluateVariable.Location = new System.Drawing.Point(8, 113);
-			this.labelEvaluateVariable.Name = "labelEvaluateVariable";
-			this.labelEvaluateVariable.Size = new System.Drawing.Size(79, 13);
-			this.labelEvaluateVariable.TabIndex = 14;
-			this.labelEvaluateVariable.Text = "Variable Name:";
-			// 
-			// buttonExecuteFunction
-			// 
-			this.buttonExecuteFunction.Location = new System.Drawing.Point(293, 64);
-			this.buttonExecuteFunction.Name = "buttonExecuteFunction";
-			this.buttonExecuteFunction.Size = new System.Drawing.Size(109, 23);
-			this.buttonExecuteFunction.TabIndex = 7;
-			this.buttonExecuteFunction.Text = "Evaluate";
-			this.buttonExecuteFunction.UseVisualStyleBackColor = true;
-			// 
 			// tabPageWindow
 			// 
 			this.tabPageWindow.BackColor = System.Drawing.Color.Transparent;
@@ -450,7 +302,6 @@
 			this.tabPageWindow.Size = new System.Drawing.Size(485, 314);
 			this.tabPageWindow.TabIndex = 1;
 			this.tabPageWindow.Text = "Window";
-			this.tabPageWindow.Click += new System.EventHandler(this.tabPageWindow_Click);
 			// 
 			// buttonClickImage
 			// 
@@ -470,6 +321,7 @@
 			this.buttonWindowActivate.TabIndex = 9;
 			this.buttonWindowActivate.Text = "Activate";
 			this.buttonWindowActivate.UseVisualStyleBackColor = true;
+			this.buttonWindowActivate.Click += new System.EventHandler(this.buttonWindowActivate_Click);
 			// 
 			// buttonWindowKill
 			// 
@@ -479,6 +331,7 @@
 			this.buttonWindowKill.TabIndex = 8;
 			this.buttonWindowKill.Text = "Kill";
 			this.buttonWindowKill.UseVisualStyleBackColor = true;
+			this.buttonWindowKill.Click += new System.EventHandler(this.buttonWindowKill_Click);
 			// 
 			// buttonWindowMinimize
 			// 
@@ -488,6 +341,7 @@
 			this.buttonWindowMinimize.TabIndex = 7;
 			this.buttonWindowMinimize.Text = "Minimize";
 			this.buttonWindowMinimize.UseVisualStyleBackColor = true;
+			this.buttonWindowMinimize.Click += new System.EventHandler(this.buttonWindowMinimize_Click);
 			// 
 			// labelFindImage1
 			// 
@@ -511,6 +365,7 @@
 			this.textBoxDetectWindow.Name = "textBoxDetectWindow";
 			this.textBoxDetectWindow.Size = new System.Drawing.Size(207, 20);
 			this.textBoxDetectWindow.TabIndex = 2;
+			this.textBoxDetectWindow.TextChanged += new System.EventHandler(this.textBoxDetectWindow_TextChanged);
 			// 
 			// buttonFindImage
 			// 
@@ -539,6 +394,7 @@
 			this.buttonWindowDetect.TabIndex = 19;
 			this.buttonWindowDetect.Text = "Detect";
 			this.buttonWindowDetect.UseVisualStyleBackColor = true;
+			this.buttonWindowDetect.Click += new System.EventHandler(this.buttonWindowDetect_Click);
 			// 
 			// tabPageQueue
 			// 
@@ -616,6 +472,7 @@
 			this.buttonNextTask.TabIndex = 2;
 			this.buttonNextTask.Text = "Pop Next Task";
 			this.buttonNextTask.UseVisualStyleBackColor = true;
+			this.buttonNextTask.Click += new System.EventHandler(this.buttonNextTask_Click);
 			// 
 			// buttonAddCharIdx
 			// 
@@ -625,64 +482,7 @@
 			this.buttonAddCharIdx.TabIndex = 1;
 			this.buttonAddCharIdx.Text = "Queue Task";
 			this.buttonAddCharIdx.UseVisualStyleBackColor = true;
-			// 
-			// tabPageInput
-			// 
-			this.tabPageInput.BackColor = System.Drawing.Color.Transparent;
-			this.tabPageInput.Controls.Add(this.buttonSendKeys);
-			this.tabPageInput.Controls.Add(this.labelSendKeys);
-			this.tabPageInput.Controls.Add(this.textBoxSendKeys);
-			this.tabPageInput.Controls.Add(this.buttonMoveMouse);
-			this.tabPageInput.Location = new System.Drawing.Point(4, 22);
-			this.tabPageInput.Margin = new System.Windows.Forms.Padding(0);
-			this.tabPageInput.Name = "tabPageInput";
-			this.tabPageInput.Size = new System.Drawing.Size(485, 314);
-			this.tabPageInput.TabIndex = 3;
-			this.tabPageInput.Text = "Input";
-			// 
-			// buttonSendKeys
-			// 
-			this.buttonSendKeys.Location = new System.Drawing.Point(326, 6);
-			this.buttonSendKeys.Name = "buttonSendKeys";
-			this.buttonSendKeys.Size = new System.Drawing.Size(65, 23);
-			this.buttonSendKeys.TabIndex = 8;
-			this.buttonSendKeys.Text = "Send";
-			this.buttonSendKeys.UseVisualStyleBackColor = true;
-			// 
-			// labelSendKeys
-			// 
-			this.labelSendKeys.AutoSize = true;
-			this.labelSendKeys.Location = new System.Drawing.Point(3, 8);
-			this.labelSendKeys.Name = "labelSendKeys";
-			this.labelSendKeys.Size = new System.Drawing.Size(61, 13);
-			this.labelSendKeys.TabIndex = 7;
-			this.labelSendKeys.Text = "Send Keys:";
-			// 
-			// textBoxSendKeys
-			// 
-			this.textBoxSendKeys.Location = new System.Drawing.Point(73, 8);
-			this.textBoxSendKeys.Name = "textBoxSendKeys";
-			this.textBoxSendKeys.Size = new System.Drawing.Size(247, 20);
-			this.textBoxSendKeys.TabIndex = 6;
-			// 
-			// buttonMoveMouse
-			// 
-			this.buttonMoveMouse.Location = new System.Drawing.Point(9, 267);
-			this.buttonMoveMouse.Name = "buttonMoveMouse";
-			this.buttonMoveMouse.Size = new System.Drawing.Size(105, 23);
-			this.buttonMoveMouse.TabIndex = 5;
-			this.buttonMoveMouse.Text = "Move Mouse";
-			this.buttonMoveMouse.UseVisualStyleBackColor = true;
-			// 
-			// buttonClose
-			// 
-			this.buttonClose.Location = new System.Drawing.Point(424, 362);
-			this.buttonClose.Name = "buttonClose";
-			this.buttonClose.Size = new System.Drawing.Size(75, 23);
-			this.buttonClose.TabIndex = 0;
-			this.buttonClose.Text = "Close";
-			this.buttonClose.UseVisualStyleBackColor = true;
-			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+			this.buttonAddCharIdx.Click += new System.EventHandler(this.buttonAddCharIdx_Click);
 			// 
 			// tabPageSettings
 			// 
@@ -702,7 +502,7 @@
 			this.tabPageSettings.Name = "tabPageSettings";
 			this.tabPageSettings.Size = new System.Drawing.Size(485, 314);
 			this.tabPageSettings.TabIndex = 5;
-			this.tabPageSettings.Text = "Settings";
+			this.tabPageSettings.Text = "Settings (disabled)";
 			// 
 			// textBoxTestReadValue
 			// 
@@ -783,6 +583,222 @@
 			this.buttonTestStore.Text = "Store";
 			this.buttonTestStore.UseVisualStyleBackColor = true;
 			// 
+			// tabPageInput
+			// 
+			this.tabPageInput.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageInput.Controls.Add(this.buttonSendKeys);
+			this.tabPageInput.Controls.Add(this.labelSendKeys);
+			this.tabPageInput.Controls.Add(this.textBoxSendKeys);
+			this.tabPageInput.Controls.Add(this.buttonMoveMouse);
+			this.tabPageInput.Location = new System.Drawing.Point(4, 22);
+			this.tabPageInput.Margin = new System.Windows.Forms.Padding(0);
+			this.tabPageInput.Name = "tabPageInput";
+			this.tabPageInput.Size = new System.Drawing.Size(485, 314);
+			this.tabPageInput.TabIndex = 3;
+			this.tabPageInput.Text = "Input";
+			// 
+			// buttonSendKeys
+			// 
+			this.buttonSendKeys.Location = new System.Drawing.Point(326, 6);
+			this.buttonSendKeys.Name = "buttonSendKeys";
+			this.buttonSendKeys.Size = new System.Drawing.Size(65, 23);
+			this.buttonSendKeys.TabIndex = 8;
+			this.buttonSendKeys.Text = "Send";
+			this.buttonSendKeys.UseVisualStyleBackColor = true;
+			this.buttonSendKeys.Click += new System.EventHandler(this.buttonSendKeys_Click);
+			// 
+			// labelSendKeys
+			// 
+			this.labelSendKeys.AutoSize = true;
+			this.labelSendKeys.Location = new System.Drawing.Point(3, 8);
+			this.labelSendKeys.Name = "labelSendKeys";
+			this.labelSendKeys.Size = new System.Drawing.Size(61, 13);
+			this.labelSendKeys.TabIndex = 7;
+			this.labelSendKeys.Text = "Send Keys:";
+			// 
+			// textBoxSendKeys
+			// 
+			this.textBoxSendKeys.Location = new System.Drawing.Point(73, 8);
+			this.textBoxSendKeys.Name = "textBoxSendKeys";
+			this.textBoxSendKeys.Size = new System.Drawing.Size(247, 20);
+			this.textBoxSendKeys.TabIndex = 6;
+			// 
+			// buttonMoveMouse
+			// 
+			this.buttonMoveMouse.Location = new System.Drawing.Point(9, 267);
+			this.buttonMoveMouse.Name = "buttonMoveMouse";
+			this.buttonMoveMouse.Size = new System.Drawing.Size(105, 23);
+			this.buttonMoveMouse.TabIndex = 5;
+			this.buttonMoveMouse.Text = "Move Mouse";
+			this.buttonMoveMouse.UseVisualStyleBackColor = true;
+			// 
+			// tabPageRaw
+			// 
+			this.tabPageRaw.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageRaw.Controls.Add(this.labelFunctionParensClose);
+			this.tabPageRaw.Controls.Add(this.labelFunctionParensOpen);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteStatement);
+			this.tabPageRaw.Controls.Add(this.textBox_var);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunction);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP1);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP2);
+			this.tabPageRaw.Controls.Add(this.textBoxExecuteFunctionP3);
+			this.tabPageRaw.Controls.Add(this.buttonExecuteStatement);
+			this.tabPageRaw.Controls.Add(this.labelExecuteStatement);
+			this.tabPageRaw.Controls.Add(this.labelFunctionParameters);
+			this.tabPageRaw.Controls.Add(this.labelFunctionName);
+			this.tabPageRaw.Controls.Add(this.button3);
+			this.tabPageRaw.Controls.Add(this.labelEvaluateVariable);
+			this.tabPageRaw.Controls.Add(this.buttonEvaluateFunction);
+			this.tabPageRaw.Location = new System.Drawing.Point(4, 22);
+			this.tabPageRaw.Margin = new System.Windows.Forms.Padding(0);
+			this.tabPageRaw.Name = "tabPageRaw";
+			this.tabPageRaw.Size = new System.Drawing.Size(485, 314);
+			this.tabPageRaw.TabIndex = 0;
+			this.tabPageRaw.Text = "Raw";
+			// 
+			// labelFunctionParensClose
+			// 
+			this.labelFunctionParensClose.AutoSize = true;
+			this.labelFunctionParensClose.Location = new System.Drawing.Point(244, 64);
+			this.labelFunctionParensClose.Name = "labelFunctionParensClose";
+			this.labelFunctionParensClose.Size = new System.Drawing.Size(10, 13);
+			this.labelFunctionParensClose.TabIndex = 21;
+			this.labelFunctionParensClose.Text = ")";
+			// 
+			// labelFunctionParensOpen
+			// 
+			this.labelFunctionParensOpen.AutoSize = true;
+			this.labelFunctionParensOpen.Location = new System.Drawing.Point(241, 12);
+			this.labelFunctionParensOpen.Name = "labelFunctionParensOpen";
+			this.labelFunctionParensOpen.Size = new System.Drawing.Size(10, 13);
+			this.labelFunctionParensOpen.TabIndex = 20;
+			this.labelFunctionParensOpen.Text = "(";
+			// 
+			// textBoxExecuteStatement
+			// 
+			this.textBoxExecuteStatement.Location = new System.Drawing.Point(189, 196);
+			this.textBoxExecuteStatement.Name = "textBoxExecuteStatement";
+			this.textBoxExecuteStatement.Size = new System.Drawing.Size(98, 20);
+			this.textBoxExecuteStatement.TabIndex = 18;
+			this.textBoxExecuteStatement.Visible = false;
+			// 
+			// textBox_var
+			// 
+			this.textBox_var.Location = new System.Drawing.Point(189, 152);
+			this.textBox_var.Name = "textBox_var";
+			this.textBox_var.Size = new System.Drawing.Size(98, 20);
+			this.textBox_var.TabIndex = 4;
+			this.textBox_var.Visible = false;
+			// 
+			// textBoxExecuteFunction
+			// 
+			this.textBoxExecuteFunction.Location = new System.Drawing.Point(85, 12);
+			this.textBoxExecuteFunction.Name = "textBoxExecuteFunction";
+			this.textBoxExecuteFunction.Size = new System.Drawing.Size(156, 20);
+			this.textBoxExecuteFunction.TabIndex = 6;
+			// 
+			// textBoxExecuteFunctionP1
+			// 
+			this.textBoxExecuteFunctionP1.Location = new System.Drawing.Point(85, 38);
+			this.textBoxExecuteFunctionP1.Name = "textBoxExecuteFunctionP1";
+			this.textBoxExecuteFunctionP1.Size = new System.Drawing.Size(156, 20);
+			this.textBoxExecuteFunctionP1.TabIndex = 8;
+			// 
+			// textBoxExecuteFunctionP2
+			// 
+			this.textBoxExecuteFunctionP2.Location = new System.Drawing.Point(247, 38);
+			this.textBoxExecuteFunctionP2.Name = "textBoxExecuteFunctionP2";
+			this.textBoxExecuteFunctionP2.Size = new System.Drawing.Size(155, 20);
+			this.textBoxExecuteFunctionP2.TabIndex = 9;
+			// 
+			// textBoxExecuteFunctionP3
+			// 
+			this.textBoxExecuteFunctionP3.Location = new System.Drawing.Point(85, 64);
+			this.textBoxExecuteFunctionP3.Name = "textBoxExecuteFunctionP3";
+			this.textBoxExecuteFunctionP3.Size = new System.Drawing.Size(156, 20);
+			this.textBoxExecuteFunctionP3.TabIndex = 10;
+			// 
+			// buttonExecuteStatement
+			// 
+			this.buttonExecuteStatement.Location = new System.Drawing.Point(293, 194);
+			this.buttonExecuteStatement.Name = "buttonExecuteStatement";
+			this.buttonExecuteStatement.Size = new System.Drawing.Size(109, 23);
+			this.buttonExecuteStatement.TabIndex = 17;
+			this.buttonExecuteStatement.Text = "Execute";
+			this.buttonExecuteStatement.UseVisualStyleBackColor = true;
+			this.buttonExecuteStatement.Visible = false;
+			this.buttonExecuteStatement.Click += new System.EventHandler(this.buttonExecuteStatement_Click);
+			// 
+			// labelExecuteStatement
+			// 
+			this.labelExecuteStatement.AutoSize = true;
+			this.labelExecuteStatement.Location = new System.Drawing.Point(8, 196);
+			this.labelExecuteStatement.Name = "labelExecuteStatement";
+			this.labelExecuteStatement.Size = new System.Drawing.Size(136, 13);
+			this.labelExecuteStatement.TabIndex = 19;
+			this.labelExecuteStatement.Text = "Statement (not hooked up):";
+			this.labelExecuteStatement.Visible = false;
+			// 
+			// labelFunctionParameters
+			// 
+			this.labelFunctionParameters.AutoSize = true;
+			this.labelFunctionParameters.Location = new System.Drawing.Point(8, 38);
+			this.labelFunctionParameters.Name = "labelFunctionParameters";
+			this.labelFunctionParameters.Size = new System.Drawing.Size(63, 13);
+			this.labelFunctionParameters.TabIndex = 16;
+			this.labelFunctionParameters.Text = "Parameters:";
+			// 
+			// labelFunctionName
+			// 
+			this.labelFunctionName.AutoSize = true;
+			this.labelFunctionName.Location = new System.Drawing.Point(8, 12);
+			this.labelFunctionName.Name = "labelFunctionName";
+			this.labelFunctionName.Size = new System.Drawing.Size(51, 13);
+			this.labelFunctionName.TabIndex = 15;
+			this.labelFunctionName.Text = "Function:";
+			// 
+			// button3
+			// 
+			this.button3.Location = new System.Drawing.Point(293, 150);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(109, 23);
+			this.button3.TabIndex = 3;
+			this.button3.Text = "Evaluate";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Visible = false;
+			this.button3.Click += new System.EventHandler(this.button3_Click);
+			// 
+			// labelEvaluateVariable
+			// 
+			this.labelEvaluateVariable.AutoSize = true;
+			this.labelEvaluateVariable.Location = new System.Drawing.Point(8, 152);
+			this.labelEvaluateVariable.Name = "labelEvaluateVariable";
+			this.labelEvaluateVariable.Size = new System.Drawing.Size(157, 13);
+			this.labelEvaluateVariable.TabIndex = 14;
+			this.labelEvaluateVariable.Text = "Variable Name (not hooked up):";
+			this.labelEvaluateVariable.Visible = false;
+			// 
+			// buttonEvaluateFunction
+			// 
+			this.buttonEvaluateFunction.Location = new System.Drawing.Point(293, 64);
+			this.buttonEvaluateFunction.Name = "buttonEvaluateFunction";
+			this.buttonEvaluateFunction.Size = new System.Drawing.Size(109, 23);
+			this.buttonEvaluateFunction.TabIndex = 7;
+			this.buttonEvaluateFunction.Text = "Evaluate";
+			this.buttonEvaluateFunction.UseVisualStyleBackColor = true;
+			this.buttonEvaluateFunction.Click += new System.EventHandler(this.buttonExecuteFunction_Click);
+			// 
+			// buttonClose
+			// 
+			this.buttonClose.Location = new System.Drawing.Point(424, 362);
+			this.buttonClose.Name = "buttonClose";
+			this.buttonClose.Size = new System.Drawing.Size(75, 23);
+			this.buttonClose.TabIndex = 0;
+			this.buttonClose.Text = "Close";
+			this.buttonClose.UseVisualStyleBackColor = true;
+			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+			// 
 			// TestsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -799,16 +815,16 @@
 			this.tabPageStatus.PerformLayout();
 			this.groupBoxSettings.ResumeLayout(false);
 			this.groupBoxSettings.PerformLayout();
-			this.tabPageRaw.ResumeLayout(false);
-			this.tabPageRaw.PerformLayout();
 			this.tabPageWindow.ResumeLayout(false);
 			this.tabPageWindow.PerformLayout();
 			this.tabPageQueue.ResumeLayout(false);
 			this.tabPageQueue.PerformLayout();
-			this.tabPageInput.ResumeLayout(false);
-			this.tabPageInput.PerformLayout();
 			this.tabPageSettings.ResumeLayout(false);
 			this.tabPageSettings.PerformLayout();
+			this.tabPageInput.ResumeLayout(false);
+			this.tabPageInput.PerformLayout();
+			this.tabPageRaw.ResumeLayout(false);
+			this.tabPageRaw.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -832,7 +848,7 @@
 		private System.Windows.Forms.Label labelFunctionName;
 		private System.Windows.Forms.Button button3;
 		private System.Windows.Forms.Label labelEvaluateVariable;
-		private System.Windows.Forms.Button buttonExecuteFunction;
+		private System.Windows.Forms.Button buttonEvaluateFunction;
 		private System.Windows.Forms.TabPage tabPageWindow;
 		private System.Windows.Forms.Button buttonWindowActivate;
 		private System.Windows.Forms.Button buttonWindowKill;
