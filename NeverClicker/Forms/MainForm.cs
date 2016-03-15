@@ -67,6 +67,11 @@ namespace NeverClicker.Forms {
 			opt.ShowDialog();
 		}
 
+		private void OpenErrorsWindow() {
+			var win = new ErrorsForm(this);
+			win.ShowDialog();
+		}
+
 		public void UpdateButtonState() {
 			//switch (AutomationEngine.EvaluateStatementAsync) {
 			//	case 
@@ -177,6 +182,10 @@ namespace NeverClicker.Forms {
 				this.AutomationEngine.Log("NeverClicker Exiting.");
 				this.AutomationEngine.Stop();
 			}		
+		}
+
+		private void button1_Click(object sender, EventArgs e) {
+			this.OpenErrorsWindow();
 		}
 	}
 }

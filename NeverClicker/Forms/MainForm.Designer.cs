@@ -41,6 +41,7 @@
 			this.buttonTestsForm = new System.Windows.Forms.Button();
 			this.listBoxTaskQueue = new System.Windows.Forms.ListBox();
 			this.labelTaskQueue = new System.Windows.Forms.Label();
+			this.buttonErrors = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textBox1
@@ -206,12 +207,23 @@
 			this.labelTaskQueue.TabIndex = 20;
 			this.labelTaskQueue.Text = "Task Queue";
 			// 
+			// buttonErrors
+			// 
+			this.buttonErrors.Location = new System.Drawing.Point(296, 520);
+			this.buttonErrors.Name = "buttonErrors";
+			this.buttonErrors.Size = new System.Drawing.Size(142, 23);
+			this.buttonErrors.TabIndex = 22;
+			this.buttonErrors.Text = "Errors";
+			this.buttonErrors.UseVisualStyleBackColor = true;
+			this.buttonErrors.Click += new System.EventHandler(this.button1_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(450, 598);
+			this.Controls.Add(this.buttonErrors);
 			this.Controls.Add(this.listBoxTaskQueue);
 			this.Controls.Add(this.labelTaskQueue);
 			this.Controls.Add(this.buttonTestsForm);
@@ -248,5 +260,6 @@
 		private System.Windows.Forms.Button buttonTestsForm;
 		private System.Windows.Forms.ListBox listBoxTaskQueue;
 		private System.Windows.Forms.Label labelTaskQueue;
+		private System.Windows.Forms.Button buttonErrors;
 	}
 }
