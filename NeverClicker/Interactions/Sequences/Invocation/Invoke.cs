@@ -69,8 +69,9 @@ namespace NeverClicker.Interactions {
 					intr.Wait(2000);
 					MoveAround(intr);	
 					Keyboard.SendKey(intr, openInventoryKey);
-					intr.Wait(300);
+					intr.Wait(3000);
 					Mouse.ClickImage(intr, "InventoryOverflowTransferButton");
+					intr.Wait(2000);
 					MoveAround(intr);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {

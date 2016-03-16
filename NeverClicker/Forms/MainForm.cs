@@ -48,10 +48,6 @@ namespace NeverClicker.Forms {
         }
 
 		public void ReloadSettings() {
-			//this.AutomationEngine = new AutomationEngine(this);
-			//AutomationEngine.ReloadSettings();
-			//WriteLine("Reloading settings.");
-			//SetButtonStateStopped();
 			this.SetButtonStateAllDisabled();
 			MessageBox.Show(this, "Please restart to apply settings.");
 			this.Close();
@@ -73,14 +69,10 @@ namespace NeverClicker.Forms {
 		}
 
 		public void UpdateButtonState() {
-			//switch (AutomationEngine.EvaluateStatementAsync) {
-			//	case 
-			//}
 			WriteLine("UpdateButtonState(): not yet implemented.");
 		}
 
 		public void SetButtonStatePaused() {
-			// SET STUFF UP
 			this.buttonPause.Enabled = true;
 			buttonPause.Text = "UnPause";
 		}
@@ -125,8 +117,6 @@ namespace NeverClicker.Forms {
 		
 		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
 			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
-
-			//WriteLine("Beginning TaskQueue Refresh... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();

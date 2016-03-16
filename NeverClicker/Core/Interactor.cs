@@ -36,14 +36,6 @@ namespace NeverClicker.Interactions {
 		}
 
 		public bool LoadSettings() {
-			//try {
-			//	this.GameAccount = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
-			//	this.GameClient = new IniFile(Settings.Default["GameClientIniPath"].ToString());
-			//} catch (Exception ex) {
-			//	//MessageBox.Show("Problem loading ini files: " + ex.ToString()); // ***** TEMPORARY - REMOVE MESSAGEBOX
-			//	return false;
-			//}
-
 			this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
 			this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);
 
@@ -61,17 +53,9 @@ namespace NeverClicker.Interactions {
 			AlibEng.Exec("SetKeyDelay, 55, 15");
 		}
 
-		//public void Log(string message, params string[] args) {
-		//	ProgressLog.Report(new LogMessage(string.Format(message, args)));
-		//}
-
 		// UpdateQueueList(): MAKE THIS ASYNC
 		public void UpdateQueueList(ImmutableSortedDictionary<long, GameTask> taskListCopy) {
-			//Wait(50); // EITHER USE A MUTEX OR FIGURE SOMETHING BETTER OUT
-			//var taskList = new SortedList<long, GameTask>(taskListOrig);
-			//Log("Calling (intr.)QueueList.Report()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 			QueueList.Report(taskListCopy);
-			//Wait(50);
 		}
 
 		public void Log(string message) {
@@ -185,10 +169,8 @@ namespace NeverClicker.Interactions {
 			return State;
 		}
 
-		// DEPRICATE? - Probably not.
 		public void Reload() {
 			VerifyStopped();
-			//AlibEng.Suspend();
 			Task.Delay(2000).Wait();
 			AlibEng.Terminate();
 
@@ -197,7 +179,6 @@ namespace NeverClicker.Interactions {
 			State = AutomationState.Stopped;
 		}
 
-		//public bool WaitUntil(int maxWaitSeconds, Func<bool> condition, Enum endState, ) {
         public bool WaitUntil<TState>(int maxWaitSeconds, TState endState, Func<Interactor, TState, bool> isState,  
 						Func<Interactor, TState, int, bool> doFailure, int attemptCount) where TState : struct 
 		{
@@ -258,7 +239,6 @@ namespace NeverClicker.Interactions {
 			VerifyRunning();
 			Log("Waiting for " + millisecondsDelay.ToString("F0") + "ms.", LogEntryType.Debug);
 			try {
-				//Task.Delay(millisecondsDelay, CancelSource.Token).Wait();
 				Task.Delay(millisecondsDelay, CancelSource.Token).Wait();
 			} catch (AggregateException ae) {
 				ae.Handle((x) => {	
@@ -283,11 +263,9 @@ namespace NeverClicker.Interactions {
 			}		
 		}
 
+	
+		/////////	CORE INTERACTION PRIMITIVES:   //////////
 
-		//	CORE INTERACTION PRIMITIVES
-		//
-		//
-		//
 		public string GetVar(string variableName) {
 			return AlibInterface(new Func<string>(() => {
 				return AlibEng.GetVar(variableName);

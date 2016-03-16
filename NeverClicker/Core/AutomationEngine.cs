@@ -20,20 +20,10 @@ namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
 	public partial class AutomationEngine {
-		//const bool SHOW_DEBUG_LOG_MESSAGES_IN_TEXTBOX = false; 
-		//const bool PRINT_DEBUG_LOG_MESSAGES_TO_LOG_FILE = false; // make a user setting
-
 		private MainForm MainForm;
 		private Interactor Itr;
-		//GameClient. GameClientInstance;
 		TaskQueue Queue;
 		LogFile LogFile;
-		//Task MouseMoveTask = null;
-		//private CancellationTokenSource CancelSource;
-		//private static readonly object Locker = new object();
-		//private static XmlDocument LogXmlDoc = new XmlDocument();
-		//private string LogFileName = "";
-				
 		
 		public AutomationEngine(MainForm form) {
 			this.MainForm = form;
@@ -43,39 +33,16 @@ namespace NeverClicker {
 				Queue = new TaskQueue();
 				LogFile = new LogFile();
 			} catch (Exception ex) {
-				//MainForm.WriteLine(ex.ToString());
 				MessageBox.Show(MainForm, "Error initializing AutomationEngine: " + ex.ToString());
 			}
-
-			//if (!SettingsManager.SettingsAreValid()) {
-			//	MainForm.SettingsInvalid();
-			//}
-
-			//this.MainForm.BindListBox(Queue.TaskList);
-
-			//LogFileName = Settings.Default.LogFilePath.ToString();
-
-			//if (File.Exists(LogFileName))
-			//	LogXmlDoc.Load(LogFileName);
-			//else {
-			//	var root = LogXmlDoc.CreateElement("messages");
-			//	LogXmlDoc.AppendChild(root);
-			//}
 		}
-
-		//public void Init() {
-			
-		//}
 
 		public void InitOldScript_DEPRICATING() {
 			Itr.Start(GetLogProgress(), GetTaskQueueProgress());
-			//Itr.Start(GetLogProgress());
-			//Itr.InitOldScript();
 			Itr.Stop();
 		}
 
 		public void Log(string message) {
-			//textBox1.AppendText(message);
 			Log(new LogMessage(message));
 		}
 		
@@ -111,7 +78,6 @@ namespace NeverClicker {
 			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "FATAL_ERROR_"
 				+ DateTime.Now.ToFileTime().ToString() + ".png";
 			var errMsg = "FATAL ERROR: Please investigate! Image file: " + errorImageFileName;
-			//Log(new LogMessage(errMsg, LogEntryType.Fatal));
 			ScreenCapture sc = new ScreenCapture();
 			Image img = sc.CaptureScreen();
 			img.Save(errorImageFileName, ImageFormat.Png);
@@ -147,20 +113,6 @@ namespace NeverClicker {
 		public async Task Run(Action action) {
 			Func<bool> func = () => { action(); return false; };
 			await Run(func);
-
-			//MainForm.SetButtonStateRunning();
-			//try {
-			//	await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()),
-			//		TaskCreationOptions.LongRunning, TaskScheduler.Current);
-			//} catch (Exception ex) {
-			//	Log(ex.ToString());
-			//	MessageBox.Show(ex.ToString());
-			//	throw ex;
-			//} finally {				
-			//	Itr.Stop();
-			//	Log("Automation engine stopped. There may be outstanding tasks yet to terminate.");
-			//	MainForm.SetButtonStateStopped();
-			//}
 		}
 
 		public void Stop() {
@@ -191,7 +143,6 @@ namespace NeverClicker {
 		}
 
 		public async void AutoCycle(int startDelaySec) {
-			//Log("AutoCycle activated.");			
 			await Run(() => Sequences.AutoCycle(Itr, Queue, startDelaySec));
 			Log("AutoCycle stopped.");
 		}
