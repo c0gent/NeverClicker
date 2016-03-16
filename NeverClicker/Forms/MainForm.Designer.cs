@@ -53,7 +53,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxLog.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.textBoxLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBoxLog.Location = new System.Drawing.Point(12, 362);
+			this.textBoxLog.Location = new System.Drawing.Point(12, 222);
 			this.textBoxLog.Multiline = true;
 			this.textBoxLog.Name = "textBoxLog";
 			this.textBoxLog.ReadOnly = true;
@@ -125,7 +125,7 @@
 			// 
 			this.labelLog.AutoSize = true;
 			this.labelLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelLog.Location = new System.Drawing.Point(211, 346);
+			this.labelLog.Location = new System.Drawing.Point(212, 206);
 			this.labelLog.Name = "labelLog";
 			this.labelLog.Size = new System.Drawing.Size(25, 13);
 			this.labelLog.TabIndex = 14;
@@ -223,13 +223,14 @@
 			// 
 			// listBoxErrors
 			// 
-			this.listBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.listBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.listBoxErrors.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.listBoxErrors.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listBoxErrors.ForeColor = System.Drawing.Color.DarkRed;
 			this.listBoxErrors.FormattingEnabled = true;
-			this.listBoxErrors.Location = new System.Drawing.Point(12, 222);
+			this.listBoxErrors.HorizontalScrollbar = true;
+			this.listBoxErrors.Location = new System.Drawing.Point(12, 424);
 			this.listBoxErrors.Name = "listBoxErrors";
 			this.listBoxErrors.ScrollAlwaysVisible = true;
 			this.listBoxErrors.Size = new System.Drawing.Size(426, 117);
@@ -241,7 +242,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelErrors.AutoSize = true;
 			this.labelErrors.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelErrors.Location = new System.Drawing.Point(206, 206);
+			this.labelErrors.Location = new System.Drawing.Point(206, 408);
 			this.labelErrors.Name = "labelErrors";
 			this.labelErrors.Size = new System.Drawing.Size(34, 13);
 			this.labelErrors.TabIndex = 24;
@@ -273,6 +274,7 @@
 			this.Name = "MainForm";
 			this.Text = "NeverClicker";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();

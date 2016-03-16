@@ -75,8 +75,8 @@ namespace NeverClicker.Interactions {
 					MoveAround(intr);
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log("[INITIAL_0]NEEDS HANDLING -- Unable to invoke for character " + charIdx 
-						+ ".", LogEntryType.FatalWithScreenshot);
+					intr.Log("Unable to invoke for character " + charIdx 
+						+ "." + "[IN0]", LogEntryType.FatalWithScreenshot);
 					//ClearDialogues(intr);
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
@@ -99,7 +99,8 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
-				intr.Log("[FINAL_1]NEEDS HANDLING -- Unable to invoke.", LogEntryType.FatalWithScreenshot);
+				intr.Log("Unable to invoke for character " + charIdx 
+						+ "." + "[FN1]", LogEntryType.FatalWithScreenshot);
 				//intr.SaveErrorScreenshot();				
 				intr.Wait(30000);	// TEMP
 				return CompletionStatus.Failed;
