@@ -39,8 +39,39 @@ namespace NeverClicker.Forms {
 		}
 
 		public void WriteLine(string message) {
-			textBox1.AppendText(message + "\r\n");
-		}		
+			textBoxLog.AppendText(message + "\r\n");
+		}
+
+		public void AppendError(string errMessage) {
+			listBoxErrors.Items.Add(errMessage);
+		}
+
+		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
+			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
+
+			try {
+				this.listBoxTaskQueue.Items.Clear();
+
+				foreach (GameTask task in taskList.Values) {
+					string taskIdName = (task.Kind == TaskKind.Professions) 
+						? TaskQueue.ProfessionTaskNames[task.TaskId] + "\t" 
+						: task.TaskId.ToString() + "\t\t";
+
+					listBoxTaskQueue.Items.Add(
+						task.MatureTime.ToShortTimeString().Trim() + 
+						"\t" + task.Kind.ToString() +
+						"\t" + taskIdName +
+						"\tCharacter " + task.CharIdx.ToString()
+					);
+				}
+			} catch (Exception ex) {
+				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
+			}
+
+			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
+
+			var endTime = DateTime.Now;
+		}
 
 		public void ConfigInvalid() {
 			MessageBox.Show(this, "Settings not configured properly. Opening settings menu.", "NeverClicker - Settings");
@@ -113,30 +144,6 @@ namespace NeverClicker.Forms {
 
 		private void buttonOptions_Click(object sender, EventArgs e) {
 			OpenSettingsWindow();
-		}
-		
-		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
-			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
-
-			try {
-				this.listBoxTaskQueue.Items.Clear();
-
-				foreach (GameTask task in taskList.Values) {
-					string taskIdName = (task.Kind == TaskKind.Professions) 
-						? TaskQueue.ProfessionTaskNames[task.TaskId] + "\t" 
-						: task.TaskId.ToString() + "\t\t";
-
-					listBoxTaskQueue.Items.Add(task.MatureTime.ToShortTimeString().Trim() + "\t" + task.Kind.ToString() 
-						+ "\t" + taskIdName
-						+ "\tCharacter " + task.CharIdx.ToString());
-				}
-			} catch (Exception ex) {
-				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
-			}
-
-			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
-
-			var endTime = DateTime.Now;
 		}
 
 		private void buttonMoveMouse_Click(object sender, EventArgs e) {

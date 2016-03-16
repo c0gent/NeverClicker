@@ -51,13 +51,15 @@ namespace NeverClicker {
 				case LogEntryType.FatalWithScreenshot:					
 					LogFile.AppendMessage(logMessage);
 					MainForm.WriteLine(logMessage.Text);
-					MessageBox.Show(MainForm, logMessage.Text + " -- " 
-						+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
+					//MessageBox.Show(MainForm, logMessage.Text + " -- " 
+					//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
+					MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
 					break;
 				case LogEntryType.Fatal:					
 					LogFile.AppendMessage(logMessage);
 					MainForm.WriteLine(logMessage.Text);
-					MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
+					//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
+					MainForm.AppendError(logMessage.Text);
 					break;
 				case LogEntryType.Error:
 				case LogEntryType.Warning:
@@ -77,7 +79,7 @@ namespace NeverClicker {
 		private string SaveErrorScreenshot() {			
 			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "FATAL_ERROR_"
 				+ DateTime.Now.ToFileTime().ToString() + ".png";
-			var errMsg = "FATAL ERROR: Please investigate! Image file: " + errorImageFileName;
+			var errMsg = "Image file: " + errorImageFileName;
 			ScreenCapture sc = new ScreenCapture();
 			Image img = sc.CaptureScreen();
 			img.Save(errorImageFileName, ImageFormat.Png);
@@ -100,8 +102,7 @@ namespace NeverClicker {
 				Itr.Stop();
 				return result;
 			} catch (Exception ex) {
-				Log(ex.ToString());
-				MessageBox.Show(MainForm, ex.ToString());
+				Log(new LogMessage(ex.ToString(), LogEntryType.Fatal));
 				throw ex;
 			} finally {
 				Itr.Stop();
