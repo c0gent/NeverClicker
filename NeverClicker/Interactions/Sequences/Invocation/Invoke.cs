@@ -99,26 +99,19 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
+				// Display invocation screen for the screenshot:
+				Keyboard.SendKey(intr, invokeKey);				
+				intr.Wait(1500);
+
 				intr.Log("Unable to invoke for character " + charIdx 
 						+ "." + "[FN1]", LogEntryType.FatalWithScreenshot);
-				//intr.SaveErrorScreenshot();				
-				intr.Wait(30000);	// TEMP
+
+				intr.Wait(30000);
+				MoveAround(intr);	
 				return CompletionStatus.Failed;
 			}
 
 			intr.Log("Invocation successful. Continuing...", LogEntryType.Info);
-
-			// BRING BACK ALTAR DEPLOYMENT:
-
-			//if (FindMaxBlessings()) {
-			//	Redeem(vault_purchase)
-			//}
-			//if (couldn't invoke) {
-			//             MoveAround()
-			//             DeployAltar()
-			//}
-			//Sleep 200
-			//Send {% NwInvokeKey %}
 
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
