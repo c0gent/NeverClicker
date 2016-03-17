@@ -41,7 +41,7 @@ namespace NeverClicker.Interactions {
 			var iconLoc = Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon");
 
 			if (iconLoc.Found) {
-				intr.Log("Image found, moving mouse to: " + (iconLoc.Point.X + xOfs).ToString() + ", " 
+				intr.Log("VIP Claim image found, moving mouse to: " + (iconLoc.Point.X + xOfs).ToString() + ", " 
 					+ (iconLoc.Point.Y + yOfs).ToString());
 
 				// Click to the right of that image:

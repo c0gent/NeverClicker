@@ -25,13 +25,14 @@ namespace NeverClicker.Interactions {
 
 			Mouse.Move(intr, 0, 0);
 
+			// If patcher is already open, close it:
 			if (Game.DeterminePatcherState(intr) != PatcherState.None) {
 				Screen.WindowKill(intr, Game.GAMEPATCHEREXE);
 				if (!intr.WaitUntil(15, PatcherState.None, Game.IsPatcherState, PatcherKillFailure, 0)) { return false; }
 			}
 
+			// Open patcher:
 			Screen.WindowRun(intr, Properties.Settings.Default.NeverwinterExePath);
-
 			if (!intr.WaitUntil(90, GameState.Patcher, Game.IsGameState, PatcherRunFailure, 0)) { return false; }
 
 			// Set focus on patcher:
@@ -39,12 +40,20 @@ namespace NeverClicker.Interactions {
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 			intr.Wait(1000);
 
+			// Make sure server is up:
+			if (Game.DeterminePatcherState(intr) == PatcherState.ServerDown) {
+				intr.Log("Server is down. Waiting 20 minutes then retrying...");
+				intr.Wait(1200000);
+				return false;
+			}
+
+			// Wait for login button to appear:
 			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure, 0)) { return false; }
 
 			// Set focus on patcher:
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
-			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {				
+			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {			
 				//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
 
 				Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);			
@@ -62,21 +71,14 @@ namespace NeverClicker.Interactions {
 
 			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure, 0)) { return false; }
 
-			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
-			//intr.Wait(200);
-			//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
-			//intr.Wait(200);
-
-			Mouse.ClickImage(intr, "PatcherPlayButton");
-
 			//intr.Wait(1000);
 			//Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
 			//intr.Wait(300);
 			//Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
-			//intr.Wait(5000);
-			//// Set focus on patcher:
-			//Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 			//Keyboard.SendInput(intr, "{Enter}");
+
+			// Click play button image (may not be as reliable as above): 
+			Mouse.ClickImage(intr, "PatcherPlayButton");
 
 			return intr.WaitUntil(60, ClientState.CharSelect, Game.IsClientState, ProduceClientState, 0);
 		}

@@ -51,7 +51,7 @@ namespace NeverClicker.Interactions {
 			string gameUserName = intr.GameAccount.GetSettingOrEmpty("NwUserName", "NwAct");
 			string gamePassword = intr.GameAccount.GetSettingOrEmpty("NwActPwd", "NwAct");
 
-			intr.Wait(100);
+			intr.Wait(1000);
 
 			//var shiftHome = @"Send {Shift down}
 			//	Sleep 20
@@ -64,6 +64,8 @@ namespace NeverClicker.Interactions {
 			//";
 
 			//intr.ExecuteStatement(shiftHome);
+			Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Input);
+			intr.Wait(200);
 
 			Keyboard.SendKeyWithMod(intr, "Shift", "Home", Keyboard.SendMode.Input);
 
