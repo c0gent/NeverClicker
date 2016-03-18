@@ -41,10 +41,13 @@ namespace NeverClicker.Interactions {
 			intr.Wait(1000);
 
 			// Make sure server is up:
-			if (Game.DeterminePatcherState(intr) == PatcherState.ServerDown) {
-				intr.Log("Server is down. Waiting 20 minutes then retrying...");
-				intr.Wait(1200000);
-				return false;
+			if (Game.IsServerState(intr, ServerState.Down)) {
+				intr.Log("Server is down. Waiting until it comes up...");
+				//intr.Wait(1200000);
+				//return false;
+
+				// Check every 1min for 1hr.
+				if (!intr.WaitUntil(3600, 60, ServerState.Up, Game.IsServerState, PatcherServerFailure, 0)) { return false; }
 			}
 
 			// Wait for login button to appear:
@@ -95,6 +98,11 @@ namespace NeverClicker.Interactions {
 
 		public static bool PatcherLogInFailure<TState>(Interactor intr, TState state, int attemptCount) {
 			intr.Log("Failed to log in using patcher, play button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
+			return false;
+		}
+
+		public static bool PatcherServerFailure<TState>(Interactor intr, TState state, int attemptCount) {
+			intr.Log("Failed to log in using patcher, server status down. Patcher state: " + state.ToString(), LogEntryType.Error);
 			return false;
 		}
 	}

@@ -140,16 +140,10 @@ namespace NeverClicker {
 		public static PatcherState DeterminePatcherState(Interactor intr) {
 			if (Screen.WindowDetectExist(intr, GAMEPATCHEREXE)) {
 				if (Screen.WindowDetectActive(intr, GAMEPATCHEREXE)) {
-					if (Screen.ImageSearch(intr, "PatcherServerUpIndicator").Found) {
-						if (Screen.ImageSearch(intr, "PatcherLoginButtonPart").Found) {
-							return PatcherState.LogIn;
-						} else if (Screen.ImageSearch(intr, "PatcherPlayButton").Found) {
-							return PatcherState.PlayButton;
-						} else {
-							return PatcherState.Unknown;
-						}
-					} else if (Screen.ImageSearch(intr, "PatcherServerDownIndicator").Found) {
-						return PatcherState.ServerDown;
+					if (Screen.ImageSearch(intr, "PatcherLoginButtonPart").Found) {
+						return PatcherState.LogIn;
+					} else if (Screen.ImageSearch(intr, "PatcherPlayButton").Found) {
+						return PatcherState.PlayButton;
 					} else {
 						return PatcherState.Unknown;
 					}
@@ -161,8 +155,24 @@ namespace NeverClicker {
 			}
 		}
 
-		
+		public static bool IsServerState(Interactor intr, ServerState desiredState) {
+			switch (desiredState) {
+				case ServerState.Up:
+					return Screen.ImageSearch(intr, "PatcherServerUpIndicator").Found;
+				case ServerState.Down:
+					return Screen.ImageSearch(intr, "PatcherServerDownIndicator").Found;
+				default:
+					return false;
+			}
+		}
 	}
+
+					//			case PatcherState.ServerDown:
+					//return Screen.ImageSearch(intr, "PatcherServerDownIndicator").Found;
+
+
+					//	} else if (Screen.ImageSearch(intr, "PatcherServerDownIndicator").Found) {
+					//	return PatcherState.ServerDown;
 
 	public enum GameState {
 		Closed,
@@ -183,12 +193,16 @@ namespace NeverClicker {
 
 	public enum PatcherState {
 		None,
-		ServerDown,
 		LogIn,
 		Patching,	// CancelButton
 		PlayButton,
 		Inactive,
 		Unknown
+	}
+
+	public enum ServerState {
+		Down,
+		Up
 	}
 
 	public enum WorldInvocationState {
