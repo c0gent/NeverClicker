@@ -46,8 +46,8 @@ namespace NeverClicker.Interactions {
 				//intr.Wait(1200000);
 				//return false;
 
-				// Check every 1min for 1hr.
-				if (!intr.WaitUntil(3600, 60, ServerState.Up, Game.IsServerState, PatcherServerFailure, 0)) { return false; }
+				// Check every 1min for 20min and return false (relaunching patcher) if unsuccessful.
+				if (!intr.WaitUntil(1200, 60, ServerState.Up, Game.IsServerState, PatcherServerFailure, 0)) { return false; }
 			}
 
 			// Wait for login button to appear:
