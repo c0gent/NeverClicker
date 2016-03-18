@@ -40,6 +40,7 @@ namespace NeverClicker.Interactions {
 			// Check for VIP Account Rewards icon:
 			var iconLoc = Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon");
 
+			// If found, click on two locations:
 			if (iconLoc.Found) {
 				intr.Log("VIP Claim image found, moving mouse to: " + (iconLoc.Point.X + xOfs).ToString() + ", " 
 					+ (iconLoc.Point.Y + yOfs).ToString());
@@ -47,8 +48,19 @@ namespace NeverClicker.Interactions {
 				// Click to the right of that image:
 				Mouse.Move(intr, iconLoc.Point.X + xOfs, iconLoc.Point.Y + yOfs);
 				Mouse.Click(intr,iconLoc.Point.X + xOfs, iconLoc.Point.Y + yOfs); 
+				intr.Wait(900);
 
+				// Click again just to the right of the previous spot:
+				Mouse.Move(intr, iconLoc.Point.X + xOfs + 15, iconLoc.Point.Y + yOfs);
+				Mouse.Click(intr,iconLoc.Point.X + xOfs + 15, iconLoc.Point.Y + yOfs); 
 				intr.Wait(3500);
+
+				// [FIXME]: BRING BACK SOME SORT OF VERIFICATION
+				//if (Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon").Found) {
+				//	intr.Log("Error clicking on claim button.", LogEntryType.FatalWithScreenshot);
+				//	Keyboard.SendKey(intr, openInventoryKey);
+				//	return false;
+				//}
 
 				// Click main bag area tab:
 
