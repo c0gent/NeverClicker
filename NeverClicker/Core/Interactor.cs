@@ -179,6 +179,16 @@ namespace NeverClicker.Interactions {
 			State = AutomationState.Stopped;
 		}
 
+		/// <summary>
+		/// Waits until a particular state is reached.
+		/// </summary>
+		/// <typeparam name="TState">Type of objective state</typeparam>
+		/// <param name="maxWaitSeconds">Maximum amount of time to wait before returning</param>
+		/// <param name="endState">Objective state</param>
+		/// <param name="isState">Function to call to query the current state</param>
+		/// <param name="doFailure">Function to call in the event of a failure (this can loop back recursively)</param>
+		/// <param name="attemptCount">Number of recursions to attempt (simply passed through, must be incremented by 'doFailure')</param>
+		/// <returns>Signal determining success or failure</returns>
 		public bool WaitUntil<TState>(int maxWaitSeconds, TState endState, Func<Interactor, TState, bool> isState,  
 						Func<Interactor, TState, int, bool> doFailure, int attemptCount) where TState : struct 
 		{

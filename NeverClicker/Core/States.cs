@@ -167,12 +167,6 @@ namespace NeverClicker {
 		}
 	}
 
-					//			case PatcherState.ServerDown:
-					//return Screen.ImageSearch(intr, "PatcherServerDownIndicator").Found;
-
-
-					//	} else if (Screen.ImageSearch(intr, "PatcherServerDownIndicator").Found) {
-					//	return PatcherState.ServerDown;
 
 	public enum GameState {
 		Closed,
