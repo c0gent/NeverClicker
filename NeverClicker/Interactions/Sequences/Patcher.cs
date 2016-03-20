@@ -61,16 +61,17 @@ namespace NeverClicker.Interactions {
 
 				Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);			
 				Keyboard.SendInput(intr, gameUserName);
+				intr.Wait(500);
 				Keyboard.SendInput(intr, "{Tab}");
 				Keyboard.SendInput(intr, gamePassword);
-				intr.Wait(1000);
+				intr.Wait(500);
 
 				Keyboard.SendInput(intr, "{Enter}");
-				intr.Wait(2000);
+				intr.Wait(5000);
 			}
 
-			// Set focus on patcher:
-			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
+			// // Set focus on patcher:
+			//Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
 			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure, 0)) { return false; }
 
