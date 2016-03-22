@@ -56,19 +56,28 @@ namespace NeverClicker.Interactions {
 			// Set focus on patcher:
 			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
-			while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {			
-				//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+			//while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {			
+			//	//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
+			//	Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);			
+			//	Keyboard.SendInput(intr, gameUserName);
+			//	intr.Wait(500);
+			//	Keyboard.SendInput(intr, "{Tab}");
+			//	Keyboard.SendInput(intr, gamePassword);
+			//	intr.Wait(500);
+			//	Keyboard.SendInput(intr, "{Enter}");
+			//	intr.Wait(10000);
+			//}
 
-				Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);			
-				Keyboard.SendInput(intr, gameUserName);
-				intr.Wait(500);
-				Keyboard.SendInput(intr, "{Tab}");
-				Keyboard.SendInput(intr, gamePassword);
-				intr.Wait(500);
+			intr.Wait(500);
+			Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);			
+			Keyboard.SendInput(intr, gameUserName);
+			intr.Wait(500);
+			Keyboard.SendInput(intr, "{Tab}");
+			Keyboard.SendInput(intr, gamePassword);
+			intr.Wait(500);
 
-				Keyboard.SendInput(intr, "{Enter}");
-				intr.Wait(5000);
-			}
+			Keyboard.SendInput(intr, "{Enter}");
+			intr.Wait(10000);
 
 			// // Set focus on patcher:
 			//Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
