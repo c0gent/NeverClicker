@@ -21,6 +21,16 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
+		public static bool ClickImage(Interactor intr, List<string> imgCodes, int xOfs, int yOfs, Point topLeft, Point botRight) {
+			var result = Screen.ImageSearch(intr, imgCodes, topLeft, botRight);
+			if (result.Found) {
+				Click(intr, result.Point.X + topLeft.X + 5, result.Point.Y + topLeft.Y + 5);
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		public static bool ClickImage(Interactor intr, string imgCode, int xOfs, int yOfs) {
 			var result = Screen.ImageSearch(intr, imgCode);
 			if (result.Found) {

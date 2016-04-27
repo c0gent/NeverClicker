@@ -16,22 +16,17 @@ namespace NeverClicker.Interactions {
 
 		//public static Point ImageSearchAndClick(Interactor intr, string imgCode) {
 		//	return new Point(0, 0);
-		//}
+		//}	
 
-		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode) {
-			int scrWidth;
-			int scrHeight;
-			bool success;
-			success = int.TryParse(intr.GetVar("A_ScreenWidth"), out scrWidth);
-			success &= int.TryParse(intr.GetVar("A_ScreenHeight"), out scrHeight);
-
-			if (success) {
-				return ImageSearch(intr, imgCode, new Point(0, 0), new Point(scrWidth, scrHeight));
-			} else {
-				return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
-			}
-		}
-
+		/// <summary>
+		/// Find an image and return it's upper left coordinate.
+		/// </summary>
+		/// This needs a crazy amount more error handling/reporting but it's just a huge pain. Most stuff is ignored.
+		/// <param name="intr"></param>
+		/// <param name="imgCode"></param>
+		/// <param name="topLeft"></param>
+		/// <param name="botRight"></param>
+		/// <returns></returns>
 		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode, Point topLeft, Point botRight) {
 			//ImageSearch, ImgX, ImgY, 1, 1, 1920, 1080, *40 % image_file %
 			string imageFileName;
@@ -98,74 +93,72 @@ namespace NeverClicker.Interactions {
 			switch (errorLevel) {
 				case 0:
 					intr.Log("ImageSearch(" + imgCode + "): Found.", LogEntryType.Debug);
-					return new ImageSearchResult() { Found = true, Point = new Point(outX, outY) };
+					//return new ImageSearchResult() { Found = true, Point = new Point(outX, outY) };
+					return new ImageSearchResult(true, new Point(outX, outY));
 				case 1:
 					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Debug);
-					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };				
+					//return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };				
+					return new ImageSearchResult(false, new Point(outX, outY));
 				case 2:
 					intr.Log("ImageSearch(" + imgCode + "): FATAL ERROR. UNABLE TO FIND IMAGE OR BAD OPTION FORMAT.", LogEntryType.Fatal);
-					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };
+					//return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };
+					return new ImageSearchResult(false, new Point(outX, outY));
 				default:
 					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Fatal);
-					return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };
+					//return new ImageSearchResult() { Found = false, Point = new Point(outX, outY) };
 					//throw new ProblemConductingImageSearchException();
+					return new ImageSearchResult(false, new Point(outX, outY));
 			}
-
 		}
 
+		public static ImageSearchResult ImageSearch(Interactor intr, List<string> imgCodes, Point topLeft, Point botRight) {
+			foreach (var imgCode in imgCodes) {
+				var res = ImageSearch(intr, imgCode, topLeft, botRight);
 
+				if (res.Found) {
+					return res;
+				}
+			}
+			return new ImageSearchResult();
+		}
 
+		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode) {
+			int scrWidth;
+			int scrHeight;
+			bool success = int.TryParse(intr.GetVar("A_ScreenWidth"), out scrWidth);
+			success &= int.TryParse(intr.GetVar("A_ScreenHeight"), out scrHeight);
 
-	//	public static ImageSearchResult ImageSearchNew(Interactor intr, string imgCode) {
-	//		var imageFileName = intr.GameClient.GetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
+			if (success) {
+				return ImageSearch(intr, imgCode, new Point(0, 0), new Point(scrWidth, scrHeight));
+			} else {
+				return new ImageSearchResult();
+			}
+		}
 
-	//		if (string.IsNullOrWhiteSpace(imageFileName)) {
-	//			intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file.", LogEntryType.Error);
-	//			return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
-	//		}
-
-	//		var imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
-
-	//		intr.Log(new LogMessage("ImageSearchNew(" + imgCode + "): Searching for image: '" + imageFilePath,
-	//			LogEntryType.Info		
-	//		));		
-
-
-	//		ScreenCapture sc = new ScreenCapture();
-
-	//		var image1 = (Bitmap)sc.CaptureScreen();
-	//		var image2 = new Bitmap(imageFilePath);
-						
-	//		var newBitmap1 = ImageCompare.ImageComparer.ChangePixelFormat(new Bitmap(image1), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-	//		var newBitmap2 = ImageCompare.ImageComparer.ChangePixelFormat(new Bitmap(image2), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-	//		var similarityThreshold = 0.950f;
-	//		var compareLevel = 0.950f;
-
-	//		var tm = new ExhaustiveTemplateMatching(similarityThreshold);
-	//		//var tm = new ExhaustiveBlockMatching(8, 12);
-
-	//		// Process the images
-	//		var results = tm.ProcessImage(newBitmap1, newBitmap2);
-
-	//		// Compare the results, 0 indicates no match so return false
-	//		if (results.Length <= 0) {
-	//			return new ImageSearchResult() { Found = false, Point = new Point(0, 0) };
-	//		}
-
-	//		// Return true if similarity score is equal or greater than the comparison level
-	//		var match = results[0].Similarity >= compareLevel;
-
-	//		return new ImageSearchResult() { Found = true, Point = new Point(0, 0) };
-	//	}
-
-
-
+		public static ImageSearchResult ImageSearch(Interactor intr, List<string> imgCodes) {
+			foreach (var imgCode in imgCodes) {
+				var res = ImageSearch(intr, imgCode);
+				if (res.Found) {
+					return res;
+				}
+			}
+			return new ImageSearchResult();
+		}
 	}
 
 	public class ImageSearchResult {
 		public Point Point;
-		public bool Found;		
+		public bool Found;
+
+		public ImageSearchResult(bool found, Point point) {
+			Found = found;
+			Point = point;
+		}
+
+		public ImageSearchResult() {
+			Found = false;
+			Point = new Point(0, 0);
+		}
 	}
 
 	class ProblemConductingImageSearchException : Exception {
