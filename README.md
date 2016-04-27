@@ -20,10 +20,10 @@ Automated invocation. May eat your laundry.
 Due to developer laziness, resolutions other than 1920x1080 will require some fiddling on your part to get working.
 
 Mess with the following settings in `NeverClicker_GameClient.ini`:
-The "[ClickLocations]" Section:
+#### The "[ClickLocations]" Section:
 - "CharSlotX" and "TopSlotY": You will either need any kind of program to tell you your mouse cursor X, Y on the screen. I use the AutoIt Window Spy included with Autohotkey downloaded from: (http://ahkscript.org/)[http://ahkscript.org/]. There are tons of other ones. Open your coordinate program up and scroll to the top of the character select list and place your cursor in the center of the top character tile (doesn't need to be exact). "CharSlotX" (the left->right component of your coordinate) should be somewhere in the 500-900ish range. "TopSlotY" (the top->bottom component) should be 60-100ish.
 
-The "[KeyBindAndUi]" Section:
+####The "[KeyBindAndUi]" Section:
 - "VisibleCharacterSelectSlots": The number of WHOLE slots you can see within the scrolling character select window when scrolled to the top. Just round down whatever number you see. If you see four slots plus almost all of a fifth but not quite, put "4".
 - "CharacterSelectScrollBarTopX" and "CharacterSelectScrollBarTopY" (*Yes, I need to move these to the "ClickLocations" section but whatever*): These two must be exact. Find the little scrollbar to the right of the character select tile area. Scroll all the way up and place your mouse cursor on the very tip of the top of the scroll bar. This should be a spot you can click on no matter where the scroll bar actually is and it will cause the scroll bar to jump up towards the top. Same deal, the X position is "CharacterSelectScrollBarTopX", Y is "CharacterSelectScrollBarTopY".
 
@@ -31,23 +31,27 @@ Eventually, resolution auto-detection may set these things for you but for now y
 
 ### 1920x1080
 [KeyBindAndUi]
-VisibleCharacterSelectSlots = 8
-CharacterSelectScrollBarTopX = 840
-CharacterSelectScrollBarTopY = 86
+
+- VisibleCharacterSelectSlots = 8
+- CharacterSelectScrollBarTopX = 840
+- CharacterSelectScrollBarTopY = 86
 
 [ClickLocations]
-CharSlotX = 680
-TopSlotY = 120
+
+- CharSlotX = 680
+- TopSlotY = 120
 
 ### 1360x768
 [KeyBindAndUi]
-VisibleCharacterSelectSlots = 4
-CharacterSelectScrollBarTopX = 587
-CharacterSelectScrollBarTopY = 64
+
+- VisibleCharacterSelectSlots = 4
+- CharacterSelectScrollBarTopX = 587
+- CharacterSelectScrollBarTopY = 64
 
 [ClickLocations]
-CharSlotX = 435
-TopSlotY = 100
+
+- CharSlotX = 435
+- TopSlotY = 100
 
 
 ## Troubleshooting
