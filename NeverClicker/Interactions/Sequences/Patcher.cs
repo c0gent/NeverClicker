@@ -75,7 +75,6 @@ namespace NeverClicker.Interactions {
 			Keyboard.SendInput(intr, "{Tab}");
 			Keyboard.SendInput(intr, gamePassword);
 			intr.Wait(500);
-
 			Keyboard.SendInput(intr, "{Enter}");
 			intr.Wait(10000);
 

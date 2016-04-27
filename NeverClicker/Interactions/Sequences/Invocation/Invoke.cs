@@ -32,7 +32,7 @@ namespace NeverClicker.Interactions {
 					intr.Log("Unable to collect enchanted key for character " + charIdx + ".", 
 						LogEntryType.FatalWithScreenshot);
 				}
-			}			
+			}
 
 			// First Invoke Attempt
 			Keyboard.SendKey(intr, invokeKey);
