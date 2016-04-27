@@ -34,7 +34,7 @@ namespace NeverClicker.Interactions {
 				}
 			}
 
-			// First Invoke Attempt
+			// Invocation Attempt (first):
 			Keyboard.SendKey(intr, invokeKey);
 			intr.Wait(100);
 
@@ -42,9 +42,9 @@ namespace NeverClicker.Interactions {
 				intr.Log("Maximum blessings reached for character " + charIdx 
 					+ ". Redeeming through Vault of Piety...", LogEntryType.Info);
 				if (Redeem(intr, REDEMPTION_ITEM)) {
-					//intr.ExecuteStatement("MoveAround()");
 					MoveAround(intr);
 					intr.Log("Redeeming Vault of Piety...", LogEntryType.Debug);
+					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
 					intr.Log("Unable to invoke: Error collecting Vault of Piety rewards for character " + charIdx + ".", LogEntryType.Error);
@@ -57,7 +57,7 @@ namespace NeverClicker.Interactions {
 
 				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionInvokeReady").Found) {
 					intr.Wait(2000);
-					//Invoke
+					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
 					intr.Log("Unable to invoke: Invocation already finished for the day on character " + charIdx + ".");
@@ -72,17 +72,17 @@ namespace NeverClicker.Interactions {
 					intr.Log("Unable to invoke: Items in overflow bag are preventing invocation for character " 
 						+ charIdx + ". Attempting to move to regular inventory...", LogEntryType.Error);
 					intr.Wait(2000);
-					MoveAround(intr);	
+					MoveAround(intr);
 					Keyboard.SendKey(intr, openInventoryKey);
 					intr.Wait(3000);
 					Mouse.ClickImage(intr, "InventoryOverflowTransferButton");
 					intr.Wait(2000);
 					MoveAround(intr);
+					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
 					intr.Log("Unable to invoke for character " + charIdx 
 						+ "." + "[IN0]", LogEntryType.FatalWithScreenshot);
-					//ClearDialogues(intr);
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
 				}
@@ -91,20 +91,21 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 			intr.Wait(3500);			
 
-			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {				
+			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
+				// Invocation Attempt:
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
-				MoveAround(intr);		
+				MoveAround(intr);
 			}
 
+			// [FIXME]: Not sure why this is here still or why it was needed:
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Debug);
-				//intr.ExecuteStatement("FindAndClick(\"InvocationRewardsOfDevotionCloseButton.png\")");
 				//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
 			}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
-				// Display invocation screen for the screenshot:
+				// Invocation Attempt: Display invocation screen for the screenshot:
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
 
@@ -124,97 +125,3 @@ namespace NeverClicker.Interactions {
 		}
 	}
 }
-
-
-//Invoke(first_run, vault_purchase) {
-//	global
-//	invo_poss := 0
-//    invo_started:= 0
-//    invo_altar_deployed:= 0
-//    if (first_run) {
-//		Sleep 500 + Ran(200)
-//        MoveAround()
-//        Sleep 500 + Ran(200)
-//    }
-
-//	while (invo_started == 0) {
-//		MoveAround()
-//        Sleep 500
-//        invo_poss += FindInvokePossible()
-
-//		; Send {% NwInvokeKey %}
-//		; Sleep 200
-//		 ; Send {% NwInvokeKey %}
-//		; Sleep 200
-
-//		Sleep % BeforeInvokeDelay %
-
-//		Send {% NwInvokeKey % down}
-//		sleep 180
-//        Send {% NwInvokeKey % up}
-//		sleep % AfterInvokeDelay %
-
-
-//		if (invo_poss < 1) {
-//			sleep 500
-//            invo_poss += FindInvokePossible()
-//        }
-
-//		Sleep 100
-
-//		if (FindMaxBlessings()) {
-//			; == Max Blessing Windows Found == ---Maybe Move this to ConfirmInvoke()-- -
-//Redeem(vault_purchase)
-//            LogAppend("[CWA Purchased]")
-//            invo_started:= 0
-//            continue
-//        } else if (0) {
-//			; == Unreachable Code ==
-//            continue
-//        } else {
-//			; == Normal Situation ==
-//            if (invo_poss < 1) {
-//				sleep 500
-//                invo_poss += FindInvokePossible()
-//            }
-
-//			if (invo_poss > 0) {
-//				; == FindInvokePossible() was true ==
-//invo_started := 1
-//                LogAppend("[Invoke Started]")
-//            } else {
-//				; == FindInvokePossible() was false, let's find out why ==
-//                LogAppend("[Invoke(): Checking CrashCheckRestart()")
-//                if (CrashCheckRestart()) {
-//				invo_started:= 0
-//                    continue
-//                }
-
-//				if (invo_altar_deployed) {
-//					LogAppend("[Altar Deployed but Cannot Invoke]")
-//                    return 0
-//                }
-
-//				MoveAround()
-
-//				if (DeployAltar()) {
-//					LogAppend("[Altar Deployed]")
-//                    invo_altar_deployed:= 1
-//                } else {
-//					LogAppend("[Altar Not Found - Invoke Failed]")
-//                    return 0
-//                }
-
-//			invo_started:= 0
-//                continue
-//            }
-//			Sleep 150 + Ran(20)
-//            invo_started:= 1
-//        }
-//	}
-
-//	Sleep 200
-//    Send {% NwInvokeKey %}
-
-//	return 1
-//}

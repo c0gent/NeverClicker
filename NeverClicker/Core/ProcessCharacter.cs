@@ -59,6 +59,8 @@ namespace NeverClicker.Interactions {
 				return;
 			}
 
+			// [DO NOT REMOVE]:
+			//
 			//int selectAttemptCount = 0;
 
 			//while (!SelectCharacter(intr, charIdx, ENTER_WORLD)) {
@@ -83,6 +85,9 @@ namespace NeverClicker.Interactions {
 			// Determine if client state is still ClientState.CharSelect
 			//    If so, FatalWithScreenShot
 			//    If not, start the 'Verification' loop which will look for signs of the 'World'
+			//
+			//
+			// END [DO NOT REMOVE]
 
 			if (!ENTER_WORLD) {
 				#pragma warning disable CS0162 // Unreachable code detected

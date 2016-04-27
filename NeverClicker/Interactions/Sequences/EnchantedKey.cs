@@ -17,7 +17,6 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
-
 		public static bool ClaimEnchantedKey(Interactor intr) {
 			int xOfs = 222;
 			int yOfs = 12;
@@ -43,7 +42,7 @@ namespace NeverClicker.Interactions {
 			// If found, click on two locations:
 			if (iconLoc.Found) {
 				intr.Log("VIP Claim image found, moving mouse to: " + (iconLoc.Point.X + xOfs).ToString() + ", " 
-					+ (iconLoc.Point.Y + yOfs).ToString());
+					+ (iconLoc.Point.Y + yOfs).ToString(), LogEntryType.Debug);
 
 				// Click to the right of that image:
 				Mouse.Move(intr, iconLoc.Point.X + xOfs, iconLoc.Point.Y + yOfs);
@@ -72,11 +71,6 @@ namespace NeverClicker.Interactions {
 
 				// Close everything down (inventory closes below):				
 
-				// DEBUG
-				//intr.Wait(3000000);
-				//return false;
-
-				// DEBUG -- REENABLE
 				intr.Log("Key claimed, closing inventory...", LogEntryType.Debug);
 				Keyboard.SendKey(intr, openInventoryKey);
 				intr.GameAccount.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
@@ -84,10 +78,6 @@ namespace NeverClicker.Interactions {
 			} else {
 				intr.Log("Failure to claim key, closing inventory...", LogEntryType.Debug);
 				Keyboard.SendKey(intr, openInventoryKey);
-
-				// DEBUG
-				//intr.Wait(3000000);
-
 				return false;
 			}			
 		}
