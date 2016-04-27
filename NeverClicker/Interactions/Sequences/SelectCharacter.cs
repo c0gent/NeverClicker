@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		const int SCROLLS_PER_TILE = 4;
-		//const int SCROLLS_TO_CENTER_BOTTOM = 2;
 		const int TILE_SIZE = 80;
 
 		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld, int loginAttemptCount) {

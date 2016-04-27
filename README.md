@@ -8,12 +8,47 @@ Automated invocation. May eat your laundry.
 4. Ensure your configuration is correct by reading the following section and making any changes necessary.
 
 ## Caveats
-- Client should be run in 'Windowed Maximized' mode at 1920x1080.
+- Client should be run in 'Windowed Maximized' mode at 1920x1080 (if not see resolution section below).
 - Client must be running DirectX 9 (there is little reason to run DirectX 11 anyway).
 - Keybinds can be customized in `NeverClicker_GameAccount.ini`. Key modifiers follow the autohotkey conventions (Alt: !, Ctrl: ^, Shift: +) ex. Ctrl-i (invoke) would be `'^i'` in the ini file.  
 - **You must configure the .ini configuration files manually** before activating Auto-Cycle (a friendly interface for this is coming eventually). You'll find a link to those files within the settings menu. 
-  - You must enter your username and password into `NeverClicker_GameAccount.ini`. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually. Things will continue normally after this point.
-- You apparently shouldn't have a character on your account which is unable to invoke because they are too low level.
+  - Set the number of characters on your account by editing the `CharCount` setting in the `[NwAct]` section of `NeverClicker_GameAccount.ini`.
+  - Enter your username and password into `NeverClicker_GameAccount.ini`. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually (*[UPDATE]: Should also be able to simply log in to character select screen before starting NeverClicker*). Things will continue normally after this point.
+- You apparently shouldn't have a character on your account which is unable to invoke because they are too low level (this may be fixed now).
+
+## Screen Resolution
+Due to developer laziness, resolutions other than 1920x1080 will require some fiddling on your part to get working.
+
+Mess with the following settings in `NeverClicker_GameClient.ini`:
+The "[ClickLocations]" Section:
+- "CharSlotX" and "TopSlotY": You will either need any kind of program to tell you your mouse cursor X, Y on the screen. I use the AutoIt Window Spy included with Autohotkey downloaded from: (http://ahkscript.org/)[http://ahkscript.org/]. There are tons of other ones. Open your coordinate program up and scroll to the top of the character select list and place your cursor in the center of the top character tile (doesn't need to be exact). "CharSlotX" (the left->right component of your coordinate) should be somewhere in the 500-900ish range. "TopSlotY" (the top->bottom component) should be 60-100ish.
+
+The "[KeyBindAndUi]" Section:
+- "VisibleCharacterSelectSlots": The number of WHOLE slots you can see within the scrolling character select window when scrolled to the top. Just round down whatever number you see. If you see four slots plus almost all of a fifth but not quite, put "4".
+- "CharacterSelectScrollBarTopX" and "CharacterSelectScrollBarTopY" (*Yes, I need to move these to the "ClickLocations" section but whatever*): These two must be exact. Find the little scrollbar to the right of the character select tile area. Scroll all the way up and place your mouse cursor on the very tip of the top of the scroll bar. This should be a spot you can click on no matter where the scroll bar actually is and it will cause the scroll bar to jump up towards the top. Same deal, the X position is "CharacterSelectScrollBarTopX", Y is "CharacterSelectScrollBarTopY".
+
+Eventually, resolution auto-detection may set these things for you but for now you're on your own. Here are some known working settings so far:
+
+### 1920x1080
+[KeyBindAndUi]
+VisibleCharacterSelectSlots = 8
+CharacterSelectScrollBarTopX = 840
+CharacterSelectScrollBarTopY = 86
+
+[ClickLocations]
+CharSlotX = 680
+TopSlotY = 120
+
+### 1360x768
+[KeyBindAndUi]
+VisibleCharacterSelectSlots = 4
+CharacterSelectScrollBarTopX = 587
+CharacterSelectScrollBarTopY = 64
+
+[ClickLocations]
+CharSlotX = 435
+TopSlotY = 100
+
 
 ## Troubleshooting
 NeverClicker is very much a work in progress. You will run in to problems. Please help us fix those.
