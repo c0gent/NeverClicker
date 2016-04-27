@@ -25,28 +25,31 @@ Mess with the following settings in `NeverClicker_GameClient.ini`:
 
 ####The "[KeyBindAndUi]" Section:
 - "VisibleCharacterSelectSlots": The number of WHOLE slots you can see within the scrolling character select window when scrolled to the top. Just round down whatever number you see. If you see four slots plus almost all of a fifth but not quite, put "4".
+- "ScrollsToAlignBottomSlot": The number of scrolls it takes, when already scrolled to the very top, to cause the bottom most visible tile in the window to be fully visible. This might just always need to be "2" but there may be certain resolutions where it's different.
 - "CharacterSelectScrollBarTopX" and "CharacterSelectScrollBarTopY" (*Yes, I need to move these to the "ClickLocations" section but whatever*): These two must be exact. Find the little scrollbar to the right of the character select tile area. Scroll all the way up and place your mouse cursor on the very tip of the top of the scroll bar. This should be a spot you can click on no matter where the scroll bar actually is and it will cause the scroll bar to jump up towards the top. Same deal, the X position is "CharacterSelectScrollBarTopX", Y is "CharacterSelectScrollBarTopY".
 
 Eventually, resolution auto-detection may set these things for you but for now you're on your own. Here are some known working settings so far:
 
 ### 1920x1080
-[KeyBindAndUi]
+`[KeyBindAndUi]`
 
-- VisibleCharacterSelectSlots = 8
-- CharacterSelectScrollBarTopX = 840
-- CharacterSelectScrollBarTopY = 86
+- `VisibleCharacterSelectSlots = 8`
+- `ScrollsToAlignBottomSlot = 2`
+- `CharacterSelectScrollBarTopX = 840`
+- `CharacterSelectScrollBarTopY = 86`
 
-[ClickLocations]
+`[ClickLocations]`
 
-- CharSlotX = 680
-- TopSlotY = 120
+- `CharSlotX = 680`
+- `TopSlotY = 120`
 
 ### 1360x768
-[KeyBindAndUi]
+`[KeyBindAndUi]`
 
-- VisibleCharacterSelectSlots = 4
-- CharacterSelectScrollBarTopX = 587
-- CharacterSelectScrollBarTopY = 64
+- `VisibleCharacterSelectSlots = 4`
+- `ScrollsToAlignBottomSlot = 2`
+- `CharacterSelectScrollBarTopX = 587`
+- `CharacterSelectScrollBarTopY = 64`
 
 [ClickLocations]
 
