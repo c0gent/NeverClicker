@@ -14,10 +14,10 @@ namespace NeverClicker.Interactions {
 
 			string cursorModeKey = intr.GameAccount.GetSettingOrEmpty("NwCursorMode", "GameHotkeys");
 
-			Point MaxBlessVaultButton = new Point(
-				intr.GameClient.GetSettingOrZero("VpMaxBlessVpX", "ClickLocations"),
-				intr.GameClient.GetSettingOrZero("VpMaxBlessVpY", "ClickLocations")
-            );
+			//Point MaxBlessVaultButton = new Point(
+			//	intr.GameClient.GetSettingOrZero("VpMaxBlessVpX", "ClickLocations"),
+			//	intr.GameClient.GetSettingOrZero("VpMaxBlessVpY", "ClickLocations")
+   //         );
 
 			//Point VaultOpenButton = new Point(
 			//	intr.GameClient.GetSettingOrZero("VpButtonX", "ClickLocations"),
@@ -53,14 +53,12 @@ namespace NeverClicker.Interactions {
 				intr.GameClient.GetSettingOrZero("VpEofAmtOkX", "ClickLocations"),
 				intr.GameClient.GetSettingOrZero("VpEofAmtOkY", "ClickLocations")
             );
-					
 
-			
-			
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Wait(200);
-				Mouse.Click(intr, MaxBlessVaultButton);
+				//Mouse.Click(intr, MaxBlessVaultButton);
+				Mouse.ClickImage(intr, "InvocationMaximumBlessingsVaultOfPietyButton");
 			} else {
 				intr.Wait(1000);
 				//if (Screen.ImageSearch(intr, "InvocationNotReady").Found ||) {

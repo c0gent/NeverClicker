@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
-		const bool ENTER_WORLD = true;		
+		const bool ENTER_WORLD = true;
+		const int SELECT_ATTEMPTS_MAX = 10;
 
 		public static void ProcessCharacter(
 					Interactor intr,
@@ -53,7 +54,35 @@ namespace NeverClicker.Interactions {
 			if (!ProduceClientState(intr, ClientState.CharSelect, 0)) { return; }
 
 			intr.Log("ProcessCharacter(): Selecting character " + charIdx + " ...", LogEntryType.Info);
-			if (!SelectCharacter(intr, charIdx, ENTER_WORLD, 0)) { return; }
+
+			if (!SelectCharacter(intr, charIdx, ENTER_WORLD)) {
+				return;
+			}
+
+			//int selectAttemptCount = 0;
+
+			//while (!SelectCharacter(intr, charIdx, ENTER_WORLD)) {
+			//	// Determine if login has been a success:
+			//	if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure, 0)) {
+			//		ProduceClientState(intr, ClientState.CharSelect, attemptCount);
+			//		SelectCharacter(intr, charIdx, enterWorld, attemptCount);
+			//		//return false;
+			//	}
+			//	ClearDialogues(intr);
+
+			//	selectAttemptCount += 1;
+
+			//	if (selectAttemptCount >= SELECT_ATTEMPTS_MAX) {
+			//		intr.Log("ProcessCharacter(): Fatal error selecting character " + charIdx + ".", LogEntryType.Fatal);
+			//		return;
+			//	}
+			//}
+
+			// NEW PLAN:
+			// SelectCharacter()
+			// Determine if client state is still ClientState.CharSelect
+			//    If so, FatalWithScreenShot
+			//    If not, start the 'Verification' loop which will look for signs of the 'World'
 
 			if (!ENTER_WORLD) {
 				#pragma warning disable CS0162 // Unreachable code detected

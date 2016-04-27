@@ -32,7 +32,6 @@ namespace NeverClicker.Interactions {
 					case ClientState.None:
 						intr.Log("Launching patcher...");
 						return PatcherLogin(intr, desiredState);
-
 					case ClientState.Inactive:						
 						intr.Log("Game client is currently in the background. Waiting 30 seconds or until client is brought to foreground before continuing...", LogEntryType.Normal);
 
@@ -47,7 +46,6 @@ namespace NeverClicker.Interactions {
 						intr.Log("Activating Client...", LogEntryType.Normal);
 						ActivateClient(intr);
 						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
-
 					case ClientState.InWorld:
 						if (attemptCount >= 10) {
 							intr.Log("Stuck at in world. Killing all and restarting.", LogEntryType.FatalWithScreenshot);

@@ -9,7 +9,7 @@ namespace NeverClicker.Interactions {
 		const int SCROLLS_PER_TILE = 4;
 		const int TILE_SIZE = 80;
 
-		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld, int loginAttemptCount) {
+		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld) {
 			if (intr.CancelSource.IsCancellationRequested) { return false; }
 
 			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
@@ -63,11 +63,17 @@ namespace NeverClicker.Interactions {
 			ClearDialogues(intr);
 			intr.Wait(3000);
 
-			if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure, loginAttemptCount)) {
-				ProduceClientState(intr, ClientState.CharSelect, loginAttemptCount);
-				SelectCharacter(intr, charIdx, enterWorld, loginAttemptCount);
+			// Determine if login has been a success:
+			if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure, 0)) {
+				// [NOTE]: Look into eliminating this recursion and moving control back up and iterating rather than delving deeper.
+				ProduceClientState(intr, ClientState.CharSelect, 0);
+				SelectCharacter(intr, charIdx, enterWorld);
+				//return false;
 			}
+
+			// [TODO]: This should happen in the 'World Verification' loop:
 			ClearDialogues(intr);
+
 			return true;
 		}
 

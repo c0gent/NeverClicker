@@ -45,7 +45,6 @@ namespace NeverClicker {
 			}
 		}
 
-
 		public static bool IsClientState(Interactor intr, ClientState desiredState) {
 			switch (desiredState) {
 				case ClientState.None:
@@ -55,8 +54,18 @@ namespace NeverClicker {
 				case ClientState.CharSelect:
 					return Screen.ImageSearch(intr, "EnterWorldButton").Found;
 				case ClientState.InWorld:
+					// Clear any window with an "X" close button ('Welcome to Neverwinter' window):
+					Sequences.ClearWindowsWithX(intr);
 					//return Screen.ImageSearch(intr, "AbilityPanelSerpent").Found;
-					return Screen.ImageSearch(intr, "MinimapCircleBottomArc").Found;
+					//return Screen.ImageSearch(intr, "MinimapCircleBottomArc").Found;
+
+					if (Screen.ImageSearch(intr, "AbilityPanelSerpent").Found) {
+						return true;
+					} else if (Screen.ImageSearch(intr, "AbilityPanelSerpent").Found) {
+						return true;
+					} else {
+						return false;
+					}					
 				case ClientState.LogIn:
 					return Screen.ImageSearch(intr, "ClientLoginButton").Found;
 			}

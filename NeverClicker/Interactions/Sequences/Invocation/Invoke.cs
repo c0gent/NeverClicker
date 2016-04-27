@@ -36,6 +36,7 @@ namespace NeverClicker.Interactions {
 
 			// First Invoke Attempt
 			Keyboard.SendKey(intr, invokeKey);
+			intr.Wait(100);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Log("Maximum blessings reached for character " + charIdx 

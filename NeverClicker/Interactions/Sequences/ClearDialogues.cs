@@ -22,7 +22,11 @@ namespace NeverClicker.Interactions {
 			//Mouse.ClickImage(intr, "DeclineButton", 0, 0, topLeft, botRight);
 			//Mouse.ClickImage(intr, "DeclineButton_2", 0, 0, topLeft, botRight);
 		}
-	}
+
+		public static void ClearWindowsWithX(Interactor intr) {
+			Mouse.ClickImage(intr, "WindowXButton");
+		}
+	}		
 }
 
 //ClearOkPopupBullshit() {
