@@ -314,6 +314,9 @@
     <Content Include="DefaultImages\InvocationSuccessWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DefaultImages\MinimapCircleBottomArc.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="DefaultImages\nw_altar_icon.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

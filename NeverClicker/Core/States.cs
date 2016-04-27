@@ -55,7 +55,8 @@ namespace NeverClicker {
 				case ClientState.CharSelect:
 					return Screen.ImageSearch(intr, "EnterWorldButton").Found;
 				case ClientState.InWorld:
-					return Screen.ImageSearch(intr, "AbilityPanelSerpent").Found;
+					//return Screen.ImageSearch(intr, "AbilityPanelSerpent").Found;
+					return Screen.ImageSearch(intr, "MinimapCircleBottomArc").Found;
 				case ClientState.LogIn:
 					return Screen.ImageSearch(intr, "ClientLoginButton").Found;
 			}

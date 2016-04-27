@@ -51,10 +51,10 @@ Eventually, resolution auto-detection may set these things for you but for now y
 - `CharacterSelectScrollBarTopX = 587`
 - `CharacterSelectScrollBarTopY = 64`
 
-[ClickLocations]
+`[ClickLocations]`
 
-- CharSlotX = 435
-- TopSlotY = 100
+- `CharSlotX = 435`
+- `TopSlotY = 100`
 
 
 ## Troubleshooting
