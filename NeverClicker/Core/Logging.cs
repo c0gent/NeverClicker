@@ -42,41 +42,14 @@ namespace NeverClicker {
 
 				// <<<<< TODO: PRUNE OLD ENTRIES >>>>>
 
-				//SessionElement = LogXmlDoc.CreateElement(SessionElementName);
-				//SessionElement.SetAttribute("id", DateTime.Now.ToFileTime().ToString());
-				//LogXmlDoc.DocumentElement.AppendChild(SessionElement);
 				InitLogFile();
 			} else {
 				try {
-					//var root = LogXmlDoc.CreateElement(RootElementName);
-					//LogXmlDoc.AppendChild(root);
-
-					//SessionElement = LogXmlDoc.CreateElement(SessionElementName);
-					//SessionElement.SetAttribute("id", DateTime.Now.ToFileTime().ToString());
-					//LogXmlDoc.DocumentElement.AppendChild(SessionElement);
-
-					//LogXmlDoc.Save(LogFileName);
 					InitLogFile();
 				} catch (Exception ex) {
 					MessageBox.Show("LogFile::AppendMessage(): Error saving log file: " + ex.ToString());
 				}
 			}
-
-			//MessageBox.Show("LogFile::LogFile(): Loading " + LogFileName);
-
-			//try {
-			//	LogXmlDoc.Load(LogFileName);
-			//} catch (XmlException) {
-			//	try {
-			//		Directory.CreateDirectory(Settings.Default.LogsFolderPath);
-			//		File.Delete(LogFileName);
-			//		LogXmlDoc.Load(LogFileName);
-			//	} catch (Exception ex) {
-			//		MessageBox.Show("Error loading log file: " + ex.ToString());
-			//	}
-			//}
-			//var root = LogXmlDoc.CreateElement("log_entries");
-			//LogXmlDoc.AppendChild(root);
 		}
 
 		/// <summary>
@@ -106,13 +79,7 @@ namespace NeverClicker {
 
 		public void AppendMessage(LogMessage logMessage) {
 			lock (Locker) {
-				//var el = (XmlElement)LogXmlDoc.DocumentElement.AppendChild(LogXmlDoc.CreateElement("entry"));
 				var entry = (XmlElement)SessionElement.AppendChild(LogXmlDoc.CreateElement("entry"));
-
-				//entry.SetAttribute("time", System.Security.SecurityElement.Escape(DateTime.Now.ToString()));
-				//entry.SetAttribute("type", System.Security.SecurityElement.Escape(logMessage.Type.ToString()));
-				//entry.SetAttribute("text", System.Security.SecurityElement.Escape(logMessage.Text).ToString());
-
 				entry.SetAttribute("time", DateTime.Now.ToString());
 				entry.SetAttribute("type", logMessage.Type.ToString());
 				entry.SetAttribute("text", logMessage.Text);
@@ -124,57 +91,6 @@ namespace NeverClicker {
 				}
 			}
 		}
-
-
-		//this.LogFileName = Properties.Settings.Default.LogsFolderPath;
-		//if (File.Exists(LogFileName)) {
-		//	LogXmlDoc.Load(LogFileName);
-		//	var root = LogXmlDoc.CreateElement("log_entries");
-		//	LogXmlDoc.AppendChild(root);
-		//} else {
-
-		//}
-
-		//var lfPath = Settings.Default.LogsFolderPath.ToString();
-
-
-		//if (InitLogFile(lfName)) {
-		//	LogFileName = lfName;
-		//}
-
-		//public static bool InitLogFile(string logFileName) {
-		//	//string logFileName = ;
-
-				
-		//	//if (!Directory.Exists(logFolder)) {
-		//	//	//Directory.CreateDirectory(logFolder);
-		//	//	return false;
-		//	//}
-
-		//	//var logFileName = logFolder + "\\" + SettingsManager.LOG_FILE_NAME;
-
-		//	if (File.Exists(logFileName)) {
-		//		try {
-		//			LogXmlDoc.Load(logFileName);
-		//		} catch (XmlException) {
-		//			return false;
-		//		}
-		//		var root = LogXmlDoc.CreateElement("log_entries");
-		//		LogXmlDoc.AppendChild(root);
-		//		return true;
-		//	} else {
-		//		return false;
-		//		//try {
-		//		//	var root = LogXmlDoc.CreateElement("log_entries");
-		//		//	LogXmlDoc.AppendChild(root);
-		//		//	LogXmlDoc.Save(logFileName);
-					
-		//		//} catch (Exception ex) {
-		//		//	MessageBox.Show("LogFile::AppendMessage(): Error saving xml document: " + ex.ToString());
-		//		//}				
-		//	}
-		//}
-		
 	}
 
 	public struct LogMessage {
@@ -202,26 +118,3 @@ namespace NeverClicker {
 		FatalWithScreenshot,
 	}		
 }
-
-//namespace NeverClicker.Interactions {
-//	public static partial class Sequences {
-//		public static void LogWaitResult<T, U>(Interactor intr, T start, U end, bool success) {
-//			if (success) {
-//				intr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: "
-//					+ start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
-//			} else {
-//				intr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " 
-//					+ start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
-//			}
-//		}
-
-//		public static void LogSuccess<T, U>(Interactor intr, T start, U end) {
-//			intr.Log("logging.cs::Interactions::Sequences::LogSuccess(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " success.", LogEntryType.Debug);
-//		}
-
-//		public static void LogFailure<T, U>(Interactor intr, T start, U end) {
-//			intr.Log("logging.cs::Interactions::Sequences::LogFailure(): Producing client state: " + start.ToString() + " -> " + end.ToString() + " failure. Re-evaluating...", LogEntryType.Debug);
-//		}
-//	}
-//}
-
