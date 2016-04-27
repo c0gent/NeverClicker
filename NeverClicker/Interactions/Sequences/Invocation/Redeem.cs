@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public static void Redeem(Interactor intr, int item) {
+		public enum VaultOfPietyItem {
+			ElixirOfFate,
+			CofferOfCelestialArtifactEquipment
+		}
+
+		public static bool Redeem(Interactor intr, VaultOfPietyItem item) {
 			intr.Wait(500);
 
 			//int item = 1; // REPLACE WITH ENUM
@@ -24,15 +29,15 @@ namespace NeverClicker.Interactions {
 			//	intr.GameClient.GetSettingOrZero("VpButtonY", "ClickLocations")
    //         );
 
-			Point VaultCelestialTab = new Point(
-				intr.GameClient.GetSettingOrZero("VpCsTabX", "ClickLocations"),
-				intr.GameClient.GetSettingOrZero("VpCsTabY", "ClickLocations")
-            );
+			//Point VaultCelestialTab = new Point(
+			//	intr.GameClient.GetSettingOrZero("VpCsTabX", "ClickLocations"),
+			//	intr.GameClient.GetSettingOrZero("VpCsTabY", "ClickLocations")
+   //         );
 
-			Point VaultCelestialAEPanel = new Point( // 5
-				intr.GameClient.GetSettingOrZero("VpCcaePanelX", "ClickLocations"),
-				intr.GameClient.GetSettingOrZero("VpCcaePanelY", "ClickLocations")
-            );
+			//Point VaultCelestialAEPanel = new Point( // 5
+			//	intr.GameClient.GetSettingOrZero("VpCcaePanelX", "ClickLocations"),
+			//	intr.GameClient.GetSettingOrZero("VpCcaePanelY", "ClickLocations")
+   //         );
 
 			Point VaultCelestialEOFPanel = new Point( // 1
 				intr.GameClient.GetSettingOrZero("VpEofPanelX", "ClickLocations"),
@@ -44,10 +49,10 @@ namespace NeverClicker.Interactions {
 				intr.GameClient.GetSettingOrZero("VpCsRedeemY", "ClickLocations")
             );
 
-			Point VaultPurchaseOkButton = new Point(
-				intr.GameClient.GetSettingOrZero("VpCwaPurchaseOkX", "ClickLocations"),
-				intr.GameClient.GetSettingOrZero("VpCwaPurchaseOkY", "ClickLocations")
-            );
+			//Point VaultPurchaseOkButton = new Point(
+			//	intr.GameClient.GetSettingOrZero("VpCwaPurchaseOkX", "ClickLocations"),
+			//	intr.GameClient.GetSettingOrZero("VpCwaPurchaseOkY", "ClickLocations")
+   //         );
 
 			Point VaultPurchaseAmtOkButton = new Point(
 				intr.GameClient.GetSettingOrZero("VpEofAmtOkX", "ClickLocations"),
@@ -77,38 +82,59 @@ namespace NeverClicker.Interactions {
 
 			intr.WaitRand(2500, 4500);
 
-			Mouse.Click(intr, VaultCelestialTab);
-			intr.Wait(2000);
-
-			if (item == 5) {
-				Mouse.Click(intr, VaultCelestialAEPanel);
-				intr.Wait(200);
-				Mouse.Click(intr, VaultCelestialAEPanel);
-				intr.Wait(500);
-
-				Mouse.Click(intr, VaultCelestialRedeemButton);
-				intr.Wait(500);
-
-				Mouse.Click(intr, VaultPurchaseOkButton);
-				intr.Wait(1500);
-
-				intr.Log("Vault of Piety item 5 purchased", LogEntryType.Info);
-			} else if (item == 1) {
-				Mouse.Click(intr, VaultCelestialEOFPanel);
-				intr.Wait(200);
-				Mouse.Click(intr, VaultCelestialEOFPanel);
-				intr.Wait(500);
-
-				Mouse.Click(intr, VaultCelestialRedeemButton);
-				intr.Wait(500);
-
-				Mouse.Click(intr, VaultPurchaseAmtOkButton);
-				intr.Wait(1500);
-
-				intr.Log("Vault of Piety item 1 purchased", LogEntryType.Info);
+			if (!Screen.ImageSearch(intr, "VaultOfPietyWindowTitle").Found) {
+				return false;
 			}
 
-			return;
+			//Mouse.Click(intr, VaultCelestialTab);
+			Mouse.ClickImage(intr, "VaultOfPietyCelestialSynergyTabButton");
+			intr.Wait(2000);
+
+			if (item == VaultOfPietyItem.CofferOfCelestialArtifactEquipment) {
+				//Mouse.Click(intr, VaultCelestialAEPanel);
+				//intr.Wait(200);
+				//Mouse.Click(intr, VaultCelestialAEPanel);
+				//intr.Wait(500);
+				//Mouse.Click(intr, VaultCelestialRedeemButton);
+				//intr.Wait(500);
+				//Mouse.Click(intr, VaultPurchaseOkButton);
+				//intr.Wait(1500);
+
+				var panel = Screen.ImageSearch(intr, "VaultOfPietyCofferOfCelestialArtifactEquipmentPanel");
+
+				if (panel.Found) {
+					Mouse.DoubleClick(intr, panel.Point);
+					intr.Wait(500);					
+					Mouse.ClickImage(intr, "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton");
+					intr.Log("Vault of Piety: 'Coffer of Celestial Artifact Equipment' purchased successfully.", LogEntryType.Info);
+				} else {
+					intr.Log("Vault of Piety Error: Could not find 'Coffer of Celestial Artifact Equipment' icon/tile.", LogEntryType.Fatal);
+					return false;
+				}				
+			} else if (item == VaultOfPietyItem.ElixirOfFate) {
+				//Mouse.Click(intr, VaultCelestialEOFPanel);
+				//intr.Wait(200);
+				//Mouse.Click(intr, VaultCelestialEOFPanel);
+				//intr.Wait(500);
+				//Mouse.Click(intr, VaultCelestialRedeemButton);
+				//intr.Wait(500);
+				//Mouse.Click(intr, VaultPurchaseAmtOkButton);
+				//intr.Wait(1500);
+
+				var panel = Screen.ImageSearch(intr, "VaultOfPietyElixirOfFatePanel");
+
+				if (panel.Found) {
+					Mouse.DoubleClick(intr, panel.Point);
+					intr.Wait(500);					
+					Mouse.ClickImage(intr, "VaultOfPietyElixirOfFateSelectAmountOkButton");
+					intr.Log("Vault of Piety: 'Elixir of Fate' purchased successfully.", LogEntryType.Info);
+				} else {
+					intr.Log("Vault of Piety Error: Could not find 'Elixir of Fate' icon/tile.", LogEntryType.Fatal);
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }

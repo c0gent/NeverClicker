@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-			public const bool ALWAYS_REDEEM = false;
-			public const int REDEMPTION_ITEM = 5;
+		public const bool ALWAYS_REDEEM = false;
+		public const VaultOfPietyItem REDEMPTION_ITEM = VaultOfPietyItem.CofferOfCelestialArtifactEquipment;
 
 		public static CompletionStatus Invoke(Interactor intr, uint charIdx, bool enchKeyIsPending) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
@@ -41,11 +41,15 @@ namespace NeverClicker.Interactions {
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Log("Maximum blessings reached for character " + charIdx 
 					+ ". Redeeming through Vault of Piety...", LogEntryType.Info);
-				Redeem(intr, REDEMPTION_ITEM);
-				//intr.ExecuteStatement("MoveAround()");
-				MoveAround(intr);
-				//intr.Log("Redeeming Vault of Piety...", LogEntryType.Info);
-				Keyboard.SendKey(intr, invokeKey);
+				if (Redeem(intr, REDEMPTION_ITEM)) {
+					//intr.ExecuteStatement("MoveAround()");
+					MoveAround(intr);
+					intr.Log("Redeeming Vault of Piety...", LogEntryType.Debug);
+					Keyboard.SendKey(intr, invokeKey);
+				} else {
+					intr.Log("Unable to invoke: Error collecting Vault of Piety rewards for character " + charIdx + ".", LogEntryType.Error);
+					return CompletionStatus.Failed;
+				}
 			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
@@ -56,16 +60,16 @@ namespace NeverClicker.Interactions {
 					//Invoke
 					Keyboard.SendKey(intr, invokeKey);
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
-					intr.Log("Invocation already finished for the day on character " + charIdx);
+					intr.Log("Unable to invoke: Invocation already finished for the day on character " + charIdx + ".");
 					return CompletionStatus.DayComplete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
-					intr.Log("Still waiting to invoke on character " + charIdx);
+					intr.Log("Unable to invoke: Still waiting to invoke on character " + charIdx + ".");
 					return CompletionStatus.Immature;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
-					intr.Log("Character " + charIdx + " not in rest zone.", LogEntryType.Fatal);
+					intr.Log("Unable to invoke: Character " + charIdx + " not in rest zone.", LogEntryType.Error);
 					return CompletionStatus.Complete;			
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
-					intr.Log("Items in overflow bag are preventing invocation for character " 
+					intr.Log("Unable to invoke: Items in overflow bag are preventing invocation for character " 
 						+ charIdx + ". Attempting to move to regular inventory...", LogEntryType.Error);
 					intr.Wait(2000);
 					MoveAround(intr);	
