@@ -65,28 +65,6 @@ namespace NeverClicker {
 			}
 		}
 
-		// FOR INVOCATION
-		public void AdvanceInvocationTask(Interactor intr, uint charIdx, int invokesToday, bool incrementInvokes) {
-			//if (taskKind == TaskKind.Profession) {
-			//	throw new Exception("TaskQueue::AdvanceTask(): Profession tasks must specify a taskId as the fourth parameter");
-			//} else {
-			//	this.AdvanceTask(intr, charIdx, taskKind, invokesToday, incrementInvokes);
-			//}
-
-			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, incrementInvokes);
-		}
-
-		// FOR PROFESSIONS
-		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId) {	
-			//if (taskKind == TaskKind.Invocation) {
-			//	throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify whether or not to increment daily invokes as fourth parameter.");
-			//} else {
-			//	this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
-			//}
-
-			this.AdvanceTask(intr, charIdx, TaskKind.Professions, taskId, false);
-		}
-
 		private void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId, bool incrementTaskId) {
 			// CHECK TO SEE IF THAT TASK IS ALREADY IN QUEUE, 
 			// IF NOT ADD
@@ -134,8 +112,34 @@ namespace NeverClicker {
 			}
 		}
 
-						
+		// FOR INVOCATION
+		public void AdvanceInvocationTask(Interactor intr, uint charIdx, int invokesToday, bool incrementInvokes) {
+			//if (taskKind == TaskKind.Profession) {
+			//	throw new Exception("TaskQueue::AdvanceTask(): Profession tasks must specify a taskId as the fourth parameter");
+			//} else {
+			//	this.AdvanceTask(intr, charIdx, taskKind, invokesToday, incrementInvokes);
+			//}
+
+			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, incrementInvokes);
+		}
+
+		// FOR PROFESSIONS
+		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId) {	
+			//if (taskKind == TaskKind.Invocation) {
+			//	throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify whether or not to increment daily invokes as fourth parameter.");
+			//} else {
+			//	this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
+			//}
+
+			this.AdvanceTask(intr, charIdx, TaskKind.Professions, taskId, false);
+		}
+
+
 		// QUEUESUBSEQUENTINVOCATIONTASK(): QUEUE FOLLOW UP TASK
+		//
+		// If `invokesToday` is 0 it can be assumed that things are out of sync. 
+		//     - `invokesToday` defaults to 1 initially (see `AdvanceTask()` near the bottom). 
+		//     - There are no other known reasons why it would be 0, therefore an extra 15 minutes of delay is added.
 		private void QueueSubsequentInvocationTask(Interactor intr, uint charIdx, int invokesToday) {
 			var now = DateTime.Now;
 			DateTime taskMatureTime = now;
@@ -144,10 +148,11 @@ namespace NeverClicker {
 			string charLabel = "Character " + charIdx.ToString();			
 			
             if (invokesToday < 6) { // QUEUE FOR LATER
-				//int extraTaskDelay = (invokesToday * 45000) + (charZeroIdx * 1000) + 180000;
-				// EXTRA DELAY REMOVED
-				//var nextInvokeDelay = InvokeDelays[invokesToday];
-				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Invocation, invokesToday);				
+				TimeSpan extraDelay = TimeSpan.FromMinutes(0);
+				if (invokesToday == 0) {
+					extraDelay = TimeSpan.FromMinutes(15);
+				}
+				taskMatureTime = CalculateTaskMatureTime(now + extraDelay, charIdx, TaskKind.Invocation, invokesToday);
 				// IF NEXT SCHEDULED TASK IS BEYOND THE 3:30 CURFEW, RESET FOR NEXT DAY
 				if (taskMatureTime > nextThreeThirty) {
 					invokesToday = 6;

@@ -1,4 +1,6 @@
 ﻿# NeverClicker
+####[Download](https://github.com/nsan1129/NeverClicker/releases)
+
 Automated invocation. May eat your laundry.
 
 ## Installation
@@ -75,6 +77,6 @@ NeverClicker is very much a work in progress. You will run in to problems. Pleas
         3. The observed behavior: What actually happened. 99% of the time this answer will be 'nothing' or 'an error message'. Please include this information.
   
 - Other things to try:
-	- Try running without 
+	- Try running without anti-aliasing.
   
 
