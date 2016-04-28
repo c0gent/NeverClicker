@@ -14,7 +14,7 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
 
-			int maxChars = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
+			int charCount = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
 			int charSlotX = intr.GameClient.GetSettingOrZero("CharSlotX", "ClickLocations");
 			int topSlotY = intr.GameClient.GetSettingOrZero("TopSlotY", "ClickLocations");
 			int visibleSlots = intr.GameClient.GetSettingOrZero("VisibleCharacterSelectSlots", "KeyBindAndUi");
@@ -22,7 +22,7 @@ namespace NeverClicker.Interactions {
 			int scrollBarTopX = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopX", "KeyBindAndUi");
 			int scrollBarTopY = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopY", "KeyBindAndUi");
 
-			if ((maxChars == 0) || (charSlotX == 0) || (topSlotY == 0) || (visibleSlots == 0)
+			if ((charCount == 0) || (charSlotX == 0) || (topSlotY == 0) || (visibleSlots == 0)
 						|| (scrollBarTopX == 0) || (scrollBarTopY == 0)) {
 				intr.Log("SelectCharacter(): Error loading ini file settings", LogEntryType.Fatal);
 				return false;
@@ -41,9 +41,11 @@ namespace NeverClicker.Interactions {
 				scrolls = (SCROLLS_PER_TILE * ((int)charIdx - (visibleSlots - 1))) + scrollsAlignBot;
 			}
 
-			for (int i = 0; i < 9; i++) {
+			int scrollUpClicks = (8 / visibleSlots) * 9;
+
+			for (int i = 0; i < scrollUpClicks; i++) {
 				Mouse.Click(intr, scrollBarTopX, scrollBarTopY);
-				intr.Wait(10);
+				//intr.Wait(10);
 			}
 			
 			Mouse.WheelUp(intr, 5);
