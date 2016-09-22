@@ -274,6 +274,11 @@ namespace NeverClicker {
 				var invokesCompletedOn = TodaysGameDate.AddDays(-1);
 				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charSettingSection), out invokesCompletedOn);
 
+				// Clear any stale invoke count:
+				if (invokesCompletedOn < TodaysGameDate.AddDays(-1)) {
+					invokesToday = 0;
+				}
+
 				var mostRecent = now.AddHours(-24);
 				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentInvocationTime", charSettingSection), out mostRecent);
 
