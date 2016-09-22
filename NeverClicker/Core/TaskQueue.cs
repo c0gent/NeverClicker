@@ -14,7 +14,6 @@ namespace NeverClicker {
 		// DEPRICATE:
 		//									     15min,   30min,   45min,   60min,   90min,
 		public static int[] InvokeDelayMinutes = { 0, 15, 30, 45, 60, 90, 0, 0, 0, 0 };
-		//public static int[] ProfessionTaskDurationMinutes = { 720, 600, 960, 1440 };
 		public static int[] ProfessionTaskDurationMinutes = { 235, 920, 690, 690, 1375 };
 		public static string[] ProfessionTaskNames = { "Guard Young Noble", "Escort a Wizard", "Kill a Young Dragon", "Protect Magical", "Battle Elemental" };
 
@@ -26,11 +25,9 @@ namespace NeverClicker {
 			Queue = new SortedList<long, GameTask>(300);
 		}
 
-
 		public void Add(GameTask gameTask) {
 			bool taskMatureTimeUnique = false;
 			uint attempts = 0;
-
 
 			while (taskMatureTimeUnique == false) {
 				ArgumentException aex = new ArgumentException();
@@ -96,7 +93,7 @@ namespace NeverClicker {
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					} else if (taskKind == TaskKind.Professions) {
 						intr.Log("Queuing subsequent professions task.", LogEntryType.Debug);
-						//this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
+						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 					}					
 				} else { // NOT MATURE
 					intr.Log("Task is not mature.", LogEntryType.Debug);
@@ -107,8 +104,8 @@ namespace NeverClicker {
 				if (taskKind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, 1);
 				} else if (taskKind == TaskKind.Professions) {
-					//this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
-				}	
+					this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
+				}
 			}
 		}
 
@@ -188,34 +185,34 @@ namespace NeverClicker {
 
 
 		// QUEUESUBSEQUENTPROFESSIONTASK(): QUEUE FOLLOW UP TASK
-		//private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
-		//	var now = DateTime.Now;
-		//	var charLabel = "Character " + charIdx.ToString();
-			
-		//	var mostRecentProfTime = now;
-		//	DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTime_" + taskId, charLabel), out mostRecentProfTime);
+		private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
+			var now = DateTime.Now;
+			var charLabel = "Character " + charIdx.ToString();
 
-		//	//int mostRecentProfTask = taskId;
-		//	//int.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTask_" + taskId, charZeroIdxLabel), out mostRecentProfTask);
+			var mostRecentProfTime = now;
+			DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTime_" + taskId, charLabel), out mostRecentProfTime);
 
-		//	var taskMatureTime = now;
+			//int mostRecentProfTask = taskId;
+			//int.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTask_" + taskId, charZeroIdxLabel), out mostRecentProfTask);
 
-		//	if (mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]) < now) {
-		//		//intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);				
-		//		//taskMatureTime = now.AddMinutes(ProfessionTaskDurationMinutes[taskId]);
-		//		taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Professions, taskId);		
-		//	} else {
-		//		//taskMatureTime = mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]);	
-		//		taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Professions, taskId);
-		//	}
-				
-		//	intr.Log("Next profession task (" + ProfessionTaskNames[taskId] + ") for character " + charIdx 
-		//		+ " at: " + taskMatureTime.ToShortTimeString() + ".");
+			var taskMatureTime = now;
 
-		//	intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);
-		//	this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
-		//	intr.UpdateQueueList(this.ListClone());
-		//}
+			if (mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]) < now) {
+				//intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);				
+				//taskMatureTime = now.AddMinutes(ProfessionTaskDurationMinutes[taskId]);
+				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Professions, taskId);
+			} else {
+				//taskMatureTime = mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]);	
+				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Professions, taskId);
+			}
+
+			intr.Log("Next profession task (" + ProfessionTaskNames[taskId] + ") for character " + charIdx
+				+ " at: " + taskMatureTime.ToShortTimeString() + ".");
+
+			intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);
+			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
+			intr.UpdateQueueList(this.ListClone());
+		}
 
 
 		// AdvanceTasks(): ADVANCE ANY EXPIRED TASKS FOR A GIVEN CHARACTER AND TASK TYPE

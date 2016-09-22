@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Core {
 	class ErrorList {
-		List<uint> char_idxs;
-		List<string> messages;		
+		// List<uint> char_idxs;
+		// List<string> messages;		
 
 
 	}
