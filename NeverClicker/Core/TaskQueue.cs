@@ -9,13 +9,28 @@ using System.Windows.Forms;
 using System.Collections.Immutable;
 
 namespace NeverClicker {
+
 	[Serializable]
 	public class TaskQueue : ISerializable {
-		// DEPRICATE:
-		//									     15min,   30min,   45min,   60min,   90min,
 		public static int[] InvokeDelayMinutes = { 0, 15, 30, 45, 60, 90, 0, 0, 0, 0 };
-		public static int[] ProfessionTaskDurationMinutes = { 235, 920, 690, 690, 1375 };
-		public static string[] ProfessionTaskNames = { "Guard Young Noble", "Escort a Wizard", "Kill a Young Dragon", "Protect Magical", "Battle Elemental" };
+
+		public static int[] ProfessionTaskDurationMinutes = {
+			//235,
+			960,
+			//690,
+			720,
+			//1375
+			480
+		};
+
+		public static string[] ProfessionTaskNames = {
+			//"Guard Young Noble",
+			"Escort a Wizard",
+			//"Kill a Young Dragon",
+			"Protect Magical",
+			//"Battle Elemental"
+			"Guard Clerics"
+		};
 
 		private SortedList<long, GameTask> Queue { get; set; }
 		public GameTask NextTask { get { return Queue.First().Value; } }
