@@ -115,7 +115,6 @@ namespace NeverClicker.Interactions {
 			// ##################################### LOG OUT ######################################
 			LogOut(intr);
 
-
 			// ########################### INVOCATION QUEUE AND SETTINGS ##########################
 			if (invocationStatus == CompletionStatus.Complete) {
 				intr.Log("Invocation task for character " + charIdx.ToString() + ": Complete.", LogEntryType.Normal);
