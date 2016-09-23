@@ -22,7 +22,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");
-			string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
+			//string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
 
 			// Collect Enchanted Key
 			if (enchKeyIsPending) {
@@ -71,13 +71,8 @@ namespace NeverClicker.Interactions {
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
 					intr.Log("Unable to invoke: Items in overflow bag are preventing invocation for character " 
 						+ charIdx + ". Attempting to move to regular inventory...", LogEntryType.Error);
-					intr.Wait(2000);
-					MoveAround(intr);
-					Keyboard.SendKey(intr, openInventoryKey);
-					intr.Wait(3000);
-					Mouse.ClickImage(intr, "InventoryOverflowTransferButton");
-					intr.Wait(2000);
-					MoveAround(intr);
+					// Attempt to transfer overflow items to regular inventory:
+					TransferOverflow(intr);
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {

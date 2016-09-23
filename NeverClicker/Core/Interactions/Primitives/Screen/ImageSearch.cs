@@ -39,6 +39,9 @@ namespace NeverClicker.Interactions {
 				intr.GameClient.SaveSetting(imageFileName, imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 			}
 
+			//// ORIGINAL:
+			//string imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
+
 			string imageFilePath;
 
 			if (File.Exists(Settings.Default.ImagesFolderPath + "\\" + imageFileName)) {

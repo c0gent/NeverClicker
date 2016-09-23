@@ -18,19 +18,19 @@ namespace NeverClicker {
 	public partial class SettingsForm: Form {
 		MainForm MainForm;
 
-		const string BUILTIN_DEFAULTS_FOLDER_NAME = "Assets" + "\\" + "Defaults";
-		public const string BUILTIN_IMAGES_SUBPATH = "\\" + BUILTIN_DEFAULTS_FOLDER_NAME + "\\" + IMAGES_FOLDER_NAME;
-		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + BUILTIN_DEFAULTS_FOLDER_NAME + "\\" + SETTINGS_FOLDER_NAME;
-
 		const string IMAGES_FOLDER_NAME = "Images";
 		const string SETTINGS_FOLDER_NAME = "Settings";
 		const string LOGS_FOLDER_NAME = "Logs";
-		const string ASSETS_FOLDER_NAME = "Assets";
+
+		const string BUILTIN_ASSETS_FOLDER_NAME = "Assets";
+		const string BUILTIN_DEFAULTS_FOLDER_NAME = BUILTIN_ASSETS_FOLDER_NAME + "\\" + "Default";
+
+		public const string BUILTIN_IMAGES_SUBPATH = "\\" + BUILTIN_DEFAULTS_FOLDER_NAME + "\\" + IMAGES_FOLDER_NAME;
+		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + BUILTIN_DEFAULTS_FOLDER_NAME + "\\" + SETTINGS_FOLDER_NAME;
 
 		public const string IMAGES_SUBPATH = "\\" + IMAGES_FOLDER_NAME;
 		public const string SETTINGS_SUBPATH = "\\" + SETTINGS_FOLDER_NAME;
 		public const string LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
-		public const string ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
 
 		//public const string DEFAULT_LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
 		//public const string DEFAULT_ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
