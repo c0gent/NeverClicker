@@ -1,4 +1,4 @@
-﻿# NeverClicker
+# NeverClicker
 ####[Download](https://github.com/nsan1129/NeverClicker/releases)
 
 Automated invocation. May eat your laundry.
@@ -14,16 +14,16 @@ Automated invocation. May eat your laundry.
 
 
 ## Configuration
-- The game client should ideally be run in 'Windowed Maximized' mode at 1920x1080. If your resolution is different, see the resolution section below.
+- The game client should ideally be run in 'Windowed Maximized' mode at 1920x1080. If your resolution is different, see the [Screen Resolution](#screen-resolution) section below.
 - Client **must** be running DirectX 9 for image detection to work (there is little reason to run DirectX 11 anyway).
 - Keybinds can be customized in `NeverClicker_GameAccount.ini`. Key modifiers follow the autohotkey conventions (Alt: !, Ctrl: ^, Shift: +) ex. Ctrl-i (invoke) would be `'^i'` in the ini file.  
 - **You must configure the .ini configuration files manually** before activating Auto-Cycle (a friendly interface for this is coming eventually). You'll find a link to those files within the settings menu. 
     - Set the number of characters on your account by editing the `CharCount` setting in the `[NwAct]` section of `NeverClicker_GameAccount.ini`.
-    - Enter your username and password into `NeverClicker_GameAccount.ini`. If you're not comfortable with this you can manually watch each time NeverClicker attempts to launch the patcher, wait for it's login attempt to fail, then type your username and password in manually (*[UPDATE]: Should also be able to simply log in to character select screen before starting NeverClicker*). Things will continue normally after this point.
-- You apparently shouldn't have a character on your account which is unable to invoke because they are too low level (this may be fixed now).
+    - Enter your username and password into `NeverClicker_GameAccount.ini`. If you're not comfortable with this you can manually log into the game client before starting the NeverClicker auto cycle.
+- You apparently can't have a character on your account which is unable to invoke because they are too low level (this should be fixed now but who knows).
 
 
-## Issues?
+## Issues? Ideas?
 Having a problem? Something doesn't work? Have a request for a new feature? [File an issue on the issues page](https://github.com/c0gent/NeverClicker/issues). In the case of problems, be sure to include:
 - What you were doing / trying to do
 - What you expected to happen
