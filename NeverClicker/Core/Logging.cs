@@ -22,6 +22,11 @@ namespace NeverClicker {
 		private const string SessionElementName = "session";
 
 		public LogFile() {
+			// Ensure log folder exists, create otherwise:
+			if (!Directory.Exists(Settings.Default.LogsFolderPath)) {
+				Directory.CreateDirectory(Settings.Default.LogsFolderPath);
+			}
+
 			LogFileName = Settings.Default.LogsFolderPath + SettingsForm.LOG_FILE_NAME;
 			LogXmlDoc = new XmlDocument();
 

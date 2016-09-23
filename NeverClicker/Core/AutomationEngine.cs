@@ -19,6 +19,7 @@ using System.Collections.Immutable;
 namespace NeverClicker {
 	//	AUTOMATIONENGINE: MANAGE AUTOMATION STATE
 	//		- ROOT OF ALL ASYNCHRONOUS OPERATIONS
+
 	public partial class AutomationEngine {
 		private MainForm MainForm;
 		private Interactor Itr;

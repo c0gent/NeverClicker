@@ -18,6 +18,10 @@ namespace NeverClicker {
 	public partial class SettingsForm: Form {
 		MainForm MainForm;
 
+		const string BUILTIN_DEFAULTS_FOLDER_NAME = "Assets" + "\\" + "Defaults";
+		public const string BUILTIN_IMAGES_SUBPATH = "\\" + BUILTIN_DEFAULTS_FOLDER_NAME + "\\" + IMAGES_FOLDER_NAME;
+		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + BUILTIN_DEFAULTS_FOLDER_NAME + "\\" + SETTINGS_FOLDER_NAME;
+
 		const string IMAGES_FOLDER_NAME = "Images";
 		const string SETTINGS_FOLDER_NAME = "Settings";
 		const string LOGS_FOLDER_NAME = "Logs";
@@ -28,8 +32,6 @@ namespace NeverClicker {
 		public const string LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
 		public const string ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
 
-		public const string BUILTIN_IMAGES_SUBPATH = "\\" + "Default" + IMAGES_FOLDER_NAME;
-		public const string BUILTIN_SETTINGS_SUBPATH = "\\" + "Default" + SETTINGS_FOLDER_NAME;
 		//public const string DEFAULT_LOGS_SUBPATH = "\\" + LOGS_FOLDER_NAME;
 		//public const string DEFAULT_ASSETS_SUBPATH = "\\" + ASSETS_FOLDER_NAME;
 
@@ -97,55 +99,58 @@ namespace NeverClicker {
 			}
 		}
 
-		public bool ValidateUserRootFolderPath() {
-			//if (Directory.Exists(this.textBoxUserRootFolder.Text)) {
-			//	return true;
-			//} else {
-			//	if (Settings.Default.NeverClickerFirstRun && Settings.Default.UserRootFolderPathIsDefault) {
-			//		Directory.CreateDirectory(this.textBoxUserRootFolder.Text);
-			//		//Settings.Default.UserRootFolderPath = this.textBoxUserRootFolder.Text;
-			//		return true;
-			//	} else {
-			//		MessageBox.Show(this, "User root configuration folder path: '" + this.textBoxUserRootFolder.Text + "' is invalid.");
-			//		return false;
-			//	}
-			//}
+		private bool ValidateCreateFolder(string textBoxText, bool isDefault) {
+			return ValidateCreateFolder(textBoxText, isDefault, false, "");
+		}
 
+		private bool ValidateCreateFolder(string textBoxText, bool isDefault, bool copyBuiltin, string builtinSubpath) {
+			if (Directory.Exists(textBoxText)) {
+				return true;
+			} else {
+				//if (Settings.Default.NeverClickerFirstRun && isDefault) {
+				//	if (copyBuiltin) {
+				//		DirectoryCopy(ProgramRootFolder + builtinSubpath,
+				//			textBoxText, true);
+				//	} else {
+				//		Directory.CreateDirectory(textBoxText);
+				//	}
+
+				//	return true;
+				//} else {
+				//	MessageBox.Show(this, "Folder path: '" + textBoxText + "' not found.");
+				//	return false;
+				//}
+
+				// If directory doesn't exist, just create it:
+				if (copyBuiltin) {
+					DirectoryCopy(ProgramRootFolder + builtinSubpath,
+					textBoxText, true);
+				} else {
+					Directory.CreateDirectory(textBoxText);
+				}
+
+				return true;
+			}
+		}
+
+		public bool ValidateUserRootFolderPath() {
 			return this.ValidateCreateFolder(this.textBoxUserRootFolder.Text, Settings.Default.UserRootFolderPathIsDefault);
 		}
 
 		public bool ValidateSettingsFolderPath() {
-			//var textBoxText = this.textBoxSettingsFolder.Text;
-			//var subpathDefault = SETTINGS_SUBPATH;
-			//var isDefault = Settings.Default.SettingsFolderPathIsDefault;			
-
-			//if (Directory.Exists(this.textBoxSettingsFolder.Text)) {
-			//	return true;
-			//} else {
-			//	if (Settings.Default.NeverClickerFirstRun && isDefault) {
-			//		DirectoryCopy(ProgramRootFolder + subpathDefault,
-			//			textBoxText, true);
-			//		//Directory.CreateDirectory(this.textBoxUserRootFolder.Text);
-			//		//Settings.Default.SettingsFolderPath = this.textBoxUserRootFolder.Text;
-			//		return true;
-			//	} else {
-			//		MessageBox.Show("Folder path: '" + textBoxText + "' not found.");
-			//		return false;
-			//	}
-			//}
-
 			return this.ValidateCreateFolder(this.textBoxSettingsFolder.Text, 
 				Settings.Default.SettingsFolderPathIsDefault, 
 				true,
-				BUILTIN_SETTINGS_SUBPATH
+				SETTINGS_SUBPATH
             );
 		}
 
 		public bool ValidateImagesFolderPath() {
-			return this.ValidateCreateFolder(this.textBoxImagesFolder.Text, 
+			return this.ValidateCreateFolder(
+				this.textBoxImagesFolder.Text,
 				Settings.Default.ImagesFolderPathIsDefault,
 				true,
-				BUILTIN_IMAGES_SUBPATH
+				IMAGES_SUBPATH
             );
 		}
 
@@ -306,31 +311,6 @@ namespace NeverClicker {
 		private void linkLabelUserConfigFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			Process.Start(Path.GetDirectoryName(linkLabelUserConfigFile.Text));
 		}
-
-		private bool ValidateCreateFolder(string textBoxText, bool isDefault) {
-			return ValidateCreateFolder(textBoxText, isDefault, false, "");
-		}
-
-		private bool ValidateCreateFolder(string textBoxText, bool isDefault, bool copyBuiltin, string builtinSubpath) {
-			if (Directory.Exists(textBoxText)) {
-				return true;
-			} else {
-				if (Settings.Default.NeverClickerFirstRun && isDefault) {
-					if (copyBuiltin) {
-						DirectoryCopy(ProgramRootFolder + builtinSubpath,
-							textBoxText, true);
-					} else {
-						Directory.CreateDirectory(textBoxText);
-					}
-
-					return true;
-				} else {
-					MessageBox.Show(this, "Folder path: '" + textBoxText + "' not found.");
-					return false;
-				}
-			}
-		}
-
 
 		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs) {
 			// Get the subdirectories for the specified directory.

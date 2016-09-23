@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using NeverClicker.Properties;
+using System.IO;
 //using AForge.Imaging;
 
 namespace NeverClicker.Interactions {
@@ -38,7 +39,13 @@ namespace NeverClicker.Interactions {
 				intr.GameClient.SaveSetting(imageFileName, imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 			}
 
-			var imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
+			string imageFilePath;
+
+			if (File.Exists(Settings.Default.ImagesFolderPath + "\\" + imageFileName)) {
+				imageFilePath = Settings.Default.ImagesFolderPath + "\\" + imageFileName;
+			} else {
+				imageFilePath = SettingsForm.ProgramRootFolder + SettingsForm.BUILTIN_IMAGES_SUBPATH + "\\" + imageFileName;
+			}
 
 			intr.Log(new LogMessage("ImageSearch(" + imgCode + "): Searching for image: '" + imageFilePath + "'"
 				+ " [TopLeft:" + topLeft.ToString()

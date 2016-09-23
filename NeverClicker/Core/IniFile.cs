@@ -22,8 +22,11 @@ namespace NeverClicker {
 				IniFileName = fileName;
 			} else {
 				var builtinSettingsFolder = SettingsForm.ProgramRootFolder + SettingsForm.BUILTIN_SETTINGS_SUBPATH;
-				SettingsForm.DirectoryCopy(builtinSettingsFolder, Settings.Default.SettingsFolderPath, false);
-				MessageBox.Show(fileName + " does not exist.", "NeverClicker Settings File Error");
+				//SettingsForm.DirectoryCopy(builtinSettingsFolder, Settings.Default.SettingsFolderPath, false);
+				File.Copy(builtinSettingsFolder + "\\" + IniFileName, 
+					Settings.Default.SettingsFolderPath + "\\" + IniFileName);
+				//MessageBox.Show("Cannot find default settings file: " +  fileName + 
+				//	" does not exist.", "NeverClicker Settings File Error");
 				return;
 			}
 

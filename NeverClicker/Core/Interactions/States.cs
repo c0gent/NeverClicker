@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using NeverClicker.Interactions;
 
-namespace NeverClicker {
+namespace NeverClicker.Interactions {
 	public static partial class Game {
 		//Interactions.Interactor Interactor;
 		//private GameClientState State;
