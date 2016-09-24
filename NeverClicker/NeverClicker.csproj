@@ -242,6 +242,9 @@
     <Content Include="Assets\Default\Images\InventoryCelestialBagOfRefinement.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Default\Images\InventoryRewardWindowOpenAnotherButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Default\Images\InventoryTabActiveAssets.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

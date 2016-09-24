@@ -1,4 +1,6 @@
 ﻿
+using System.Drawing;
+
 namespace NeverClicker.Interactions {
 	
 	public static partial class Sequences {
@@ -55,13 +57,18 @@ namespace NeverClicker.Interactions {
 		}
 
 
+		public static void OpenRewardBag(Interactor intr, ImageSearchResult bagImageResult) {
+			const int CLICK_OFS_MAX = 25;
+			Mouse.DoubleClick(intr, bagImageResult.Point.X + intr.Rand(5, CLICK_OFS_MAX), 
+					bagImageResult.Point.Y + intr.Rand(5, CLICK_OFS_MAX));
+		}
+
+
 		// Searches inventory for Celestial Bags of Refining and opens each one. 
 		//
 		// [TODO]: Need error handling channels if detected states don't align with expected.
 		//
 		public static CompletionStatus OpenCelestialBags(Interactor intr, bool InventoryOpened) {
-			const int CLICK_OFS_MAX = 25;
-
 			// Open inventory:
 			if (!InventoryOpened) {
 				OpenInventory(intr);
@@ -80,22 +87,26 @@ namespace NeverClicker.Interactions {
 			var imgCode = "InventoryCelestialBagOfRefinement";
 
 			// First Search:
-			var ir = Screen.ImageSearch(intr, imgCode);
+			var bagSearchResult = Screen.ImageSearch(intr, imgCode);
+			var openAnotherBtnLoc = new Point();
+			var randOfs = new Point(intr.Rand(1, 20), intr.Rand(1, 10));
+			//int xOfs = intr.Rand(1, 20);
+			//int yOfs = intr.Rand(1, 10);
 
-			if (ir.Found) {
-				intr.Log("Opening celestial bags...", LogEntryType.Debug);
+			if (bagSearchResult.Found) {
+				intr.Log("Opening celestial bags...", LogEntryType.Debug);			
+				OpenRewardBag(intr, bagSearchResult);
+
+				// Determine 'Open Another' button location for future presses:
+				var openAnotherBtnSearchResult = Screen.ImageSearch(intr, "InventoryRewardWindowOpenAnotherButton");
+				openAnotherBtnLoc = new Point(openAnotherBtnSearchResult.Point.X + randOfs.X, 
+					openAnotherBtnSearchResult.Point.Y + randOfs.Y);
 			}
 
-			while (ir.Found) {
-				Mouse.DoubleClick(intr, ir.Point.X + intr.Rand(5, CLICK_OFS_MAX), 
-					ir.Point.Y + intr.Rand(5, CLICK_OFS_MAX));
-				intr.WaitRand(50, 120);
-
-				// Subsequent Search(es):
-				//
-				// [TODO]: Replace subsequent clicking of icons with clicking of the "Open Another" button.
-				//
-				ir = Screen.ImageSearch(intr, imgCode);
+			// Open remaining bags:
+			while (Screen.ImageSearch(intr, imgCode).Found) {
+				intr.WaitRand(20, 40);				
+				Mouse.Click(intr, openAnotherBtnLoc);
 			}
 
 			return CompletionStatus.Complete;
