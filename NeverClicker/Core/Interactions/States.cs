@@ -205,7 +205,8 @@ namespace NeverClicker.Interactions {
 					return InventoryState.Assets;
 				} else if (Screen.ImageSearch(intr, "InventoryTabActiveCompanions").Found) {
 					return InventoryState.Companions;
-				} else if (Screen.ImageSearch(intr, "InventoryTabActiveVip").Found) {
+				} else if (Screen.ImageSearch(intr, 
+							new List<string> { "InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found ) {
 					return InventoryState.Vip;
 				} else {
 					intr.Log("Inventory window is open but inventory tab cannot be determined.", LogEntryType.Fatal);

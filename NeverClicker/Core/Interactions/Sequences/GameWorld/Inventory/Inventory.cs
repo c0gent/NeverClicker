@@ -78,10 +78,7 @@ namespace NeverClicker.Interactions {
 			if (!(Game.DetermineInventoryState(intr) == InventoryState.Bags)) {
 				Mouse.ClickImage(intr, "InventoryTabIconBags");
 				intr.WaitRand(700, 2200);
-			}	
-
-			// Transfer any overflow items:
-			TransferOverflow(intr, true, true);
+			}			
 
 			// Determine if any Celestial Bags of Refinement are present:
 			var imgCode = "InventoryCelestialBagOfRefinement";
@@ -103,11 +100,19 @@ namespace NeverClicker.Interactions {
 					var randOfs = new Point(intr.Rand(1, 60), intr.Rand(1, 10));
 					var openAnotherBtnLoc = new Point(openAnotherBtnSearchResult.Point.X + randOfs.X, 
 						openAnotherBtnSearchResult.Point.Y + randOfs.Y);
+					int bagsOpened = 0;
 
 					// Open remaining bags:
 					while (Screen.ImageSearch(intr, imgCode).Found) {
 						intr.WaitRand(20, 40);				
 						Mouse.Click(intr, openAnotherBtnLoc);
+						bagsOpened += 1;
+
+						// Something is probably stuck:
+						if (bagsOpened >= 100) {
+							TransferOverflow(intr, true, true);
+							break;	
+						}
 					}
 				}
 			}
@@ -138,15 +143,18 @@ namespace NeverClicker.Interactions {
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);
 			}
 
+			// Transfer any overflow items:
+			TransferOverflow(intr, true, true);
+
 			// Open Celestial Bags of Refinement:
 			var ocbStatus = OpenCelestialBags(intr, true);
+
+			// Transfer any overflow items again:
+			TransferOverflow(intr, true, true);
 
 			if (ocbStatus != CompletionStatus.Complete) {
 				return ocbStatus;
 			}
-
-			// Transfer any additional overflow items:
-			TransferOverflow(intr, true, true);
 
 			// Finish up:
 			MoveAround(intr);
