@@ -107,6 +107,8 @@ namespace NeverClicker.Interactions {
 		// [TODO]: Need error handling channels if detected states don't align with expected.
 		//
 		public static CompletionStatus MaintainInventory(Interactor intr, uint charIdx, bool enchKeyPendingCollection) {
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
+
 			bool InventoryOpened = OpenInventory(intr);
 
 			var enchKeyAvailable = DetectEnchantedKeyAwaitingCollection(intr);

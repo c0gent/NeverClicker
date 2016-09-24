@@ -51,13 +51,15 @@ namespace NeverClicker.Interactions {
 			Mouse.WheelUp(intr, 5);
 
 			Mouse.Move(intr, charSlotX, clickY);
-			intr.Wait(100);
+			intr.Wait(200);
 
 			if (mustScroll) {
 				Mouse.WheelDown(intr, scrolls);
 			}
 
 			if (!enterWorld) { return true; }
+
+			intr.Wait(200);
 
 			Mouse.DoubleClick(intr, charSlotX, clickY);
 

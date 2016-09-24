@@ -6,9 +6,79 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
-	public static partial class Sequences {	
+	public static partial class Sequences {
+		private static bool CollectCompleted(Interactor intr) {
+			if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
+				intr.Wait(500);
+				Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
+				intr.Wait(1500);
+				return true;
+			} else {
+				return false;
+			}
+		}
 
-		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {			
+
+		private static bool SelectProfTask(Interactor intr, string taskName) {
+			var searchButton = Screen.ImageSearch(intr, "ProfessionsSearchButton");
+			intr.Wait(50);
+
+			Mouse.Click(intr, searchButton.Point, -100, 0);
+			intr.Wait(50);
+				
+			Keyboard.SendKey(intr, "Shift", "Home");
+			intr.Wait(50);
+
+			Keyboard.Send(intr, taskName);
+			intr.Wait(50);
+
+			Keyboard.SendKey(intr, "Enter");
+			intr.Wait(100);
+
+			var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
+
+			if (taskContinueResult.Found) {
+				ContinueTask(intr, taskContinueResult.Point);
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		private static void ContinueTask(Interactor intr, Point continueButton) {
+			Mouse.Click(intr, continueButton);
+			intr.Wait(100);
+
+			Mouse.ClickImage(intr, "ProfessionsAssetButton");
+			intr.Wait(50);
+
+			// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
+			if (!Mouse.ClickImage(intr, "ProfessionsMercenaryIcon")) {
+				if (!Mouse.ClickImage(intr, "ProfessionsManAtArmsIcon")) {
+					if (!Mouse.ClickImage(intr, "ProfessionsGuardIcon")) {
+						if (!Mouse.ClickImage(intr, "ProfessionsLeadershipAdventurerIcon")) {
+							if (!Mouse.ClickImage(intr, "ProfessionsLeadershipHeroIcon")) {
+								intr.Log("No optional professions assets found.", LogEntryType.Debug);
+							}
+						}
+					}
+				}
+			}
+
+			
+			
+
+			intr.Wait(50);
+
+			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
+			intr.Wait(200);
+
+			//Mouse.ClickImage(intr, "ProfessionsWindowTitle");
+		}
+
+		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
+
 			string profsWinKey = intr.GameAccount.GetSettingOrEmpty("NwProfessionsWindowKey", "GameHotkeys");
 
 			Keyboard.SendKey(intr, profsWinKey);
@@ -21,7 +91,7 @@ namespace NeverClicker.Interactions {
 
 				if (!Screen.ImageSearch(intr, "ProfessionsWindowTitle").Found) {
 					intr.Log("Unable to open professions window", LogEntryType.FatalWithScreenshot);
-					return CompletionStatus.Failed ;
+					return CompletionStatus.Failed;
 				}
 			}
 
@@ -53,7 +123,7 @@ namespace NeverClicker.Interactions {
 				if (result.Found) {
 					intr.Log("Empty professions slot found at: " + result.Point.ToString() + ".", LogEntryType.Info);
 				} else {
-					intr.Log("Empty professions slot not found.", LogEntryType.Info);
+					intr.Log("All professions slots busy.", LogEntryType.Info);
 					break;
 				}
 
@@ -100,67 +170,6 @@ namespace NeverClicker.Interactions {
 			} else {
 				return CompletionStatus.Immature;
 			}
-		}
-
-
-		private static bool CollectCompleted(Interactor intr) {
-			if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
-				intr.Wait(2500);
-				Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
-				intr.Wait(2000);
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-
-		private static bool SelectProfTask(Interactor intr, string taskName) {
-			var searchButton = Screen.ImageSearch(intr, "ProfessionsSearchButton");
-			intr.Wait(50);
-
-			Mouse.Click(intr, searchButton.Point, -100, 0);
-			intr.Wait(50);
-				
-			Keyboard.SendKey(intr, "Shift", "Home");
-			intr.Wait(50);
-
-			Keyboard.Send(intr, taskName);
-			intr.Wait(50);
-
-			Keyboard.SendKey(intr, "Enter");
-			intr.Wait(100);
-
-			var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
-
-			if (taskContinueResult.Found) {
-				ContinueTask(intr, taskContinueResult.Point);
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		private static void ContinueTask(Interactor intr, Point continueButton) {
-			Mouse.Click(intr, continueButton);
-			intr.Wait(100);
-
-			Mouse.ClickImage(intr, "ProfessionsAssetButton");
-			intr.Wait(50);
-
-			// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
-			if (!Mouse.ClickImage(intr, "ProfessionsMercenaryIcon")) {
-				if (!Mouse.ClickImage(intr, "ProfessionsManAtArmsIcon")) {
-					Mouse.ClickImage(intr, "ProfessionsGuardIcon");
-				}
-			}
-
-			intr.Wait(50);
-
-			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
-			intr.Wait(200);
-
-			//Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 		}
 	}
 }
