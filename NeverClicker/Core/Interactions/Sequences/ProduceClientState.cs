@@ -28,12 +28,16 @@ namespace NeverClicker.Interactions {
 				KillAll(intr);
 				return true;
 			} else if (desiredState == ClientState.CharSelect) {
-				switch (Game.DetermineClientState(intr)) {
+				var currentClientState = Game.DetermineClientState(intr);
+				intr.Log("Interactions::ProduceClientState(): Current client state is " + 
+					currentClientState.ToString(), LogEntryType.Debug);
+				switch (currentClientState) {
 					case ClientState.None:
 						intr.Log("Launching patcher...");
 						return PatcherLogin(intr, desiredState);
 					case ClientState.Inactive:						
-						intr.Log("Game client is currently in the background. Waiting 30 seconds or until client is brought to foreground before continuing...", LogEntryType.Normal);
+						intr.Log("Game client is currently in the background. Waiting 30 seconds " +
+							"or until client is brought to foreground before continuing...", LogEntryType.Normal);
 
 						const int waitIncr = 5000;
 

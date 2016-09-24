@@ -11,7 +11,7 @@ namespace NeverClicker.Interactions {
 
 			Screen.WindowActivate(intr, Game.GAMECLIENTEXE);
 
-			intr.Wait(1000);
+			intr.Wait(5000);
 
 			return true;
 		}

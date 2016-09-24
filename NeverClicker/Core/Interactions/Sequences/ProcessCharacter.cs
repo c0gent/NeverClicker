@@ -22,6 +22,7 @@ namespace NeverClicker.Interactions {
 			DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charLabel), out invokesCompletedOn);
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
+			CompletionStatus maintStatus = CompletionStatus.None;
 			var professionsCompleted = new List<int>();
 			bool processingIncomplete = false;
 			bool enchKeyIsPending = IsEnchantedKeyPending(intr);
@@ -100,7 +101,12 @@ namespace NeverClicker.Interactions {
 			intr.Wait(1500);
 			ClearDialogues(intr);
 			MoveAround(intr);
-								
+
+			// ############################### INVENTORY MAINTENANCE ##############################
+			intr.Log("ProcessCharacter(): Maintaining inventory for character " + charIdx + " ...", LogEntryType.Info);
+			maintStatus = MaintainInventory(intr, charIdx, enchKeyIsPending);
+			intr.Log("ProcessCharacter(): Inventory maintenance status: " + maintStatus.ToString(), LogEntryType.Info);
+
 			// #################################### INVOCATION ####################################
 			intr.Log("ProcessCharacter(): Invoking for character " + charIdx + " ...", LogEntryType.Info);
 			invocationStatus = Invoke(intr, charIdx, enchKeyIsPending);

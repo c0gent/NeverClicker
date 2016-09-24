@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Mouse {
+
+		// Clicks an image.
+		//
+		// [TODO]: Randomize click location within image area.
+		//
 		public static bool ClickImage(Interactor intr, string imgCode) {
 			return ClickImage(intr, imgCode, 0, 0);
 		}

@@ -106,7 +106,7 @@
   <ItemGroup>
     <Compile Include="Core\Experimental\AutomationEngine.Tests.cs" />
     <Compile Include="Core\Experimental\ErrorList.cs" />
-    <Compile Include="Core\Interactions\Sequences\GameWorld\Inventory.cs" />
+    <Compile Include="Core\Interactions\Sequences\GameWorld\Inventory\Inventory.cs" />
     <Compile Include="Forms\ErrorsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,12 +126,12 @@
     <Compile Include="Core\Interactions\Primitives\Mouse\Mouse.cs" />
     <Compile Include="Core\Interactions\Primitives\Screen\Wake.cs" />
     <Compile Include="Core\Interactions\Primitives\Screen\Window.cs" />
-    <Compile Include="Core\Interactions\Sequences\CharacterSelect\ActivateClient.cs" />
+    <Compile Include="Core\Interactions\Sequences\ActivateClient.cs" />
     <Compile Include="Core\Interactions\Sequences\ClearDialogues.cs" />
     <Compile Include="Core\Interactions\Sequences\CharacterSelect\ClearSafeLogin.cs" />
     <Compile Include="Core\Interactions\Sequences\CharacterSelect\Client.cs" />
     <Compile Include="Core\Interactions\Sequences\CrashCheckRecovery.cs" />
-    <Compile Include="Core\Interactions\Sequences\GameWorld\EnchantedKey.cs" />
+    <Compile Include="Core\Interactions\Sequences\GameWorld\Inventory\EnchantedKey.cs" />
     <Compile Include="Core\Interactions\Sequences\GameWorld\Invocation\Invoke.cs" />
     <Compile Include="Core\Interactions\Sequences\GameWorld\LogOut.cs" />
     <Compile Include="Core\Interactions\Sequences\GameWorld\MoveAround.cs" />
@@ -240,6 +240,39 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Assets\Default\Images\InventoryCelestialBagOfRefinement.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabActiveAssets.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabActiveBags.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabActiveCompanions.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabActiveVip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabActiveWealth.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabIconAssets.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabIconBags.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabIconCompanions.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabIconVip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryTabIconWealth.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\InventoryWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="cursor-512.ico" />

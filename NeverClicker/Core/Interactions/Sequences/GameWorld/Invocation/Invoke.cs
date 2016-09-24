@@ -21,18 +21,19 @@ namespace NeverClicker.Interactions {
 				#pragma warning restore CS0162 // Unreachable code detected
 			}
 
-			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");
-			//string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
+			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");			
 
-			// Collect Enchanted Key
-			if (enchKeyIsPending) {
-				if (!ClaimEnchantedKey(intr)) {
-					// ***** Can Remove This *****
-					if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
-					intr.Log("Unable to collect enchanted key for character " + charIdx + ".", 
-						LogEntryType.FatalWithScreenshot);
-				}
-			}
+			///////// MOVED TO INVENTORY MANAGEMENT:
+			//string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
+			//// Collect Enchanted Key
+			//if (enchKeyIsPending) {
+			//	if (!ClaimEnchantedKey(intr)) {
+			//		// ***** Can Remove This *****
+			//		if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
+			//		intr.Log("Unable to collect enchanted key for character " + charIdx + ".", 
+			//			LogEntryType.Fatal);
+			//	}
+			//}
 
 			// Invocation Attempt (first):
 			Keyboard.SendKey(intr, invokeKey);
@@ -71,8 +72,16 @@ namespace NeverClicker.Interactions {
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
 					intr.Log("Unable to invoke: Items in overflow bag are preventing invocation for character " 
 						+ charIdx + ". Attempting to move to regular inventory...", LogEntryType.Error);
+
 					// Attempt to transfer overflow items to regular inventory:
-					TransferOverflow(intr);
+					//
+					// [NOTE]: Possibly Redundant. 
+					// - Determine if it is possible for new items to be added to inventory
+					//   between inventory management and here.
+					//
+					TransferOverflow(intr, false, false);
+					MoveAround(intr);
+
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {

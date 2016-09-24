@@ -43,33 +43,33 @@ namespace NeverClicker.Interactions {
 				}
 
 				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);
-				TimeSpan nextTaskWaitDelay = queue.NextTaskWaitDelay();				
+				TimeSpan nextTaskMatureDelay = queue.NextTaskWaitDelay();				
 				
-				if (nextTaskWaitDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
+				if (nextTaskMatureDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
 					ProcessCharacter(intr, queue);
 					
 				} else { // TASK TIMER NOT MATURE YET -> WAIT
 					intr.Wait(1000);
-					intr.Log("Next task matures in " + nextTaskWaitDelay.TotalMinutes.ToString("F0") + " minutes.");
+					intr.Log("Next task matures in " + nextTaskMatureDelay.TotalMinutes.ToString("F0") + " minutes.");
 
-					TimeSpan waitDelay = nextTaskWaitDelay;
+					TimeSpan waitDelay = nextTaskMatureDelay;
 
-					if (nextTaskWaitDelay.TotalMinutes > 8) {
+					if (nextTaskMatureDelay.TotalMinutes > 8) {
 						if (queue.NextTask.Kind == TaskKind.Professions) {
-							waitDelay = nextTaskWaitDelay + intr.RandomDelay(45, 75);
+							waitDelay = nextTaskMatureDelay + intr.RandomDelay(9, 25);
 						} else {
-							waitDelay = nextTaskWaitDelay + intr.RandomDelay(5, 15);
+							waitDelay = nextTaskMatureDelay + intr.RandomDelay(9, 15);
 						}
 
 						ProduceClientState(intr, ClientState.None, 0);										
-					} else if (nextTaskWaitDelay.TotalMinutes > 1) {
-						waitDelay = nextTaskWaitDelay + intr.RandomDelay(2, 5);
+					} else if (nextTaskMatureDelay.TotalMinutes > 1) {
+						waitDelay = nextTaskMatureDelay + intr.RandomDelay(3, 8);
 						intr.Log("Minimizing client and waiting " + waitDelay.TotalMinutes.ToString("F0") + " minutes.");						
 						ProduceClientState(intr, ClientState.Inactive, 0);
-					} else if (nextTaskWaitDelay.TotalSeconds > 1) {
+					} else if (nextTaskMatureDelay.TotalSeconds > 1) {
 						// Delay more than 1 sec, let the train catch up...
-						waitDelay = nextTaskWaitDelay + intr.RandomDelay(1, 3);
+						waitDelay = nextTaskMatureDelay + intr.RandomDelay(2, 7);
 					}
 
 					if (waitDelay.TotalMinutes >= 1) {

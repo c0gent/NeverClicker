@@ -44,6 +44,8 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
+
+		// [NOTE]: Some of the logic here may overlap too heavily with `Determine...` to make this function worth keeping.
 		public static bool IsClientState(Interactor intr, ClientState desiredState) {
 			switch (desiredState) {
 				case ClientState.None:
@@ -51,8 +53,20 @@ namespace NeverClicker.Interactions {
 				case ClientState.Inactive:
 					return (!Screen.WindowDetectActive(intr, GAMECLIENTEXE) && Screen.WindowDetectExist(intr, GAMECLIENTEXE));
 				case ClientState.CharSelect:
+					// Ensure the client is not in the background, even though 
+					// the client may well be at the character select screen:
+					if (IsClientState(intr, ClientState.Inactive)) {
+						return false;
+					}
+
 					return Screen.ImageSearch(intr, "EnterWorldButton").Found;
 				case ClientState.InWorld:
+					// Ensure the client is not in the background, even though 
+					// the client may well be logged in to the game world:
+					if (IsClientState(intr, ClientState.Inactive)) {
+						return false;
+					}
+
 					// Clear any window with an "X" close button ('Welcome to Neverwinter' window):
 					Sequences.ClearWindowsWithX(intr);
 					//return Screen.ImageSearch(intr, "AbilityPanelSerpent").Found;
@@ -174,6 +188,33 @@ namespace NeverClicker.Interactions {
 					return false;
 			}
 		}
+
+
+			//"InventoryTabActiveBags"
+			//"InventoryTabActiveWealth"
+			//"InventoryTabActiveAssets"
+			//"InventoryTabActiveCompanions"
+			//"InventoryTabActiveVip"
+		public static InventoryState DetermineInventoryState(Interactor intr) {
+			if (Screen.ImageSearch(intr, "InventoryWindowTitle").Found) {
+				if (Screen.ImageSearch(intr, "InventoryTabActiveBags").Found) {
+					return InventoryState.Bags;
+				} else if (Screen.ImageSearch(intr, "InventoryTabActiveWealth").Found) {
+					return InventoryState.Wealth;
+				} else if (Screen.ImageSearch(intr, "InventoryTabActiveAssets").Found) {
+					return InventoryState.Assets;
+				} else if (Screen.ImageSearch(intr, "InventoryTabActiveCompanions").Found) {
+					return InventoryState.Companions;
+				} else if (Screen.ImageSearch(intr, "InventoryTabActiveVip").Found) {
+					return InventoryState.Vip;
+				} else {
+					intr.Log("Inventory window is open but inventory tab cannot be determined.", LogEntryType.Fatal);
+					return InventoryState.Unknown;
+				}
+			} else {
+				return InventoryState.None;
+			}
+		}
 	}
 
 
@@ -233,6 +274,16 @@ namespace NeverClicker.Interactions {
 		RewardsOfDevotion,
 		InvocationSuccess,
 		Unknown
+	}
+
+	public enum InventoryState {
+		None,
+		Bags,
+		Wealth,
+		Assets,
+		Companions,
+		Vip,
+		Unknown,
 	}
 }
 
