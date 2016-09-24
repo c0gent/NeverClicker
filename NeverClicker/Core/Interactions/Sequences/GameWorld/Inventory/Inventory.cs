@@ -88,25 +88,28 @@ namespace NeverClicker.Interactions {
 
 			// First Search:
 			var bagSearchResult = Screen.ImageSearch(intr, imgCode);
-			var openAnotherBtnLoc = new Point();
-			var randOfs = new Point(intr.Rand(1, 20), intr.Rand(1, 10));
-			//int xOfs = intr.Rand(1, 20);
-			//int yOfs = intr.Rand(1, 10);
+			//var openAnotherBtnLoc = new Point();			
 
 			if (bagSearchResult.Found) {
 				intr.Log("Opening celestial bags...", LogEntryType.Debug);			
 				OpenRewardBag(intr, bagSearchResult);
 
+				intr.Wait(800);
+
 				// Determine 'Open Another' button location for future presses:
 				var openAnotherBtnSearchResult = Screen.ImageSearch(intr, "InventoryRewardWindowOpenAnotherButton");
-				openAnotherBtnLoc = new Point(openAnotherBtnSearchResult.Point.X + randOfs.X, 
-					openAnotherBtnSearchResult.Point.Y + randOfs.Y);
-			}
 
-			// Open remaining bags:
-			while (Screen.ImageSearch(intr, imgCode).Found) {
-				intr.WaitRand(20, 40);				
-				Mouse.Click(intr, openAnotherBtnLoc);
+				if (openAnotherBtnSearchResult.Found) {
+					var randOfs = new Point(intr.Rand(1, 60), intr.Rand(1, 10));
+					var openAnotherBtnLoc = new Point(openAnotherBtnSearchResult.Point.X + randOfs.X, 
+						openAnotherBtnSearchResult.Point.Y + randOfs.Y);
+
+					// Open remaining bags:
+					while (Screen.ImageSearch(intr, imgCode).Found) {
+						intr.WaitRand(20, 40);				
+						Mouse.Click(intr, openAnotherBtnLoc);
+					}
+				}
 			}
 
 			return CompletionStatus.Complete;

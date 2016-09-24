@@ -59,7 +59,7 @@ namespace NeverClicker.Interactions {
 
 			if (!enterWorld) { return true; }
 
-			intr.Wait(300);
+			intr.Wait(400);
 
 			Mouse.DoubleClick(intr, charSlotX, clickY);
 
