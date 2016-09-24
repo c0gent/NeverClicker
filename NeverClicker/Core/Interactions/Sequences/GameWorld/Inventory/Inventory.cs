@@ -6,9 +6,6 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 
 		// Checks to ensure that the inventory was successfully opened.
-		//
-		// [TODO]: COMPLETE ME
-		//
 		public static bool InventoryIsOpen(Interactor intr) {
 			var invState = Game.DetermineInventoryState(intr);
 
@@ -20,9 +17,6 @@ namespace NeverClicker.Interactions {
 		}
 
 		// Opens inventory.
-		//
-		// [TODO]: Need error handling channels if detected states don't align with expected.
-		//
 		public static bool OpenInventory(Interactor intr) {
 			intr.Log("Opening inventory...", LogEntryType.Debug);
 			string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
@@ -34,8 +28,6 @@ namespace NeverClicker.Interactions {
 		}
 
 		// Attempts to transfer overflow items to regular inventory.
-		//
-		// [TODO]: Need checks on inventory window status.
 		//
 		// [TODO]: Need error handling channels if detected states don't align with expected.
 		//

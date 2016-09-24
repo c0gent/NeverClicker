@@ -86,7 +86,16 @@ Eventually, resolution auto-detection may set these things for you but for now y
         - `ScrollsToAlignBottomSlot = 2`
         - `CharacterSelectScrollBarTopX = 587`
         - `CharacterSelectScrollBarTopY = 64`
-
     - `[ClickLocations]`
         - `CharSlotX = 435`
         - `TopSlotY = 100`
+
+- 1280x1024
+    - `[KeyBindAndUi]`
+        - `VisibleCharacterSelectSlots = 6`
+        - `ScrollsToAlignBottomSlot = 3`
+        - `CharacterSelectScrollBarTopX = 551`
+        - `CharacterSelectScrollBarTopY = 120`
+    - `[ClickLocations]`
+        - `CharSlotX = 407`
+        - `TopSlotY = 151`
