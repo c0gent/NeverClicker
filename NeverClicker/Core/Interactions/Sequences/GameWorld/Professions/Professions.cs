@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		private static bool CollectCompleted(Interactor intr) {
-			if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
+			var resultAvailable = Screen.ImageSearch(intr, "ProfessionsCollectResult");
+
+			//if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
+			if (resultAvailable.Found) {
+				Mouse.Click(intr, resultAvailable.Point);
 				intr.Wait(500);
 				Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
 				intr.Wait(1500);
@@ -81,6 +85,8 @@ namespace NeverClicker.Interactions {
 
 			string profsWinKey = intr.GameAccount.GetSettingOrEmpty("NwProfessionsWindowKey", "GameHotkeys");
 
+			intr.Log("Opening professions window for character " + charZeroIdxLabel + ".", LogEntryType.Debug);
+
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
 			
@@ -96,13 +102,22 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile")) {
-				intr.Wait(1000);
+				intr.Wait(500);
 			}
 
-			for (int i = 0; i < 9; i++) {
-				if (!CollectCompleted(intr)) {
-					break;
+			int profResultsCollected = 0;
+
+			if (Screen.ImageSearch(intr, "ProfessionsCollectResult").Found) {
+				while (profResultsCollected < 9) {
+					if (!CollectCompleted(intr)) {
+						break;
+					} else {
+						profResultsCollected += 1;
+					}
 				}
+
+				intr.Log("Collected " + profResultsCollected + " profession results for character + " 
+					+ charZeroIdxLabel + ".", LogEntryType.Debug);
 			}
 
 			int currentTask = 0;

@@ -275,6 +275,12 @@
     <Content Include="Assets\Default\Images\InventoryWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Default\Images\ProfessionsLeadershipAdventurerIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\ProfessionsLeadershipHeroIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="cursor-512.ico" />
     <Content Include="Assets\Default\Images\AbilityPanelSerpent.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
