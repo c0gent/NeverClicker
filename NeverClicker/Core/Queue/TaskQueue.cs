@@ -136,9 +136,10 @@ namespace NeverClicker {
 		}
 
 		// FOR PROFESSIONS
-		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId) {	
+		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId) {
 			//if (taskKind == TaskKind.Invocation) {
-			//	throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify whether or not to increment daily invokes as fourth parameter.");
+			//	throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify 
+			// whether or not to increment daily invokes as fourth parameter.");
 			//} else {
 			//	this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
 			//}
@@ -187,7 +188,7 @@ namespace NeverClicker {
 				//string dateTimeFormattedClassic = FormatDateTimeClassic(intr, DateTime.Now);
 				intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
 				intr.GameAccount.SaveSetting(now.ToString(), "MostRecentInvocationTime", charLabel);
-				intr.GameAccount.SaveSetting(charIdx.ToString(), "CharLastInvoked", "Invocation");
+				//intr.GameAccount.SaveSetting(charIdx.ToString(), "CharLastInvoked", "Invocation");
 				intr.Log("Settings saved to ini for: " + charLabel + ".", LogEntryType.Debug);
 			} catch (Exception ex) {
 				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString(), LogEntryType.Error);
@@ -263,11 +264,13 @@ namespace NeverClicker {
 						var oldProfTask = Queue[pk];
 						Queue.Remove(pk);
 						var newMatureTime = pk + 1 + oldProfTask.TaskId;
-						Queue.Add(newMatureTime, new GameTask(new DateTime(newMatureTime), charIdx, TaskKind.Professions, oldProfTask.TaskId));
+						Queue.Add(newMatureTime, new GameTask(new DateTime(newMatureTime), 
+							charIdx, TaskKind.Professions, oldProfTask.TaskId));
 					}
 				}
 			} else {
-				intr.Log("TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation task item for character " + charIdx + ".", LogEntryType.Fatal);
+				intr.Log("TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation " + 
+					"task item for character " + charIdx + ".", LogEntryType.Fatal);
 			}
 		}
 
@@ -281,10 +284,12 @@ namespace NeverClicker {
 
 				// ################################### INVOCATION #####################################
 				int invokesToday = 0;
-				int.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesToday", charSettingSection), out invokesToday);
+				int.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesToday", 
+					charSettingSection), out invokesToday);
 
 				var invokesCompletedOn = TodaysGameDate.AddDays(-1);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesCompleteFor", charSettingSection), out invokesCompletedOn);
+				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesCompleteFor", 
+					charSettingSection), out invokesCompletedOn);
 
 				// Clear any stale invoke count:
 				if (invokesCompletedOn < TodaysGameDate.AddDays(-1)) {
@@ -292,9 +297,11 @@ namespace NeverClicker {
 				}
 
 				var mostRecent = now.AddHours(-24);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentInvocationTime", charSettingSection), out mostRecent);
+				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentInvocationTime", 
+					charSettingSection), out mostRecent);
 
-				var taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Invocation, invokesToday);
+				var taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, 
+					TaskKind.Invocation, invokesToday);
 				taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
 
 				if (invokesToday >= 6) {
@@ -309,52 +316,58 @@ namespace NeverClicker {
 
 				if (resetDay) {
 					intr.GameAccount.SaveSetting("0", "InvokesToday", charSettingSection);
-					intr.GameAccount.SaveSetting(TodaysGameDate.AddHours(-2).ToString(), "MostRecentInvocationTime", charSettingSection);
+					intr.GameAccount.SaveSetting(TodaysGameDate.AddHours(-2).ToString(), 
+						"MostRecentInvocationTime", charSettingSection);
 					invokesToday = 0;
 					taskMatureTime = now;
 				}
 
-				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + taskMatureTime.ToString(), LogEntryType.Debug);
+				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + 
+					taskMatureTime.ToString(), LogEntryType.Debug);
 				this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
 
 
 				// ################################## PROFESSIONS #####################################
-				// REMOVE OLD
-				//for (var p = 0; p < ProfessionTaskNames.Length; p++) {
-				//	var settingKey = "MostRecentProfTime_" + p;
-				//	var oldTaskThreshold = now.AddDays(0);
-				//	var TaskMatureTime = now;
+				// ################ Prune Stale Profession Tasks ################
+				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
+					var settingKey = "MostRecentProfTime_" + p;
+					var oldTaskThreshold = now.AddDays(-1);
+					var TaskMatureTime = now;
 
-				//	if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out taskMatureTime)) {
-				//		intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + taskMatureTime.ToString() + ".", LogEntryType.Info);
-				//	}
+					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey, 
+								charSettingSection), out taskMatureTime)) {
+						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + 
+							taskMatureTime.ToString() + ".", LogEntryType.Debug);
+					
+						// [TODO]: Is this necessary?:
+						if (taskMatureTime < oldTaskThreshold) {
+							intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);
+							intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
+						}
+					}					
+				}
 
-				//	if (taskMatureTime < oldTaskThreshold) {
-				//		intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Info);
-				//		intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
-				//	}
-				//}
+				// ################ Add Tasks to Queue ################
+				int tasksQueued = 0;
 
+				for (var taskId = 0; taskId < ProfessionTaskNames.Length; taskId++) {
+					var settingKey = "MostRecentProfTime_" + taskId;
+					mostRecent = now.AddDays(-1);
 
-				//int tasksQueued = 0;
+					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey, 
+								charSettingSection), out mostRecent)) {
+						intr.Log("Adding profession task to queue for character " + charIdx
+							+ ", matures: " + mostRecent.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 
-				//for (var taskId = 0; taskId < ProfessionTaskNames.Length; taskId++) {
-				//	var settingKey = "MostRecentProfTime_" + taskId;
-				//	mostRecent = now.AddDays(-1);			
+						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Professions, taskId);
+						taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
 
-				//	if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty(settingKey, charSettingSection), out mostRecent)) {
-				//		intr.Log("Adding profession task to queue for character " + charIdx 
-				//			+ ", matures: " + mostRecent.ToString()	+ ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
+						this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
+						tasksQueued += 1;
+					}
+				}
 
-				//		taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Professions, taskId);
-				//		taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
-
-    //                    this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
-				//		tasksQueued += 1;
-				//	}						
-				//}
-
-				//intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
+				intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
 			}
 		}
 
