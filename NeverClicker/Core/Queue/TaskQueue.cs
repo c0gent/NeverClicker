@@ -205,7 +205,7 @@ namespace NeverClicker {
 			var charLabel = "Character " + charIdx.ToString();
 
 			var mostRecentProfTime = now;
-			DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTime_" + taskId, charLabel), out mostRecentProfTime);
+			DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentProfTime_" + taskId, charLabel), out mostRecentProfTime);
 
 			//int mostRecentProfTask = taskId;
 			//int.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTask_" + taskId, charZeroIdxLabel), out mostRecentProfTask);
@@ -281,10 +281,10 @@ namespace NeverClicker {
 
 				// ################################### INVOCATION #####################################
 				int invokesToday = 0;
-				int.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesToday", charSettingSection), out invokesToday);
+				int.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesToday", charSettingSection), out invokesToday);
 
 				var invokesCompletedOn = TodaysGameDate.AddDays(-1);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("InvokesCompleteFor", charSettingSection), out invokesCompletedOn);
+				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesCompleteFor", charSettingSection), out invokesCompletedOn);
 
 				// Clear any stale invoke count:
 				if (invokesCompletedOn < TodaysGameDate.AddDays(-1)) {
@@ -292,7 +292,7 @@ namespace NeverClicker {
 				}
 
 				var mostRecent = now.AddHours(-24);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentInvocationTime", charSettingSection), out mostRecent);
+				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentInvocationTime", charSettingSection), out mostRecent);
 
 				var taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Invocation, invokesToday);
 				taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;

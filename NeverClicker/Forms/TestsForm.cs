@@ -218,6 +218,12 @@ namespace NeverClicker.Forms {
 
 		}
 
+		private void buttonGotoSlot_Click(object sender, EventArgs e) {
+			uint charIdx;
 
+			if (uint.TryParse(this.textBoxCharSlotIdx.Text, out charIdx)) {
+				MainForm.AutomationEngine.GotoCharSlot(charIdx);
+			}
+		}
 	}
 }

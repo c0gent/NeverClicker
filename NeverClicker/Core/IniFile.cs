@@ -53,7 +53,7 @@ namespace NeverClicker {
 			}
 		}
 
-		public string GetSettingOrEmpty(string settingName, string sectionName) {
+		public string GetSettingOrEmptyString(string settingName, string sectionName) {
 			string settingVal = null;
 
 			try {
@@ -70,17 +70,13 @@ namespace NeverClicker {
 		}
 
 		public int GetSettingOrZero(string settingName, string sectionName) {
-			//IniData data;
-
-			//try {
-			//	Data = Parser.ReadFile(IniFileName);
-			//} catch (Exception) {
-			//	MessageBox.Show("Problem loading ini files. Please check settings.");
-			//	return 0;
-			//}
-			
-			int number;
+			return GetSettingOr(settingName, sectionName, 0);
+		}
+		
+		public int GetSettingOr(string settingName, string sectionName, int dflt_val) {
+			int setting_val;
 			string settingVal = null;
+			int return_val = dflt_val;
 
 			try {
 				settingVal = Data[sectionName][settingName];
@@ -89,14 +85,16 @@ namespace NeverClicker {
 			}
 
 			if (settingVal == null) {
-				return 0;
+				return_val = dflt_val;
 			}			
 
-			if (int.TryParse(Data[sectionName][settingName], out number)) {
-				return number;
+			if (int.TryParse(Data[sectionName][settingName], out setting_val)) {
+				return_val = setting_val;
 			} else {
-				return 0;
-			}				
+				return_val = dflt_val;
+			}
+
+			return return_val;
 		}
 
 		public bool SettingExists(string settingName, string sectionName) {

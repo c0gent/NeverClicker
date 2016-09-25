@@ -21,7 +21,7 @@ namespace NeverClicker.Interactions {
 				#pragma warning restore CS0162 // Unreachable code detected
 			}
 
-			string invokeKey = intr.GameAccount.GetSettingOrEmpty("NwInvokeKey", "GameHotkeys");			
+			string invokeKey = intr.GameAccount.GetSettingOrEmptyString("NwInvokeKey", "GameHotkeys");			
 
 			///////// MOVED TO INVENTORY MANAGEMENT:
 			//string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");

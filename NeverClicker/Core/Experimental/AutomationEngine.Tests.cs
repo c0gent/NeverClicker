@@ -139,5 +139,12 @@ namespace NeverClicker {
 				Log("Image not found.");
 			}
 		}
+
+		public async void GotoCharSlot(uint charIdx) {
+			await Run(() => {
+				Sequences.ActivateClient(Itr);
+				Sequences.SelectCharacter(Itr, charIdx, false);
+			});
+		}
 	}
 }

@@ -19,7 +19,7 @@ namespace NeverClicker.Interactions {
 		// Opens inventory.
 		public static bool OpenInventory(Interactor intr) {
 			intr.Log("Opening inventory...", LogEntryType.Debug);
-			string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
+			string openInventoryKey = intr.GameAccount.GetSettingOrEmptyString("NwInventoryKey", "GameHotkeys");
 			MoveAround(intr);
 			Keyboard.SendKey(intr, openInventoryKey);
 			intr.Wait(2500);

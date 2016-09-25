@@ -8,7 +8,7 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool IsEnchantedKeyPending(Interactor intr) {
 			DateTime KeyLastReceived;
-			if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmpty("EnchKeyLastReceived", "Invocation"), out KeyLastReceived)) {
+			if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("EnchKeyLastReceived", "Invocation"), out KeyLastReceived)) {
 				if (KeyLastReceived >= TaskQueue.TodaysGameDate) {
 					// We already have key for the day
 					return false;
@@ -55,9 +55,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			// Ensure that we're looking at the VIP tab and the reward icon.
-			if (!DetectEnchantedKeyAwaitingCollection(intr)) {
-				return false;
-			}
+			if (!DetectEnchantedKeyAwaitingCollection(intr)) { return false; }
 
 			// Get reward icon location/result:
 			var iconLoc = Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon");

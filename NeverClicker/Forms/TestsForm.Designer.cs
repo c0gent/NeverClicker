@@ -62,17 +62,6 @@
 			this.labelGameTaskCharacterIdx = new System.Windows.Forms.Label();
 			this.buttonNextTask = new System.Windows.Forms.Button();
 			this.buttonAddCharIdx = new System.Windows.Forms.Button();
-			this.tabPageSettings = new System.Windows.Forms.TabPage();
-			this.textBoxTestReadValue = new System.Windows.Forms.TextBox();
-			this.textBoxTestReadName = new System.Windows.Forms.TextBox();
-			this.textBoxTestFileName = new System.Windows.Forms.TextBox();
-			this.textBoxTestFileContents = new System.Windows.Forms.TextBox();
-			this.textBoxTestStoreName = new System.Windows.Forms.TextBox();
-			this.textBoxTestStoreValue = new System.Windows.Forms.TextBox();
-			this.buttonTestReadValue = new System.Windows.Forms.Button();
-			this.labelTestProperty = new System.Windows.Forms.Label();
-			this.labelTestFileName = new System.Windows.Forms.Label();
-			this.buttonTestStore = new System.Windows.Forms.Button();
 			this.tabPageInput = new System.Windows.Forms.TabPage();
 			this.buttonSendKeys = new System.Windows.Forms.Button();
 			this.labelSendKeys = new System.Windows.Forms.Label();
@@ -94,15 +83,30 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.labelEvaluateVariable = new System.Windows.Forms.Label();
 			this.buttonEvaluateFunction = new System.Windows.Forms.Button();
+			this.tabPageSettings = new System.Windows.Forms.TabPage();
+			this.textBoxTestReadValue = new System.Windows.Forms.TextBox();
+			this.textBoxTestReadName = new System.Windows.Forms.TextBox();
+			this.textBoxTestFileName = new System.Windows.Forms.TextBox();
+			this.textBoxTestFileContents = new System.Windows.Forms.TextBox();
+			this.textBoxTestStoreName = new System.Windows.Forms.TextBox();
+			this.textBoxTestStoreValue = new System.Windows.Forms.TextBox();
+			this.buttonTestReadValue = new System.Windows.Forms.Button();
+			this.labelTestProperty = new System.Windows.Forms.Label();
+			this.labelTestFileName = new System.Windows.Forms.Label();
+			this.buttonTestStore = new System.Windows.Forms.Button();
 			this.buttonClose = new System.Windows.Forms.Button();
+			this.tabPageCharSel = new System.Windows.Forms.TabPage();
+			this.buttonGotoSlot = new System.Windows.Forms.Button();
+			this.textBoxCharSlotIdx = new System.Windows.Forms.TextBox();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.groupBoxSettings.SuspendLayout();
 			this.tabPageWindow.SuspendLayout();
 			this.tabPageQueue.SuspendLayout();
-			this.tabPageSettings.SuspendLayout();
 			this.tabPageInput.SuspendLayout();
 			this.tabPageRaw.SuspendLayout();
+			this.tabPageSettings.SuspendLayout();
+			this.tabPageCharSel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControlPrimary
@@ -115,6 +119,7 @@
 			this.tabControlPrimary.Controls.Add(this.tabPageInput);
 			this.tabControlPrimary.Controls.Add(this.tabPageRaw);
 			this.tabControlPrimary.Controls.Add(this.tabPageSettings);
+			this.tabControlPrimary.Controls.Add(this.tabPageCharSel);
 			this.tabControlPrimary.Location = new System.Drawing.Point(9, 9);
 			this.tabControlPrimary.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControlPrimary.Name = "tabControlPrimary";
@@ -484,105 +489,6 @@
 			this.buttonAddCharIdx.UseVisualStyleBackColor = true;
 			this.buttonAddCharIdx.Click += new System.EventHandler(this.buttonAddCharIdx_Click);
 			// 
-			// tabPageSettings
-			// 
-			this.tabPageSettings.BackColor = System.Drawing.Color.Transparent;
-			this.tabPageSettings.Controls.Add(this.textBoxTestReadValue);
-			this.tabPageSettings.Controls.Add(this.textBoxTestReadName);
-			this.tabPageSettings.Controls.Add(this.textBoxTestFileName);
-			this.tabPageSettings.Controls.Add(this.textBoxTestFileContents);
-			this.tabPageSettings.Controls.Add(this.textBoxTestStoreName);
-			this.tabPageSettings.Controls.Add(this.textBoxTestStoreValue);
-			this.tabPageSettings.Controls.Add(this.buttonTestReadValue);
-			this.tabPageSettings.Controls.Add(this.labelTestProperty);
-			this.tabPageSettings.Controls.Add(this.labelTestFileName);
-			this.tabPageSettings.Controls.Add(this.buttonTestStore);
-			this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
-			this.tabPageSettings.Margin = new System.Windows.Forms.Padding(0);
-			this.tabPageSettings.Name = "tabPageSettings";
-			this.tabPageSettings.Size = new System.Drawing.Size(485, 314);
-			this.tabPageSettings.TabIndex = 5;
-			this.tabPageSettings.Text = "Settings (disabled)";
-			// 
-			// textBoxTestReadValue
-			// 
-			this.textBoxTestReadValue.Location = new System.Drawing.Point(338, 65);
-			this.textBoxTestReadValue.Name = "textBoxTestReadValue";
-			this.textBoxTestReadValue.Size = new System.Drawing.Size(100, 20);
-			this.textBoxTestReadValue.TabIndex = 19;
-			// 
-			// textBoxTestReadName
-			// 
-			this.textBoxTestReadName.Location = new System.Drawing.Point(78, 65);
-			this.textBoxTestReadName.Name = "textBoxTestReadName";
-			this.textBoxTestReadName.Size = new System.Drawing.Size(173, 20);
-			this.textBoxTestReadName.TabIndex = 18;
-			// 
-			// textBoxTestFileName
-			// 
-			this.textBoxTestFileName.Location = new System.Drawing.Point(78, 11);
-			this.textBoxTestFileName.Name = "textBoxTestFileName";
-			this.textBoxTestFileName.Size = new System.Drawing.Size(360, 20);
-			this.textBoxTestFileName.TabIndex = 14;
-			// 
-			// textBoxTestFileContents
-			// 
-			this.textBoxTestFileContents.Location = new System.Drawing.Point(9, 91);
-			this.textBoxTestFileContents.Multiline = true;
-			this.textBoxTestFileContents.Name = "textBoxTestFileContents";
-			this.textBoxTestFileContents.Size = new System.Drawing.Size(429, 87);
-			this.textBoxTestFileContents.TabIndex = 13;
-			// 
-			// textBoxTestStoreName
-			// 
-			this.textBoxTestStoreName.Location = new System.Drawing.Point(78, 39);
-			this.textBoxTestStoreName.Name = "textBoxTestStoreName";
-			this.textBoxTestStoreName.Size = new System.Drawing.Size(173, 20);
-			this.textBoxTestStoreName.TabIndex = 12;
-			// 
-			// textBoxTestStoreValue
-			// 
-			this.textBoxTestStoreValue.Location = new System.Drawing.Point(257, 39);
-			this.textBoxTestStoreValue.Name = "textBoxTestStoreValue";
-			this.textBoxTestStoreValue.Size = new System.Drawing.Size(100, 20);
-			this.textBoxTestStoreValue.TabIndex = 11;
-			// 
-			// buttonTestReadValue
-			// 
-			this.buttonTestReadValue.Location = new System.Drawing.Point(257, 63);
-			this.buttonTestReadValue.Name = "buttonTestReadValue";
-			this.buttonTestReadValue.Size = new System.Drawing.Size(75, 23);
-			this.buttonTestReadValue.TabIndex = 17;
-			this.buttonTestReadValue.Text = "Read";
-			this.buttonTestReadValue.UseVisualStyleBackColor = true;
-			// 
-			// labelTestProperty
-			// 
-			this.labelTestProperty.AutoSize = true;
-			this.labelTestProperty.Location = new System.Drawing.Point(9, 42);
-			this.labelTestProperty.Name = "labelTestProperty";
-			this.labelTestProperty.Size = new System.Drawing.Size(49, 13);
-			this.labelTestProperty.TabIndex = 16;
-			this.labelTestProperty.Text = "Property:";
-			// 
-			// labelTestFileName
-			// 
-			this.labelTestFileName.AutoSize = true;
-			this.labelTestFileName.Location = new System.Drawing.Point(9, 14);
-			this.labelTestFileName.Name = "labelTestFileName";
-			this.labelTestFileName.Size = new System.Drawing.Size(52, 13);
-			this.labelTestFileName.TabIndex = 15;
-			this.labelTestFileName.Text = "Yaml File:";
-			// 
-			// buttonTestStore
-			// 
-			this.buttonTestStore.Location = new System.Drawing.Point(363, 37);
-			this.buttonTestStore.Name = "buttonTestStore";
-			this.buttonTestStore.Size = new System.Drawing.Size(75, 23);
-			this.buttonTestStore.TabIndex = 10;
-			this.buttonTestStore.Text = "Store";
-			this.buttonTestStore.UseVisualStyleBackColor = true;
-			// 
 			// tabPageInput
 			// 
 			this.tabPageInput.BackColor = System.Drawing.Color.Transparent;
@@ -789,6 +695,105 @@
 			this.buttonEvaluateFunction.UseVisualStyleBackColor = true;
 			this.buttonEvaluateFunction.Click += new System.EventHandler(this.buttonExecuteFunction_Click);
 			// 
+			// tabPageSettings
+			// 
+			this.tabPageSettings.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageSettings.Controls.Add(this.textBoxTestReadValue);
+			this.tabPageSettings.Controls.Add(this.textBoxTestReadName);
+			this.tabPageSettings.Controls.Add(this.textBoxTestFileName);
+			this.tabPageSettings.Controls.Add(this.textBoxTestFileContents);
+			this.tabPageSettings.Controls.Add(this.textBoxTestStoreName);
+			this.tabPageSettings.Controls.Add(this.textBoxTestStoreValue);
+			this.tabPageSettings.Controls.Add(this.buttonTestReadValue);
+			this.tabPageSettings.Controls.Add(this.labelTestProperty);
+			this.tabPageSettings.Controls.Add(this.labelTestFileName);
+			this.tabPageSettings.Controls.Add(this.buttonTestStore);
+			this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
+			this.tabPageSettings.Margin = new System.Windows.Forms.Padding(0);
+			this.tabPageSettings.Name = "tabPageSettings";
+			this.tabPageSettings.Size = new System.Drawing.Size(485, 314);
+			this.tabPageSettings.TabIndex = 5;
+			this.tabPageSettings.Text = "Settings (disabled)";
+			// 
+			// textBoxTestReadValue
+			// 
+			this.textBoxTestReadValue.Location = new System.Drawing.Point(338, 65);
+			this.textBoxTestReadValue.Name = "textBoxTestReadValue";
+			this.textBoxTestReadValue.Size = new System.Drawing.Size(100, 20);
+			this.textBoxTestReadValue.TabIndex = 19;
+			// 
+			// textBoxTestReadName
+			// 
+			this.textBoxTestReadName.Location = new System.Drawing.Point(78, 65);
+			this.textBoxTestReadName.Name = "textBoxTestReadName";
+			this.textBoxTestReadName.Size = new System.Drawing.Size(173, 20);
+			this.textBoxTestReadName.TabIndex = 18;
+			// 
+			// textBoxTestFileName
+			// 
+			this.textBoxTestFileName.Location = new System.Drawing.Point(78, 11);
+			this.textBoxTestFileName.Name = "textBoxTestFileName";
+			this.textBoxTestFileName.Size = new System.Drawing.Size(360, 20);
+			this.textBoxTestFileName.TabIndex = 14;
+			// 
+			// textBoxTestFileContents
+			// 
+			this.textBoxTestFileContents.Location = new System.Drawing.Point(9, 91);
+			this.textBoxTestFileContents.Multiline = true;
+			this.textBoxTestFileContents.Name = "textBoxTestFileContents";
+			this.textBoxTestFileContents.Size = new System.Drawing.Size(429, 87);
+			this.textBoxTestFileContents.TabIndex = 13;
+			// 
+			// textBoxTestStoreName
+			// 
+			this.textBoxTestStoreName.Location = new System.Drawing.Point(78, 39);
+			this.textBoxTestStoreName.Name = "textBoxTestStoreName";
+			this.textBoxTestStoreName.Size = new System.Drawing.Size(173, 20);
+			this.textBoxTestStoreName.TabIndex = 12;
+			// 
+			// textBoxTestStoreValue
+			// 
+			this.textBoxTestStoreValue.Location = new System.Drawing.Point(257, 39);
+			this.textBoxTestStoreValue.Name = "textBoxTestStoreValue";
+			this.textBoxTestStoreValue.Size = new System.Drawing.Size(100, 20);
+			this.textBoxTestStoreValue.TabIndex = 11;
+			// 
+			// buttonTestReadValue
+			// 
+			this.buttonTestReadValue.Location = new System.Drawing.Point(257, 63);
+			this.buttonTestReadValue.Name = "buttonTestReadValue";
+			this.buttonTestReadValue.Size = new System.Drawing.Size(75, 23);
+			this.buttonTestReadValue.TabIndex = 17;
+			this.buttonTestReadValue.Text = "Read";
+			this.buttonTestReadValue.UseVisualStyleBackColor = true;
+			// 
+			// labelTestProperty
+			// 
+			this.labelTestProperty.AutoSize = true;
+			this.labelTestProperty.Location = new System.Drawing.Point(9, 42);
+			this.labelTestProperty.Name = "labelTestProperty";
+			this.labelTestProperty.Size = new System.Drawing.Size(49, 13);
+			this.labelTestProperty.TabIndex = 16;
+			this.labelTestProperty.Text = "Property:";
+			// 
+			// labelTestFileName
+			// 
+			this.labelTestFileName.AutoSize = true;
+			this.labelTestFileName.Location = new System.Drawing.Point(9, 14);
+			this.labelTestFileName.Name = "labelTestFileName";
+			this.labelTestFileName.Size = new System.Drawing.Size(52, 13);
+			this.labelTestFileName.TabIndex = 15;
+			this.labelTestFileName.Text = "Yaml File:";
+			// 
+			// buttonTestStore
+			// 
+			this.buttonTestStore.Location = new System.Drawing.Point(363, 37);
+			this.buttonTestStore.Name = "buttonTestStore";
+			this.buttonTestStore.Size = new System.Drawing.Size(75, 23);
+			this.buttonTestStore.TabIndex = 10;
+			this.buttonTestStore.Text = "Store";
+			this.buttonTestStore.UseVisualStyleBackColor = true;
+			// 
 			// buttonClose
 			// 
 			this.buttonClose.Location = new System.Drawing.Point(424, 362);
@@ -798,6 +803,35 @@
 			this.buttonClose.Text = "Close";
 			this.buttonClose.UseVisualStyleBackColor = true;
 			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+			// 
+			// tabPageCharSel
+			// 
+			this.tabPageCharSel.Controls.Add(this.textBoxCharSlotIdx);
+			this.tabPageCharSel.Controls.Add(this.buttonGotoSlot);
+			this.tabPageCharSel.Location = new System.Drawing.Point(4, 22);
+			this.tabPageCharSel.Name = "tabPageCharSel";
+			this.tabPageCharSel.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageCharSel.Size = new System.Drawing.Size(485, 314);
+			this.tabPageCharSel.TabIndex = 6;
+			this.tabPageCharSel.Text = "CharSel";
+			this.tabPageCharSel.UseVisualStyleBackColor = true;
+			// 
+			// buttonGotoSlot
+			// 
+			this.buttonGotoSlot.Location = new System.Drawing.Point(121, 88);
+			this.buttonGotoSlot.Name = "buttonGotoSlot";
+			this.buttonGotoSlot.Size = new System.Drawing.Size(75, 23);
+			this.buttonGotoSlot.TabIndex = 0;
+			this.buttonGotoSlot.Text = "Go To Slot";
+			this.buttonGotoSlot.UseVisualStyleBackColor = true;
+			this.buttonGotoSlot.Click += new System.EventHandler(this.buttonGotoSlot_Click);
+			// 
+			// textBoxCharSlotIdx
+			// 
+			this.textBoxCharSlotIdx.Location = new System.Drawing.Point(121, 62);
+			this.textBoxCharSlotIdx.Name = "textBoxCharSlotIdx";
+			this.textBoxCharSlotIdx.Size = new System.Drawing.Size(100, 20);
+			this.textBoxCharSlotIdx.TabIndex = 1;
 			// 
 			// TestsForm
 			// 
@@ -819,12 +853,14 @@
 			this.tabPageWindow.PerformLayout();
 			this.tabPageQueue.ResumeLayout(false);
 			this.tabPageQueue.PerformLayout();
-			this.tabPageSettings.ResumeLayout(false);
-			this.tabPageSettings.PerformLayout();
 			this.tabPageInput.ResumeLayout(false);
 			this.tabPageInput.PerformLayout();
 			this.tabPageRaw.ResumeLayout(false);
 			this.tabPageRaw.PerformLayout();
+			this.tabPageSettings.ResumeLayout(false);
+			this.tabPageSettings.PerformLayout();
+			this.tabPageCharSel.ResumeLayout(false);
+			this.tabPageCharSel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -902,5 +938,8 @@
 		private System.Windows.Forms.Label labelTestProperty;
 		private System.Windows.Forms.Label labelTestFileName;
 		private System.Windows.Forms.Button buttonTestStore;
+		private System.Windows.Forms.TabPage tabPageCharSel;
+		private System.Windows.Forms.TextBox textBoxCharSlotIdx;
+		private System.Windows.Forms.Button buttonGotoSlot;
 	}
 }
