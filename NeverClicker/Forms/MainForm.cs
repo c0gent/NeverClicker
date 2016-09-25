@@ -182,7 +182,7 @@ namespace NeverClicker.Forms {
 			if (this.AutomationEngine != null) {
 				if (!this.AutoCycleTask.IsCompleted) {
 					e.Cancel = true;
-					this.AutomationEngine.Log("NeverClicker Exiting.");				
+					this.AutomationEngine.Log("NeverClicker exiting...");				
 					this.AutomationEngine.Stop();
 					await this.AutoCycleTask;
 					this.Close();
