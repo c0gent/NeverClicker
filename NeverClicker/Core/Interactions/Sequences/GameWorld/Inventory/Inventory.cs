@@ -69,7 +69,8 @@ namespace NeverClicker.Interactions {
 			// If bags tab is not active, click it's icon.
 			if (!(Game.DetermineInventoryState(intr) == InventoryState.Bags)) {
 				Mouse.ClickImage(intr, "InventoryTabIconBags");
-				intr.WaitRand(700, 2200);
+				Mouse.Move(intr, new Point(1, 100));
+				intr.WaitRand(700, 1100);
 			}			
 
 			// Determine if any Celestial Bags of Refinement are present:
