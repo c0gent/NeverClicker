@@ -15,7 +15,11 @@ using System.Collections.Immutable;
 namespace NeverClicker.Forms {
 	public partial class MainForm : Form {
 		public AutomationEngine AutomationEngine;
-		private void buttonExit_Click(object sender, EventArgs e) => Close();		
+		public Task AutoCycleTask;
+
+		private void buttonExit_Click(object sender, EventArgs e) {
+			Close();
+		}
 
 		public MainForm() {
 			InitializeComponent();
@@ -33,7 +37,7 @@ namespace NeverClicker.Forms {
 				if (Settings.Default.BeginOnStartup) {
 					int delaySecs = 10;
 					this.SetButtonStateRunning();
-					AutomationEngine.AutoCycle(delaySecs);
+					this.AutoCycleTask = AutomationEngine.AutoCycle(delaySecs);
 				}
 			}			
 		}
@@ -167,17 +171,22 @@ namespace NeverClicker.Forms {
 
 		private void buttonAutoCycle_Click(object sender, EventArgs e) {
 			this.SetButtonStateRunning();
-			AutomationEngine.AutoCycle(0);
+			this.AutoCycleTask = AutomationEngine.AutoCycle(0);
 		}
 
 		private void buttonTestsForm_Click(object sender, EventArgs e) {
 			this.OpenTestsWindow();
 		}
 
-		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+		async void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
 			if (this.AutomationEngine != null) {
-				this.AutomationEngine.Log("NeverClicker Exiting.");
-				this.AutomationEngine.Stop();
+				if (!this.AutoCycleTask.IsCompleted) {
+					e.Cancel = true;
+					this.AutomationEngine.Log("NeverClicker Exiting.");				
+					this.AutomationEngine.Stop();
+					await this.AutoCycleTask;
+					this.Close();
+				}
 			}		
 		}
 

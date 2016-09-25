@@ -32,6 +32,7 @@ namespace NeverClicker.Interactions {
 			//intr.Log("End AutoCycle Init: " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 			intr.Log("Starting AutoCycle in " + startDelaySec.ToString() + " seconds...");
 			intr.Wait(startDelaySec * 1000);
+			if (intr.CancelSource.IsCancellationRequested) { return; }
 			intr.Log("Beginning AutoCycle.");
 			
 			

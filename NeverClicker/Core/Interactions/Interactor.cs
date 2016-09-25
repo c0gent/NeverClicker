@@ -39,9 +39,36 @@ namespace NeverClicker.Interactions {
 			this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
 			this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);
 
+			BackwardCompatability();
+
 			InitAlibEng();
 			return true;
 		}
+
+		// Migrate any settings which may have been moved
+		private void BackwardCompatability() {
+			// Move `CharacterSelectScrollBarTopX` & `CharacterSelectScrollBarTopY` from `KeyBindAndUi` to `ClickLocations`:
+			int characterSelectScrollBarTopX;
+
+			if (!GameClient.TryGetSetting("CharacterSelectScrollBarTopX", "ClickLocations", out characterSelectScrollBarTopX)) {
+				if (GameClient.TryGetSetting("CharacterSelectScrollBarTopX", "KeyBindAndUi", out characterSelectScrollBarTopX)) {
+					GameClient.SaveSetting(characterSelectScrollBarTopX.ToString(), "CharacterSelectScrollBarTopX", "ClickLocations");
+				} else {
+					Log("Unable to load 'CharacterSelectScrollBarTopX' setting.", LogEntryType.Fatal);
+				}				
+			}
+
+			int characterSelectScrollBarTopY;
+
+			if (!GameClient.TryGetSetting("CharacterSelectScrollBarTopY", "ClickLocations", out characterSelectScrollBarTopY)) {
+				if (GameClient.TryGetSetting("CharacterSelectScrollBarTopY", "KeyBindAndUi", out characterSelectScrollBarTopY)) {
+					GameClient.SaveSetting(characterSelectScrollBarTopY.ToString(), "CharacterSelectScrollBarTopY", "ClickLocations");
+				} else {
+					Log("Unable to load 'CharacterSelectScrollBarTopY' setting.", LogEntryType.Fatal);
+				}
+			}
+		}
+
 
 		private void InitAlibEng() {
 			AlibEng = new AlibEngine();

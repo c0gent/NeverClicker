@@ -117,13 +117,15 @@ namespace NeverClicker {
 			await Run(func);
 		}
 
-		public void Stop() {
+		public CancellationTokenSource Stop() {
 			try {
 				Log("Stopping automation engine...");
 				Itr.CancelSource.Cancel();
+				return Itr.CancelSource;
 			} catch (Exception ex) {
 				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Error));
-			} 
+				return null;
+			}
 		}
 
 		public void ReloadSettings() {
@@ -144,7 +146,7 @@ namespace NeverClicker {
 			return Itr.State;
 		}
 
-		public async void AutoCycle(int startDelaySec) {
+		public async Task AutoCycle(int startDelaySec) {
 			await Run(() => Sequences.AutoCycle(Itr, Queue, startDelaySec));
 			Log("AutoCycle stopped.");
 		}

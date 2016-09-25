@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		const int DEFAULT_CHARACTER_SELECT_SCROLL_BAR_TOP_X = 840;
-		const int DEFAULT_CHARACTER_SELECT_SCROLL_BAR_TOP_Y = 108;
+		//const int DEFAULT_CHARACTER_SELECT_SCROLL_BAR_TOP_X = 840;
+		//const int DEFAULT_CHARACTER_SELECT_SCROLL_BAR_TOP_Y = 108;
 		const int SCROLLS_PER_TILE = 4;
 		const int TILE_SIZE = 80;
 		//const int TILE_SIZE = 78;
@@ -18,10 +18,8 @@ namespace NeverClicker.Interactions {
 			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
 
 			int charCount = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
-			int scrollBarTopX = intr.GameClient.GetSettingOr("CharacterSelectScrollBarTopX", "ClickLocations",
-				DEFAULT_CHARACTER_SELECT_SCROLL_BAR_TOP_X);
-			int scrollBarTopY = intr.GameClient.GetSettingOr("CharacterSelectScrollBarTopY", "ClickLocations",
-				DEFAULT_CHARACTER_SELECT_SCROLL_BAR_TOP_Y);
+			int scrollBarTopX = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopX", "ClickLocations");
+			int scrollBarTopY = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopY", "ClickLocations");
 			int charSlotX = intr.GameClient.GetSettingOrZero("CharSlotX", "ClickLocations");
 			int topSlotY = intr.GameClient.GetSettingOrZero("TopSlotY", "ClickLocations");
 			int visibleSlots = intr.GameClient.GetSettingOrZero("VisibleCharacterSelectSlots", "KeyBindAndUi");

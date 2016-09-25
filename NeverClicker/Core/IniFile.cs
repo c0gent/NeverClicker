@@ -53,6 +53,21 @@ namespace NeverClicker {
 			}
 		}
 
+		public bool TryGetSetting(string settingName, string sectionName, out int settingValInt) {
+			string settingValString;
+
+			if (TryGetSetting(settingName, sectionName, out settingValString)) {
+				if (int.TryParse(settingValString, out settingValInt)) {
+					return true;
+				} else {
+					return false;
+				}
+ 			} else {
+				settingValInt = 0;
+				return false;
+			}
+		}
+
 		public string GetSettingOrEmptyString(string settingName, string sectionName) {
 			string settingVal = null;
 
