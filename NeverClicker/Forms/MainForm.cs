@@ -57,8 +57,8 @@ namespace NeverClicker.Forms {
 				this.listBoxTaskQueue.Items.Clear();
 
 				foreach (GameTask task in taskList.Values) {
-					string taskIdName = (task.Kind == TaskKind.Professions) 
-						? TaskQueue.ProfessionTaskNames[task.TaskId] + "\t" 
+					string taskIdName = (task.Kind == TaskKind.Profession) 
+						? ProfessionTasksRef.ProfessionTaskNames[task.TaskId] + "\t" 
 						: task.TaskId.ToString() + "\t\t";
 
 					listBoxTaskQueue.Items.Add(
@@ -179,7 +179,7 @@ namespace NeverClicker.Forms {
 		}
 
 		async void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-			if (this.AutomationEngine != null) {
+			if (this.AutoCycleTask != null) {
 				if (!this.AutoCycleTask.IsCompleted) {
 					e.Cancel = true;
 					this.AutomationEngine.Log("NeverClicker exiting...");				

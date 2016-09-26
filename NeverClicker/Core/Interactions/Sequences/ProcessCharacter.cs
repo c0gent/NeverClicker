@@ -16,7 +16,7 @@ namespace NeverClicker.Interactions {
 					TaskQueue queue
 		) {			
 			uint charIdx = queue.NextTask.CharIdx;
-			string charLabel = queue.NextTask.CharZeroIdxLabel;
+			string charLabel = queue.NextTask.CharIdxLabel;
 			int invokesToday = intr.GameAccount.GetSettingOrZero("InvokesToday", charLabel);
 			DateTime invokesCompletedOn;
 			DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesCompleteFor", charLabel), out invokesCompletedOn);
@@ -41,7 +41,7 @@ namespace NeverClicker.Interactions {
 					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
 				}
 			} else {
-				if (queue.NextTask.Kind == TaskKind.Professions) {
+				if (queue.NextTask.Kind == TaskKind.Profession) {
 					queue.PostponeUntilNextInvoke(intr, charIdx);
 				}
 			}
@@ -149,12 +149,12 @@ namespace NeverClicker.Interactions {
 					queue.AdvanceProfessionsTask(intr, charIdx, taskId);
 				}
 
-				if (queue.NextTask.Kind == TaskKind.Professions) {
+				if (queue.NextTask.Kind == TaskKind.Profession) {
 					queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);  // SAME
 				}
-			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Professions) { // UNUSED
+			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) { // UNUSED
 				queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);      // SAME
-			} else if (queue.NextTask.Kind == TaskKind.Professions) {
+			} else if (queue.NextTask.Kind == TaskKind.Profession) {
 				processingIncomplete = true;
 				// CANCELLED OR FAILED
 				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME

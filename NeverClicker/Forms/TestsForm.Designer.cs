@@ -94,10 +94,11 @@
 			this.labelTestProperty = new System.Windows.Forms.Label();
 			this.labelTestFileName = new System.Windows.Forms.Label();
 			this.buttonTestStore = new System.Windows.Forms.Button();
-			this.buttonClose = new System.Windows.Forms.Button();
 			this.tabPageCharSel = new System.Windows.Forms.TabPage();
-			this.buttonGotoSlot = new System.Windows.Forms.Button();
 			this.textBoxCharSlotIdx = new System.Windows.Forms.TextBox();
+			this.buttonGotoSlot = new System.Windows.Forms.Button();
+			this.buttonClose = new System.Windows.Forms.Button();
+			this.buttonWriteTestData = new System.Windows.Forms.Button();
 			this.tabControlPrimary.SuspendLayout();
 			this.tabPageStatus.SuspendLayout();
 			this.groupBoxSettings.SuspendLayout();
@@ -160,6 +161,7 @@
 			// 
 			// groupBoxSettings
 			// 
+			this.groupBoxSettings.Controls.Add(this.buttonWriteTestData);
 			this.groupBoxSettings.Controls.Add(this.textBoxReadSettingValue3);
 			this.groupBoxSettings.Controls.Add(this.textBoxReadSettingValue2);
 			this.groupBoxSettings.Controls.Add(this.labelSettingValue3);
@@ -673,7 +675,6 @@
 			this.button3.Text = "Evaluate";
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Visible = false;
-			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
 			// labelEvaluateVariable
 			// 
@@ -783,7 +784,7 @@
 			this.labelTestFileName.Name = "labelTestFileName";
 			this.labelTestFileName.Size = new System.Drawing.Size(52, 13);
 			this.labelTestFileName.TabIndex = 15;
-			this.labelTestFileName.Text = "Yaml File:";
+			this.labelTestFileName.Text = "Toml File:";
 			// 
 			// buttonTestStore
 			// 
@@ -793,16 +794,6 @@
 			this.buttonTestStore.TabIndex = 10;
 			this.buttonTestStore.Text = "Store";
 			this.buttonTestStore.UseVisualStyleBackColor = true;
-			// 
-			// buttonClose
-			// 
-			this.buttonClose.Location = new System.Drawing.Point(424, 362);
-			this.buttonClose.Name = "buttonClose";
-			this.buttonClose.Size = new System.Drawing.Size(75, 23);
-			this.buttonClose.TabIndex = 0;
-			this.buttonClose.Text = "Close";
-			this.buttonClose.UseVisualStyleBackColor = true;
-			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
 			// 
 			// tabPageCharSel
 			// 
@@ -816,6 +807,13 @@
 			this.tabPageCharSel.Text = "CharSel";
 			this.tabPageCharSel.UseVisualStyleBackColor = true;
 			// 
+			// textBoxCharSlotIdx
+			// 
+			this.textBoxCharSlotIdx.Location = new System.Drawing.Point(121, 62);
+			this.textBoxCharSlotIdx.Name = "textBoxCharSlotIdx";
+			this.textBoxCharSlotIdx.Size = new System.Drawing.Size(100, 20);
+			this.textBoxCharSlotIdx.TabIndex = 1;
+			// 
 			// buttonGotoSlot
 			// 
 			this.buttonGotoSlot.Location = new System.Drawing.Point(121, 88);
@@ -826,12 +824,25 @@
 			this.buttonGotoSlot.UseVisualStyleBackColor = true;
 			this.buttonGotoSlot.Click += new System.EventHandler(this.buttonGotoSlot_Click);
 			// 
-			// textBoxCharSlotIdx
+			// buttonClose
 			// 
-			this.textBoxCharSlotIdx.Location = new System.Drawing.Point(121, 62);
-			this.textBoxCharSlotIdx.Name = "textBoxCharSlotIdx";
-			this.textBoxCharSlotIdx.Size = new System.Drawing.Size(100, 20);
-			this.textBoxCharSlotIdx.TabIndex = 1;
+			this.buttonClose.Location = new System.Drawing.Point(424, 362);
+			this.buttonClose.Name = "buttonClose";
+			this.buttonClose.Size = new System.Drawing.Size(75, 23);
+			this.buttonClose.TabIndex = 0;
+			this.buttonClose.Text = "Close";
+			this.buttonClose.UseVisualStyleBackColor = true;
+			this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+			// 
+			// buttonWriteTestData
+			// 
+			this.buttonWriteTestData.Location = new System.Drawing.Point(29, 198);
+			this.buttonWriteTestData.Name = "buttonWriteTestData";
+			this.buttonWriteTestData.Size = new System.Drawing.Size(125, 23);
+			this.buttonWriteTestData.TabIndex = 13;
+			this.buttonWriteTestData.Text = "Write Test Data...";
+			this.buttonWriteTestData.UseVisualStyleBackColor = true;
+			this.buttonWriteTestData.Click += new System.EventHandler(this.buttonWriteTestData_Click);
 			// 
 			// TestsForm
 			// 
@@ -941,5 +952,6 @@
 		private System.Windows.Forms.TabPage tabPageCharSel;
 		private System.Windows.Forms.TextBox textBoxCharSlotIdx;
 		private System.Windows.Forms.Button buttonGotoSlot;
+		private System.Windows.Forms.Button buttonWriteTestData;
 	}
 }

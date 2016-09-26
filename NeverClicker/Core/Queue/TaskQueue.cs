@@ -12,32 +12,18 @@ namespace NeverClicker {
 
 	[Serializable]
 	public class TaskQueue : ISerializable {
+		// Invocation Delays:
 		public static int[] InvokeDelayMinutes = { 0, 15, 30, 45, 60, 90, 0, 0, 0, 0 };
-
-		public static int[] ProfessionTaskDurationMinutes = {
-			//235,
-			960,
-			//690,
-			720,
-			//1375
-			480
-		};
-
-		public static string[] ProfessionTaskNames = {
-			//"Guard Young Noble",
-			"Escort a Wizard",
-			//"Kill a Young Dragon",
-			"Protect Magical",
-			//"Battle Elemental"
-			"Guard Clerics"
-		};
-
+		//// [BRING ME BACK]:
+		//private readonly ProfessionTasks ProfessionTaskList;
 		private SortedList<long, GameTask> Queue { get; set; }
 		public GameTask NextTask { get { return Queue.First().Value; } }
 		public bool IsEmpty { get { return Queue.Count == 0; } }
 
 		public TaskQueue() {
 			Queue = new SortedList<long, GameTask>(300);
+			//// [BRING ME BACK]:
+			//ProfessionTaskList = new ProfessionTasks();
 		}
 
 		public void Add(GameTask gameTask) {
@@ -106,7 +92,7 @@ namespace NeverClicker {
 						intr.Log("Queuing subsequent invocation task.", LogEntryType.Debug);
 						var invokesToday = (incrementTaskId) ? taskId + 1 : taskId;
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
-					} else if (taskKind == TaskKind.Professions) {
+					} else if (taskKind == TaskKind.Profession) {
 						intr.Log("Queuing subsequent professions task.", LogEntryType.Debug);
 						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 					}					
@@ -118,7 +104,7 @@ namespace NeverClicker {
 				intr.Log("Key not found for task.", LogEntryType.Info);
 				if (taskKind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, 1);
-				} else if (taskKind == TaskKind.Professions) {
+				} else if (taskKind == TaskKind.Profession) {
 					this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 				}
 			}
@@ -144,7 +130,7 @@ namespace NeverClicker {
 			//	this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
 			//}
 
-			this.AdvanceTask(intr, charIdx, TaskKind.Professions, taskId, false);
+			this.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId, false);
 		}
 
 
@@ -213,20 +199,20 @@ namespace NeverClicker {
 
 			var taskMatureTime = now;
 
-			if (mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]) < now) {
+			if (mostRecentProfTime.AddMinutes(ProfessionTasksRef.ProfessionTaskDurationMinutes[taskId]) < now) {
 				//intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);				
 				//taskMatureTime = now.AddMinutes(ProfessionTaskDurationMinutes[taskId]);
-				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Professions, taskId);
+				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Profession, taskId);
 			} else {
 				//taskMatureTime = mostRecentProfTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]);	
-				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Professions, taskId);
+				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Profession, taskId);
 			}
 
-			intr.Log("Next profession task (" + ProfessionTaskNames[taskId] + ") for character " + charIdx
+			intr.Log("Next profession task (" + ProfessionTasksRef.ProfessionTaskNames[taskId] + ") for character " + charIdx
 				+ " at: " + taskMatureTime.ToShortTimeString() + ".");
 
 			intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);
-			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
+			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));
 			intr.UpdateQueueList(this.ListClone());
 		}
 
@@ -248,7 +234,7 @@ namespace NeverClicker {
 
 				if (prevTask.Kind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, prevTask.TaskId + 1);
-				} else if (prevTask.Kind == TaskKind.Professions) {
+				} else if (prevTask.Kind == TaskKind.Profession) {
 					//this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
 				}
 			}
@@ -256,7 +242,7 @@ namespace NeverClicker {
 
 		public void PostponeUntilNextInvoke(Interactor intr, uint charIdx) {
 			var invKey = GetTaskKeys(charIdx, TaskKind.Invocation);
-			var profKeys = GetTaskKeys(charIdx, TaskKind.Professions);
+			var profKeys = GetTaskKeys(charIdx, TaskKind.Profession);
 			
 			if (invKey.Count == 1) {
 				foreach (var pk in profKeys) {
@@ -265,7 +251,7 @@ namespace NeverClicker {
 						Queue.Remove(pk);
 						var newMatureTime = pk + 1 + oldProfTask.TaskId;
 						Queue.Add(newMatureTime, new GameTask(new DateTime(newMatureTime), 
-							charIdx, TaskKind.Professions, oldProfTask.TaskId));
+							charIdx, TaskKind.Profession, oldProfTask.TaskId));
 					}
 				}
 			} else {
@@ -329,7 +315,7 @@ namespace NeverClicker {
 
 				// ################################## PROFESSIONS #####################################
 				// ################ Prune Stale Profession Tasks ################
-				for (var p = 0; p < ProfessionTaskNames.Length; p++) {
+				for (var p = 0; p < ProfessionTasksRef.ProfessionTaskNames.Length; p++) {
 					var settingKey = "MostRecentProfTime_" + p;
 					var oldTaskThreshold = now.AddDays(-1);
 					var TaskMatureTime = now;
@@ -350,7 +336,7 @@ namespace NeverClicker {
 				// ################ Add Tasks to Queue ################
 				int tasksQueued = 0;
 
-				for (var taskId = 0; taskId < ProfessionTaskNames.Length; taskId++) {
+				for (var taskId = 0; taskId < ProfessionTasksRef.ProfessionTaskNames.Length; taskId++) {
 					var settingKey = "MostRecentProfTime_" + taskId;
 					mostRecent = now.AddDays(-1);
 
@@ -359,10 +345,10 @@ namespace NeverClicker {
 						intr.Log("Adding profession task to queue for character " + charIdx
 							+ ", matures: " + mostRecent.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 
-						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Professions, taskId);
+						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Profession, taskId);
 						taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
 
-						this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Professions, taskId));
+						this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));
 						tasksQueued += 1;
 					}
 				}
@@ -379,8 +365,8 @@ namespace NeverClicker {
 				case TaskKind.Invocation:
 					taskMatureTime = startTime.AddMinutes(InvokeDelayMinutes[taskId]);
 					break;
-				case TaskKind.Professions:
-					taskMatureTime = startTime.AddMinutes(ProfessionTaskDurationMinutes[taskId]);
+				case TaskKind.Profession:
+					taskMatureTime = startTime.AddMinutes(ProfessionTasksRef.ProfessionTaskDurationMinutes[taskId]);
 					break;
 				default:
 					return DateTime.Now;
@@ -392,7 +378,7 @@ namespace NeverClicker {
 
 
 		public bool TryGetTaskKey(uint charIdx, TaskKind taskKind, out long taskKey) {
-			if (taskKind == TaskKind.Professions) {
+			if (taskKind == TaskKind.Profession) {
 				throw new Exception("TaskQueue::GetTaskKey(): Profession tasks must specify a taskId as the third parameter");
 			} else {
 				return this.TryGetTaskKey(charIdx, taskKind, 999, out taskKey);
@@ -408,7 +394,7 @@ namespace NeverClicker {
 						taskKeys.Add(kvp.Key);
 					}
 				}
-			} else if (taskKind == TaskKind.Professions) {
+			} else if (taskKind == TaskKind.Profession) {
 				foreach (var kvp in this.Queue) {
 					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind && kvp.Value.TaskId == taskId) {
 						taskKeys.Add(kvp.Key);
@@ -439,7 +425,7 @@ namespace NeverClicker {
 						taskKeys.Add(kvp.Key);
 					}
 				}
-			} else if (taskKind == TaskKind.Professions) {
+			} else if (taskKind == TaskKind.Profession) {
 				foreach (var kvp in this.Queue) {
 					if (kvp.Value.CharIdx == charIdx && kvp.Value.Kind == taskKind) {
 						taskKeys.Add(kvp.Key);

@@ -155,8 +155,8 @@ namespace NeverClicker.Interactions {
 					success = true;
 				} else {
 					while(true) {
-						if (currentTask < TaskQueue.ProfessionTaskNames.Length) {
-							if (SelectProfTask(intr, TaskQueue.ProfessionTaskNames[currentTask])) {
+						if (currentTask < ProfessionTasksRef.ProfessionTaskNames.Length) {
+							if (SelectProfTask(intr, ProfessionTasksRef.ProfessionTaskNames[currentTask])) {
 								success = true;
 								break;								
 							} else {
@@ -172,7 +172,7 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				if (success && currentTask < TaskQueue.ProfessionTaskNames.Length) {
+				if (success && currentTask < ProfessionTasksRef.ProfessionTaskNames.Length) {
 					completionList.Add(currentTask);
 					anySuccess = true;
 				} 

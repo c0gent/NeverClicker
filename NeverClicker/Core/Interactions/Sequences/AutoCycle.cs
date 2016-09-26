@@ -57,7 +57,7 @@ namespace NeverClicker.Interactions {
 					TimeSpan waitDelay = nextTaskMatureDelay;
 
 					if (nextTaskMatureDelay.TotalMinutes > 8) {
-						if (queue.NextTask.Kind == TaskKind.Professions) {
+						if (queue.NextTask.Kind == TaskKind.Profession) {
 							waitDelay = nextTaskMatureDelay + intr.RandomDelay(9, 25);
 						} else {
 							waitDelay = nextTaskMatureDelay + intr.RandomDelay(9, 15);

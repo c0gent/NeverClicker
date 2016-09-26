@@ -13,7 +13,7 @@ namespace NeverClicker {
 		public readonly uint CharIdx; /*{ get; private set; }*/
 		public readonly int TaskId; /*{ get; private set; }*/
 
-		public string CharZeroIdxLabel { get { return "Character " + CharIdx.ToString(); } }
+		public string CharIdxLabel { get { return "Character " + CharIdx.ToString(); } }
 
 		public GameTask(DateTime matureTime, uint charIdx, TaskKind kind, int taskId) {
 			this.MatureTime = matureTime;
@@ -40,6 +40,6 @@ namespace NeverClicker {
 
 	public enum TaskKind {
 		Invocation,
-		Professions,
+		Profession,
 	}
 }

@@ -214,16 +214,23 @@ namespace NeverClicker.Forms {
 			}
 		}
 
-		private void button3_Click(object sender, EventArgs e) {
-
-		}
-
 		private void buttonGotoSlot_Click(object sender, EventArgs e) {
 			uint charIdx;
 
 			if (uint.TryParse(this.textBoxCharSlotIdx.Text, out charIdx)) {
 				MainForm.AutomationEngine.GotoCharSlot(charIdx);
 			}
+		}
+
+		private void buttonWriteTestData_Click(object sender, EventArgs e) {
+			var tomlTestData = new TomlTestData();
+
+			try {
+				tomlTestData.Write();
+			} catch (Exception ex) {
+				MessageBox.Show(ex.ToString());
+			}
+
 		}
 	}
 }
