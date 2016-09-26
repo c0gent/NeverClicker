@@ -43,8 +43,10 @@ namespace NeverClicker.Interactions {
 					intr.Log("Curfew time. Sleeping for " + (sleepTime / 60000).ToString() + " minutes.");					
 				}
 
-				intr.Log("AutoCycle():while: Loop iteration started.", LogEntryType.Debug);
-				TimeSpan nextTaskMatureDelay = queue.NextTaskWaitDelay();				
+				intr.Log("AutoCycle(): Loop iteration starting.", LogEntryType.Debug);
+				
+				TimeSpan nextTaskMatureDelay = queue.NextTaskMatureDelay();
+				intr.Log("AutoCycle(): Next task mature delay: " + nextTaskMatureDelay, LogEntryType.Debug);
 				
 				if (nextTaskMatureDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####

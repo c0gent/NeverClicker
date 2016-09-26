@@ -29,7 +29,7 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Starting processing for character " + charIdx + " ...", LogEntryType.Normal);
 			
-			if ((invokesToday >= 6)) {
+			if (queue.NextTask.Kind == TaskKind.Invocation && (invokesToday >= 6)) {
 				if (invokesCompletedOn == TaskQueue.TodaysGameDate) {
 					intr.Log(charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow", LogEntryType.Info);
 					queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
@@ -41,9 +41,9 @@ namespace NeverClicker.Interactions {
 					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
 				}
 			} else {
-				if (queue.NextTask.Kind == TaskKind.Professions) {
-					queue.PostponeUntilNextInvoke(intr, charIdx);
-				}
+				//if (queue.NextTask.Kind == TaskKind.Professions) {
+				//	queue.PostponeUntilNextInvoke(intr, charIdx);
+				//}
 			}
 
 
