@@ -51,7 +51,7 @@ namespace NeverClicker.Forms {
 		}
 
 		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
-			AutomationEngine.Log(new LogMessage("Refreshing task queue...", LogEntryType.Debug));
+			WriteLine(new LogMessage("Refreshing task queue...", LogEntryType.Debug).Text);
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
@@ -72,7 +72,7 @@ namespace NeverClicker.Forms {
 				MessageBox.Show(this, "Error refreshing task queue: " + ex.ToString());
 			}
 
-			AutomationEngine.Log(new LogMessage("Task queue is refreshed.", LogEntryType.Debug));
+			WriteLine(new LogMessage("Task queue is refreshed.", LogEntryType.Debug).Text);
 
 			var endTime = DateTime.Now;
 		}
@@ -182,7 +182,7 @@ namespace NeverClicker.Forms {
 			if (this.AutoCycleTask != null) {
 				if (!this.AutoCycleTask.IsCompleted) {
 					e.Cancel = true;
-					this.AutomationEngine.Log("NeverClicker exiting...");				
+					WriteLine("NeverClicker exiting...");				
 					this.AutomationEngine.Stop();
 					await this.AutoCycleTask;
 					this.Close();

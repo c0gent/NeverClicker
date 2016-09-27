@@ -23,72 +23,71 @@ namespace NeverClicker {
 	public partial class AutomationEngine {
 		private MainForm MainForm;
 		private Interactor Itr;
-		TaskQueue Queue;
-		LogFile LogFile;
+		//TaskQueue StoredQueue;
+		//LogFile LogFile;
 		
 		public AutomationEngine(MainForm form) {
 			this.MainForm = form;
 
 			try {
 				Itr = new Interactor();
-				Queue = new TaskQueue();
-				LogFile = new LogFile();
+				//Queue = new TaskQueue();
+				//StoredQueue = null;
+				//LogFile = new LogFile();
 			} catch (Exception ex) {
 				MessageBox.Show(MainForm, "Error initializing AutomationEngine: " + ex.ToString());
 			}
 		}
 
-		public void InitOldScript_DEPRICATING() {
-			Itr.Start(GetLogProgress(), GetTaskQueueProgress());
-			Itr.Stop();
+		//public void InitOldScript_DEPRICATING() {
+		//	Itr.Start(GetLogProgress(), GetTaskQueueProgress());
+		//	Itr.Stop();
+		//}
+
+		public void LogProgress(string message) {
+			MainForm.WriteLine(message);
 		}
 
-		public void Log(string message) {
-			Log(new LogMessage(message));
-		}
-		
-		public void Log(LogMessage logMessage) {			
-			switch (logMessage.Type) {
-				case LogEntryType.FatalWithScreenshot:					
-					LogFile.AppendMessage(logMessage);
-					MainForm.WriteLine(logMessage.Text);
-					//MessageBox.Show(MainForm, logMessage.Text + " -- " 
-					//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
-					MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
-					break;
-				case LogEntryType.Fatal:					
-					LogFile.AppendMessage(logMessage);
-					MainForm.WriteLine(logMessage.Text);
-					//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
-					MainForm.AppendError(logMessage.Text);
-					break;
-				case LogEntryType.Error:
-				case LogEntryType.Warning:
-				case LogEntryType.Normal:
-					LogFile.AppendMessage(logMessage);
-					MainForm.WriteLine(logMessage.Text);
-					break;				
-				case LogEntryType.Info:
-					LogFile.AppendMessage(logMessage);
-					break;
-				case LogEntryType.Debug:
-					if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
-					break;				
-			}
+		public void LogError(string message) {
+			MainForm.AppendError(message);
 		}
 
-		private string SaveErrorScreenshot() {			
-			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "FATAL_ERROR_"
-				+ DateTime.Now.ToFileTime().ToString() + ".png";
-			var errMsg = "Image file: " + errorImageFileName;
-			ScreenCapture sc = new ScreenCapture();
-			Image img = sc.CaptureScreen();
-			img.Save(errorImageFileName, ImageFormat.Png);
-			return errMsg;
-		}
+		//public void Log(LogMessage logMessage) {			
+		//	switch (logMessage.Type) {
+		//		case LogEntryType.FatalWithScreenshot:					
+		//			LogFile.AppendMessage(logMessage);
+		//			MainForm.WriteLine(logMessage.Text);
+		//			//MessageBox.Show(MainForm, logMessage.Text + " -- " 
+		//			//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
+		//			MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
+		//			break;
+		//		case LogEntryType.Fatal:					
+		//			LogFile.AppendMessage(logMessage);
+		//			MainForm.WriteLine(logMessage.Text);
+		//			//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
+		//			MainForm.AppendError(logMessage.Text);
+		//			break;
+		//		case LogEntryType.Error:
+		//		case LogEntryType.Warning:
+		//		case LogEntryType.Normal:
+		//			LogFile.AppendMessage(logMessage);
+		//			MainForm.WriteLine(logMessage.Text);
+		//			break;				
+		//		case LogEntryType.Info:
+		//			LogFile.AppendMessage(logMessage);
+		//			break;
+		//		case LogEntryType.Debug:
+		//			if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
+		//			break;				
+		//	}
+		//}
 
 		private Progress<LogMessage> GetLogProgress() {
-			return new Progress<LogMessage>(l => Log(l));
+			return new Progress<LogMessage>(l => MainForm.WriteLine(l.Text));
+		}
+
+		private Progress<LogMessage> GetLogError() {
+			return new Progress<LogMessage>(l => MainForm.AppendError(l.Text));
 		}
 
 		private Progress<ImmutableSortedDictionary<long, GameTask>> GetTaskQueueProgress() {
@@ -98,16 +97,17 @@ namespace NeverClicker {
 		public async Task<TResult> Run<TResult>(Func<TResult> action) {
 			MainForm.SetButtonStateRunning();
 			try {
-				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetTaskQueueProgress()), 
+				var result = await Task.Factory.StartNew(action, Itr.Start(GetLogProgress(), GetLogError(),
+					GetTaskQueueProgress()), 
 					TaskCreationOptions.LongRunning, TaskScheduler.Current);
 				Itr.Stop();
 				return result;
 			} catch (Exception ex) {
-				Log(new LogMessage(ex.ToString(), LogEntryType.Fatal));
+				LogError(new LogMessage(ex.ToString(), LogEntryType.Fatal).Text);
 				throw ex;
 			} finally {
 				Itr.Stop();
-				Log("Stopping running tasks...");
+				LogProgress("Stopping running tasks...");
 				MainForm.SetButtonStateStopped();
 			}
 		}
@@ -119,11 +119,11 @@ namespace NeverClicker {
 
 		public CancellationTokenSource Stop() {
 			try {
-				Log("Stopping automation engine...");
+				LogProgress("Stopping automation engine...");
 				Itr.CancelSource.Cancel();
 				return Itr.CancelSource;
 			} catch (Exception ex) {
-				Log(new LogMessage("Task cancellation error: " + ex, LogEntryType.Error));
+				LogError(new LogMessage("Task cancellation error: " + ex, LogEntryType.Error).Text);
 				return null;
 			}
 		}
@@ -147,8 +147,9 @@ namespace NeverClicker {
 		}
 
 		public async Task AutoCycle(int startDelaySec) {
-			await Run(() => Sequences.AutoCycle(Itr, Queue, startDelaySec));
-			Log("AutoCycle stopped.");
+			//await Run(() => Sequences.AutoCycle(Itr, Queue, startDelaySec));
+			await Run(() => Sequences.AutoCycle(Itr, startDelaySec));
+			LogProgress("AutoCycle stopped.");
 		}
 	}
 }

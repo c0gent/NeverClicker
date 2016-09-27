@@ -13,21 +13,22 @@ namespace NeverClicker.Interactions {
 		
 		public static void AutoCycle(
 					Interactor intr,
-					TaskQueue queue,
+					//TaskQueue queue,
 					int startDelaySec)
         {
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
+			var queue = new TaskQueue();
 			int charsTotal = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
 
 			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
 				queue.Populate(intr, charsTotal, RESET_DAY);
-				//intr.Log("Calling intr.UpdateQueueList()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 
-				// Move this somewhere else?
+				//intr.Log("Calling intr.UpdateQueueList()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
+				// [NOTE]: Move this somewhere else?
 				intr.UpdateQueueList(queue.ListClone());
-            }
+			}
 
 			//intr.Log("End AutoCycle Init: " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 			intr.Log("Starting AutoCycle in " + startDelaySec.ToString() + " seconds...");
@@ -87,6 +88,8 @@ namespace NeverClicker.Interactions {
 				intr.Wait(100);
 				//if (intr.CancelSource.IsCancellationRequested) { return; }				
 			}
+
+			intr.Log("Autocycle complete.", LogEntryType.Info);
 
 			//intr.GameAccount.SaveSetting("0", "CharZeroIdxLastInvoked", "Invocation");
 			//intr.Log("AutoCycle(): Returning.", LogEntryType.Info);

@@ -16,12 +16,14 @@ namespace NeverClicker {
 		public static int[] InvokeDelayMinutes = { 0, 15, 30, 45, 60, 90, 0, 0, 0, 0 };
 		//// [BRING ME BACK]:
 		//private readonly ProfessionTasks ProfessionTaskList;
-		private SortedList<long, GameTask> Queue { get; set; }
+		//private SortedList<long, GameTask> Queue { get; set; }
+		private SortedDictionary<long, GameTask> Queue { get; set; }
 		public GameTask NextTask { get { return Queue.First().Value; } }
 		public bool IsEmpty { get { return Queue.Count == 0; } }
 
 		public TaskQueue() {
-			Queue = new SortedList<long, GameTask>(300);
+			//Queue = new SortedList<long, GameTask>(300);
+			Queue = new SortedDictionary<long, GameTask>();
 			//// [BRING ME BACK]:
 			//ProfessionTaskList = new ProfessionTasks();
 		}
@@ -326,11 +328,11 @@ namespace NeverClicker {
 					var oldTaskThreshold = now.AddDays(-2);
 					DateTime profTaskMatureTime;
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey, 
+					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey,
 								charSettingSection), out profTaskMatureTime)) {
-						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + 
+						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " +
 							profTaskMatureTime.ToString() + ".", LogEntryType.Debug);
-					
+
 						// [TODO]: Is this necessary?:
 						if (profTaskMatureTime < oldTaskThreshold) {
 							intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);

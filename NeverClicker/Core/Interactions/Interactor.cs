@@ -24,15 +24,18 @@ namespace NeverClicker.Interactions {
 		public Random Rng = new Random();
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
 		public IProgress<LogMessage> ProgressLog { get; private set; }
+		public IProgress<LogMessage> ErrorLog { get; private set; }
 		public IProgress<ImmutableSortedDictionary<long, GameTask>> QueueList { get; private set; }
 		public CancellationTokenSource CancelSource { get; private set; }
 		public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
 		public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
+		LogFile LogFile;
 
 		public Interactor() {
 			//InitAlibEng(); // LOADED BELOW (LoadSettings())
 			
 			LoadSettings();
+			LogFile = new LogFile();
 		}
 
 		public bool LoadSettings() {
@@ -85,20 +88,67 @@ namespace NeverClicker.Interactions {
 			QueueList.Report(taskListCopy);
 		}
 
-		public void Log(string message) {
-			Log(message, LogEntryType.Normal);
-		}
+		//public void Log(string message) {
+		//	Log(message, LogEntryType.Normal);
+		//}
 
 		public void Log(string message, LogEntryType lt) {
-			if (message != null) {
-				ProgressLog.Report(new LogMessage(message, lt));
-			} else {
-				ProgressLog.Report(new LogMessage("Interactor::Log(): null log message passed!", LogEntryType.Warning));
-			}	
+			//if (message != null) {
+			//	ProgressLog.Report(new LogMessage(message, lt));
+			//} else {
+			//	ProgressLog.Report(new LogMessage("Interactor::Log(): null log message passed!", LogEntryType.Warning));
+			//}
+			Log(new LogMessage(message, lt));
 		}
 
-		public void Log(LogMessage logMessage) {
-			ProgressLog.Report(logMessage);
+		//public void Log(LogMessage logMessage) {
+		//	ProgressLog.Report(logMessage);
+		//}
+
+		public void Log(string message) {
+			Log(new LogMessage(message));
+		}
+		
+		public void Log(LogMessage logMessage) {			
+			switch (logMessage.Type) {
+				case LogEntryType.FatalWithScreenshot:					
+					LogFile.AppendMessage(logMessage);
+					//MainForm.WriteLine(logMessage.Text);
+					ProgressLog.Report(logMessage);
+					//MessageBox.Show(MainForm, logMessage.Text + " -- " 
+					//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
+					//MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
+					ErrorLog.Report(new LogMessage(logMessage.Text + " -- " + SaveErrorScreenshot()));
+					break;
+				case LogEntryType.Fatal:					
+					LogFile.AppendMessage(logMessage);
+					ProgressLog.Report(logMessage);
+					//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
+					ErrorLog.Report(logMessage);
+					break;
+				case LogEntryType.Error:
+				case LogEntryType.Warning:
+				case LogEntryType.Normal:
+					LogFile.AppendMessage(logMessage);
+					ProgressLog.Report(logMessage);
+					break;				
+				case LogEntryType.Info:
+					LogFile.AppendMessage(logMessage);
+					break;
+				case LogEntryType.Debug:
+					if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
+					break;				
+			}
+		}
+
+		private string SaveErrorScreenshot() {			
+			var errorImageFileName = Settings.Default.LogsFolderPath + @"\" + "FATAL_ERROR_"
+				+ DateTime.Now.ToFileTime().ToString() + ".png";
+			var errMsg = "Image file: " + errorImageFileName;
+			ScreenCapture sc = new ScreenCapture();
+			Image img = sc.CaptureScreen();
+			img.Save(errorImageFileName, ImageFormat.Png);
+			return errMsg;
 		}
 
 		public void MoveMouseCursor(Point point, bool click) {
@@ -139,10 +189,12 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
-		public CancellationToken Start(IProgress<LogMessage> log, IProgress<ImmutableSortedDictionary<long, GameTask>> queueList) {
+		public CancellationToken Start(IProgress<LogMessage> progressLog, IProgress<LogMessage> errorLog,
+					IProgress<ImmutableSortedDictionary<long, GameTask>> queueList) {
 		//public CancellationToken Start(IProgress<LogMessage> log) {
 			if (State == AutomationState.Stopped) {
-				ProgressLog = log;
+				ProgressLog = progressLog;
+				ErrorLog = errorLog;
 				QueueList = queueList;
 				CancelSource = new CancellationTokenSource();
 				State = AutomationState.Running;

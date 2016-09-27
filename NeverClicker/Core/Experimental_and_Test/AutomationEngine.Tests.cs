@@ -21,7 +21,7 @@ namespace NeverClicker {
 
 		// Specify what you want to happen when the Elapsed event is raised.
 		private void OnTimedEvent(object source, ElapsedEventArgs e) {
-			Log("Hello World!");
+			LogProgress("Hello World!");
 		}
 
 		public async void SendKeys(string keys) {
@@ -29,37 +29,38 @@ namespace NeverClicker {
 		}
 		
 
-		public void AddGameTask(uint charIdx, int delaySec) {
-			var dateTime = DateTime.Now.AddSeconds(delaySec);
-			var taskKind = TaskKind.Invocation;
+		// DISABLED UNTIL QUEUE POSITION IS SORTED:
+		//public void AddGameTask(uint charIdx, int delaySec) {
+		//	var dateTime = DateTime.Now.AddSeconds(delaySec);
+		//	var taskKind = TaskKind.Invocation;
 
-			GameTask gameTask = new GameTask(
-				dateTime, charIdx, taskKind, 0
-			);
+		//	GameTask gameTask = new GameTask(
+		//		dateTime, charIdx, taskKind, 0
+		//	);
 
-			try {
-				Log(string.Format("Adding task with charIdx: {0}, dateTime: {1}, taskKind: {2}", charIdx, dateTime, taskKind));
-				Queue.Add(gameTask);
-			} catch (Exception exc) {
-				Log(exc.ToString());
-			}
-		}
+		//	try {
+		//		LogProgress(string.Format("Adding task with charIdx: {0}, dateTime: {1}, taskKind: {2}", charIdx, dateTime, taskKind));
+		//		Queue.Add(gameTask);
+		//	} catch (Exception exc) {
+		//		LogProgress(exc.ToString());
+		//	}
+		//}
 
 
 		public void ProcessNextGameTask() {
 			//throw new NotImplementedException();
 
-			Log("Manually removing tasks has been disabled.");
+			LogProgress("Manually removing tasks has been disabled.");
 
 			//GameTask nextTask;
 		
 			//if (!Queue.IsEmpty) {
 			//	nextTask = Queue.NextTask;
-			//	Log("Processing next task for character " + nextTask.CharIdx.ToString()
+			//	LogProgress("Processing next task for character " + nextTask.CharIdx.ToString()
 			//		+ "; time: " + nextTask.MatureTime.ToShortTimeString()
 			//		+ "; type: " + nextTask.Kind.ToString() + ".");
 			//} else {
-			//	Log("Task queue is empty.");
+			//	LogProgress("Task queue is empty.");
 			//}
 
 			//EXECUTE TASK
@@ -73,9 +74,9 @@ namespace NeverClicker {
 
 
 		public async void MouseMovementTest() {
-			Log("Mouse movement activated.");
+			LogProgress("Mouse movement activated.");
 			await Run(() => Sequences.MouseMoveTest(Itr));
-			Log("Mouse movement cancelled.");
+			LogProgress("Mouse movement cancelled.");
 		}
 
 
@@ -88,35 +89,35 @@ namespace NeverClicker {
 						string param2 = null, string param3 = null, string param4 = null
 		) {
 			var result = await Run(() => Itr.EvaluateFunction(functionName, param1, param2, param3, param4));
-			Log(string.Format("'{0}()' returns: '{1}'", functionName, result));
+			LogProgress(string.Format("'{0}()' returns: '{1}'", functionName, result));
 		}
 
 
 		public async void ExecuteStatement(string statement) {
-			Log(string.Format("Evaluating '{0}'()...", statement));
+			LogProgress(string.Format("Evaluating '{0}'()...", statement));
 			await Run(() => Itr.ExecuteStatement(statement));
-			Log(string.Format("'{0}' complete.", statement));
+			LogProgress(string.Format("'{0}' complete.", statement));
 		}
 
 
 		public async Task<bool> DetectWindow(string windowExe) {
-			Log(string.Format("Detecting: '{0}'...", windowExe));
+			LogProgress(string.Format("Detecting: '{0}'...", windowExe));
 			var result = await Run(() => Screen.WindowDetectExist(Itr, windowExe));
 			return result;
 		}
 
 		public async void WindowMinimize(string windowExe) {
-			Log(string.Format("Minimizing: '{0}'...", windowExe));
+			LogProgress(string.Format("Minimizing: '{0}'...", windowExe));
 			await Run(() => Screen.WindowMinimize(Itr, windowExe));
 		}
 
 		public async void WindowActivate(string windowExe) {
-			Log(string.Format("Activating: '{0}'...", windowExe));
+			LogProgress(string.Format("Activating: '{0}'...", windowExe));
 			await Run(() => Screen.WindowActivate(Itr, windowExe));
 		}
 
 		public async void WindowKill(string windowExe) {
-			Log(string.Format("Activating: '{0}'...", windowExe));
+			LogProgress(string.Format("Activating: '{0}'...", windowExe));
 			await Run(() => Screen.WindowKill(Itr, windowExe));
 		}
 
@@ -124,9 +125,9 @@ namespace NeverClicker {
 			ImageSearchResult searchResult = await Run(() => Screen.ImageSearch(Itr, imgCode));
 
 			if (searchResult.Found) {
-				Log("Image found at: " + searchResult.Point.ToString());
+				LogProgress("Image found at: " + searchResult.Point.ToString());
 			} else {
-				Log("Image not found.");
+				LogProgress("Image not found.");
 			}
 		}
 
@@ -134,9 +135,9 @@ namespace NeverClicker {
 			var searchResult = await Run(() => Mouse.ClickImage(Itr, imgCode));
 
 			if (searchResult) {
-				Log("Image clicked.");
+				LogProgress("Image clicked.");
 			} else {
-				Log("Image not found.");
+				LogProgress("Image not found.");
 			}
 		}
 

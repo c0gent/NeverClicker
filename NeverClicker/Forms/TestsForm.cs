@@ -117,7 +117,8 @@ namespace NeverClicker.Forms {
 			TaskKind taskType;
 			Enum.TryParse(this.comboBoxGameTaskType.SelectedValue.ToString(), out taskType);
 
-			MainForm.AutomationEngine.AddGameTask((uint)charIdx, delaySec);
+			//MainForm.AutomationEngine.AddGameTask((uint)charIdx, delaySec);
+			MainForm.WriteLine("TestForm::buttonAddCharIdx_Click: Testing queue temporarily disabled.");
 		}
 
 		private void buttonNextTask_Click(object sender, EventArgs e) {
