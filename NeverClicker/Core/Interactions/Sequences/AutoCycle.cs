@@ -66,16 +66,18 @@ namespace NeverClicker.Interactions {
 						}
 
 						ProduceClientState(intr, ClientState.None, 0);										
-					} else if (nextTaskMatureDelay.TotalMinutes > 1) {
-						waitDelay = nextTaskMatureDelay + intr.RandomDelay(3, 8);
-						intr.Log("Minimizing client and waiting " + waitDelay.TotalMinutes.ToString("F0") + " minutes.");						
-						ProduceClientState(intr, ClientState.Inactive, 0);
+					//} else if (nextTaskMatureDelay.TotalMinutes > 1) {
+					//	ProduceClientState(intr, ClientState.Inactive, 0);
+					//	waitDelay = nextTaskMatureDelay + intr.RandomDelay(3, 8);
+										
 					} else if (nextTaskMatureDelay.TotalSeconds > 1) {
 						// Delay more than 1 sec, let the train catch up...
-						waitDelay = nextTaskMatureDelay + intr.RandomDelay(2, 7);
+						ProduceClientState(intr, ClientState.Inactive, 0);
+						waitDelay = nextTaskMatureDelay + intr.RandomDelay(5, 11);
+						intr.Log("Minimizing client and waiting " + waitDelay.TotalMinutes.ToString("F0") + " minutes.");
 					}
 
-					if (waitDelay.TotalMinutes >= 1) {
+					if (waitDelay.TotalSeconds > 1) {
 						intr.Log("Sleeping for " + waitDelay.TotalMinutes.ToString("F0") + " minutes before continuing...");
 						intr.Wait(waitDelay);
 						Screen.Wake(intr);
