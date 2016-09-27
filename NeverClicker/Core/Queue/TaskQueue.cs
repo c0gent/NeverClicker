@@ -81,7 +81,12 @@ namespace NeverClicker {
 			//DateTime matureTime = DateTime.Now;
 
 			if (keyExists) {
-				intr.Log("Key found for task.", LogEntryType.Debug);
+				intr.Log("Key found for task: " + 
+					"id: " + taskId.ToString() + ", " + 
+					"kind: " + taskKind.ToString() + ", " +
+					"char: " + charIdx.ToString() + ". ",
+					LogEntryType.Debug);
+
 				if (taskKey < nowTicks) { // MATURE
 					intr.Log("Task is mature.", LogEntryType.Debug);
 					//var oldTask = Queue[taskKey];
@@ -97,7 +102,8 @@ namespace NeverClicker {
 						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 					}					
 				} else { // NOT MATURE
-					intr.Log("Task is not mature.", LogEntryType.Debug);
+					intr.Log("Task is not mature: taskKey: " + taskKey + 
+						", nowTicks: " + nowTicks + ".", LogEntryType.Debug);
 					// DO NOTHING?
 				}
 			} else { // DOESN'T EXIST YET
@@ -286,17 +292,17 @@ namespace NeverClicker {
 				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentInvocationTime", 
 					charSettingSection), out mostRecent);
 
-				var taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, 
+				var invTaskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, 
 					TaskKind.Invocation, invokesToday);
-				taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
+				invTaskMatureTime = (invTaskMatureTime < now) ? now : invTaskMatureTime;
 
 				if (invokesToday >= 6) {
 					if (invokesCompletedOn < TodaysGameDate) { // START FRESH DAY
 						intr.GameAccount.SaveSetting("0", "InvokesToday", charSettingSection);
 						invokesToday = 0;
-						taskMatureTime = now;
+						invTaskMatureTime = now;
 					} else { // DONE FOR THE DAY
-						taskMatureTime = NextThreeAmPst;
+						invTaskMatureTime = NextThreeAmPst;
 					}
 				}
 
@@ -305,32 +311,32 @@ namespace NeverClicker {
 					intr.GameAccount.SaveSetting(TodaysGameDate.AddHours(-2).ToString(), 
 						"MostRecentInvocationTime", charSettingSection);
 					invokesToday = 0;
-					taskMatureTime = now;
+					invTaskMatureTime = now;
 				}
 
 				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + 
-					taskMatureTime.ToString(), LogEntryType.Debug);
-				this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
+					invTaskMatureTime.ToString(), LogEntryType.Debug);
+				this.Add(new GameTask(invTaskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
 
 
 				// ################################## PROFESSIONS #####################################
 				// ################ Prune Stale Profession Tasks ################
 				for (var p = 0; p < ProfessionTasksRef.ProfessionTaskNames.Length; p++) {
 					var settingKey = "MostRecentProfTime_" + p;
-					var oldTaskThreshold = now.AddDays(-1);
-					var TaskMatureTime = now;
+					var oldTaskThreshold = now.AddDays(-2);
+					DateTime profTaskMatureTime;
 
 					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey, 
-								charSettingSection), out taskMatureTime)) {
+								charSettingSection), out profTaskMatureTime)) {
 						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " + 
-							taskMatureTime.ToString() + ".", LogEntryType.Debug);
+							profTaskMatureTime.ToString() + ".", LogEntryType.Debug);
 					
 						// [TODO]: Is this necessary?:
-						if (taskMatureTime < oldTaskThreshold) {
+						if (profTaskMatureTime < oldTaskThreshold) {
 							intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);
 							intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
 						}
-					}					
+					}
 				}
 
 				// ################ Add Tasks to Queue ################
@@ -339,16 +345,18 @@ namespace NeverClicker {
 				for (var taskId = 0; taskId < ProfessionTasksRef.ProfessionTaskNames.Length; taskId++) {
 					var settingKey = "MostRecentProfTime_" + taskId;
 					mostRecent = now.AddDays(-1);
+					DateTime profTaskMatureTime;
 
 					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey, 
 								charSettingSection), out mostRecent)) {
 						intr.Log("Adding profession task to queue for character " + charIdx
 							+ ", matures: " + mostRecent.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 
-						taskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Profession, taskId);
-						taskMatureTime = (taskMatureTime < now) ? now : taskMatureTime;
+						profTaskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Profession, taskId);
+						profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
 
-						this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));
+						this.Add(new GameTask(profTaskMatureTime, charIdx, TaskKind.Profession, taskId));
+
 						tasksQueued += 1;
 					}
 				}
@@ -407,12 +415,12 @@ namespace NeverClicker {
 					+ " keys for charIdx: " + charIdx 
 					+ ", taskKind: " + taskKind.ToString()
 					+ ", taskId: " + taskId + ".");
-			} else if (taskKeys.Count < 1) {
-				taskKey = 0;
-				return false;
-			} else {
+			} else if (taskKeys.Count == 1) {
 				taskKey = taskKeys[0];
 				return true;
+			} else {
+				taskKey = 0;
+				return false;
 			}			
 		}
 
@@ -442,7 +450,7 @@ namespace NeverClicker {
 			return nextTask.Value;
 		}
 
-		public TimeSpan NextTaskWaitDelay() {
+		public TimeSpan NextTaskMatureDelay() {
 			//var nextTask = TaskList.First();
 			//return new TimeSpan(nextTask.Value.MatureTime.CompareTo(DateTime.Now));
 			return Queue.First().Value.MatureTime - DateTime.Now;
