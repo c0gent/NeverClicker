@@ -112,7 +112,7 @@
     <Compile Include="Core\Experimental_and_Test\ErrorList.cs" />
     <Compile Include="Core\Interactions\Sequences\GameWorld\Inventory\Inventory.cs" />
     <Compile Include="Core\Queue\ProfessionTask.cs" />
-    <Compile Include="Core\TomlFile.cs" />
+    <Compile Include="Core\Experimental_and_Test\TomlFile.cs" />
     <Compile Include="Forms\ErrorsForm.cs">
       <SubType>Form</SubType>
     </Compile>
