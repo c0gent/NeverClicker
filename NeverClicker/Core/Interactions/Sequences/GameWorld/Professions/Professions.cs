@@ -49,6 +49,7 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
+		// Actually queues a profession task:
 		private static void ContinueTask(Interactor intr, Point continueButton) {
 			Mouse.Click(intr, continueButton);
 			intr.Wait(100);
@@ -67,15 +68,12 @@ namespace NeverClicker.Interactions {
 						}
 					}
 				}
-			}
-
-			
-			
+			}		
 
 			intr.Wait(50);
 
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
-			intr.Wait(200);
+			intr.Wait(500);
 
 			//Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 		}
@@ -133,18 +131,20 @@ namespace NeverClicker.Interactions {
 					intr.Wait(400);
 				}
 
-				var result = Screen.ImageSearch(intr, "ProfessionsEmptySlot");
+				var EmptySlotResult = Screen.ImageSearch(intr, "ProfessionsEmptySlot");
 
-				if (result.Found) {
-					intr.Log("Empty professions slot found at: " + result.Point.ToString() + ".", LogEntryType.Info);
+				if (EmptySlotResult.Found) {
+					intr.Log("Empty professions slot found at: " + EmptySlotResult.Point.ToString() + ".", LogEntryType.Info);
 				} else {
 					intr.Log("All professions slots busy.", LogEntryType.Info);
 					break;
 				}
 
-				Mouse.Click(intr, result.Point, 30, 90);
-				intr.Wait(200);
+				// Click the "Choose Task" button below the empty slot:
+				Mouse.Click(intr, EmptySlotResult.Point, 30, 90);
+				intr.Wait(400);
 
+				// Click the "Leadership" category tile if it is not selected (determined by color):
 				Mouse.ClickImage(intr, "ProfessionsLeadershipTileUnselected");
 				intr.Wait(200);
 				
