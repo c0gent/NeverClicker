@@ -1,4 +1,5 @@
-﻿using NeverClicker.Properties;
+﻿using NeverClicker.Core;
+using NeverClicker.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -224,10 +225,10 @@ namespace NeverClicker.Forms {
 		}
 
 		private void buttonWriteTestData_Click(object sender, EventArgs e) {
-			var tomlTestData = new TomlTestData();
+			var settingsFile = new XmlSettingsFile("TestSettings");
 
 			try {
-				tomlTestData.Write();
+				settingsFile.Write();
 			} catch (Exception ex) {
 				MessageBox.Show(ex.ToString());
 			}

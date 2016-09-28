@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 using Nett;
 
 namespace NeverClicker {
-	//class TomlFile {
-
-
-	//}
-
 	public class TomlTestData {
 		List<Stuff> Stuffs {get; set;}
 
