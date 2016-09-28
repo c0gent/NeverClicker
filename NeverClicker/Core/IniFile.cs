@@ -16,17 +16,12 @@ namespace NeverClicker {
 		private string IniFileName;
 
 		public IniFile(string fileName) {
-			// ***** ADD A CHECK TO MAKE SURE FILES EXIST AND THROW EXCEPTION HERE RATHER THAN LATER *****
 			if (File.Exists(fileName)) {
-				//MessageBox.Show(fileName + " exists.");
 				IniFileName = fileName;
 			} else {
 				var builtinSettingsFolder = SettingsForm.ProgramRootFolder + SettingsForm.BUILTIN_SETTINGS_SUBPATH;
-				//SettingsForm.DirectoryCopy(builtinSettingsFolder, Settings.Default.SettingsFolderPath, false);
 				File.Copy(builtinSettingsFolder + "\\" + IniFileName, 
 					Settings.Default.SettingsFolderPath + "\\" + IniFileName);
-				//MessageBox.Show("Cannot find default settings file: " +  fileName + 
-				//	" does not exist.", "NeverClicker Settings File Error");
 				return;
 			}
 
@@ -164,10 +159,6 @@ namespace NeverClicker {
 
 			return true;
 		}
-
-		//private IniData ReadFile() {
-		//	return 
-		//}
 	}
 
 	class InvalidIniSettingSectionException : Exception {

@@ -228,7 +228,7 @@ namespace NeverClicker.Forms {
 			var settingsFile = new XmlSettingsFile("TestSettings");
 
 			try {
-				settingsFile.Write();
+				settingsFile.TestWrite();
 			} catch (Exception ex) {
 				MessageBox.Show(ex.ToString());
 			}
