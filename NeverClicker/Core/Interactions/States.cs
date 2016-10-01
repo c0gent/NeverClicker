@@ -242,6 +242,7 @@ namespace NeverClicker.Interactions {
 		Patching,	// CancelButton
 		PlayButton,
 		Inactive,
+		VerifyDialogue,
 		Unknown
 	}
 

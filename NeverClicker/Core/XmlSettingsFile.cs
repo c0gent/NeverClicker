@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace NeverClicker.Core {
 	public class XmlSettingsFile {
@@ -16,12 +17,12 @@ namespace NeverClicker.Core {
 		//string Name;
 		string FileName;
 		string DocumentElementName;
-		XmlElement DocumentElement;
+		XmlElement Root;
 		//string SessionElementName;
 
 		public XmlSettingsFile(string name) {
 			//Name = name;
-			FileName = @"c:\opt\" + name + ".xml.txt";
+			FileName = Settings.Default.SettingsFolderPath + "\\" + name + ".xml.txt";
 			DocumentElementName = name;
 			SettingsXmlDoc = new XmlDocument();
 
@@ -34,17 +35,88 @@ namespace NeverClicker.Core {
 			}
 
 			if (SettingsXmlDoc.DocumentElement == null) {
-				DocumentElement = SettingsXmlDoc.CreateElement(DocumentElementName);
-				SettingsXmlDoc.AppendChild(DocumentElement);
+				Root = SettingsXmlDoc.CreateElement(DocumentElementName);
+				SettingsXmlDoc.AppendChild(Root);
 			} else {
-				DocumentElement = SettingsXmlDoc.DocumentElement;
+				Root = SettingsXmlDoc.DocumentElement;
 			}
 			// ################ /MOVE ################
 		}
 
+
+		////public XmlElement GetElement(string nodeName, )
+
+		public XmlElement CreateSection(string sectionName) {
+			var section = SettingsXmlDoc.CreateElement(sectionName);
+			Root.AppendChild(section);
+			SettingsXmlDoc.Save(FileName);
+			return section;
+		}
+
+		public XmlElement GetOrCreateSection(string sectionName) {
+			var section = Root.SelectSingleNode(sectionName) as XmlElement;
+
+			if (section == null) {
+				return CreateSection(sectionName);
+			} else {
+				return section;
+			}
+		}
+
+		public XmlElement CreateSetting(string settingName, XmlElement section) {
+			//var section = GetOrCreateSection(sectionName);
+			var setting = SettingsXmlDoc.CreateElement(settingName);
+			//setting.InnerText = val.ToString().Trim();
+			section.AppendChild(setting);
+			SettingsXmlDoc.Save(FileName);
+			return setting;
+		}
+
+		public XmlElement GetOrCreateSetting(string settingName, string sectionName) {
+			var section = GetOrCreateSection(sectionName);
+			var setting = section.SelectSingleNode(settingName);
+
+			if (setting == null) {
+				return CreateSetting(settingName, section);
+			} else {
+				return section;
+			}
+		}
+
+		// Returns a setting value if it exists or else creates the setting
+		// with the specified default value and returns it.
+		//
+		public string GetSettingValOrDefault(string settingName, string sectionName, string valDefault) {
+			var setting = GetOrCreateSetting(settingName, sectionName);
+
+			if (string.IsNullOrWhiteSpace(setting.InnerText)) {
+				setting.InnerText = valDefault.Trim();
+				SettingsXmlDoc.Save(FileName);
+			}
+
+			return setting.InnerText.Trim();
+		}
+
+		// Returns a setting value if it exists or else creates the setting
+		// with the specified default value and returns it.
+		//
+		public int GetSettingValOrDefault(string settingName, string sectionName, int valDefault) {
+			var setting = GetOrCreateSetting(settingName, sectionName);
+			int valResult;
+
+			if(!int.TryParse(setting.InnerText, out valResult)) {
+				setting.InnerText = valDefault.ToString();
+				SettingsXmlDoc.Save(FileName);
+				return valDefault;
+			} else {
+				return valResult;
+			}
+		}
+
+		// Gets a string setting value if the setting exists.
 		public bool TryGetSetting(string settingName, string sectionName, out string settingVal) {
 			try {
-				settingVal = DocumentElement[sectionName][settingName].InnerText.Trim();
+				settingVal = Root[sectionName][settingName].InnerText.Trim();
 
 				if (string.IsNullOrWhiteSpace(settingVal)) {
 					settingVal = "";
@@ -58,6 +130,7 @@ namespace NeverClicker.Core {
 			}
 		}
 
+		// Gets an int setting value if the setting exists.
 		public bool TryGetSetting(string settingName, string sectionName, out int settingValInt) {
 			string settingValString;
 
@@ -80,14 +153,15 @@ namespace NeverClicker.Core {
 
 		public void TestWrite() {
 			// Try to access a (section) node:
-			var sectionName = "Awesome_Category";
-			var sectionNode = DocumentElement.SelectSingleNode(sectionName);			
+			var sectionName_0 = "Awesome_Category";
+			var sectionNode = Root.SelectSingleNode(sectionName_0);			
 
 			// If the (section) node is null, create it:
 			if (sectionNode == null) {
-				XmlElement sectionElement = SettingsXmlDoc.CreateElement(sectionName);
+				XmlElement sectionElement = SettingsXmlDoc.CreateElement(sectionName_0);
 				SettingsXmlDoc.DocumentElement.AppendChild(sectionElement);
 			}
+
 
 			// Try to access a (setting) node:
 			var settingName_0 = "Setting_0";
@@ -101,6 +175,15 @@ namespace NeverClicker.Core {
 				sectionNode.AppendChild(settingElement);
 			}
 
+			string settingVal_0;
+
+			if (TryGetSetting(settingName_0, sectionName_0, out settingVal_0)) {
+				MessageBox.Show("[" + sectionName_0 + "][" + settingName_0  + "]: "  + settingVal_0);
+			} else {
+				MessageBox.Show("No dice pulling up [" + sectionName_0 + "][" + settingName_0 + "].");
+			}
+
+
 			// Try to access a (setting) node:
 			var settingName_1 = "Setting_1";
 			var settingNode_1 = sectionNode.SelectSingleNode(settingName_1);
@@ -112,30 +195,30 @@ namespace NeverClicker.Core {
 				sectionNode.AppendChild(settingElement);
 			}
 
-			string settingVal_0;
-
-			if (TryGetSetting(settingName_0, sectionName, out settingVal_0)) {
-				MessageBox.Show("[" + sectionName + "][" + settingName_0  + "]: "  + settingVal_0);
-			} else {
-				MessageBox.Show("No dice pulling up [" + sectionName + "][" + settingName_0 + "].");
-			}
-
 			int settingVal_1;
 
-			if (TryGetSetting(settingName_1, sectionName, out settingVal_1)) {
-				MessageBox.Show("[" + sectionName + "][" + settingName_1  + "]: "  + settingVal_1);
+			if (TryGetSetting(settingName_1, sectionName_0, out settingVal_1)) {
+				MessageBox.Show("[" + sectionName_0 + "][" + settingName_1  + "]: "  + settingVal_1);
 			} else {
-				MessageBox.Show("No dice pulling up [" + sectionName + "][" + settingName_1 + "].");
+				MessageBox.Show("No dice pulling up [" + sectionName_0 + "][" + settingName_1 + "].");
 			}
+
+
+			var sectionName_1 = "Boring_Category";
+
+
+			var settingName_2 = "Setting_2__" + DateTime.Now.ToFileTime();
+			int settingVal_2 = GetSettingValOrDefault(settingName_2, sectionName_1, 9999);
+			MessageBox.Show("[" + sectionName_1 + "][" + settingName_2  + "]: "  + settingVal_2);
 
 			SettingsXmlDoc.Save(FileName);
 		}
 	}
 
 	public class Stuff {
-		public int Num {get; set;}
-		public string Words {get; set;}
-		public StuffKind Kind {get; set;}
+		public int Num { get; set; }
+		public string Words { get; set; }
+		public StuffKind Kind { get; set; }
 
 		public Stuff(int num, string words, StuffKind kind) {
 			this.Num = num;

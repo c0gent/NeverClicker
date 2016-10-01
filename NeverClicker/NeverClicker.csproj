@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Experimental_and_Test\AutomationEngine.Tests.cs" />
+    <Compile Include="Core\Experimental_and_Test\ConfigSettingsFile.cs" />
     <Compile Include="Core\Experimental_and_Test\ErrorList.cs" />
     <Compile Include="Core\Experimental_and_Test\XmlSettingsFile.cs" />
     <Compile Include="Core\Globals.cs" />
