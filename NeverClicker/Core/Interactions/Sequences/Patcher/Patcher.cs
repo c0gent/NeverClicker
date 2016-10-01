@@ -11,8 +11,8 @@ namespace NeverClicker.Interactions {
 		public static bool PatcherLogin<TState>(Interactor intr, TState state) {
 			//intr.ExecuteStatement("ActivateNeverwinter()");
 
-			string gameUserName = intr.GameAccount.GetSettingOrEmptyString("NwUserName", "NwAct");
-			string gamePassword = intr.GameAccount.GetSettingOrEmptyString("NwActPwd", "NwAct");
+			string gameUserName = intr.GameAccount.GetSettingValOr("AccountName", "General", "");
+			string gamePassword = intr.GameAccount.GetSettingValOr("Password", "General", "");
 
 			if (gameUserName == "enter_user_name" || gameUserName == ""
 					|| gamePassword == "enter_password" || gamePassword == "")

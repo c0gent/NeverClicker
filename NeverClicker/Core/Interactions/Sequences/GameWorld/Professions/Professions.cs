@@ -81,7 +81,7 @@ namespace NeverClicker.Interactions {
 		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
 
-			string profsWinKey = intr.GameAccount.GetSettingOrEmptyString("NwProfessionsWindowKey", "GameHotkeys");
+			string profsWinKey = intr.GameAccount.GetSettingValOr("NwProfessionsWindowKey", "GameHotkeys", Globals.NwProfessionsWindowKey);
 
 			intr.Log("Opening professions window for character " + charZeroIdxLabel + ".", LogEntryType.Debug);
 

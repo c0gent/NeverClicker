@@ -8,7 +8,7 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool IsEnchantedKeyPending(Interactor intr) {
 			DateTime KeyLastReceived;
-			if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("EnchKeyLastReceived", "Invocation"), out KeyLastReceived)) {
+			if (DateTime.TryParse(intr.GameAccount.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
 				if (KeyLastReceived >= TaskQueue.TodaysGameDate) {
 					// We already have key for the day
 					return false;

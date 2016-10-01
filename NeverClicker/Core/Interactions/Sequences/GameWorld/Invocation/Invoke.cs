@@ -1,4 +1,5 @@
-﻿using NeverClicker.Properties;
+﻿using NeverClicker.Core;
+using NeverClicker.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,7 +22,7 @@ namespace NeverClicker.Interactions {
 				#pragma warning restore CS0162 // Unreachable code detected
 			}
 
-			string invokeKey = intr.GameAccount.GetSettingOrEmptyString("NwInvokeKey", "GameHotkeys");			
+			string invokeKey = intr.GameAccount.GetSettingValOr("NwInvokeKey", "GameHotkeys", Globals.NwInvokeKey);
 
 			///////// MOVED TO INVENTORY MANAGEMENT:
 			//string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");

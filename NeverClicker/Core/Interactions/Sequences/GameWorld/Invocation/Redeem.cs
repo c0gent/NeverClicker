@@ -14,7 +14,7 @@ namespace NeverClicker.Interactions {
 
 		public static bool Redeem(Interactor intr, VaultOfPietyItem item) {
 			intr.Wait(500);
-			string cursorModeKey = intr.GameAccount.GetSettingOrEmptyString("NwCursorMode", "GameHotkeys");
+			string cursorModeKey = intr.GameAccount.GetSettingValOr("NwCursorMode", "GameHotkeys", "");
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Wait(200);

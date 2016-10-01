@@ -108,10 +108,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AccountSettings.cs" />
+    <Compile Include="Core\ClientSettings.cs" />
     <Compile Include="Core\Experimental_and_Test\AutomationEngine.Tests.cs" />
     <Compile Include="Core\Experimental_and_Test\ConfigSettingsFile.cs" />
     <Compile Include="Core\Experimental_and_Test\ErrorList.cs" />
-    <Compile Include="Core\Experimental_and_Test\XmlSettingsFile.cs" />
+    <Compile Include="Core\XmlSettingsFile.cs" />
     <Compile Include="Core\Globals.cs" />
     <Compile Include="Core\Interactions\Sequences\GameWorld\Inventory\Inventory.cs" />
     <Compile Include="Core\Queue\ProfessionTask.cs" />

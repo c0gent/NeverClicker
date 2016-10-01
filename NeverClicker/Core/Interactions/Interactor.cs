@@ -14,6 +14,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Collections.Immutable;
+using NeverClicker.Core;
 
 namespace NeverClicker.Interactions {
 	// INTERACTOR: MANAGES ALIBENGINE
@@ -27,20 +28,24 @@ namespace NeverClicker.Interactions {
 		public IProgress<LogMessage> ErrorLog { get; private set; }
 		public IProgress<ImmutableSortedDictionary<long, GameTask>> QueueList { get; private set; }
 		public CancellationTokenSource CancelSource { get; private set; }
-		public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
-		public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
+		//public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
+		//public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
+		public AccountSettings GameAccount;
+		public ClientSettings GameClient;
 		LogFile LogFile;
 
 		public Interactor() {
 			//InitAlibEng(); // LOADED BELOW (LoadSettings())
-			
-			LoadSettings();
 			LogFile = new LogFile();
+
+			LoadSettings();			
 		}
 
 		public bool LoadSettings() {
-			this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
-			this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);
+			////this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
+			//this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);	
+			this.GameAccount = new AccountSettings();
+			this.GameClient = new ClientSettings();
 
 			BackwardCompatability();
 
@@ -114,30 +119,33 @@ namespace NeverClicker.Interactions {
 				case LogEntryType.FatalWithScreenshot:					
 					LogFile.AppendMessage(logMessage);
 					//MainForm.WriteLine(logMessage.Text);
-					ProgressLog.Report(logMessage);
+					ProgressLog?.Report(logMessage);
 					//MessageBox.Show(MainForm, logMessage.Text + " -- " 
 					//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
 					//MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
-					ErrorLog.Report(new LogMessage(logMessage.Text + " -- " + SaveErrorScreenshot()));
+					ErrorLog?.Report(new LogMessage(logMessage.Text + " -- " + SaveErrorScreenshot()));
 					break;
 				case LogEntryType.Fatal:					
 					LogFile.AppendMessage(logMessage);
-					ProgressLog.Report(logMessage);
+					ProgressLog?.Report(logMessage);
 					//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
-					ErrorLog.Report(logMessage);
+					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Error:
+					LogFile.AppendMessage(logMessage);
+					ErrorLog?.Report(logMessage);
+					break;
 				case LogEntryType.Warning:
 				case LogEntryType.Normal:
 					LogFile.AppendMessage(logMessage);
-					ProgressLog.Report(logMessage);
-					break;				
+					ProgressLog?.Report(logMessage);
+					break;
 				case LogEntryType.Info:
 					LogFile.AppendMessage(logMessage);
 					break;
 				case LogEntryType.Debug:
 					if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
-					break;				
+					break;
 			}
 		}
 

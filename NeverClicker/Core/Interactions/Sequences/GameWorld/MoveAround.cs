@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeverClicker.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static void MoveAround(Interactor intr) {
-			string moveLeftKey = intr.GameAccount.GetSettingOrEmptyString("NwMoveLeftKey", "GameHotkeys");
-			string moveRightKey = intr.GameAccount.GetSettingOrEmptyString("NwMoveRightKey", "GameHotkeys");
-			string moveForeKey = intr.GameAccount.GetSettingOrEmptyString("NwMoveForeKey", "GameHotkeys");
-			string moveBackKey = intr.GameAccount.GetSettingOrEmptyString("NwMoveBackKey", "GameHotkeys");
+			string moveLeftKey = intr.GameAccount.GetSettingValOr("NwMoveLeftKey", "GameHotkeys", Globals.NwMoveLeftKey);
+			string moveRightKey = intr.GameAccount.GetSettingValOr("NwMoveRightKey", "GameHotkeys", Globals.NwMoveRightKey);
+			string moveForeKey = intr.GameAccount.GetSettingValOr("NwMoveForeKey", "GameHotkeys", Globals.NwMoveForeKey);
+			string moveBackKey = intr.GameAccount.GetSettingValOr("NwMoveBackKey", "GameHotkeys", Globals.NwMoveBackKey);
 
 			intr.WaitRand(40, 120);
 

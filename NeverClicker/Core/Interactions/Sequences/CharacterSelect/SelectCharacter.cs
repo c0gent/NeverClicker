@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NeverClicker.Core;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,13 +19,23 @@ namespace NeverClicker.Interactions {
 
 			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
 
-			int charCount = intr.GameAccount.GetSettingOrZero("CharCount", "NwAct");
-			int scrollBarTopX = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopX", "ClickLocations");
-			int scrollBarTopY = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopY", "ClickLocations");
-			int charSlotX = intr.GameClient.GetSettingOrZero("CharSlotX", "ClickLocations");
-			int topSlotY = intr.GameClient.GetSettingOrZero("TopSlotY", "ClickLocations");
-			int visibleSlots = intr.GameClient.GetSettingOrZero("VisibleCharacterSelectSlots", "KeyBindAndUi");
-			int scrollsAlignBot = intr.GameClient.GetSettingOrZero("ScrollsToAlignBottomSlot", "KeyBindAndUi");
+			int charCount = intr.GameAccount.GetSettingValOr("CharacterCount", "General", 0);
+
+			//int scrollBarTopX = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopX", "ClickLocations");
+			//int scrollBarTopY = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopY", "ClickLocations");
+			//int charSlotX = intr.GameClient.GetSettingOrZero("CharSlotX", "ClickLocations");
+			//int topSlotY = intr.GameClient.GetSettingOrZero("TopSlotY", "ClickLocations");
+			//int visibleSlots = intr.GameClient.GetSettingOrZero("VisibleCharacterSelectSlots", "KeyBindAndUi");
+			//int scrollsAlignBot = intr.GameClient.GetSettingOrZero("ScrollsToAlignBottomSlot", "KeyBindAndUi");
+
+			var charSel = new ClientCharSelectDefaults(new Point(1920, 1080));
+
+			int scrollBarTopX = intr.GameClient.GetSettingValOr("ScrollBarTopX", "CharacterSelect", charSel.ScrollBarTopX);
+			int scrollBarTopY = intr.GameClient.GetSettingValOr("ScrollBarTopY", "CharacterSelect", charSel.ScrollBarTopY);
+			int charSlotX = intr.GameClient.GetSettingValOr("CharSlotX", "CharacterSelect", charSel.CharSlotX);
+			int topSlotY = intr.GameClient.GetSettingValOr("TopSlotY", "CharacterSelect", charSel.TopSlotY);
+			int visibleSlots = intr.GameClient.GetSettingValOr("VisibleSlots", "CharacterSelect", charSel.VisibleSlots);
+			int scrollsAlignBot = intr.GameClient.GetSettingValOr("ScrollsToAlignBottomSlot", "CharacterSelect", charSel.ScrollsToAlignBottomSlot);
 
 			if ((charCount == 0) || (charSlotX == 0) || (topSlotY == 0) || (visibleSlots == 0)
 						|| (scrollBarTopX == 0) || (scrollBarTopY == 0)) {

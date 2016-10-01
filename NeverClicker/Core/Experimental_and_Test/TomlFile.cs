@@ -22,23 +22,4 @@ namespace NeverClicker {
 			Toml.WriteFile(this.Stuffs, "c:\\opt\\file.toml.txt");
 		}
 	}
-
-	public class Stuff {
-		public int Num {get; set;}
-		public string Words {get; set;}
-		public StuffKind Kind {get; set;}
-
-		public Stuff(int num, string words, StuffKind kind) {
-			this.Num = num;
-			this.Words = words;
-			this.Kind = kind;
-		}
-	}
-
-	public enum StuffKind {
-		Awesome,
-		Super,
-		Terrible,
-	}
-
 }

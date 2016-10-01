@@ -82,6 +82,22 @@ namespace NeverClicker {
 		public int GetSettingOrZero(string settingName, string sectionName) {
 			return GetSettingOr(settingName, sectionName, 0);
 		}
+
+		public string GetSettingOr(string settingName, string sectionName, string dflt_val) {
+			string settingVal = null;
+
+			try {
+				settingVal = Data[sectionName][settingName];
+			} catch (NullReferenceException) {
+				settingVal = null;
+			}
+
+			if (settingVal != null) {
+				return settingVal.Trim();					
+			} else {
+				return dflt_val;
+			}	
+		}
 		
 		public int GetSettingOr(string settingName, string sectionName, int dflt_val) {
 			int setting_val;

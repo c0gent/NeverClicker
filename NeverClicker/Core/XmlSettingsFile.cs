@@ -10,26 +10,23 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace NeverClicker.Core {
+namespace NeverClicker {
 	public class XmlSettingsFile {
 		XmlDocument SettingsXmlDoc;
 		//XmlElement SessionElement;
 		//string Name;
-		string FileName;
+		public string FileName { get; private set; }
 		string DocumentElementName;
 		XmlElement Root;
 		//string SessionElementName;
 
 		public XmlSettingsFile(string name) {
-			//Name = name;
 			FileName = Settings.Default.SettingsFolderPath + "\\" + name + ".xml.txt";
 			DocumentElementName = name;
 			SettingsXmlDoc = new XmlDocument();
 
-			// ################# MOVE MOST OF THIS TO AN INIT FUNCTION OR HELPER CLASS ################# 
 			if (!File.Exists(FileName)) {
 				SettingsXmlDoc.AppendChild(SettingsXmlDoc.CreateElement(DocumentElementName));
-				SettingsXmlDoc.Save(FileName);
 			} else {
 				SettingsXmlDoc.Load(FileName);
 			}
@@ -40,7 +37,11 @@ namespace NeverClicker.Core {
 			} else {
 				Root = SettingsXmlDoc.DocumentElement;
 			}
-			// ################ /MOVE ################
+		}
+
+		// Saves the document to disk.
+		public void SaveFile() {
+			SettingsXmlDoc.Save(FileName);
 		}
 
 
@@ -49,7 +50,7 @@ namespace NeverClicker.Core {
 		public XmlElement CreateSection(string sectionName) {
 			var section = SettingsXmlDoc.CreateElement(sectionName);
 			Root.AppendChild(section);
-			SettingsXmlDoc.Save(FileName);
+			//SaveFile();
 			return section;
 		}
 
@@ -68,30 +69,30 @@ namespace NeverClicker.Core {
 			var setting = SettingsXmlDoc.CreateElement(settingName);
 			//setting.InnerText = val.ToString().Trim();
 			section.AppendChild(setting);
-			SettingsXmlDoc.Save(FileName);
+			//SaveFile();
 			return setting;
 		}
 
 		public XmlElement GetOrCreateSetting(string settingName, string sectionName) {
 			var section = GetOrCreateSection(sectionName);
-			var setting = section.SelectSingleNode(settingName);
+			var setting = section.SelectSingleNode(settingName) as XmlElement;
 
 			if (setting == null) {
 				return CreateSetting(settingName, section);
 			} else {
-				return section;
+				return setting;
 			}
 		}
 
 		// Returns a setting value if it exists or else creates the setting
 		// with the specified default value and returns it.
 		//
-		public string GetSettingValOrDefault(string settingName, string sectionName, string valDefault) {
+		public string GetSettingValOr(string settingName, string sectionName, string valDefault) {
 			var setting = GetOrCreateSetting(settingName, sectionName);
 
 			if (string.IsNullOrWhiteSpace(setting.InnerText)) {
 				setting.InnerText = valDefault.Trim();
-				SettingsXmlDoc.Save(FileName);
+				SaveFile();
 			}
 
 			return setting.InnerText.Trim();
@@ -100,13 +101,13 @@ namespace NeverClicker.Core {
 		// Returns a setting value if it exists or else creates the setting
 		// with the specified default value and returns it.
 		//
-		public int GetSettingValOrDefault(string settingName, string sectionName, int valDefault) {
+		public int GetSettingValOr(string settingName, string sectionName, int valDefault) {
 			var setting = GetOrCreateSetting(settingName, sectionName);
 			int valResult;
 
 			if(!int.TryParse(setting.InnerText, out valResult)) {
 				setting.InnerText = valDefault.ToString();
-				SettingsXmlDoc.Save(FileName);
+				SaveFile();
 				return valDefault;
 			} else {
 				return valResult;
@@ -144,6 +145,19 @@ namespace NeverClicker.Core {
 				settingValInt = 0;
 				return false;
 			}
+		}
+
+
+		public void SaveSetting(int val, string settingName, string sectionName) {
+			var setting = GetOrCreateSetting(settingName, sectionName);
+			setting.InnerText = val.ToString();
+			SaveFile();
+		}
+
+		public void SaveSetting(string val, string settingName, string sectionName) {
+			var setting = GetOrCreateSetting(settingName, sectionName);
+			setting.InnerText = val.Trim();
+			SaveFile();
 		}
 
 		//private SetAttribute(XmlElement) {
@@ -208,10 +222,10 @@ namespace NeverClicker.Core {
 
 
 			var settingName_2 = "Setting_2__" + DateTime.Now.ToFileTime();
-			int settingVal_2 = GetSettingValOrDefault(settingName_2, sectionName_1, 9999);
+			int settingVal_2 = GetSettingValOr(settingName_2, sectionName_1, 9999);
 			MessageBox.Show("[" + sectionName_1 + "][" + settingName_2  + "]: "  + settingVal_2);
 
-			SettingsXmlDoc.Save(FileName);
+			SaveFile();
 		}
 	}
 

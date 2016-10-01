@@ -152,7 +152,7 @@ namespace NeverClicker {
 			DateTime taskMatureTime = now;
 			DateTime nextThreeThirty = NextThreeAmPst;
 			DateTime todaysInvokeDate = TodaysGameDate;
-			string charLabel = "Character " + charIdx.ToString();			
+			string charLabel = "Character_" + charIdx.ToString();			
 			
             if (invokesToday < 6) { // QUEUE FOR LATER
 				TimeSpan extraDelay = TimeSpan.FromMinutes(0);
@@ -197,10 +197,10 @@ namespace NeverClicker {
 		// QUEUESUBSEQUENTPROFESSIONTASK(): QUEUE FOLLOW UP TASK
 		private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
 			var now = DateTime.Now;
-			var charLabel = "Character " + charIdx.ToString();
+			var charLabel = "Character_" + charIdx.ToString();
 
 			var mostRecentProfTime = now;
-			DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentProfTime_" + taskId, charLabel), out mostRecentProfTime);
+			DateTime.TryParse(intr.GameAccount.GetSettingValOr("MostRecentProfTime_" + taskId, charLabel, ""), out mostRecentProfTime);
 
 			//int mostRecentProfTask = taskId;
 			//int.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTask_" + taskId, charZeroIdxLabel), out mostRecentProfTask);
@@ -274,16 +274,16 @@ namespace NeverClicker {
 			var now = DateTime.Now;
 
 			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
-				var charSettingSection = "Character " + charIdx.ToString();
+				var charSettingSection = "Character_" + charIdx.ToString();
 
 				// ################################### INVOCATION #####################################
 				int invokesToday = 0;
-				int.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesToday", 
-					charSettingSection), out invokesToday);
+				int.TryParse(intr.GameAccount.GetSettingValOr("InvokesToday", 
+					charSettingSection, ""), out invokesToday);
 
 				var invokesCompletedOn = TodaysGameDate.AddDays(-1);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("InvokesCompleteFor", 
-					charSettingSection), out invokesCompletedOn);
+				DateTime.TryParse(intr.GameAccount.GetSettingValOr("InvokesCompleteFor", 
+					charSettingSection, ""), out invokesCompletedOn);
 
 				// Clear any stale invoke count:
 				if (invokesCompletedOn < TodaysGameDate.AddDays(-1)) {
@@ -291,8 +291,8 @@ namespace NeverClicker {
 				}
 
 				var mostRecent = now.AddHours(-24);
-				DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString("MostRecentInvocationTime", 
-					charSettingSection), out mostRecent);
+				DateTime.TryParse(intr.GameAccount.GetSettingValOr("MostRecentInvocationTime", 
+					charSettingSection, ""), out mostRecent);
 
 				var invTaskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, 
 					TaskKind.Invocation, invokesToday);
@@ -328,16 +328,16 @@ namespace NeverClicker {
 					var oldTaskThreshold = now.AddDays(-2);
 					DateTime profTaskMatureTime;
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey,
-								charSettingSection), out profTaskMatureTime)) {
+					if (DateTime.TryParse(intr.GameAccount.GetSettingValOr(settingKey,
+								charSettingSection, ""), out profTaskMatureTime)) {
 						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " +
 							profTaskMatureTime.ToString() + ".", LogEntryType.Debug);
 
-						// [TODO]: Is this necessary?:
-						if (profTaskMatureTime < oldTaskThreshold) {
-							intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);
-							intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
-						}
+						//// [TODO]: Is this necessary?:
+						//if (profTaskMatureTime < oldTaskThreshold) {
+						//	intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);
+						//	intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
+						//}
 					}
 				}
 
@@ -349,8 +349,8 @@ namespace NeverClicker {
 					mostRecent = now.AddDays(-1);
 					DateTime profTaskMatureTime;
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingOrEmptyString(settingKey, 
-								charSettingSection), out mostRecent)) {
+					if (DateTime.TryParse(intr.GameAccount.GetSettingValOr(settingKey, 
+								charSettingSection, ""), out mostRecent)) {
 						intr.Log("Adding profession task to queue for character " + charIdx
 							+ ", matures: " + mostRecent.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 

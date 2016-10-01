@@ -25,7 +25,7 @@ namespace NeverClicker.Forms {
 			InitializeComponent();
 		}
 
-		private void MainForm_Shown(object sender, EventArgs e) {			
+		private void Init() {
 			Settings.Default.Upgrade();
 
 			if (!Settings.Default.NeverClickerConfigValid) {
@@ -39,7 +39,11 @@ namespace NeverClicker.Forms {
 					this.SetButtonStateRunning();
 					this.AutoCycleTask = AutomationEngine.AutoCycle(delaySecs);
 				}
-			}			
+			}
+		}
+		
+		private void MainForm_Shown(object sender, EventArgs e) {			
+			Init();
 		}
 
 		public void WriteLine(string message) {
@@ -82,10 +86,20 @@ namespace NeverClicker.Forms {
 			OpenSettingsWindow();
         }
 
-		public void ReloadSettings() {
-			this.SetButtonStateAllDisabled();
-			MessageBox.Show(this, "Please restart to apply settings.");
-			this.Close();
+		async public void ReloadSettings() {
+			//this.SetButtonStateAllDisabled();
+			//MessageBox.Show(this, "Please restart to apply settings.");
+			//this.Close();
+			WriteLine("Reloading automation engine...");
+
+			if (this.AutoCycleTask != null) {
+				if (!this.AutoCycleTask.IsCompleted) {								
+					this.AutomationEngine.Stop();
+					await this.AutoCycleTask;
+					this.Close();
+				}
+			}	
+			this.Init();
 		}
 
 		private void OpenSettingsWindow() {
