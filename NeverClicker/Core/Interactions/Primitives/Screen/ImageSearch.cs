@@ -32,10 +32,10 @@ namespace NeverClicker.Interactions {
 		public static ImageSearchResult ImageSearch(Interactor intr, string imgCode, Point topLeft, Point botRight) {
 			string imageFileName;
 
-			if (!intr.GameClient.TryGetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles", out imageFileName)) {
+			if (!intr.ClientSettings.TryGetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles", out imageFileName)) {
 				//intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file. Creating.", LogEntryType.Debug);
 				imageFileName = imgCode + ".png";
-				intr.GameClient.SaveSetting(imageFileName, imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
+				intr.ClientSettings.SaveSetting(imageFileName, imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 			}
 
 			string imageFilePath;

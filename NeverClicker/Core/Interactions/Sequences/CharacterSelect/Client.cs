@@ -48,8 +48,8 @@ namespace NeverClicker.Interactions {
 
 			//if (!intr.WaitUntil(15, ClientState.LogIn, Game.IsClientState, null, 0)) { return false; }
 
-			string gameUserName = intr.GameAccount.GetSettingValOr("AccountName", "General", "");
-			string gamePassword = intr.GameAccount.GetSettingValOr("Password", "General", "");
+			string gameUserName = intr.AccountSettings.GetSettingValOr("AccountName", "General", "");
+			string gamePassword = intr.AccountSettings.GetSettingValOr("Password", "General", "");
 
 			intr.Wait(1000);
 

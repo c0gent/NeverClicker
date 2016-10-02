@@ -123,6 +123,16 @@ namespace NeverClicker {
 			return return_val;
 		}
 
+		public bool SectionExists(string sectionName) {
+			try {
+				var section = Data[sectionName];
+			} catch (NullReferenceException) {
+				return false;
+			}
+
+			return true;
+		}
+
 		public bool SettingExists(string settingName, string sectionName) {
 			string settingVal = null;
 

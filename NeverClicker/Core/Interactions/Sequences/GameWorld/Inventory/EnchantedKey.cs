@@ -8,7 +8,7 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool IsEnchantedKeyPending(Interactor intr) {
 			DateTime KeyLastReceived;
-			if (DateTime.TryParse(intr.GameAccount.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
+			if (DateTime.TryParse(intr.AccountSettings.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
 				if (KeyLastReceived >= TaskQueue.TodaysGameDate) {
 					// We already have key for the day
 					return false;
@@ -84,7 +84,7 @@ namespace NeverClicker.Interactions {
 					if (Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon").Found) {
 						intr.Log("Error clicking on claim button.", LogEntryType.FatalWithScreenshot);
 						intr.Log("Enchanted key collected by character " + charIdx + ".", LogEntryType.Normal);
-						intr.GameAccount.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
+						intr.AccountSettings.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
 						return true;
 					} else {
 						return false;

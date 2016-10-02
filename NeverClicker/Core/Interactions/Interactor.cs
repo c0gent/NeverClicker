@@ -30,8 +30,9 @@ namespace NeverClicker.Interactions {
 		public CancellationTokenSource CancelSource { get; private set; }
 		//public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
 		//public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
-		public AccountSettings GameAccount;
-		public ClientSettings GameClient;
+		public AccountSettings AccountSettings;
+		public ClientSettings ClientSettings;
+		public AccountStates AccountStates;
 		LogFile LogFile;
 
 		public Interactor() {
@@ -44,8 +45,9 @@ namespace NeverClicker.Interactions {
 		public bool LoadSettings() {
 			////this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
 			//this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);	
-			this.GameAccount = new AccountSettings();
-			this.GameClient = new ClientSettings();
+			this.AccountSettings = new AccountSettings();
+			this.ClientSettings = new ClientSettings();
+			this.AccountStates = new AccountStates();
 
 			BackwardCompatability();
 
@@ -58,9 +60,9 @@ namespace NeverClicker.Interactions {
 			// Move `CharacterSelectScrollBarTopX` & `CharacterSelectScrollBarTopY` from `KeyBindAndUi` to `ClickLocations`:
 			int characterSelectScrollBarTopX;
 
-			if (!GameClient.TryGetSetting("CharacterSelectScrollBarTopX", "ClickLocations", out characterSelectScrollBarTopX)) {
-				if (GameClient.TryGetSetting("CharacterSelectScrollBarTopX", "KeyBindAndUi", out characterSelectScrollBarTopX)) {
-					GameClient.SaveSetting(characterSelectScrollBarTopX.ToString(), "CharacterSelectScrollBarTopX", "ClickLocations");
+			if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "ClickLocations", out characterSelectScrollBarTopX)) {
+				if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "KeyBindAndUi", out characterSelectScrollBarTopX)) {
+					ClientSettings.SaveSetting(characterSelectScrollBarTopX.ToString(), "CharacterSelectScrollBarTopX", "ClickLocations");
 				} else {
 					Log("Unable to load 'CharacterSelectScrollBarTopX' setting.", LogEntryType.Fatal);
 				}				
@@ -68,9 +70,9 @@ namespace NeverClicker.Interactions {
 
 			int characterSelectScrollBarTopY;
 
-			if (!GameClient.TryGetSetting("CharacterSelectScrollBarTopY", "ClickLocations", out characterSelectScrollBarTopY)) {
-				if (GameClient.TryGetSetting("CharacterSelectScrollBarTopY", "KeyBindAndUi", out characterSelectScrollBarTopY)) {
-					GameClient.SaveSetting(characterSelectScrollBarTopY.ToString(), "CharacterSelectScrollBarTopY", "ClickLocations");
+			if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "ClickLocations", out characterSelectScrollBarTopY)) {
+				if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "KeyBindAndUi", out characterSelectScrollBarTopY)) {
+					ClientSettings.SaveSetting(characterSelectScrollBarTopY.ToString(), "CharacterSelectScrollBarTopY", "ClickLocations");
 				} else {
 					Log("Unable to load 'CharacterSelectScrollBarTopY' setting.", LogEntryType.Fatal);
 				}

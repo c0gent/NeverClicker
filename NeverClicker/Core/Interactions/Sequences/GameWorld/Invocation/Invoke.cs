@@ -10,40 +10,29 @@ using System.Threading.Tasks;
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-		public const bool ALWAYS_REDEEM = false;
-		public const VaultOfPietyItem REDEMPTION_ITEM = VaultOfPietyItem.CofferOfCelestialArtifactEquipment;
+		public const bool DEBUG_ALWAYS_REDEEM = false;
+		public const VaultOfPietyItem DEFAULT_REDEMPTION_ITEM = VaultOfPietyItem.CofferOfCelestialArtifactEquipment;
 
 		public static CompletionStatus Invoke(Interactor intr, uint charIdx, bool enchKeyIsPending) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
 
-			if (ALWAYS_REDEEM) {
-				#pragma warning disable CS0162 // Unreachable code detected
-				Redeem(intr, REDEMPTION_ITEM);
-				#pragma warning restore CS0162 // Unreachable code detected
-			}
-
-			string invokeKey = intr.GameAccount.GetSettingValOr("NwInvokeKey", "GameHotkeys", Globals.NwInvokeKey);
-
-			///////// MOVED TO INVENTORY MANAGEMENT:
-			//string openInventoryKey = intr.GameAccount.GetSettingOrEmpty("NwInventoryKey", "GameHotkeys");
-			//// Collect Enchanted Key
-			//if (enchKeyIsPending) {
-			//	if (!ClaimEnchantedKey(intr)) {
-			//		// ***** Can Remove This *****
-			//		if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
-			//		intr.Log("Unable to collect enchanted key for character " + charIdx + ".", 
-			//			LogEntryType.Fatal);
-			//	}
-			//}
+			string invokeKey = intr.AccountSettings.GetSettingValOr("Invoke", "GameHotkeys", Global.Default.InvokeKey);
 
 			// Invocation Attempt (first):
 			Keyboard.SendKey(intr, invokeKey);
 			intr.Wait(100);
 
-			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
+			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
+				VaultOfPietyItem vopItem;
+
 				intr.Log("Maximum blessings reached for character " + charIdx 
 					+ ". Redeeming through Vault of Piety...", LogEntryType.Info);
-				if (Redeem(intr, REDEMPTION_ITEM)) {
+
+				if (!Enum.TryParse(intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), out vopItem)) {
+					vopItem = DEFAULT_REDEMPTION_ITEM;
+				}
+
+				if (Redeem(intr, vopItem )) {
 					MoveAround(intr);
 					intr.Log("Redeeming Vault of Piety...", LogEntryType.Debug);
 					// Invocation Attempt:
@@ -103,14 +92,14 @@ namespace NeverClicker.Interactions {
 				MoveAround(intr);
 			}
 
-			// [FIXME]: Not sure why this is here still or why it was needed:
-			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
-				intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Debug);
-				//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
-			}
+			//// [FIXME]: Not sure why this is here still or why it was needed:
+			//if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
+			//	intr.Log("Closing Rewards of Devotion window and reassessing invocation success...", LogEntryType.Debug);
+			//	//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
+			//}
 
 			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
-				// Invocation Attempt: Display invocation screen for the screenshot:
+				// Invocation Attempt Failure -- Display invocation screen for the screenshot:
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
 

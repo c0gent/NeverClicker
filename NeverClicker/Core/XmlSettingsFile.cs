@@ -12,7 +12,7 @@ using System.Xml.XPath;
 
 namespace NeverClicker {
 	public class XmlSettingsFile {
-		XmlDocument SettingsXmlDoc;
+		protected XmlDocument Doc;
 		//XmlElement SessionElement;
 		//string Name;
 		public string FileName { get; private set; }
@@ -23,64 +23,64 @@ namespace NeverClicker {
 		public XmlSettingsFile(string name) {
 			FileName = Settings.Default.SettingsFolderPath + "\\" + name + ".xml.txt";
 			DocumentElementName = name;
-			SettingsXmlDoc = new XmlDocument();
+			Doc = new XmlDocument();
 
 			if (!File.Exists(FileName)) {
-				SettingsXmlDoc.AppendChild(SettingsXmlDoc.CreateElement(DocumentElementName));
+				Doc.AppendChild(Doc.CreateElement(DocumentElementName));
 			} else {
-				SettingsXmlDoc.Load(FileName);
+				Doc.Load(FileName);
 			}
 
-			if (SettingsXmlDoc.DocumentElement == null) {
-				Root = SettingsXmlDoc.CreateElement(DocumentElementName);
-				SettingsXmlDoc.AppendChild(Root);
+			if (Doc.DocumentElement == null) {
+				Root = Doc.CreateElement(DocumentElementName);
+				Doc.AppendChild(Root);
 			} else {
-				Root = SettingsXmlDoc.DocumentElement;
+				Root = Doc.DocumentElement;
 			}
 		}
 
 		// Saves the document to disk.
 		public void SaveFile() {
-			SettingsXmlDoc.Save(FileName);
+			Doc.Save(FileName);
 		}
 
 
 		////public XmlElement GetElement(string nodeName, )
 
-		public XmlElement CreateSection(string sectionName) {
-			var section = SettingsXmlDoc.CreateElement(sectionName);
-			Root.AppendChild(section);
+		public XmlElement CreateSectionNode(string sectionName) {
+			var sectionNode = Doc.CreateElement(sectionName);
+			Root.AppendChild(sectionNode);
 			//SaveFile();
-			return section;
+			return sectionNode;
 		}
 
-		public XmlElement GetOrCreateSection(string sectionName) {
-			var section = Root.SelectSingleNode(sectionName) as XmlElement;
+		public XmlElement GetOrCreateSectionNode(string sectionName) {
+			var sectionNode = Root.SelectSingleNode(sectionName) as XmlElement;
 
-			if (section == null) {
-				return CreateSection(sectionName);
+			if (sectionNode == null) {
+				return CreateSectionNode(sectionName);
 			} else {
-				return section;
+				return sectionNode;
 			}
 		}
 
-		public XmlElement CreateSetting(string settingName, XmlElement section) {
+		public XmlElement CreateSettingNode(string settingName, XmlElement section) {
 			//var section = GetOrCreateSection(sectionName);
-			var setting = SettingsXmlDoc.CreateElement(settingName);
+			var settingNode = Doc.CreateElement(settingName);
 			//setting.InnerText = val.ToString().Trim();
-			section.AppendChild(setting);
+			section.AppendChild(settingNode);
 			//SaveFile();
-			return setting;
+			return settingNode;
 		}
 
-		public XmlElement GetOrCreateSetting(string settingName, string sectionName) {
-			var section = GetOrCreateSection(sectionName);
-			var setting = section.SelectSingleNode(settingName) as XmlElement;
+		public XmlElement GetOrCreateSettingNode(string settingName, string sectionName) {
+			var sectionNode = GetOrCreateSectionNode(sectionName);
+			var settingNode = sectionNode.SelectSingleNode(settingName) as XmlElement;
 
-			if (setting == null) {
-				return CreateSetting(settingName, section);
+			if (settingNode == null) {
+				return CreateSettingNode(settingName, sectionNode);
 			} else {
-				return setting;
+				return settingNode;
 			}
 		}
 
@@ -88,25 +88,42 @@ namespace NeverClicker {
 		// with the specified default value and returns it.
 		//
 		public string GetSettingValOr(string settingName, string sectionName, string valDefault) {
-			var setting = GetOrCreateSetting(settingName, sectionName);
+			var settingNode = GetOrCreateSettingNode(settingName, sectionName);
 
-			if (string.IsNullOrWhiteSpace(setting.InnerText)) {
-				setting.InnerText = valDefault.Trim();
+			if (string.IsNullOrWhiteSpace(settingNode.InnerText)) {
+				settingNode.InnerText = valDefault.Trim();
 				SaveFile();
 			}
 
-			return setting.InnerText.Trim();
+			return settingNode.InnerText.Trim();
 		}
 
 		// Returns a setting value if it exists or else creates the setting
 		// with the specified default value and returns it.
 		//
 		public int GetSettingValOr(string settingName, string sectionName, int valDefault) {
-			var setting = GetOrCreateSetting(settingName, sectionName);
+			var settingNode = GetOrCreateSettingNode(settingName, sectionName);
 			int valResult;
 
-			if(!int.TryParse(setting.InnerText, out valResult)) {
-				setting.InnerText = valDefault.ToString();
+			if(!int.TryParse(settingNode.InnerText, out valResult)) {
+				settingNode.InnerText = valDefault.ToString();
+				SaveFile();
+				return valDefault;
+			} else {
+				return valResult;
+			}
+		}
+
+		
+		// Returns a setting value if it exists or else creates the setting
+		// with the specified default value and returns it.
+		//
+		public DateTime GetSettingValOr(string settingName, string sectionName, DateTime valDefault) {
+			var settingNode = GetOrCreateSettingNode(settingName, sectionName);
+			DateTime valResult;
+
+			if(!DateTime.TryParse(settingNode.InnerText, out valResult)) {
+				settingNode.InnerText = valDefault.ToShortTimeString();
 				SaveFile();
 				return valDefault;
 			} else {
@@ -149,14 +166,14 @@ namespace NeverClicker {
 
 
 		public void SaveSetting(int val, string settingName, string sectionName) {
-			var setting = GetOrCreateSetting(settingName, sectionName);
-			setting.InnerText = val.ToString();
+			var settingNode = GetOrCreateSettingNode(settingName, sectionName);
+			settingNode.InnerText = val.ToString();
 			SaveFile();
 		}
 
 		public void SaveSetting(string val, string settingName, string sectionName) {
-			var setting = GetOrCreateSetting(settingName, sectionName);
-			setting.InnerText = val.Trim();
+			var settingNode = GetOrCreateSettingNode(settingName, sectionName);
+			settingNode.InnerText = val.Trim();
 			SaveFile();
 		}
 
@@ -172,8 +189,8 @@ namespace NeverClicker {
 
 			// If the (section) node is null, create it:
 			if (sectionNode == null) {
-				XmlElement sectionElement = SettingsXmlDoc.CreateElement(sectionName_0);
-				SettingsXmlDoc.DocumentElement.AppendChild(sectionElement);
+				XmlElement sectionElement = Doc.CreateElement(sectionName_0);
+				Doc.DocumentElement.AppendChild(sectionElement);
 			}
 
 
@@ -183,7 +200,7 @@ namespace NeverClicker {
 
 			// If The setting is null, set a default value:
 			if (settingNode_0 == null) {
-				XmlElement settingElement = SettingsXmlDoc.CreateElement(settingName_0);
+				XmlElement settingElement = Doc.CreateElement(settingName_0);
 				//settingElement.Value = "5";
 				settingElement.InnerText = "Value_0";
 				sectionNode.AppendChild(settingElement);
@@ -204,7 +221,7 @@ namespace NeverClicker {
 
 			// If The setting is null, set a default value:
 			if (settingNode_1 == null) {
-				XmlElement settingElement = SettingsXmlDoc.CreateElement(settingName_1);
+				XmlElement settingElement = Doc.CreateElement(settingName_1);
 				settingElement.InnerText = "1000";
 				sectionNode.AppendChild(settingElement);
 			}

@@ -17,9 +17,17 @@ namespace NeverClicker.Interactions {
 		) {			
 			uint charIdx = queue.NextTask.CharIdx;
 			string charLabel = queue.NextTask.CharIdxLabel;
-			int invokesToday = intr.GameAccount.GetSettingValOr("InvokesToday", charLabel, 0);
-			DateTime invokesCompletedOn;
-			DateTime.TryParse(intr.GameAccount.GetSettingValOr("InvokesCompleteFor", charLabel, ""), out invokesCompletedOn);
+			int invokesToday = intr.AccountStates.GetSettingValOr("InvokesToday", charLabel, 0);
+
+			//DateTime invokesCompletedOn;
+
+			//if (!DateTime.TryParse(intr.AccountStates.GetCharState(charIdx, "InvokesCompleteFor"), out invokesCompletedOn)) {
+			//	invokesCompletedOn = DateTime.Parse(Global.Default.SomeOldDateString);
+			//}
+
+			DateTime invokesCompletedOn = intr.AccountStates.GetCharStateOr(charIdx, 
+				"InvokesCompleteFor", Global.Default.SomeOldDate);
+
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
 			CompletionStatus maintStatus = CompletionStatus.None;
@@ -40,7 +48,7 @@ namespace NeverClicker.Interactions {
 					} else if (invokesCompletedOn < TaskQueue.TodaysGameDate) {
 						intr.Log(charLabel + ": Resetting InvokesToday to 0.", LogEntryType.Info);
 						invokesToday = 0;
-						intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
+						intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
 					} else {
 						var errMsg = charLabel + ": Internal error. `invokesCompletedOn` is in the future.";
 						intr.Log(errMsg, LogEntryType.Fatal);

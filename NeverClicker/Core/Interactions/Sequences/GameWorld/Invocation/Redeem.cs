@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public enum VaultOfPietyItem {
-			ElixirOfFate,
-			CofferOfCelestialArtifactEquipment
+			ElixirOfFate = 0,
+			BlessedProfessionsElementalPack = 1,
+			CofferOfCelestialEnchantments = 2,
+			CofferOfCelestialArtifacts = 3,
+			CofferOfCelestialArtifactEquipment = 4,
 		}
 
 		public static bool Redeem(Interactor intr, VaultOfPietyItem item) {
 			intr.Wait(500);
-			string cursorModeKey = intr.GameAccount.GetSettingValOr("NwCursorMode", "GameHotkeys", "");
+			string cursorModeKey = intr.AccountSettings.GetSettingValOr("ToggleMouseCursor", "GameHotkeys", 
+				Global.Default.ToggleMouseCursor);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
 				intr.Wait(200);

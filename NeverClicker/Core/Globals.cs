@@ -1,17 +1,24 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
-namespace NeverClicker {
-	public static class Globals {
-		public static int CharCount = 0;
-		public static string NwInvokeKey = "^i";
-		public static string NwLogoutKey = "=0";
-		public static string NwProfessionsWindowKey = "n";
-		public static string NwInventoryKey = "i";
-		public static string NwMoveForeKey = "w";
-		public static string NwMoveBackKey = "s";
-		public static string NwMoveLeftKey = "a";
-		public static string NwMoveRightKey = "d";
-		public static string NwCursorMode = "ALT";
+namespace NeverClicker.Global {
+	public static class Default {		
+		public static int MaxCharacterCount = 52;
+		public static int CharacterCount = 0;
+		public static int VaultPurchase = 4;
+		public static string InvokeKey = "^i";
+		public static string LogoutKey = "=0";
+		public static string ProfessionsWindowKey = "n";
+		public static string InventoryKey = "i";
+		public static string MoveForwardKey = "w";
+		public static string MoveBackwardKey = "s";
+		public static string MoveLeftKey = "a";
+		public static string MoveRightKey = "d";
+		public static string ToggleMouseCursor = "ALT";
+
+		public static string CharLabelPrefix = "char_";
+		public static string SomeOldDateString = "1/1/2016 00:00:00";
+		public static DateTime SomeOldDate = DateTime.Parse(SomeOldDateString);
 	}
 
 	public struct ClientCharSelectDefaults {

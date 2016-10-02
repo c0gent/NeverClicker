@@ -169,8 +169,8 @@ namespace NeverClicker {
 				try {
 					intr.Log("Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
 						+ charIdx + " on: " + todaysInvokeDate, LogEntryType.Debug);
-					intr.GameAccount.SaveSetting(todaysInvokeDate.ToString(), "InvokesCompleteFor", charLabel);
-					intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
+					intr.AccountStates.SaveCharState(todaysInvokeDate.ToString(), charIdx, "InvokesCompleteFor");
+					intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
 					taskMatureTime = nextThreeThirty;
 					//invokesToday = 6;
 				} catch (Exception ex) {
@@ -180,8 +180,9 @@ namespace NeverClicker {
 
 			try {
 				//string dateTimeFormattedClassic = FormatDateTimeClassic(intr, DateTime.Now);
-				intr.GameAccount.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
-				intr.GameAccount.SaveSetting(now.ToString(), "MostRecentInvocationTime", charLabel);
+				//intr.AccountSettings.SaveSetting(invokesToday.ToString(), "InvokesToday", charLabel);
+				intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
+				intr.AccountStates.SaveCharState(now, charIdx, "MostRecentInvocationTime");
 				//intr.GameAccount.SaveSetting(charIdx.ToString(), "CharLastInvoked", "Invocation");
 				intr.Log("Settings saved to ini for: " + charLabel + ".", LogEntryType.Debug);
 			} catch (Exception ex) {
@@ -197,10 +198,10 @@ namespace NeverClicker {
 		// QUEUESUBSEQUENTPROFESSIONTASK(): QUEUE FOLLOW UP TASK
 		private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
 			var now = DateTime.Now;
-			var charLabel = "Character_" + charIdx.ToString();
+			//var charLabel = "Character_" + charIdx.ToString();
 
-			var mostRecentProfTime = now;
-			DateTime.TryParse(intr.GameAccount.GetSettingValOr("MostRecentProfTime_" + taskId, charLabel, ""), out mostRecentProfTime);
+			var mostRecentProfTime = intr.AccountStates.GetCharStateOr(charIdx, 
+				"MostRecentProfTime_" + taskId, Global.Default.SomeOldDate);
 
 			//int mostRecentProfTask = taskId;
 			//int.TryParse(intr.GameAccount.GetSettingOrEmpty("MostRecentProfTask_" + taskId, charZeroIdxLabel), out mostRecentProfTask);
@@ -219,7 +220,7 @@ namespace NeverClicker {
 			intr.Log("Next profession task (" + ProfessionTasksRef.ProfessionTaskNames[taskId] + ") for character " + charIdx
 				+ " at: " + taskMatureTime.ToShortTimeString() + ".");
 
-			intr.GameAccount.SaveSetting(now.ToString(), "MostRecentProfTime_" + taskId, charLabel);
+			intr.AccountStates.SaveCharState(now, charIdx, "MostRecentProfTime_" + taskId);
 			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));
 			intr.UpdateQueueList(this.ListClone());
 		}
@@ -274,33 +275,41 @@ namespace NeverClicker {
 			var now = DateTime.Now;
 
 			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
-				var charSettingSection = "Character_" + charIdx.ToString();
+				//var charSettingSection = "Character_" + charIdx.ToString();
 
 				// ################################### INVOCATION #####################################
-				int invokesToday = 0;
-				int.TryParse(intr.GameAccount.GetSettingValOr("InvokesToday", 
-					charSettingSection, ""), out invokesToday);
+				//int invokesToday = 0;
+				//int.TryParse(intr.AccountSettings.GetSettingValOr("InvokesToday", 
+				//	charSettingSection, ""), out invokesToday);
 
-				var invokesCompletedOn = TodaysGameDate.AddDays(-1);
-				DateTime.TryParse(intr.GameAccount.GetSettingValOr("InvokesCompleteFor", 
-					charSettingSection, ""), out invokesCompletedOn);
+				int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesCompleteFor", 0);
+
+				//var invokesCompletedOn = TodaysGameDate.AddDays(-1);
+				//DateTime.TryParse(intr.AccountStates.GetCharState(charIdx, "InvokesCompleteFor"), out invokesCompletedOn);
+
+				DateTime invokesCompletedOn = intr.AccountStates.GetCharStateOr(charIdx, 
+					"InvokesCompleteFor", Global.Default.SomeOldDate);
 
 				// Clear any stale invoke count:
 				if (invokesCompletedOn < TodaysGameDate.AddDays(-1)) {
 					invokesToday = 0;
 				}
 
-				var mostRecent = now.AddHours(-24);
-				DateTime.TryParse(intr.GameAccount.GetSettingValOr("MostRecentInvocationTime", 
-					charSettingSection, ""), out mostRecent);
+				//var mostRecent = now.AddHours(-24);
+				//DateTime.TryParse(intr.AccountSettings.GetSettingValOr("MostRecentInvocationTime", 
+				//	charSettingSection, ""), out mostRecent);
 
-				var invTaskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, 
+				DateTime mostRecentInvoke = intr.AccountStates.GetCharStateOr(charIdx, "MostRecentInvocationTime", 
+					now.AddHours(-24));
+
+				var invTaskMatureTime = CalculateTaskMatureTime(mostRecentInvoke, charIdx, 
 					TaskKind.Invocation, invokesToday);
 				invTaskMatureTime = (invTaskMatureTime < now) ? now : invTaskMatureTime;
 
 				if (invokesToday >= 6) {
 					if (invokesCompletedOn < TodaysGameDate) { // START FRESH DAY
-						intr.GameAccount.SaveSetting("0", "InvokesToday", charSettingSection);
+						//intr.AccountSettings.SaveSetting("0", "InvokesToday", charSettingSection);
+						intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");
 						invokesToday = 0;
 						invTaskMatureTime = now;
 					} else { // DONE FOR THE DAY
@@ -309,9 +318,10 @@ namespace NeverClicker {
 				}
 
 				if (resetDay) {
-					intr.GameAccount.SaveSetting("0", "InvokesToday", charSettingSection);
-					intr.GameAccount.SaveSetting(TodaysGameDate.AddHours(-2).ToString(), 
-						"MostRecentInvocationTime", charSettingSection);
+					//intr.AccountStates.SaveSetting("0", "InvokesToday", charSettingSection);
+					intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");
+					intr.AccountStates.SaveCharState(TodaysGameDate.AddHours(-2).ToString(), charIdx,
+						"MostRecentInvocationTime");
 					invokesToday = 0;
 					invTaskMatureTime = now;
 				}
@@ -323,44 +333,46 @@ namespace NeverClicker {
 
 				// ################################## PROFESSIONS #####################################
 				// ################ Prune Stale Profession Tasks ################
-				for (var p = 0; p < ProfessionTasksRef.ProfessionTaskNames.Length; p++) {
-					var settingKey = "MostRecentProfTime_" + p;
-					var oldTaskThreshold = now.AddDays(-2);
-					DateTime profTaskMatureTime;
+				//for (var p = 0; p < ProfessionTasksRef.ProfessionTaskNames.Length; p++) {
+				//	var settingKey = "MostRecentProfTime_" + p;
+				//	var oldTaskThreshold = now.AddDays(-2);
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingValOr(settingKey,
-								charSettingSection, ""), out profTaskMatureTime)) {
-						intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " +
-							profTaskMatureTime.ToString() + ".", LogEntryType.Debug);
+				//	//DateTime profTaskMatureTime;
 
-						//// [TODO]: Is this necessary?:
-						//if (profTaskMatureTime < oldTaskThreshold) {
-						//	intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);
-						//	intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
-						//}
-					}
-				}
+				//	//if (DateTime.TryParse(intr.AccountStates.GetCharStateOr(charIdx,
+				//	//			charSettingSection, ""), out profTaskMatureTime)) {
+				//	//	intr.Log("Found " + settingKey + " for " + charSettingSection + " in ini file: " +
+				//	//		profTaskMatureTime.ToString() + ".", LogEntryType.Debug);
+
+				//	//	//// [TODO]: Is this necessary?:
+				//	//	//if (profTaskMatureTime < oldTaskThreshold) {
+				//	//	//	intr.Log("Removing " + settingKey + " for " + charSettingSection + " from ini file.", LogEntryType.Debug);
+				//	//	//	intr.GameAccount.RemoveSetting(settingKey, charSettingSection);
+				//	//	//}
+				//	//}
+				//	DateTime profTaskMatureTime = intr.AccountStates.GetCharStateOr(charIdx,
+				//		settingKey, Global.Default.SomeOldDate);
+				//}
 
 				// ################ Add Tasks to Queue ################
 				int tasksQueued = 0;
 
 				for (var taskId = 0; taskId < ProfessionTasksRef.ProfessionTaskNames.Length; taskId++) {
 					var settingKey = "MostRecentProfTime_" + taskId;
-					mostRecent = now.AddDays(-1);
+					//var mostRecentTask = now.AddDays(-1);
 					DateTime profTaskMatureTime;
 
-					if (DateTime.TryParse(intr.GameAccount.GetSettingValOr(settingKey, 
-								charSettingSection, ""), out mostRecent)) {
-						intr.Log("Adding profession task to queue for character " + charIdx
-							+ ", matures: " + mostRecent.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
+					var mostRecentTask = intr.AccountStates.GetCharStateOr(charIdx, settingKey, Global.Default.SomeOldDate);
 
-						profTaskMatureTime = CalculateTaskMatureTime(mostRecent, charIdx, TaskKind.Profession, taskId);
-						profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
+					intr.Log("Adding profession task to queue for character " + charIdx
+						+ ", matures: " + mostRecentTask.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
 
-						this.Add(new GameTask(profTaskMatureTime, charIdx, TaskKind.Profession, taskId));
+					profTaskMatureTime = CalculateTaskMatureTime(mostRecentTask, charIdx, TaskKind.Profession, taskId);
+					profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
 
-						tasksQueued += 1;
-					}
+					this.Add(new GameTask(profTaskMatureTime, charIdx, TaskKind.Profession, taskId));
+
+					tasksQueued += 1;
 				}
 
 				intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);

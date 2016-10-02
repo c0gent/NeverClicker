@@ -19,7 +19,7 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return; }
 
 			var queue = new TaskQueue();
-			int charsTotal = intr.GameAccount.GetSettingValOr("CharacterCount", "General", 0);
+			int charsTotal = intr.AccountSettings.GetSettingValOr("CharacterCount", "General", 0);
 
 			if (queue.IsEmpty) {
 				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
