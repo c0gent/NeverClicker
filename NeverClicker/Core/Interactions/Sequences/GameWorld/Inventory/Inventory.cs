@@ -68,9 +68,16 @@ namespace NeverClicker.Interactions {
 
 			// If bags tab is not active, click it's icon.
 			if (!(Game.DetermineInventoryState(intr) == InventoryState.Bags)) {
-				Mouse.ClickImage(intr, "InventoryTabIconBags");
-				Mouse.Move(intr, new Point(1, 100));
-				intr.WaitRand(700, 1100);
+				var iconBags = Screen.ImageSearch(intr, "InventoryTabIconBags");
+				//Mouse.ClickImage(intr, "InventoryTabIconBags");
+				if (iconBags.Found) {
+					Mouse.Click(intr, iconBags.Point);
+					Mouse.Move(intr, iconBags.Point.X - 30, iconBags.Point.Y);
+					intr.WaitRand(250, 300);
+				} else {
+					intr.Log("Unable to find 'InventoryTabIconBags'.", LogEntryType.Fatal);
+					return CompletionStatus.Failed;
+				}
 			}			
 
 			// Determine if any Celestial Bags of Refinement are present:
