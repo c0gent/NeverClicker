@@ -98,21 +98,48 @@ namespace NeverClicker {
 		}
 	}
 
+
+	// A log message.
 	public struct LogMessage {
 		public readonly string Text;
 		public readonly LogEntryType Type;
+		public readonly List<LogSubtext> Subtexts;
 
 		public LogMessage(string message) {
 			Text = message;
 			Type = LogEntryType.Normal;
+			Subtexts = new List<LogSubtext>(8);
 		}
 
 		public LogMessage(string message, LogEntryType type) {
 			Text = message;
 			Type = type;
+			Subtexts = new List<LogSubtext>(8);
+		}
+
+		public LogMessage(string message, LogEntryType type, List<LogSubtext> subtexts) {
+			Text = message;
+			Type = type;
+			Subtexts = subtexts;
 		}
 	}
 
+
+	// A log message subtext, used for detailed information.
+	public struct LogSubtext {
+		public readonly string Title;
+		public readonly string Message;
+
+		public LogSubtext(string title, string message) {
+			Title = title;
+			Message = message;
+		}
+
+
+	}
+
+
+	// The log entry type severity.
 	public enum LogEntryType {		
 		Normal,
 		Debug,

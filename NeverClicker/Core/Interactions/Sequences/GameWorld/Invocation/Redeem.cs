@@ -36,7 +36,7 @@ namespace NeverClicker.Interactions {
 				}
 			}
 
-			intr.WaitRand(2500, 4500);
+			intr.WaitRand(2100, 2500);
 
 			if (!Screen.ImageSearch(intr, "VaultOfPietyWindowTitle").Found) {
 				return false;
@@ -70,6 +70,10 @@ namespace NeverClicker.Interactions {
 					return false;
 				}
 			}
+
+			// [FIXME]: Handle the fact that the VaultOfPietyItem is:  `5`
+			// [FIX THE HELL OUT OF ME][FIX THE HELL OUT OF ME]
+			// [FIX THE HELL OUT OF ME][FIX THE HELL OUT OF ME][FIX THE HELL OUT OF ME][FIX THE HELL OUT OF ME]
 
 			return true;
 		}

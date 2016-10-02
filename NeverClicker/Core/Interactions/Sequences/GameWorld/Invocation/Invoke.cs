@@ -23,10 +23,10 @@ namespace NeverClicker.Interactions {
 			intr.Wait(100);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
-				VaultOfPietyItem vopItem;
-
 				intr.Log("Maximum blessings reached for character " + charIdx 
 					+ ". Redeeming through Vault of Piety...", LogEntryType.Info);
+
+				VaultOfPietyItem vopItem;
 
 				if (!Enum.TryParse(intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), out vopItem)) {
 					vopItem = DEFAULT_REDEMPTION_ITEM;
