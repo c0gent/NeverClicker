@@ -17,7 +17,7 @@ namespace NeverClicker.Interactions {
 		) {			
 			uint charIdx = queue.NextTask.CharIdx;
 			string charLabel = queue.NextTask.CharIdxLabel;
-			int invokesToday = intr.AccountStates.GetSettingValOr("InvokesToday", charLabel, 0);
+			int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesToday", 0);
 
 			//DateTime invokesCompletedOn;
 

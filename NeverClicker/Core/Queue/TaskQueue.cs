@@ -152,7 +152,8 @@ namespace NeverClicker {
 			DateTime taskMatureTime = now;
 			DateTime nextThreeThirty = NextThreeAmPst;
 			DateTime todaysInvokeDate = TodaysGameDate;
-			string charLabel = "Character_" + charIdx.ToString();			
+			//string charLabel = "Character_" + charIdx.ToString();	
+			string charLabel = intr.AccountSettings.GetCharSetting(charIdx, "CharacterName");
 			
             if (invokesToday < 6) { // QUEUE FOR LATER
 				TimeSpan extraDelay = TimeSpan.FromMinutes(0);
@@ -169,7 +170,7 @@ namespace NeverClicker {
 				try {
 					intr.Log("Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
 						+ charIdx + " on: " + todaysInvokeDate, LogEntryType.Debug);
-					intr.AccountStates.SaveCharState(todaysInvokeDate.ToString(), charIdx, "InvokesCompleteFor");
+					intr.AccountStates.SaveCharState(todaysInvokeDate, charIdx, "InvokesCompleteFor");
 					intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
 					taskMatureTime = nextThreeThirty;
 					//invokesToday = 6;
@@ -244,7 +245,7 @@ namespace NeverClicker {
 				if (prevTask.Kind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, prevTask.TaskId + 1);
 				} else if (prevTask.Kind == TaskKind.Profession) {
-					//this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
+					this.QueueSubsequentProfessionTask(intr, charIdx, prevTask.TaskId);
 				}
 			}
 		}
@@ -282,7 +283,7 @@ namespace NeverClicker {
 				//int.TryParse(intr.AccountSettings.GetSettingValOr("InvokesToday", 
 				//	charSettingSection, ""), out invokesToday);
 
-				int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesCompleteFor", 0);
+				int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesToday", 0);
 
 				//var invokesCompletedOn = TodaysGameDate.AddDays(-1);
 				//DateTime.TryParse(intr.AccountStates.GetCharState(charIdx, "InvokesCompleteFor"), out invokesCompletedOn);
