@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 namespace NeverClicker {
 	public class ClientSettings : XmlSettingsFile {
 		public ClientSettings() : base("ClientSettings") {
-			var oldIniFileName = Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME;
+			base.SaveFile();
+		}
 
+		public ClientSettings(string oldIniFileName) : base("ClientSettings") {
 			if (File.Exists(oldIniFileName)) {
 				MigrateSettings(oldIniFileName);
 			}
@@ -36,9 +38,7 @@ namespace NeverClicker {
 					"VisibleSlots", "CharacterSelect");
 				SaveSetting(oldIni.GetSettingOr("ScrollsToAlignBottomSlot", "KeyBindAndUi", charSel.ScrollsToAlignBottomSlot),
 					"ScrollsToAlignBottomSlot", "CharacterSelect");
-			}
-
-			File.Move(oldIniFileName, oldIniFileName + ".OLD.txt");
+			}			
 		}
 	}
 }

@@ -189,7 +189,7 @@ namespace NeverClicker {
 				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString(), LogEntryType.Error);
 			}
 						
-			intr.Log("Next invocation task for character " + charIdx + " at: " + taskMatureTime.ToShortTimeString() + ".");
+			intr.Log("Next invocation task for character " + charIdx + " at: " + taskMatureTime.ToString() + ".");
 			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
 			intr.UpdateQueueList(this.ListClone());
 		}
@@ -218,7 +218,7 @@ namespace NeverClicker {
 			}
 
 			intr.Log("Next profession task (" + ProfessionTasksRef.ProfessionTaskNames[taskId] + ") for character " + charIdx
-				+ " at: " + taskMatureTime.ToShortTimeString() + ".");
+				+ " at: " + taskMatureTime.ToString() + ".");
 
 			intr.AccountStates.SaveCharState(now, charIdx, "MostRecentProfTime_" + taskId);
 			this.Add(new GameTask(taskMatureTime, charIdx, TaskKind.Profession, taskId));

@@ -5,12 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NeverClicker {
 	public class AccountStates : XmlSettingsFile {
 		public AccountStates() : base("AccountStates") {
-			var oldIniFileName = Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME;
+			base.SaveFile();
+		}
 
+		public AccountStates(string oldIniFileName) : base("AccountStates") {
 			if (File.Exists(oldIniFileName)) {
 				MigrateIniSettings(oldIniFileName);
 			}
@@ -94,7 +97,7 @@ namespace NeverClicker {
 
 		// Saves a `DateTime` state value.
 		public void SaveCharState(DateTime settingVal, uint charIdx, string settingName) {
-			SaveCharState(settingVal.ToShortTimeString(), charIdx, settingName);
+			SaveCharState(settingVal.ToString(), charIdx, settingName);
 		}
 
 		// Migrates old ini settings.
@@ -102,19 +105,8 @@ namespace NeverClicker {
 			if (!File.Exists(base.FileName)) {
 				var oldIni = new IniFile(oldIniFileName);
 
-				//var charCount = GetSettingValOr("CharacterCount", "General", Global.Default.MaxCharacterCount);
-
 				for (uint charIdx = 0; charIdx < Global.Default.MaxCharacterCount; charIdx++) {
 					string charLabelZero = "Character " + charIdx.ToString();
-
-					//[Character 48]
-					//VaultPurchase = 5
-					//InvokesToday = 6
-					//InvokesCompleteFor = 10/1/2016 00:00:00
-					//MostRecentInvocationTime = 10/1/2016 10:13:40
-					//MostRecentProfTime_1 = 10/1/2016 16:19:59
-					//MostRecentProfTime_2 = 10/1/2016 16:22:20
-					//MostRecentProfTime_0 = 10/1/2016 05:44:26
 
 					if (oldIni.SectionExists(charLabelZero)) {
 						SaveCharState(oldIni.GetSettingOr("InvokesToday", charLabelZero, 0),

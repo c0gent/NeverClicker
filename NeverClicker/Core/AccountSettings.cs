@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 namespace NeverClicker {
 	public class AccountSettings : XmlSettingsFile {
 		public AccountSettings() : base("AccountSettings") {
-			var oldIniFileName = Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME;
+			base.SaveFile();
+		}
 
+		public AccountSettings(string oldIniFileName) : base("AccountSettings") {
 			if (File.Exists(oldIniFileName)) {
 				MigrateIniSettings(oldIniFileName);
 			}
@@ -99,9 +101,6 @@ namespace NeverClicker {
 						charIdx, "VaultOfPietyItem");						
 				}
 			}
-
-			File.Move(oldIniFileName, oldIniFileName + ".OLD.txt");
 		}
-
 	}
 }

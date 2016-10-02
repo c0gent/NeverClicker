@@ -44,10 +44,7 @@ namespace NeverClicker.Interactions {
 
 		public bool LoadSettings() {
 			////this.GameAccount = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME);
-			//this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);	
-			this.AccountSettings = new AccountSettings();
-			this.ClientSettings = new ClientSettings();
-			this.AccountStates = new AccountStates();
+			//this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);			
 
 			BackwardCompatability();
 
@@ -57,25 +54,49 @@ namespace NeverClicker.Interactions {
 
 		// Migrate any settings which may have been moved
 		private void BackwardCompatability() {
-			// Move `CharacterSelectScrollBarTopX` & `CharacterSelectScrollBarTopY` from `KeyBindAndUi` to `ClickLocations`:
-			int characterSelectScrollBarTopX;
+			//// Move `CharacterSelectScrollBarTopX` & `CharacterSelectScrollBarTopY` from `KeyBindAndUi` to `ClickLocations`:
+			//int characterSelectScrollBarTopX;
 
-			if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "ClickLocations", out characterSelectScrollBarTopX)) {
-				if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "KeyBindAndUi", out characterSelectScrollBarTopX)) {
-					ClientSettings.SaveSetting(characterSelectScrollBarTopX.ToString(), "CharacterSelectScrollBarTopX", "ClickLocations");
-				} else {
-					Log("Unable to load 'CharacterSelectScrollBarTopX' setting.", LogEntryType.Fatal);
-				}				
+			//if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "ClickLocations", out characterSelectScrollBarTopX)) {
+			//	if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "KeyBindAndUi", out characterSelectScrollBarTopX)) {
+			//		ClientSettings.SaveSetting(characterSelectScrollBarTopX.ToString(), "CharacterSelectScrollBarTopX", "ClickLocations");
+			//	} else {
+			//		Log("Unable to load 'CharacterSelectScrollBarTopX' setting.", LogEntryType.Fatal);
+			//	}				
+			//}
+
+			//int characterSelectScrollBarTopY;
+
+			//if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "ClickLocations", out characterSelectScrollBarTopY)) {
+			//	if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "KeyBindAndUi", out characterSelectScrollBarTopY)) {
+			//		ClientSettings.SaveSetting(characterSelectScrollBarTopY.ToString(), "CharacterSelectScrollBarTopY", "ClickLocations");
+			//	} else {
+			//		Log("Unable to load 'CharacterSelectScrollBarTopY' setting.", LogEntryType.Fatal);
+			//	}
+			//}
+
+			// IMPORT OLD ACCOUNT SETTINGS:
+
+			var oldAccountIniFileName = Settings.Default.SettingsFolderPath + SettingsForm.GAME_ACCOUNT_INI_FILE_NAME;
+
+			if (File.Exists(oldAccountIniFileName)) {
+				this.AccountSettings = new AccountSettings(oldAccountIniFileName);
+				this.AccountStates = new AccountStates(oldAccountIniFileName);
+				File.Move(oldAccountIniFileName, oldAccountIniFileName + ".OLD.txt");
+			} else {
+				this.AccountSettings = new AccountSettings();
+				this.AccountStates = new AccountStates();
 			}
 
-			int characterSelectScrollBarTopY;
+			// IMPORT OLD CLIENT SETTINGS:
 
-			if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "ClickLocations", out characterSelectScrollBarTopY)) {
-				if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "KeyBindAndUi", out characterSelectScrollBarTopY)) {
-					ClientSettings.SaveSetting(characterSelectScrollBarTopY.ToString(), "CharacterSelectScrollBarTopY", "ClickLocations");
-				} else {
-					Log("Unable to load 'CharacterSelectScrollBarTopY' setting.", LogEntryType.Fatal);
-				}
+			var oldClientIniFileName = Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME;
+
+			if (File.Exists(oldClientIniFileName)) {
+				this.ClientSettings = new ClientSettings(oldClientIniFileName);
+				File.Move(oldClientIniFileName, oldClientIniFileName + ".OLD.txt");
+			} else {
+				this.ClientSettings = new ClientSettings();
 			}
 		}
 
