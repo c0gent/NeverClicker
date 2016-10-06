@@ -15,6 +15,8 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Collections.Immutable;
 using NeverClicker.Core;
+using NLog;
+using NLog.Targets;
 
 namespace NeverClicker.Interactions {
 	// INTERACTOR: MANAGES ALIBENGINE
@@ -33,13 +35,14 @@ namespace NeverClicker.Interactions {
 		public AccountSettings AccountSettings;
 		public ClientSettings ClientSettings;
 		public AccountStates AccountStates;
-		LogFile LogFile;
+		//LogFile LogFile;
+		private static Logger logger = LogManager.GetLogger("Interactor");
 
 		public Interactor() {
 			//InitAlibEng(); // LOADED BELOW (LoadSettings())
-			LogFile = new LogFile();
+			//LogFile = new LogFile();
 
-			LoadSettings();			
+			LoadSettings();
 		}
 
 		public bool LoadSettings() {
@@ -47,6 +50,11 @@ namespace NeverClicker.Interactions {
 			//this.GameClient = new IniFile(Settings.Default.SettingsFolderPath + SettingsForm.GAME_CLIENT_INI_FILE_NAME);			
 
 			BackwardCompatability();
+			
+			var logFileName = Settings.Default.LogsFolderPath + SettingsForm.LOG_FILE_NAME;
+
+			FileTarget target = LogManager.Configuration.FindTargetByName<FileTarget>("logFile");
+				target.FileName = logFileName;
 
 			InitAlibEng();
 			return true;
@@ -140,7 +148,8 @@ namespace NeverClicker.Interactions {
 		public void Log(LogMessage logMessage) {			
 			switch (logMessage.Type) {
 				case LogEntryType.FatalWithScreenshot:					
-					LogFile.AppendMessage(logMessage);
+					//LogFile.AppendMessage(logMessage);
+					logger.Fatal(logMessage.Text);
 					//MainForm.WriteLine(logMessage.Text);
 					ProgressLog?.Report(logMessage);
 					//MessageBox.Show(MainForm, logMessage.Text + " -- " 
@@ -149,25 +158,30 @@ namespace NeverClicker.Interactions {
 					ErrorLog?.Report(new LogMessage(logMessage.Text + " -- " + SaveErrorScreenshot()));
 					break;
 				case LogEntryType.Fatal:					
-					LogFile.AppendMessage(logMessage);
+					//LogFile.AppendMessage(logMessage); 
+					logger.Fatal(logMessage.Text);
 					ProgressLog?.Report(logMessage);
 					//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
 					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Error:
-					LogFile.AppendMessage(logMessage);
+					//LogFile.AppendMessage(logMessage);
+					logger.Error(logMessage.Text);
 					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Warning:
 				case LogEntryType.Normal:
-					LogFile.AppendMessage(logMessage);
+					//LogFile.AppendMessage(logMessage);
+					logger.Info(logMessage.Text);
 					ProgressLog?.Report(logMessage);
 					break;
 				case LogEntryType.Info:
-					LogFile.AppendMessage(logMessage);
+					//LogFile.AppendMessage(logMessage);
+					logger.Info(logMessage.Text);
 					break;
 				case LogEntryType.Debug:
-					if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
+					//if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
+					if (Settings.Default.LogDebugMessages) { logger.Debug(logMessage.Text); }					
 					break;
 			}
 		}

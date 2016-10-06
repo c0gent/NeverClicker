@@ -97,8 +97,10 @@ namespace NeverClicker {
 					var charLabelZero = "Character " + charIdx.ToString();
 					var charLabelOne = "Character " + (charIdx + 1).ToString();
 					SaveCharSetting(charLabelOne, charIdx, "CharacterName");
-					SaveCharSetting(oldIni.GetSettingOr("VaultPurchase", charLabelZero, Global.Default.VaultPurchase),
-						charIdx, "VaultOfPietyItem");						
+
+					var vopItem = oldIni.GetSettingOr("VaultPurchase", charLabelZero, Global.Default.VaultPurchase);
+					if (vopItem > 4) { vopItem = 4; };
+					SaveCharSetting(vopItem, charIdx, "VaultOfPietyItem");
 				}
 			}
 		}

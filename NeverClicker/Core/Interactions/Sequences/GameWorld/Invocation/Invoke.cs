@@ -28,11 +28,13 @@ namespace NeverClicker.Interactions {
 
 				VaultOfPietyItem vopItem;
 
-				if (!Enum.TryParse(intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), out vopItem)) {
+				if (!Enum.TryParse(intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), out vopItem)) {					
 					vopItem = DEFAULT_REDEMPTION_ITEM;
 				}
 
-				if (Redeem(intr, vopItem )) {
+				intr.Log("VaultOfPietyItem: " + vopItem.ToString(), LogEntryType.Debug);
+
+				if (Redeem(intr, vopItem)) {
 					MoveAround(intr);
 					intr.Log("Redeeming Vault of Piety...", LogEntryType.Debug);
 					// Invocation Attempt:
