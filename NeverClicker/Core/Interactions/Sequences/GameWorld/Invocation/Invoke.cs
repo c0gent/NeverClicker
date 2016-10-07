@@ -13,7 +13,7 @@ namespace NeverClicker.Interactions {
 		public const bool DEBUG_ALWAYS_REDEEM = false;
 		public const VaultOfPietyItem DEFAULT_REDEMPTION_ITEM = VaultOfPietyItem.CofferOfCelestialArtifactEquipment;
 
-		public static CompletionStatus Invoke(Interactor intr, uint charIdx, bool enchKeyIsPending) {
+		public static CompletionStatus Invoke(Interactor intr, uint charIdx) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
 
 			string invokeKey = intr.AccountSettings.GetSettingValOr("Invoke", "GameHotkeys", Global.Default.InvokeKey);
@@ -87,7 +87,7 @@ namespace NeverClicker.Interactions {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 			intr.Wait(3500);			
 
-			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
+			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, States.IsDialogueBoxState, null, 0)) {
 				// Invocation Attempt:
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
@@ -100,7 +100,7 @@ namespace NeverClicker.Interactions {
 			//	//Mouse.ClickImage(intr, "InvocationRewardsOfDevotionCloseButton");
 			//}
 
-			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, Game.IsDialogueBoxState, null, 0)) {
+			if (!intr.WaitUntil(9, DialogueBoxState.InvocationSuccess, States.IsDialogueBoxState, null, 0)) {
 				// Invocation Attempt Failure -- Display invocation screen for the screenshot:
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);

@@ -349,6 +349,10 @@ namespace NeverClicker {
 			//Settings.Default.Save();
 		}
 
+		private void checkBoxLogTrace_CheckedChanged(object sender, EventArgs e) {
+			Settings.Default.LogTraceMessages = this.checkBoxLogTrace.Checked;
+		}
+
 		private void linkLabelAccountIniFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			Process.Start(linkLabelAccountIniFile.Text);
 		}
@@ -360,8 +364,7 @@ namespace NeverClicker {
 		private void checkBoxBeginOnStartup_CheckedChanged(object sender, EventArgs e) {
 			Settings.Default.BeginOnStartup = this.checkBoxBeginOnStartup.Checked;
 			Settings.Default.Save();
-		}		
-
+		}
 
 		//private void checkBoxSettingsFolder_CheckedChanged(object sender, EventArgs e) {
 		//	bool boxChecked = this.checkBoxSettingsFolder.Checked;

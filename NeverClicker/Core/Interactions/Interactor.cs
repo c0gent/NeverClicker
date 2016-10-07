@@ -141,10 +141,10 @@ namespace NeverClicker.Interactions {
 					logger.Info(logMessage.Text, logMessage.Args);
 					break;
 				case LogEntryType.Debug:
-					if (Settings.Default.LogDebugMessages) { logger.Debug(logMessage.Text); }	
+					if (Settings.Default.LogDebugMessages) { logger.Debug(logMessage.Text, logMessage.Args); }	
 					break;
 				case LogEntryType.Trace:
-					if (Settings.Default.LogTraceMessages) { logger.Debug(logMessage.Text); }		
+					if (Settings.Default.LogTraceMessages) { logger.Debug(logMessage.Text, logMessage.Args); }		
 					break;
 			}
 		}
@@ -291,12 +291,12 @@ namespace NeverClicker.Interactions {
 			int iters = 0;
 
 			//this.Log(LogEntryType.Debug, "Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.");
-			this.Log(LogEntryType.Debug, "Waiting for {0} a maximum of {1:F0} seconds.",
-				endState);
+			this.Log(LogEntryType.Trace, "Waiting for {0} a maximum of {1:F0} seconds.",
+				endState, maxWaitSeconds);
 
 			while (!(isState(this, endState))) {
 				if (CancelSource.IsCancellationRequested) { return false; }
-				this.Log(LogEntryType.Debug, "Waiting until state: {0}.", endState);
+				this.Log(LogEntryType.Trace, "Waiting until state: {0}.", endState);
 				this.Wait(1000 * secondsPerIter);
 				iters += 1;
 				if (iters >= maxIters) {					
@@ -461,11 +461,11 @@ namespace NeverClicker.Interactions {
 
 		public static void LogWaitStatus<TState>(Interactor intr, TState end, bool success) {
 			if (success) {
-				intr.Log(LogEntryType.Debug, "WaitUntil(): Found client state: " +
-					" -> {0}.", end);
+				intr.Log(LogEntryType.Trace, "WaitUntil(): Found client state: " +
+					"-> {0}.", end);
 			} else {
-				intr.Log(LogEntryType.Debug, "WaitUntil(): Failure to find client state: "
-					+ " -> {0}. Re-evaluating...", end);
+				intr.Log(LogEntryType.Trace, "WaitUntil(): Failure to find client state: "
+					+ "-> {0}. Re-evaluating...", end);
 			}
 		}
 	}

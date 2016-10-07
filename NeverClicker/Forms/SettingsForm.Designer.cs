@@ -40,6 +40,7 @@
 			this.linkLabelAccountIniFile = new System.Windows.Forms.LinkLabel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.tabPagePaths = new System.Windows.Forms.TabPage();
+			this.checkBoxBeginOnStartup = new System.Windows.Forms.CheckBox();
 			this.labelLogDebug = new System.Windows.Forms.Label();
 			this.checkBoxLogDebug = new System.Windows.Forms.CheckBox();
 			this.textBoxImageShadeVariation = new System.Windows.Forms.TextBox();
@@ -65,7 +66,8 @@
 			this.buttonSettingsFolder = new System.Windows.Forms.Button();
 			this.labelImagesFolder = new System.Windows.Forms.Label();
 			this.tabControlOptions = new System.Windows.Forms.TabControl();
-			this.checkBoxBeginOnStartup = new System.Windows.Forms.CheckBox();
+			this.labelLogTrace = new System.Windows.Forms.Label();
+			this.checkBoxLogTrace = new System.Windows.Forms.CheckBox();
 			this.tabPageClient.SuspendLayout();
 			this.tabPageAccount.SuspendLayout();
 			this.tabPagePaths.SuspendLayout();
@@ -162,6 +164,8 @@
 			// tabPagePaths
 			// 
 			this.tabPagePaths.BackColor = System.Drawing.Color.Transparent;
+			this.tabPagePaths.Controls.Add(this.checkBoxLogTrace);
+			this.tabPagePaths.Controls.Add(this.labelLogTrace);
 			this.tabPagePaths.Controls.Add(this.checkBoxBeginOnStartup);
 			this.tabPagePaths.Controls.Add(this.labelLogDebug);
 			this.tabPagePaths.Controls.Add(this.checkBoxLogDebug);
@@ -193,6 +197,18 @@
 			this.tabPagePaths.Size = new System.Drawing.Size(827, 459);
 			this.tabPagePaths.TabIndex = 0;
 			this.tabPagePaths.Text = "Paths";
+			// 
+			// checkBoxBeginOnStartup
+			// 
+			this.checkBoxBeginOnStartup.AutoSize = true;
+			this.checkBoxBeginOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.checkBoxBeginOnStartup.Location = new System.Drawing.Point(9, 7);
+			this.checkBoxBeginOnStartup.Name = "checkBoxBeginOnStartup";
+			this.checkBoxBeginOnStartup.Size = new System.Drawing.Size(212, 17);
+			this.checkBoxBeginOnStartup.TabIndex = 32;
+			this.checkBoxBeginOnStartup.Text = "Start AutoCycle on NeverClicker Startup";
+			this.checkBoxBeginOnStartup.UseVisualStyleBackColor = true;
+			this.checkBoxBeginOnStartup.CheckedChanged += new System.EventHandler(this.checkBoxBeginOnStartup_CheckedChanged);
 			// 
 			// labelLogDebug
 			// 
@@ -457,17 +473,25 @@
 			this.tabControlOptions.Size = new System.Drawing.Size(835, 485);
 			this.tabControlOptions.TabIndex = 22;
 			// 
-			// checkBoxBeginOnStartup
+			// labelLogTrace
 			// 
-			this.checkBoxBeginOnStartup.AutoSize = true;
-			this.checkBoxBeginOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxBeginOnStartup.Location = new System.Drawing.Point(9, 7);
-			this.checkBoxBeginOnStartup.Name = "checkBoxBeginOnStartup";
-			this.checkBoxBeginOnStartup.Size = new System.Drawing.Size(212, 17);
-			this.checkBoxBeginOnStartup.TabIndex = 32;
-			this.checkBoxBeginOnStartup.Text = "Start AutoCycle on NeverClicker Startup";
-			this.checkBoxBeginOnStartup.UseVisualStyleBackColor = true;
-			this.checkBoxBeginOnStartup.CheckedChanged += new System.EventHandler(this.checkBoxBeginOnStartup_CheckedChanged);
+			this.labelLogTrace.AutoSize = true;
+			this.labelLogTrace.Location = new System.Drawing.Point(6, 286);
+			this.labelLogTrace.Name = "labelLogTrace";
+			this.labelLogTrace.Size = new System.Drawing.Size(110, 13);
+			this.labelLogTrace.TabIndex = 33;
+			this.labelLogTrace.Text = "Log Trace Messages:";
+			// 
+			// checkBoxLogTrace
+			// 
+			this.checkBoxLogTrace.AutoSize = true;
+			this.checkBoxLogTrace.Location = new System.Drawing.Point(141, 285);
+			this.checkBoxLogTrace.Name = "checkBoxLogTrace";
+			this.checkBoxLogTrace.Size = new System.Drawing.Size(65, 17);
+			this.checkBoxLogTrace.TabIndex = 34;
+			this.checkBoxLogTrace.Text = "Enabled";
+			this.checkBoxLogTrace.UseVisualStyleBackColor = true;
+			this.checkBoxLogTrace.CheckedChanged += new System.EventHandler(this.checkBoxLogTrace_CheckedChanged);
 			// 
 			// SettingsForm
 			// 
@@ -533,5 +557,7 @@
 		private System.Windows.Forms.Label labelLogDebug;
 		private System.Windows.Forms.CheckBox checkBoxLogDebug;
 		private System.Windows.Forms.CheckBox checkBoxBeginOnStartup;
+		private System.Windows.Forms.CheckBox checkBoxLogTrace;
+		private System.Windows.Forms.Label labelLogTrace;
 	}
 }

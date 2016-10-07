@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 namespace NeverClicker.Interactions {
-	public static partial class Game {
+	public static partial class States {
 		//Interactions.Interactor Interactor;
 		//private GameClientState State;
 
@@ -190,24 +190,42 @@ namespace NeverClicker.Interactions {
 		}
 
 
-			//"InventoryTabActiveBags"
-			//"InventoryTabActiveWealth"
-			//"InventoryTabActiveAssets"
-			//"InventoryTabActiveCompanions"
-			//"InventoryTabActiveVip"
+		// WORLD:
+		public static bool IsWorldWindowState(Interactor intr, WorldWindowState desiredState) {
+			switch (desiredState) {
+				case WorldWindowState.Inventory:
+					return Screen.ImageSearch(intr, "InventoryWindowTitle").Found;
+				default:
+					return false;
+			}
+		}
+
+
+		// INVENTORY:
+		public static bool IsInventoryState(Interactor intr, InventoryState desiredState) {
+			switch (desiredState) {
+				case InventoryState.Vip:
+					return (Screen.ImageSearch(intr, new List<string> {
+						"InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found );
+				default:
+					return false;
+			}
+		}
+
+		// INVENTORY:
 		public static InventoryState DetermineInventoryState(Interactor intr) {
-			if (Screen.ImageSearch(intr, "InventoryWindowTitle").Found) {
+			if (IsWorldWindowState(intr, WorldWindowState.Inventory)) {
 				if (Screen.ImageSearch(intr, "InventoryTabActiveBags").Found) {
 					return InventoryState.Bags;
+				} else if (Screen.ImageSearch(intr, new List<string> {
+								"InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found ) {
+					return InventoryState.Vip;
 				} else if (Screen.ImageSearch(intr, "InventoryTabActiveWealth").Found) {
 					return InventoryState.Wealth;
 				} else if (Screen.ImageSearch(intr, "InventoryTabActiveAssets").Found) {
 					return InventoryState.Assets;
 				} else if (Screen.ImageSearch(intr, "InventoryTabActiveCompanions").Found) {
-					return InventoryState.Companions;
-				} else if (Screen.ImageSearch(intr, 
-							new List<string> { "InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found ) {
-					return InventoryState.Vip;
+					return InventoryState.Companions;				
 				} else {
 					intr.Log(LogEntryType.Fatal, "Inventory window is open but inventory tab cannot be determined.");
 					return InventoryState.Unknown;
@@ -215,7 +233,7 @@ namespace NeverClicker.Interactions {
 			} else {
 				return InventoryState.None;
 			}
-		}
+		}		
 	}
 
 

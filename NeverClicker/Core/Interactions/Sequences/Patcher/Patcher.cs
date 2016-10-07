@@ -26,35 +26,35 @@ namespace NeverClicker.Interactions {
 			Mouse.Move(intr, 0, 0);
 
 			// If patcher is already open, close it:
-			if (Game.DeterminePatcherState(intr) != PatcherState.None) {
-				Screen.WindowKill(intr, Game.GAMEPATCHEREXE);
-				if (!intr.WaitUntil(15, PatcherState.None, Game.IsPatcherState, PatcherKillFailure, 0)) { return false; }
+			if (States.DeterminePatcherState(intr) != PatcherState.None) {
+				Screen.WindowKill(intr, States.GAMEPATCHEREXE);
+				if (!intr.WaitUntil(15, PatcherState.None, States.IsPatcherState, PatcherKillFailure, 0)) { return false; }
 			}
 
 			// Open patcher:
 			Screen.WindowRun(intr, Properties.Settings.Default.NeverwinterExePath);
-			if (!intr.WaitUntil(90, GameState.Patcher, Game.IsGameState, PatcherRunFailure, 0)) { return false; }
+			if (!intr.WaitUntil(90, GameState.Patcher, States.IsGameState, PatcherRunFailure, 0)) { return false; }
 
 			// Set focus on patcher:
 			intr.Wait(4000);
-			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
+			Screen.WindowActivate(intr, States.GAMEPATCHEREXE);
 			intr.Wait(1000);
 
 			// Make sure server is up:
-			if (Game.IsServerState(intr, ServerState.Down)) {
+			if (States.IsServerState(intr, ServerState.Down)) {
 				intr.Log("Server is down. Waiting until it comes up...");
 				//intr.Wait(1200000);
 				//return false;
 
 				// Check every 1min for 20min and return false (relaunching patcher) if unsuccessful.
-				if (!intr.WaitUntil(1200, 60, ServerState.Up, Game.IsServerState, PatcherServerFailure, 0)) { return false; }
+				if (!intr.WaitUntil(1200, 60, ServerState.Up, States.IsServerState, PatcherServerFailure, 0)) { return false; }
 			}
 
 			// Wait for login button to appear:
-			if (!intr.WaitUntil(90, PatcherState.LogIn, Game.IsPatcherState, PatcherRunFailure, 0)) { return false; }
+			if (!intr.WaitUntil(90, PatcherState.LogIn, States.IsPatcherState, PatcherRunFailure, 0)) { return false; }
 
 			// Set focus on patcher:
-			Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
+			Screen.WindowActivate(intr, States.GAMEPATCHEREXE);
 
 			//while (intr.WaitUntil(10, PatcherState.LogIn, Game.IsPatcherState, null, 0)) {			
 			//	//Keyboard.SendEvent(intr, "{Shift down}{Tab}{Shift up}");
@@ -81,7 +81,7 @@ namespace NeverClicker.Interactions {
 			// // Set focus on patcher:
 			//Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 
-			if (!intr.WaitUntil(1800, PatcherState.PlayButton, Game.IsPatcherState, PatcherLogInFailure, 0)) { return false; }
+			if (!intr.WaitUntil(1800, PatcherState.PlayButton, States.IsPatcherState, PatcherLogInFailure, 0)) { return false; }
 
 			//intr.Wait(1000);
 			//Keyboard.SendKeyWithMod(intr, "Shift", "Tab", Keyboard.SendMode.Event);
@@ -92,7 +92,7 @@ namespace NeverClicker.Interactions {
 			// Click play button image (may not be as reliable as above): 
 			Mouse.ClickImage(intr, "PatcherPlayButton");
 
-			return intr.WaitUntil(60, ClientState.CharSelect, Game.IsClientState, ProduceClientState, 0);
+			return intr.WaitUntil(60, ClientState.CharSelect, States.IsClientState, ProduceClientState, 0);
 		}
 
 		public static bool PatcherKillFailure<TState>(Interactor intr, TState state, int attemptCount) {

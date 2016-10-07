@@ -83,7 +83,7 @@ namespace NeverClicker.Interactions {
 			intr.Wait(3000);
 
 			// Determine if login has been a success:
-			if (!intr.WaitUntil(90, ClientState.InWorld, Game.IsClientState, CharSelectFailure, 0)) {
+			if (!intr.WaitUntil(90, ClientState.InWorld, States.IsClientState, CharSelectFailure, 0)) {
 				// [NOTE]: Look into eliminating this recursion and moving control back up and iterating rather than delving deeper.
 				ProduceClientState(intr, ClientState.CharSelect, 0);
 				SelectCharacter(intr, charIdx, enterWorld);

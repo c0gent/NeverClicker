@@ -9,7 +9,7 @@ namespace NeverClicker.Interactions {
 		public static bool ActivateClient(Interactor intr) {
 			//intr.ExecuteStatement("ActivateNeverwinter()");
 
-			Screen.WindowActivate(intr, Game.GAMECLIENTEXE);
+			Screen.WindowActivate(intr, States.GAMECLIENTEXE);
 
 			intr.Wait(1500);
 

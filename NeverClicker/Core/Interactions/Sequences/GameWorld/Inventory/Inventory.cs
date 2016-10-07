@@ -5,16 +5,16 @@ namespace NeverClicker.Interactions {
 	
 	public static partial class Sequences {
 
-		// Checks to ensure that the inventory was successfully opened.
-		public static bool InventoryIsOpen(Interactor intr) {
-			var invState = Game.DetermineInventoryState(intr);
+		//// Checks to ensure that the inventory was successfully opened.
+		//public static bool InventoryIsOpen(Interactor intr) {
+		//	var invState = States.DetermineInventoryState(intr);
 
-			if (invState == InventoryState.Unknown || invState == InventoryState.None) {
-				return false;
-			} else {
-				return true;
-			}
-		}
+		//	if (invState == InventoryState.None) {
+		//		return false;
+		//	} else {
+		//		return true;
+		//	}
+		//}
 
 		// Opens inventory.
 		public static bool OpenInventory(Interactor intr) {
@@ -22,9 +22,14 @@ namespace NeverClicker.Interactions {
 			string openInventoryKey = intr.AccountSettings.GetSettingValOr("Inventory", "GameHotkeys", Global.Default.InventoryKey);
 			MoveAround(intr);
 			Keyboard.SendKey(intr, openInventoryKey);
-			intr.Wait(2500);
 
-			return InventoryIsOpen(intr);
+			if (intr.WaitUntil(8, WorldWindowState.Inventory, States.IsWorldWindowState, null, 1)) {
+				intr.Log(LogEntryType.Debug, "Inventory is open.");
+				return true;
+			} else {
+				intr.Log(LogEntryType.Error, "Unable to open inventory.");
+				return false;
+			}
 		}
 
 		// Attempts to transfer overflow items to regular inventory.
@@ -38,7 +43,7 @@ namespace NeverClicker.Interactions {
 
 			// If bags tab is not active, click it's icon.
 			if (!bagsTabActive) {
-				if (!(Game.DetermineInventoryState(intr) == InventoryState.Bags)) {
+				if (!(States.DetermineInventoryState(intr) == InventoryState.Bags)) {
 					Mouse.ClickImage(intr, "InventoryTabIconBags");
 					intr.WaitRand(1200, 2200);
 				}
@@ -67,7 +72,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			// If bags tab is not active, click it's icon.
-			if (!(Game.DetermineInventoryState(intr) == InventoryState.Bags)) {
+			if (!(States.DetermineInventoryState(intr) == InventoryState.Bags)) {
 				var iconBags = Screen.ImageSearch(intr, "InventoryTabIconBags");
 				//Mouse.ClickImage(intr, "InventoryTabIconBags");
 				if (iconBags.Found) {
@@ -125,7 +130,7 @@ namespace NeverClicker.Interactions {
 		//
 		// [TODO]: Need error handling channels if detected states don't align with expected.
 		//
-		public static CompletionStatus MaintainInventory(Interactor intr, uint charIdx, bool enchKeyPendingCollection) {
+		public static CompletionStatus MaintainInventory(Interactor intr, uint charIdx) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
 
 			bool InventoryOpened = OpenInventory(intr);
@@ -133,11 +138,8 @@ namespace NeverClicker.Interactions {
 			var enchKeyAvailable = DetectEnchantedKeyAwaitingCollection(intr);
 
 			// Collect Enchanted Key:
-			if (enchKeyPendingCollection) {
-				if (ClaimEnchantedKey(intr, charIdx, InventoryOpened)) {
-				} else {
-					intr.Log(LogEntryType.Fatal, "Unable to collect enchanted key for character " + charIdx + ".");
-				}
+			if (IsEnchantedKeyPending(intr)) {
+				ClaimEnchantedKey(intr, charIdx, InventoryOpened);
 			} else if (enchKeyAvailable) {
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);
 			}

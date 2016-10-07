@@ -8,9 +8,10 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool IsEnchantedKeyPending(Interactor intr) {
 			DateTime KeyLastReceived;
-			if (DateTime.TryParse(intr.AccountSettings.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
+			if (DateTime.TryParse(intr.AccountStates.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
 				if (KeyLastReceived >= TaskQueue.TodaysGameDate) {
 					// We already have key for the day
+					//intr.Log(LogEntryType.Trace, "")
 					return false;
 				}
 			}
@@ -22,7 +23,7 @@ namespace NeverClicker.Interactions {
 		// [TODO]: Need error handling channels if detected states don't align with expected.
 		//
 		public static bool DetectEnchantedKeyAwaitingCollection(Interactor intr) {
-			if (Game.DetermineInventoryState(intr) == InventoryState.Vip) {
+			if (States.DetermineInventoryState(intr) == InventoryState.Vip) {
 				return Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon").Found;
 			} else {
 				return false;
@@ -49,13 +50,16 @@ namespace NeverClicker.Interactions {
 			}
 
 			// If VIP tab is not active, click it's icon.
-			if (!(Game.DetermineInventoryState(intr) == InventoryState.Vip)) {
+			if (!States.IsInventoryState(intr, InventoryState.Vip)) {
 				Mouse.ClickImage(intr, "InventoryTabIconVip");
-				intr.WaitRand(1200, 2200);
-			}
+				intr.Wait(1400);
 
-			// Ensure that we're looking at the VIP tab and the reward icon.
-			if (!DetectEnchantedKeyAwaitingCollection(intr)) { return false; }
+				// Ensure that we're looking at the VIP tab.
+				if (States.DetermineInventoryState(intr) != InventoryState.Vip) {
+					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to select VIP Tab in Inventory window.");
+					return false;
+				}
+			}			
 
 			// Get reward icon location/result:
 			var iconLoc = Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon");
@@ -76,25 +80,28 @@ namespace NeverClicker.Interactions {
 				intr.Wait(2500);
 
 				// Verify that the VIP reward icon is no longer visible:
-				if (!(Game.DetermineInventoryState(intr) == InventoryState.Vip)) {
+				if (!(States.DetermineInventoryState(intr) == InventoryState.Vip)) {
 					intr.Log(LogEntryType.FatalWithScreenshot, "Inventory window VIP tab not active when it should be.");
 					return false;
 				} else {
 					if (Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon").Found) {
 						intr.Log(LogEntryType.FatalWithScreenshot, "Error clicking on claim button.");
-						intr.Log(LogEntryType.Normal, "Enchanted key collected by character " + charIdx + ".");
-						intr.AccountSettings.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
-						return true;
-					} else {
 						return false;
+					} else {
+						intr.Log(LogEntryType.Normal, "Enchanted key collected on character " + charIdx + ".");
+						intr.AccountStates.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
+						return true;
 					}
 				}
 
 				// [TODO]: Open Enchanted Key Bag
 				
 			} else {
-				intr.Log(LogEntryType.Info, "Failure to claim enchanted key by character " + charIdx + ".");
-
+				if (States.DetermineInventoryState(intr) == InventoryState.Vip) {
+					intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character " + charIdx + ".");
+					intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
+					intr.AccountStates.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
+				}
 				//if (!inventoryOpened) {
 				//	//Keyboard.SendKey(intr, openInventoryKey);
 				//	MoveAround(intr);
