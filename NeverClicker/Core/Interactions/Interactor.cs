@@ -51,10 +51,9 @@ namespace NeverClicker.Interactions {
 
 			BackwardCompatability();
 			
-			var logFileName = Settings.Default.LogsFolderPath + SettingsForm.LOG_FILE_NAME;
-
 			FileTarget target = LogManager.Configuration.FindTargetByName<FileTarget>("logFile");
-				target.FileName = logFileName;
+			target.FileName = Settings.Default.LogsFolderPath + SettingsForm.LOG_FILE_NAME;
+			target.ArchiveFileName = Settings.Default.LogsFolderPath + @"/Log.{#}.archive.txt";
 
 			InitAlibEng();
 			return true;
@@ -62,26 +61,6 @@ namespace NeverClicker.Interactions {
 
 		// Migrate any settings which may have been moved
 		private void BackwardCompatability() {
-			//// Move `CharacterSelectScrollBarTopX` & `CharacterSelectScrollBarTopY` from `KeyBindAndUi` to `ClickLocations`:
-			//int characterSelectScrollBarTopX;
-
-			//if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "ClickLocations", out characterSelectScrollBarTopX)) {
-			//	if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopX", "KeyBindAndUi", out characterSelectScrollBarTopX)) {
-			//		ClientSettings.SaveSetting(characterSelectScrollBarTopX.ToString(), "CharacterSelectScrollBarTopX", "ClickLocations");
-			//	} else {
-			//		Log("Unable to load 'CharacterSelectScrollBarTopX' setting.", LogEntryType.Fatal);
-			//	}				
-			//}
-
-			//int characterSelectScrollBarTopY;
-
-			//if (!ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "ClickLocations", out characterSelectScrollBarTopY)) {
-			//	if (ClientSettings.TryGetSetting("CharacterSelectScrollBarTopY", "KeyBindAndUi", out characterSelectScrollBarTopY)) {
-			//		ClientSettings.SaveSetting(characterSelectScrollBarTopY.ToString(), "CharacterSelectScrollBarTopY", "ClickLocations");
-			//	} else {
-			//		Log("Unable to load 'CharacterSelectScrollBarTopY' setting.", LogEntryType.Fatal);
-			//	}
-			//}
 
 			// IMPORT OLD ACCOUNT SETTINGS:
 
@@ -95,6 +74,7 @@ namespace NeverClicker.Interactions {
 				this.AccountSettings = new AccountSettings();
 				this.AccountStates = new AccountStates();
 			}
+
 
 			// IMPORT OLD CLIENT SETTINGS:
 
@@ -119,69 +99,52 @@ namespace NeverClicker.Interactions {
 			AlibEng.Exec("SetKeyDelay, 55, 15");
 		}
 
-		// UpdateQueueList(): MAKE THIS ASYNC
+		// UpdateQueueList()
 		public void UpdateQueueList(ImmutableSortedDictionary<long, GameTask> taskListCopy) {
 			QueueList.Report(taskListCopy);
-		}
-
-		//public void Log(string message) {
-		//	Log(message, LogEntryType.Normal);
-		//}
-
-		public void Log(string message, LogEntryType lt) {
-			//if (message != null) {
-			//	ProgressLog.Report(new LogMessage(message, lt));
-			//} else {
-			//	ProgressLog.Report(new LogMessage("Interactor::Log(): null log message passed!", LogEntryType.Warning));
-			//}
-			Log(new LogMessage(message, lt));
-		}
-
-		//public void Log(LogMessage logMessage) {
-		//	ProgressLog.Report(logMessage);
-		//}
+		}		
 
 		public void Log(string message) {
 			Log(new LogMessage(message));
+		}
+
+		public void Log(LogEntryType lt, string message) {
+			Log(new LogMessage(lt, message));
+		}
+
+		public void Log(LogEntryType lt, string message, params object[] args) {
+			Log(new LogMessage(lt, message, args));
 		}
 		
 		public void Log(LogMessage logMessage) {			
 			switch (logMessage.Type) {
 				case LogEntryType.FatalWithScreenshot:					
-					//LogFile.AppendMessage(logMessage);
-					logger.Fatal(logMessage.Text);
-					//MainForm.WriteLine(logMessage.Text);
+					logger.Fatal(logMessage.Text, logMessage.Args);
 					ProgressLog?.Report(logMessage);
-					//MessageBox.Show(MainForm, logMessage.Text + " -- " 
-					//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
-					//MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
 					ErrorLog?.Report(new LogMessage(logMessage.Text + " -- " + SaveErrorScreenshot()));
 					break;
 				case LogEntryType.Fatal:					
-					//LogFile.AppendMessage(logMessage); 
-					logger.Fatal(logMessage.Text);
+					logger.Fatal(logMessage.Text, logMessage.Args);
 					ProgressLog?.Report(logMessage);
-					//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
 					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Error:
-					//LogFile.AppendMessage(logMessage);
-					logger.Error(logMessage.Text);
+					logger.Error(logMessage.Text, logMessage.Args);
 					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Warning:
 				case LogEntryType.Normal:
-					//LogFile.AppendMessage(logMessage);
-					logger.Info(logMessage.Text);
+					logger.Info(logMessage.Text, logMessage.Args);
 					ProgressLog?.Report(logMessage);
 					break;
 				case LogEntryType.Info:
-					//LogFile.AppendMessage(logMessage);
-					logger.Info(logMessage.Text);
+					logger.Info(logMessage.Text, logMessage.Args);
 					break;
 				case LogEntryType.Debug:
-					//if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
-					if (Settings.Default.LogDebugMessages) { logger.Debug(logMessage.Text); }					
+					if (Settings.Default.LogDebugMessages) { logger.Debug(logMessage.Text); }	
+					break;
+				case LogEntryType.Trace:
+					if (Settings.Default.LogTraceMessages) { logger.Debug(logMessage.Text); }		
 					break;
 			}
 		}
@@ -213,7 +176,7 @@ namespace NeverClicker.Interactions {
 		// CONVERT TO ASYNC
 		private bool LoadScript(string fileName) {
 			if (!File.Exists(fileName)) {
-				Log(fileName + " does not exist.", LogEntryType.Fatal);
+				Log(LogEntryType.Fatal, "{0} does not exist.", fileName);
 				return false;
 			} 
 
@@ -223,11 +186,11 @@ namespace NeverClicker.Interactions {
 					//log.Report(String.Format("Attempting to load '{0}'.", NwCommonFileName));
 					AlibEng.AddFile(fileName);
 				} catch (Exception e) {
-					Log(string.Format("Problem loading: '{0}': {1}", fileName, e), LogEntryType.Error);
+					Log(LogEntryType.Error, "Problem loading: '{0}': {1}", fileName, e);
 					continue;
 				}
 
-				Log(string.Format("'{0}' loaded.", fileName), LogEntryType.Debug);
+				Log(LogEntryType.Debug, string.Format("'{0}' loaded.", fileName));
 				break;
 			}
 
@@ -244,7 +207,7 @@ namespace NeverClicker.Interactions {
 				CancelSource = new CancellationTokenSource();
 				State = AutomationState.Running;
 			} else {
-				Log("Interactor::Start(): Automation already running", LogEntryType.Fatal);
+				Log(LogEntryType.Fatal, "Interactor::Start(): Automation already running");
 				throw new AlreadyRunningException();
 			}
 
@@ -327,11 +290,13 @@ namespace NeverClicker.Interactions {
 			int maxIters = maxWaitSeconds / secondsPerIter;
 			int iters = 0;
 
-			this.Log("Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.", LogEntryType.Debug);
+			//this.Log(LogEntryType.Debug, "Waiting for " + endState.ToString() + " a maximum of " + maxWaitSeconds.ToString("F0") + " seconds.");
+			this.Log(LogEntryType.Debug, "Waiting for {0} a maximum of {1:F0} seconds.",
+				endState);
 
 			while (!(isState(this, endState))) {
 				if (CancelSource.IsCancellationRequested) { return false; }
-				this.Log("Waiting until state: " + endState.ToString() + ".", LogEntryType.Debug);
+				this.Log(LogEntryType.Debug, "Waiting until state: {0}.", endState);
 				this.Wait(1000 * secondsPerIter);
 				iters += 1;
 				if (iters >= maxIters) {					
@@ -378,7 +343,7 @@ namespace NeverClicker.Interactions {
 
 		public void Wait(int millisecondsDelay) {
 			VerifyRunning();
-			Log("Waiting for " + millisecondsDelay.ToString("F0") + "ms.", LogEntryType.Debug);
+			Log(LogEntryType.Trace, "Waiting for {0:F0} ms.", millisecondsDelay);
 			try {
 				Task.Delay(millisecondsDelay, CancelSource.Token).Wait();
 			} catch (AggregateException ae) {
@@ -386,7 +351,7 @@ namespace NeverClicker.Interactions {
 					if (x is TaskCanceledException) {						
 						return true;
 					} else {
-						Log("Interactor::Wait(): Error: " + x.ToString(), LogEntryType.Fatal);
+						Log(LogEntryType.Trace, "Interactor::Wait(): Error: {0}", x);
 						//MessageBox.Show(x.ToString());
 						return false; // Let anything else stop the application.
 					}
@@ -496,11 +461,11 @@ namespace NeverClicker.Interactions {
 
 		public static void LogWaitStatus<TState>(Interactor intr, TState end, bool success) {
 			if (success) {
-				intr.Log("WaitUntil(): Found client state: "
-					+ " -> " + end.ToString() + ".", LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "WaitUntil(): Found client state: " +
+					" -> {0}.", end);
 			} else {
-				intr.Log("WaitUntil(): Failure to find client state: "
-					+ " -> " + end.ToString() + ". Re-evaluating...", LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "WaitUntil(): Failure to find client state: "
+					+ " -> {0}. Re-evaluating...", end);
 			}
 		}
 	}
@@ -528,68 +493,3 @@ namespace NeverClicker.Interactions {
 		public NotRunningException(string message, Exception inner) : base(message, inner) { }
 	}
 }
-
-
-
-// SHOULD BE ASYNC BUT DEPRICATING EVENTUALLY ANYWAY
-		//public bool InitOldScript_DEPRICATING() {
-		//	VerifyRunning();
-		//	string scriptRoot = Settings.Default.UserRootFolderPath + "\\Assets";
-
-		//	if (Directory.Exists(Settings.Default.AssetsFolderPath)) {
-		//		scriptRoot = Settings.Default.AssetsFolderPath;
-		//	} else {
-		//		Log(Settings.Default.AssetsFolderPath + " does not exist. Using: " + Settings.Default.UserRootFolderPath + "\\Assets");
-		//	}
-
-		//	string gameExeRoot = Settings.Default.NeverwinterExePath;
-		//	string settingsFolder = Settings.Default.SettingsFolderPath;
-  //          string imagesFolder = Settings.Default.ImagesFolderPath;
-		//	string logsFolder = Settings.Default.LogsFolderPath;
-  //          string scriptFileName = "\\NW_Common.ahk";
-
-		//	if ((scriptRoot == "") || (gameExeRoot == "")) {
-		//		Log(string.Format("Cannot load script file or paths: '{0}' & '{1}'.", scriptRoot, gameExeRoot), LogEntryType.Fatal);
-		//		return false;
-		//	}
-
-		//	try {
-		//		var nwCommonFileName = scriptRoot + scriptFileName;
-
-		//		if (!File.Exists(nwCommonFileName)) {
-		//			Log("Error: " + nwCommonFileName + " does not exist.", LogEntryType.Fatal);
-		//			return false;
-		//		}
-
-		//		if (!LoadScript(nwCommonFileName)) {
-		//			return false;
-		//		}
-
-		//		AlibEng.Exec("SetWorkingDir %A_ScriptDir%");
-		//		//AlibEng.Exec("A_CommonDir = " + scriptRoot);
-		//		AlibEng.Exec("A_SettingsDir = " + settingsFolder);
-		//		//Log("A_ImagesDir = " + imagesFolder);
-  //              AlibEng.Exec("A_ImagesDir = " + imagesFolder);
-		//		AlibEng.Exec("A_LogsDir = " + logsFolder);
-		//		AlibEng.Exec("NwFolder := \"" + Path.GetDirectoryName(gameExeRoot) + "\"");
-		//		//AlibEng.Exec("NwExe := " + gameExeRoot);
-
-					
-
-		//		this.AlibEng.Exec("gcs_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
-		//		this.AlibEng.Exec("as_ini := \"" + Settings.Default.SettingsFolderPath.ToString() + "\"");
-		//		this.AlibEng.Exec("ai_log := \"" + Settings.Default.LogsFolderPath + "\"");
-
-		//		AlibEng.Exec("ToggleAfk := 0");
-		//		AlibEng.Exec("ToggleMouseDragClick := 0");
-		//		AlibEng.Exec("ToggleShit := 0");
-
-		//		AlibEng.ExecFunction("Init");
-		//	} catch (Exception ex) {
-		//		Log(ex.ToString(), LogEntryType.Error);
-		//		return false;
-		//	}
-
-		//	Log("Old script initialized.", LogEntryType.Debug);
-		//	return true;
-		//}

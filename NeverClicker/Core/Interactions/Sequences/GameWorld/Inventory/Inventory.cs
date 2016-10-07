@@ -18,7 +18,7 @@ namespace NeverClicker.Interactions {
 
 		// Opens inventory.
 		public static bool OpenInventory(Interactor intr) {
-			intr.Log("Opening inventory...", LogEntryType.Debug);
+			intr.Log(LogEntryType.Debug, "Opening inventory...");
 			string openInventoryKey = intr.AccountSettings.GetSettingValOr("Inventory", "GameHotkeys", Global.Default.InventoryKey);
 			MoveAround(intr);
 			Keyboard.SendKey(intr, openInventoryKey);
@@ -75,7 +75,7 @@ namespace NeverClicker.Interactions {
 					Mouse.Move(intr, iconBags.Point.X - 30, iconBags.Point.Y);
 					intr.WaitRand(250, 300);
 				} else {
-					intr.Log("Unable to find 'InventoryTabIconBags'.", LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "Unable to find 'InventoryTabIconBags'.");
 					return CompletionStatus.Failed;
 				}
 			}			
@@ -88,7 +88,7 @@ namespace NeverClicker.Interactions {
 			//var openAnotherBtnLoc = new Point();			
 
 			if (bagSearchResult.Found) {
-				intr.Log("Opening celestial bags...", LogEntryType.Debug);			
+				intr.Log(LogEntryType.Debug, "Opening celestial bags...");
 				OpenRewardBag(intr, bagSearchResult);
 
 				intr.Wait(800);
@@ -136,8 +136,7 @@ namespace NeverClicker.Interactions {
 			if (enchKeyPendingCollection) {
 				if (ClaimEnchantedKey(intr, charIdx, InventoryOpened)) {
 				} else {
-					intr.Log("Unable to collect enchanted key for character " + charIdx + ".",
-						LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "Unable to collect enchanted key for character " + charIdx + ".");
 				}
 			} else if (enchKeyAvailable) {
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);

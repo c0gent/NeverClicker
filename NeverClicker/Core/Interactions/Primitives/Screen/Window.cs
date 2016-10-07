@@ -19,7 +19,8 @@ namespace NeverClicker.Interactions {
 		public static bool WindowDetect(Interactor intr, string windowExe, string flavor) {
 			string detectionParam = string.Format("ahk_exe {0}", windowExe);
 			var result = intr.EvaluateFunction("Win" + flavor, detectionParam);
-			intr.Log("Interactions::Screen::WindowDetect" + flavor + "(): Win" + flavor + "(" + detectionParam + "): '" + result + "'", LogEntryType.Debug);
+			intr.Log(LogEntryType.Trace, "Interactions::Screen::WindowDetect{0}(): Win{0}({1}): '{2}'",
+				flavor, detectionParam, result);
 
 			if ((result.Trim() == "0x0") || (string.IsNullOrWhiteSpace(result))) {
 				return false;
@@ -29,9 +30,6 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static void WindowRun(Interactor intr, string windowExePath) {
-			//string param = string.Format("\"{0}\"", windowExePath);
-			//string exeFolder = "\"" + Path.GetDirectoryName(windowExePath) + "\"";
-
 			string runFolder = Path.GetDirectoryName(windowExePath);
 			intr.ExecuteStatement("Run, " + windowExePath + ", " + runFolder);
 		}

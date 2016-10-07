@@ -214,5 +214,17 @@ namespace NeverClicker.Properties {
                 this["LogDebugMessages"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogTraceMessages {
+            get {
+                return ((bool)(this["LogTraceMessages"]));
+            }
+            set {
+                this["LogTraceMessages"] = value;
+            }
+        }
     }
 }

@@ -52,36 +52,6 @@ namespace NeverClicker {
 			MainForm.AppendError(message);
 		}
 
-		//public void Log(LogMessage logMessage) {			
-		//	switch (logMessage.Type) {
-		//		case LogEntryType.FatalWithScreenshot:					
-		//			LogFile.AppendMessage(logMessage);
-		//			MainForm.WriteLine(logMessage.Text);
-		//			//MessageBox.Show(MainForm, logMessage.Text + " -- " 
-		//			//	+ SaveErrorScreenshot(), "NeverClicker - " + logMessage.Text);
-		//			MainForm.AppendError(logMessage.Text + " -- " + SaveErrorScreenshot());
-		//			break;
-		//		case LogEntryType.Fatal:					
-		//			LogFile.AppendMessage(logMessage);
-		//			MainForm.WriteLine(logMessage.Text);
-		//			//MessageBox.Show(MainForm, logMessage.Text, "NeverClicker - " + logMessage.Text);
-		//			MainForm.AppendError(logMessage.Text);
-		//			break;
-		//		case LogEntryType.Error:
-		//		case LogEntryType.Warning:
-		//		case LogEntryType.Normal:
-		//			LogFile.AppendMessage(logMessage);
-		//			MainForm.WriteLine(logMessage.Text);
-		//			break;				
-		//		case LogEntryType.Info:
-		//			LogFile.AppendMessage(logMessage);
-		//			break;
-		//		case LogEntryType.Debug:
-		//			if (Settings.Default.LogDebugMessages) { LogFile.AppendMessage(logMessage); }
-		//			break;				
-		//	}
-		//}
-
 		private Progress<LogMessage> GetLogProgress() {
 			return new Progress<LogMessage>(l => MainForm.WriteLine(l.Text));
 		}

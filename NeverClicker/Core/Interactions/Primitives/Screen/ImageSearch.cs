@@ -33,7 +33,6 @@ namespace NeverClicker.Interactions {
 			string imageFileName;
 
 			if (!intr.ClientSettings.TryGetSetting(imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles", out imageFileName)) {
-				//intr.Log("Image code prefix '" + imgCode + "' not found in settings ini file. Creating.", LogEntryType.Debug);
 				imageFileName = imgCode + ".png";
 				intr.ClientSettings.SaveSetting(imageFileName, imgCode + "_ImageFile", "SearchRectanglesAnd_ImageFiles");
 			}
@@ -46,10 +45,12 @@ namespace NeverClicker.Interactions {
 				imageFilePath = SettingsForm.ProgramRootFolder + SettingsForm.BUILTIN_IMAGES_SUBPATH + "\\" + imageFileName;
 			}
 
-			intr.Log(new LogMessage("ImageSearch(" + imgCode + "): Searching for image: '" + imageFilePath + "'"
-				+ " [TopLeft:" + topLeft.ToString()
-				+ " BotRight:" + botRight.ToString() + "]",
-				LogEntryType.Debug			
+			intr.Log(new LogMessage(LogEntryType.Debug, "ImageSearch({0}): Searching for image: '{1}'"
+				+ " [TopLeft:{2} BotRight:{3}]",
+				imgCode,
+				imageFilePath,
+				topLeft,
+				botRight
 			));
 
 			int outX = 0;
@@ -74,10 +75,10 @@ namespace NeverClicker.Interactions {
 
 			switch (errorLevel) {
 				case 0:
-					intr.Log("ImageSearch(" + imgCode + "): Found.", LogEntryType.Debug);
+					intr.Log(LogEntryType.Trace, "ImageSearch({0}): Found.", imgCode);
 					return new ImageSearchResult(true, new Point(outX, outY));
 				case 1:
-					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Debug);
+					intr.Log(LogEntryType.Trace, "ImageSearch({0}): Not Found.", imgCode);
 					return new ImageSearchResult(false, new Point(outX, outY));
 				case 2:
 					intr.Log(new LogMessage(
@@ -87,11 +88,11 @@ namespace NeverClicker.Interactions {
 							+ " ErrorLevel:" + intr.GetVar(ERROR_LEVEL),
 							LogEntryType.Debug					
 					));
-					intr.Log("ImageSearch(" + imgCode + "): FATAL ERROR. INVALID IMAGE FILE OR OPTION FORMAT. " +
-						"(Path: " + imageFilePath + ")", LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "ImageSearch(" + imgCode + "): FATAL ERROR. INVALID IMAGE FILE OR OPTION FORMAT. " +
+						"(Path: " + imageFilePath + ")");
 					return new ImageSearchResult(false, new Point(outX, outY));
 				default:
-					intr.Log("ImageSearch(" + imgCode + "): Not Found.", LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "ImageSearch(" + imgCode + "): Not Found.");
 					return new ImageSearchResult(false, new Point(outX, outY));
 			}
 		}

@@ -17,7 +17,7 @@ namespace NeverClicker.Interactions {
 		public static bool SelectCharacter(Interactor intr, uint charIdx, bool enterWorld) {
 			if (intr.CancelSource.IsCancellationRequested) { return false; }
 
-			intr.Log("Selecting character " + charIdx.ToString() + " ...", LogEntryType.Info);
+			intr.Log(LogEntryType.Info, "Selecting character " + charIdx.ToString() + " ...");
 
 			int charCount = intr.AccountSettings.GetSettingValOr("CharacterCount", "General", 0);
 
@@ -39,7 +39,7 @@ namespace NeverClicker.Interactions {
 
 			if ((charCount == 0) || (charSlotX == 0) || (topSlotY == 0) || (visibleSlots == 0)
 						|| (scrollBarTopX == 0) || (scrollBarTopY == 0)) {
-				intr.Log("SelectCharacter(): Error loading ini file settings", LogEntryType.Fatal);
+				intr.Log(LogEntryType.Fatal, "SelectCharacter(): Error loading ini file settings");
 				return false;
 			}
 

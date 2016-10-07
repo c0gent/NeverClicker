@@ -127,7 +127,7 @@ namespace NeverClicker.Interactions {
 
 			var keySeq = "{" + keyModStr + " down}{" + keyStr + "}{" + keyModStr + " up}";
 
-			intr.Log("SendKeyWithMod(): Executing: '"+ modeStr + keySeq + "' ...", LogEntryType.Debug);
+			intr.Log(LogEntryType.Trace, "SendKeyWithMod(): Executing: '"+ modeStr + keySeq + "' ...");
 			intr.ExecuteStatement(modeStr + keySeq);
 
 			//SendEvent(intr, "{Shift down}{Tab}{Shift up}");

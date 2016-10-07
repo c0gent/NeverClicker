@@ -22,7 +22,7 @@ namespace NeverClicker.Interactions {
 			int charsTotal = intr.AccountSettings.GetSettingValOr("CharacterCount", "General", 0);
 
 			if (queue.IsEmpty) {
-				intr.Log("Auto-populating task queue: (0 -> " + (charsTotal).ToString() + ")");
+				intr.Log("Populating task queue: (0 -> " + (charsTotal).ToString() + ")");
 				queue.Populate(intr, charsTotal, RESET_DAY);
 
 				//intr.Log("Calling intr.UpdateQueueList()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
@@ -44,10 +44,10 @@ namespace NeverClicker.Interactions {
 					intr.Log("Curfew time. Sleeping for " + (sleepTime / 60000).ToString() + " minutes.");					
 				}
 
-				intr.Log("AutoCycle(): Loop iteration starting.", LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "AutoCycle(): Loop iteration starting.");
 				
 				TimeSpan nextTaskMatureDelay = queue.NextTaskMatureDelay();
-				intr.Log("AutoCycle(): Next task mature delay: " + nextTaskMatureDelay, LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "AutoCycle(): Next task mature delay: " + nextTaskMatureDelay);
 				
 				if (nextTaskMatureDelay.Ticks <= 0) { // TASK TIMER HAS MATURED -> CONTINUE
 					// ##### ENTRY POINT -- INVOKING & PROCESSING CHARACTER #####
@@ -89,7 +89,7 @@ namespace NeverClicker.Interactions {
 				//if (intr.CancelSource.IsCancellationRequested) { return; }				
 			}
 
-			intr.Log("Autocycle complete.", LogEntryType.Info);
+			intr.Log(LogEntryType.Info, "Autocycle complete.");
 
 			//intr.GameAccount.SaveSetting("0", "CharZeroIdxLastInvoked", "Invocation");
 			//intr.Log("AutoCycle(): Returning.", LogEntryType.Info);

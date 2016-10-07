@@ -17,8 +17,8 @@ namespace NeverClicker.Interactions {
 			if (gameUserName == "enter_user_name" || gameUserName == ""
 					|| gamePassword == "enter_password" || gamePassword == "")
 			{
-				intr.Log("Username and/or Password not configured properly. Please edit " +
-					"NeverClicker_GameAccount.ini and enter them there.", LogEntryType.Fatal);
+				intr.Log(LogEntryType.Fatal, "Username and/or Password not configured properly. Please edit " +
+					"NeverClicker_GameAccount.ini and enter them there.");
 				intr.CancelSource.Cancel();
 				return false;
 			}
@@ -96,22 +96,22 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static bool PatcherKillFailure<TState>(Interactor intr, TState state, int attemptCount) {
-			intr.Log("Failed to launch Patcher, unable to close existing process. Patcher state: " + state.ToString(), LogEntryType.Error);
+			intr.Log(LogEntryType.Error, "Failed to launch Patcher, unable to close existing process. Patcher state: " + state.ToString());
 			return false;
 		}
 
 		public static bool PatcherRunFailure<TState>(Interactor intr, TState state, int attemptCount) {
-			intr.Log("Failed to launch Patcher, login button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
+			intr.Log(LogEntryType.Error, "Failed to launch Patcher, login button not found. Patcher state: " + state.ToString());
 			return false;
 		}
 
 		public static bool PatcherLogInFailure<TState>(Interactor intr, TState state, int attemptCount) {
-			intr.Log("Failed to log in using patcher, play button not found. Patcher state: " + state.ToString(), LogEntryType.Error);
+			intr.Log(LogEntryType.Error, "Failed to log in using patcher, play button not found. Patcher state: " + state.ToString());
 			return false;
 		}
 
 		public static bool PatcherServerFailure<TState>(Interactor intr, TState state, int attemptCount) {
-			intr.Log("Failed to log in using patcher, server status down. Patcher state: " + state.ToString(), LogEntryType.Error);
+			intr.Log(LogEntryType.Error, "Failed to log in using patcher, server status down. Patcher state: " + state.ToString());
 			return false;
 		}
 	}

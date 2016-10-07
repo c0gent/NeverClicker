@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool CrashCheckRecovery(Interactor intr, int prev_tries_unimplemented) {
-			intr.Log("CrashCheckRecovery(): Initiating...", LogEntryType.Info);
+			intr.Log(LogEntryType.Info, "CrashCheckRecovery(): Initiating...");
 
 			Screen.Wake(intr);
 

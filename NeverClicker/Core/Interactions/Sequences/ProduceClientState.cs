@@ -12,32 +12,32 @@ namespace NeverClicker.Interactions {
 
 			attemptCount += 1;
 
-			intr.Log("Attempting to produce client state: " + desiredState.ToString(), LogEntryType.Info);
+			intr.Log(LogEntryType.Info, "Attempting to produce client state: " + desiredState.ToString());
 
 			if (Game.IsClientState(intr, desiredState)) {
-				intr.Log("Client state is already: " + desiredState.ToString(), LogEntryType.Info);
+				intr.Log(LogEntryType.Info, "Client state is already: " + desiredState.ToString());
 				return true;
 			} else if (desiredState == ClientState.Inactive) {
 				if (Game.IsGameState(intr, GameState.ClientActive)) {
-					intr.Log("Minimizing client...", LogEntryType.Normal);
+					intr.Log( "Minimizing client...");
 					Screen.WindowMinimize(intr, Game.GAMECLIENTEXE);					
 				} 
 				return true;
 			} else if (desiredState == ClientState.None) {
-				intr.Log("Attempting to close game client...", LogEntryType.Normal);
+				intr.Log("Attempting to close game client...");
 				KillAll(intr);
 				return true;
 			} else if (desiredState == ClientState.CharSelect) {
 				var currentClientState = Game.DetermineClientState(intr);
-				intr.Log("Interactions::ProduceClientState(): Current client state is " + 
-					currentClientState.ToString(), LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "Interactions::ProduceClientState(): Current client state is " + 
+					currentClientState.ToString());
 				switch (currentClientState) {
 					case ClientState.None:
 						intr.Log("Launching patcher...");
 						return PatcherLogin(intr, desiredState);
 					case ClientState.Inactive:						
 						intr.Log("Game client is currently in the background. Waiting 30 seconds " +
-							"or until client is brought to foreground before continuing...", LogEntryType.Normal);
+							"or until client is brought to foreground before continuing...");
 
 						const int waitIncr = 5000;
 
@@ -47,28 +47,28 @@ namespace NeverClicker.Interactions {
 						}
 
 						//intr.Wait(30000);
-						intr.Log("Activating Client...", LogEntryType.Normal);
+						intr.Log("Activating Client...");
 						ActivateClient(intr);
 						return intr.WaitUntil(10, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 					case ClientState.InWorld:
 						if (attemptCount >= 10) {
-							intr.Log("Stuck at in world. Killing all and restarting.", LogEntryType.FatalWithScreenshot);
+							intr.Log(LogEntryType.FatalWithScreenshot, "Stuck at in world. Killing all and restarting.");
 							KillAll(intr);
 							intr.Wait(5000);
 							return ProduceClientState(intr, ClientState.CharSelect, 0);
 						} else {
-							intr.Log("Logging out...", LogEntryType.Normal);
+							intr.Log("Logging out...");
 							LogOut(intr);
 							return intr.WaitUntil(45, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 						}
 					case ClientState.LogIn:
 						if (attemptCount >= 10) {
-							intr.Log("Stuck at client login screen. Killing all and restarting.", LogEntryType.FatalWithScreenshot);
+							intr.Log(LogEntryType.FatalWithScreenshot, "Stuck at client login screen. Killing all and restarting.");
 							KillAll(intr);
 							intr.Wait(5000);
 							return ProduceClientState(intr, ClientState.CharSelect, 0);
 						} else {
-							intr.Log("Client open, at login screen.", LogEntryType.Normal);
+							intr.Log("Client open, at login screen.");
 							ClientSignIn(intr);
 							return intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, ProduceClientState, attemptCount);
 						}
@@ -77,7 +77,7 @@ namespace NeverClicker.Interactions {
 						ClearDialogues(intr);
 
 						if (!intr.WaitUntil(30, ClientState.CharSelect, Game.IsClientState, null, attemptCount)) {
-							intr.Log("Client state unknown. Attempting crash recovery...", LogEntryType.Info);
+							intr.Log(LogEntryType.Info, "Client state unknown. Attempting crash recovery...");
 
 							CrashCheckRecovery(intr, 0);
 							return ProduceClientState(intr, desiredState, attemptCount);

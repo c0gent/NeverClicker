@@ -70,11 +70,10 @@ namespace NeverClicker {
 			// IF NOT ADD
 			// IF SO, CHECK TO SEE IF THAT TASK HAS MATURED
 			// IF IT HAS MATURED, ADVANCE
-			intr.Log("Advancing task: "
+			intr.Log(LogEntryType.Info, "Advancing task: "
 				+ "[charIdx: " + charIdx 
 				+ ", taskKind: " + taskKind.ToString()
-				+ ", taskId: " + taskId + "]."				
-				, LogEntryType.Info);
+				+ ", taskId: " + taskId + "].");
 
 			var nowTicks = DateTime.Now.AddSeconds(1).Ticks;
 			long taskKey = 0;
@@ -83,33 +82,32 @@ namespace NeverClicker {
 			//DateTime matureTime = DateTime.Now;
 
 			if (keyExists) {
-				intr.Log("Key found for task: " + 
+				intr.Log(LogEntryType.Debug, "Key found for task: " + 
 					"id: " + taskId.ToString() + ", " + 
 					"kind: " + taskKind.ToString() + ", " +
-					"char: " + charIdx.ToString() + ". ",
-					LogEntryType.Debug);
+					"char: " + charIdx.ToString() + ". ");
 
 				if (taskKey < nowTicks) { // MATURE
-					intr.Log("Task is mature.", LogEntryType.Debug);
+					intr.Log(LogEntryType.Debug, "Task is mature.");
 					//var oldTask = Queue[taskKey];
-					intr.Log("Removing old task.", LogEntryType.Debug);
+					intr.Log(LogEntryType.Debug, "Removing old task.");
 					Queue.Remove(taskKey); 
 
 					if (taskKind == TaskKind.Invocation) {
-						intr.Log("Queuing subsequent invocation task.", LogEntryType.Debug);
+						intr.Log(LogEntryType.Debug, "Queuing subsequent invocation task.");
 						var invokesToday = (incrementTaskId) ? taskId + 1 : taskId;
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					} else if (taskKind == TaskKind.Profession) {
-						intr.Log("Queuing subsequent professions task.", LogEntryType.Debug);
+						intr.Log(LogEntryType.Debug, "Queuing subsequent professions task.");
 						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
 					}					
 				} else { // NOT MATURE
-					intr.Log("Task is not mature: taskKey: " + taskKey + 
-						", nowTicks: " + nowTicks + ".", LogEntryType.Debug);
+					intr.Log(LogEntryType.Debug, "Task is not mature: taskKey: " + taskKey + 
+						", nowTicks: " + nowTicks + ".");
 					// DO NOTHING?
 				}
 			} else { // DOESN'T EXIST YET
-				intr.Log("Key not found for task.", LogEntryType.Info);
+				intr.Log(LogEntryType.Info, "Key not found for task.");
 				if (taskKind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, 1);
 				} else if (taskKind == TaskKind.Profession) {
@@ -168,14 +166,14 @@ namespace NeverClicker {
 				}
 			} else { // (INVOKES >= 6) QUEUE FOR TOMORROW
 				try {
-					intr.Log("Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
-						+ charIdx + " on: " + todaysInvokeDate, LogEntryType.Debug);
+					intr.Log(LogEntryType.Debug, "Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
+						+ charIdx + " on: " + todaysInvokeDate);
 					intr.AccountStates.SaveCharState(todaysInvokeDate, charIdx, "InvokesCompleteFor");
 					intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
 					taskMatureTime = nextThreeThirty;
 					//invokesToday = 6;
 				} catch (Exception ex) {
-                    intr.Log("Error saving InvokesCompleteFor" + ex.ToString(), LogEntryType.Error);
+                    intr.Log(LogEntryType.Error, "Error saving InvokesCompleteFor" + ex.ToString());
 				}
 			}
 
@@ -185,9 +183,9 @@ namespace NeverClicker {
 				intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
 				intr.AccountStates.SaveCharState(now, charIdx, "MostRecentInvocationTime");
 				//intr.GameAccount.SaveSetting(charIdx.ToString(), "CharLastInvoked", "Invocation");
-				intr.Log("Settings saved to ini for: " + charLabel + ".", LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "Settings saved to ini for: " + charLabel + ".");
 			} catch (Exception ex) {
-				intr.Log("Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString(), LogEntryType.Error);
+				intr.Log(LogEntryType.Error, "Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
 			}
 						
 			intr.Log("Next invocation task for character " + charIdx + " at: " + taskMatureTime.ToString() + ".");
@@ -265,8 +263,8 @@ namespace NeverClicker {
 					}
 				}
 			} else {
-				intr.Log("TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation " + 
-					"task item for character " + charIdx + ".", LogEntryType.Fatal);
+				intr.Log(LogEntryType.Fatal, "TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation " + 
+					"task item for character " + charIdx + ".");
 			}
 		}
 
@@ -327,8 +325,8 @@ namespace NeverClicker {
 					invTaskMatureTime = now;
 				}
 
-				intr.Log("Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + 
-					invTaskMatureTime.ToString(), LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + 
+					invTaskMatureTime.ToString());
 				this.Add(new GameTask(invTaskMatureTime, charIdx, TaskKind.Invocation, invokesToday));
 
 
@@ -365,8 +363,8 @@ namespace NeverClicker {
 
 					var mostRecentTask = intr.AccountStates.GetCharStateOr(charIdx, settingKey, Global.Default.SomeOldDate);
 
-					intr.Log("Adding profession task to queue for character " + charIdx
-						+ ", matures: " + mostRecentTask.ToString() + ", taskId: " + taskId.ToString() + ".", LogEntryType.Info);
+					intr.Log(LogEntryType.Info, "Adding profession task to queue for character " + charIdx
+						+ ", matures: " + mostRecentTask.ToString() + ", taskId: " + taskId.ToString() + ".");
 
 					profTaskMatureTime = CalculateTaskMatureTime(mostRecentTask, charIdx, TaskKind.Profession, taskId);
 					profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
@@ -376,7 +374,7 @@ namespace NeverClicker {
 					tasksQueued += 1;
 				}
 
-				intr.Log("[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".", LogEntryType.Info);
+				intr.Log(LogEntryType.Info, "[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".");
 			}
 		}
 

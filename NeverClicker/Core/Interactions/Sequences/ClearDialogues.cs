@@ -8,7 +8,7 @@ using System.Drawing;
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static void ClearDialogues(Interactor intr) {
-			intr.Log("Attempting to clear dialogues...", LogEntryType.Debug);
+			intr.Log(LogEntryType.Debug, "Attempting to clear dialogues...");
 
 			Point topLeft = new Point(680, 400);
 			Point botRight = new Point(1240, 680);

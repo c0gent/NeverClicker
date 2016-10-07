@@ -37,7 +37,7 @@ namespace NeverClicker.Interactions {
 				clicked |= Mouse.ClickImage(intr, "InvocationReady");
 
 				if (!clicked) {
-					intr.Log("Unable to click Vault of Piety button", LogEntryType.FatalWithScreenshot);
+					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to click Vault of Piety button");
 				}
 			}
 
@@ -57,9 +57,9 @@ namespace NeverClicker.Interactions {
 					Mouse.DoubleClick(intr, panel.Point);
 					intr.Wait(500);					
 					Mouse.ClickImage(intr, "VaultOfPietyElixirOfFateSelectAmountOkButton");
-					intr.Log("Vault of Piety: 'Elixir of Fate' purchased successfully.", LogEntryType.Info);
+					intr.Log(LogEntryType.Info, "Vault of Piety: 'Elixir of Fate' purchased successfully.");
 				} else {
-					intr.Log("Vault of Piety Error: Could not find 'Elixir of Fate' icon/tile.", LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find 'Elixir of Fate' icon/tile.");
 					return false;
 				}
 			} else if (item == VaultOfPietyItem.CofferOfCelestialArtifactEquipment) {
@@ -69,9 +69,9 @@ namespace NeverClicker.Interactions {
 					Mouse.DoubleClick(intr, panel.Point);
 					intr.Wait(500);					
 					Mouse.ClickImage(intr, "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton");
-					intr.Log("Vault of Piety: 'Coffer of Celestial Artifact Equipment' purchased successfully.", LogEntryType.Info);
+					intr.Log(LogEntryType.Info, "Vault of Piety: 'Coffer of Celestial Artifact Equipment' purchased successfully.");
 				} else {
-					intr.Log("Vault of Piety Error: Could not find 'Coffer of Celestial Artifact Equipment' icon/tile.", LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find 'Coffer of Celestial Artifact Equipment' icon/tile.");
 					return false;
 				}				
 			} 

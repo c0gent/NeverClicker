@@ -63,7 +63,7 @@ namespace NeverClicker.Interactions {
 					if (!Mouse.ClickImage(intr, "ProfessionsGuardIcon")) {
 						if (!Mouse.ClickImage(intr, "ProfessionsLeadershipAdventurerIcon")) {
 							if (!Mouse.ClickImage(intr, "ProfessionsLeadershipHeroIcon")) {
-								intr.Log("No optional professions assets found.", LogEntryType.Debug);
+								intr.Log(LogEntryType.Debug, "No optional professions assets found.");
 							}
 						}
 					}
@@ -83,7 +83,7 @@ namespace NeverClicker.Interactions {
 
 			string profsWinKey = intr.AccountSettings.GetSettingValOr("Professions", "GameHotkeys", Global.Default.ProfessionsWindowKey);
 
-			intr.Log("Opening professions window for character " + charZeroIdxLabel + ".", LogEntryType.Debug);
+			intr.Log(LogEntryType.Debug, "Opening professions window for character " + charZeroIdxLabel + ".");
 
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
@@ -94,7 +94,7 @@ namespace NeverClicker.Interactions {
 				intr.Wait(200);
 
 				if (!Screen.ImageSearch(intr, "ProfessionsWindowTitle").Found) {
-					intr.Log("Unable to open professions window", LogEntryType.FatalWithScreenshot);
+					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to open professions window");
 					return CompletionStatus.Failed;
 				}
 			}
@@ -114,8 +114,8 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				intr.Log("Collected " + profResultsCollected + " profession results for character + " 
-					+ charZeroIdxLabel + ".", LogEntryType.Debug);
+				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for character + " 
+					+ charZeroIdxLabel + ".");
 			}
 
 			int currentTask = 0;
@@ -134,9 +134,9 @@ namespace NeverClicker.Interactions {
 				var EmptySlotResult = Screen.ImageSearch(intr, "ProfessionsEmptySlot");
 
 				if (EmptySlotResult.Found) {
-					intr.Log("Empty professions slot found at: " + EmptySlotResult.Point.ToString() + ".", LogEntryType.Info);
+					intr.Log(LogEntryType.Info, "Empty professions slot found at: " + EmptySlotResult.Point.ToString() + ".");
 				} else {
-					intr.Log("All professions slots busy.", LogEntryType.Info);
+					intr.Log(LogEntryType.Info, "All professions slots busy.");
 					break;
 				}
 
@@ -164,7 +164,7 @@ namespace NeverClicker.Interactions {
 								continue;
 							}
 						} else {
-							intr.Log("Could not find valid professions task.", LogEntryType.Normal);
+							intr.Log(LogEntryType.Normal, "Could not find valid professions task.");
 							CollectCompleted(intr);
 							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 							break;

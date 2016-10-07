@@ -38,7 +38,7 @@ namespace NeverClicker.Interactions {
 
 
 		public static bool ClientSignIn(Interactor intr) {
-			intr.Log("Signing in Client...", LogEntryType.Info);
+			intr.Log(LogEntryType.Info, "Signing in Client...");
 
 			//intr.ExecuteStatement("ClientLogin()");
 
@@ -122,7 +122,7 @@ namespace NeverClicker.Interactions {
 
 
 		public static void KillAll(Interactor intr) {
-			intr.Log("Closing game client and/or patcher...", LogEntryType.Info);
+			intr.Log(LogEntryType.Info, "Closing game client and/or patcher...");
 			//intr.ExecuteStatement("VigilantlyCloseClientAndExit()");
 
 			Screen.WindowKill(intr, "Neverwinter.exe");

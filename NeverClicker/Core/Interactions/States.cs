@@ -209,7 +209,7 @@ namespace NeverClicker.Interactions {
 							new List<string> { "InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found ) {
 					return InventoryState.Vip;
 				} else {
-					intr.Log("Inventory window is open but inventory tab cannot be determined.", LogEntryType.Fatal);
+					intr.Log(LogEntryType.Fatal, "Inventory window is open but inventory tab cannot be determined.");
 					return InventoryState.Unknown;
 				}
 			} else {
