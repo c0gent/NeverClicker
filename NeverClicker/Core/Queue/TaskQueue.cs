@@ -303,7 +303,7 @@ namespace NeverClicker {
 
 				var invTaskMatureTime = CalculateTaskMatureTime(mostRecentInvoke, charIdx, 
 					TaskKind.Invocation, invokesToday);
-				invTaskMatureTime = (invTaskMatureTime < now) ? now : invTaskMatureTime;
+				//invTaskMatureTime = (invTaskMatureTime < now) ? now : invTaskMatureTime;
 
 				if (invokesToday >= 6) {
 					if (invokesCompletedOn < TodaysGameDate) { // START FRESH DAY
@@ -319,7 +319,7 @@ namespace NeverClicker {
 				if (resetDay) {
 					//intr.AccountStates.SaveSetting("0", "InvokesToday", charSettingSection);
 					intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");
-					intr.AccountStates.SaveCharState(TodaysGameDate.AddHours(-2).ToString(), charIdx,
+					intr.AccountStates.SaveCharState(TodaysGameDate.AddDays(-1).ToString(), charIdx,
 						"MostRecentInvocationTime");
 					invokesToday = 0;
 					invTaskMatureTime = now;
@@ -358,16 +358,15 @@ namespace NeverClicker {
 
 				for (var taskId = 0; taskId < ProfessionTasksRef.ProfessionTaskNames.Length; taskId++) {
 					var settingKey = "MostRecentProfTime_" + taskId;
-					//var mostRecentTask = now.AddDays(-1);
-					DateTime profTaskMatureTime;
+					//var mostRecentTask = now.AddDays(-1);					
 
-					var mostRecentTask = intr.AccountStates.GetCharStateOr(charIdx, settingKey, Global.Default.SomeOldDate);
+					var mostRecentTask = intr.AccountStates.GetCharStateOr(charIdx, settingKey, Global.Default.SomeOldDate);					
+
+					DateTime profTaskMatureTime = CalculateTaskMatureTime(mostRecentTask, charIdx, TaskKind.Profession, taskId);
+					//profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
 
 					intr.Log(LogEntryType.Info, "Adding profession task to queue for character " + charIdx
 						+ ", matures: " + mostRecentTask.ToString() + ", taskId: " + taskId.ToString() + ".");
-
-					profTaskMatureTime = CalculateTaskMatureTime(mostRecentTask, charIdx, TaskKind.Profession, taskId);
-					profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
 
 					this.Add(new GameTask(profTaskMatureTime, charIdx, TaskKind.Profession, taskId));
 
