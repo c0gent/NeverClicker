@@ -49,6 +49,9 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
+		private static string[] LeadershipIconsSmall = ["ProfessionsLeadershipHeroIcon", "ProfessionsLeadershipAdventurerIcon",
+			"ProfessionsLeadershipManAtArmsIcon", "ProfessionsLeadershipGuardIcon", "ProfessionsLeadershipMercenaryIcon"];
+
 		// Actually queues a profession task:
 		private static void ContinueTask(Interactor intr, Point continueButton) {
 			Mouse.Click(intr, continueButton);
@@ -57,18 +60,18 @@ namespace NeverClicker.Interactions {
 			Mouse.ClickImage(intr, "ProfessionsAssetButton");
 			intr.Wait(50);
 
-			// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
-			if (!Mouse.ClickImage(intr, "ProfessionsMercenaryIcon")) {
-				if (!Mouse.ClickImage(intr, "ProfessionsManAtArmsIcon")) {
-					if (!Mouse.ClickImage(intr, "ProfessionsGuardIcon")) {
-						if (!Mouse.ClickImage(intr, "ProfessionsLeadershipAdventurerIcon")) {
-							if (!Mouse.ClickImage(intr, "ProfessionsLeadershipHeroIcon")) {
-								intr.Log(LogEntryType.Debug, "No optional professions assets found.");
-							}
-						}
-					}
-				}
-			}		
+			//// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
+			//if (!Mouse.ClickImage(intr, "ProfessionsMercenaryIcon")) {
+			//	if (!Mouse.ClickImage(intr, "ProfessionsManAtArmsIcon")) {
+			//		if (!Mouse.ClickImage(intr, "ProfessionsGuardIcon")) {
+			//			if (!Mouse.ClickImage(intr, "ProfessionsLeadershipAdventurerIcon")) {
+			//				if (!Mouse.ClickImage(intr, "ProfessionsLeadershipHeroIcon")) {
+			//					intr.Log(LogEntryType.Debug, "No optional professions assets found.");
+			//				}
+			//			}
+			//		}
+			//	}
+			//}		
 
 			intr.Wait(50);
 
