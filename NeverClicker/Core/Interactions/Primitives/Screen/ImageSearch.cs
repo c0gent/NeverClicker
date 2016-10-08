@@ -121,7 +121,7 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
-		public static ImageSearchResult ImageSearch(Interactor intr, List<string> imgCodes) {
+		public static ImageSearchResult ImageSearch(Interactor intr, params string[] imgCodes) {
 			foreach (var imgCode in imgCodes) {
 				var res = ImageSearch(intr, imgCode);
 				if (res.Found) {

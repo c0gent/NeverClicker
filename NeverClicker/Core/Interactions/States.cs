@@ -194,7 +194,10 @@ namespace NeverClicker.Interactions {
 		public static bool IsWorldWindowState(Interactor intr, WorldWindowState desiredState) {
 			switch (desiredState) {
 				case WorldWindowState.Inventory:
-					return Screen.ImageSearch(intr, "InventoryWindowTitle").Found;
+					//return Screen.ImageSearch(intr, "InventoryWindowTitle").Found;
+
+					// Search for either the VIP or Bags tab instead of title (title is unreliable):
+					return Screen.ImageSearch(intr, "InventoryTabActiveVip", "InventoryTabActiveBags").Found;
 				default:
 					return false;
 			}
@@ -205,8 +208,7 @@ namespace NeverClicker.Interactions {
 		public static bool IsInventoryState(Interactor intr, InventoryState desiredState) {
 			switch (desiredState) {
 				case InventoryState.Vip:
-					return (Screen.ImageSearch(intr, new List<string> {
-						"InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found );
+					return (Screen.ImageSearch(intr, "InventoryTabActiveVip").Found );
 				default:
 					return false;
 			}
@@ -217,8 +219,7 @@ namespace NeverClicker.Interactions {
 			if (IsWorldWindowState(intr, WorldWindowState.Inventory)) {
 				if (Screen.ImageSearch(intr, "InventoryTabActiveBags").Found) {
 					return InventoryState.Bags;
-				} else if (Screen.ImageSearch(intr, new List<string> {
-								"InventoryTabActiveVip", "InventoryTabActiveVip_2" }).Found ) {
+				} else if (IsInventoryState(intr, InventoryState.Vip)) {
 					return InventoryState.Vip;
 				} else if (Screen.ImageSearch(intr, "InventoryTabActiveWealth").Found) {
 					return InventoryState.Wealth;

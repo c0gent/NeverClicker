@@ -28,6 +28,7 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static void Click(Interactor intr, int xCoord, int yCoord) {
+			intr.Log(LogEntryType.Trace, "Clicking at ({0},{1}).", xCoord, yCoord);
 			intr.ExecuteStatement("SendEvent { Click " + xCoord + ", " + yCoord + ", 1 }");
 		}
 
@@ -37,6 +38,7 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static void DoubleClick(Interactor intr, int xCoord, int yCoord) {
+			intr.Log(LogEntryType.Trace, "Double-clicking at ({0},{1}).", xCoord, yCoord);
 			intr.ExecuteStatement("SendEvent { Click " + xCoord + ", " + yCoord + ", 0 }");
 			intr.Wait(10);
 			intr.ExecuteStatement("SendEvent { Click 2 }");
@@ -48,6 +50,7 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static void Move(Interactor intr, int xCoord, int yCoord) {
+			intr.Log(LogEntryType.Trace, "Moving mouse cursor to ({0},{1}).", xCoord, yCoord);
 			intr.ExecuteStatement("SendEvent { Click " + xCoord + ", " + yCoord + ", 0 }");
 		}
 

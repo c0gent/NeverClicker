@@ -78,7 +78,7 @@ namespace NeverClicker.Interactions {
 				if (iconBags.Found) {
 					Mouse.Click(intr, iconBags.Point);
 					Mouse.Move(intr, iconBags.Point.X - 30, iconBags.Point.Y);
-					intr.WaitRand(250, 300);
+					intr.WaitRand(50, 100);
 				} else {
 					intr.Log(LogEntryType.Fatal, "Unable to find 'InventoryTabIconBags'.");
 					return CompletionStatus.Failed;

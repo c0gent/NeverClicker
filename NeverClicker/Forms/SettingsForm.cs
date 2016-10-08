@@ -82,6 +82,7 @@ namespace NeverClicker {
 			}
 
 			this.checkBoxLogDebug.Checked = Settings.Default.LogDebugMessages;
+			this.checkBoxLogTrace.Checked = Settings.Default.LogTraceMessages;
 		}
 
 		private void SettingsForm_Shown(object sender, EventArgs e) {
