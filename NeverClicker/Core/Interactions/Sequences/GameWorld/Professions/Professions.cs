@@ -49,8 +49,21 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
-		private static string[] LeadershipIconsSmall = ["ProfessionsLeadershipHeroIcon", "ProfessionsLeadershipAdventurerIcon",
-			"ProfessionsLeadershipManAtArmsIcon", "ProfessionsLeadershipGuardIcon", "ProfessionsLeadershipMercenaryIcon"];
+		private static string[] LeadershipIconsSmall = {
+			"ProfessionsLeadershipMercenaryIcon", 
+			"ProfessionsLeadershipGuardIcon",
+			"ProfessionsLeadershipFootmanIcon",
+			"ProfessionsLeadershipManAtArmsIcon", 
+			"ProfessionsLeadershipAdventurerIcon", 
+			"ProfessionsLeadershipHeroIcon"};
+
+		private static string[] LeadershipTilesLarge = {
+			"ProfessionsLeadershipMercenaryTileLarge", 
+			"ProfessionsLeadershipGuardTileLarge",
+			"ProfessionsLeadershipFootmanTileLarge",
+			"ProfessionsLeadershipManAtArmsTileLarge", 
+			"ProfessionsLeadershipAdventurerTileLarge", 
+			"ProfessionsLeadershipHeroTileLarge"};
 
 		// Actually queues a profession task:
 		private static void ContinueTask(Interactor intr, Point continueButton) {
@@ -72,6 +85,22 @@ namespace NeverClicker.Interactions {
 			//		}
 			//	}
 			//}		
+
+			// Attempt to add optional assets:
+			string assetLabel = null;
+
+			foreach (var iconLabel in LeadershipIconsSmall) {
+				if (Mouse.ClickImage(intr, iconLabel)) {
+					assetLabel = iconLabel;
+					break;
+				}
+			}
+
+			if (string.IsNullOrWhiteSpace(assetLabel)) {
+				intr.Log(LogEntryType.Debug, "No optional professions assets found.");
+			} else {
+				intr.Log(LogEntryType.Debug, "Using optional profession asset with label: {0}", assetLabel);
+			}			
 
 			intr.Wait(50);
 

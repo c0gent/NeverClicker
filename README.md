@@ -22,6 +22,10 @@ Automated invocation. May eat your laundry.
     - Enter your username and password into `NeverClicker_GameAccount.ini`. If you're not comfortable with this you can manually log into the game client before starting the NeverClicker auto cycle.
 - You apparently can't have a character on your account which is unable to invoke because they are too low level (this should be fixed now but who knows).
 
+## Professions
+- Sort your profession assets in your inventory so that the optional assets you want to use are **above** all other assets. 
+- The profession system will first choose assets from the top of the bag to the bottom, then from the weakest asset (Mercenary) to the strongest (Hero). Remove any weak assets you don't want used from your inventory.
+
 
 ## Issues? Ideas?
 Having a problem? Something doesn't work? Have a request for a new feature? [File an issue on the issues page](https://github.com/c0gent/NeverClicker/issues). In the case of problems, be sure to include:
