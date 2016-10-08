@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeverClicker.Globals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,8 +31,7 @@ namespace NeverClicker.Interactions {
 
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
-			CompletionStatus maintStatus = CompletionStatus.None;
-			var professionsCompleted = new List<int>();
+			CompletionStatus maintStatus = CompletionStatus.None;			
 			bool processingIncomplete = false;
 
 			intr.Log("Starting processing for character " + charIdx + " ...");
@@ -123,6 +123,7 @@ namespace NeverClicker.Interactions {
 
 			// ################################### PROFESSIONS ####################################
 			intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...");
+			var professionsCompleted = new List<int>(9);
 			professionsStatus = MaintainProfs(intr, charLabel, professionsCompleted);
 			intr.Log(LogEntryType.Info, "ProcessCharacter(): Professions status: " + professionsStatus.ToString());
 

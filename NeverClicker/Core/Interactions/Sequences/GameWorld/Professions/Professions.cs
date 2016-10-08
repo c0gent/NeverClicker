@@ -1,16 +1,82 @@
-﻿using System;
+﻿using NeverClicker.Globals;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+namespace NeverClicker.Globals {
+	public enum Profession {
+		Leadership,
+		Jewelcrafting,
+		Alchemy,
+		Other,
+	}
+
+	public enum ProfessionAssetId {
+		None,
+		Mercenary,
+		Guard,
+		Footman,
+		ManAtArms,
+		Adventurer,
+		Hero,		
+	}
+
+	public struct LeadershipAsset {
+		public readonly ProfessionAssetId AssetId;
+		public readonly string Label;
+		public readonly float BonusFactor;
+
+		public LeadershipAsset(ProfessionAssetId assetId, float bonusFactor) {
+			AssetId = assetId;
+			Label = assetId.ToString("G");
+			BonusFactor = bonusFactor;
+		}
+
+		public string SmallIconImageLabel { get {
+			return "ProfessionsLeadership" + Label + "Icon";
+		} }
+
+		public string LargeTileImageLabel { get {
+			return "ProfessionsLeadership" + Label + "TileLarge";
+		} }
+	}
+}
+
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
+
+		//private static string[] LeadershipIconsSmall = {
+		//	"ProfessionsLeadershipMercenaryIcon", 
+		//	"ProfessionsLeadershipGuardIcon",
+		//	"ProfessionsLeadershipFootmanIcon",
+		//	"ProfessionsLeadershipManAtArmsIcon", 
+		//	"ProfessionsLeadershipAdventurerIcon", 
+		//	"ProfessionsLeadershipHeroIcon"};
+
+		//private static string[] LeadershipTilesLarge = {
+		//	"ProfessionsLeadershipMercenaryTileLarge", 
+		//	"ProfessionsLeadershipGuardTileLarge",
+		//	"ProfessionsLeadershipFootmanTileLarge",
+		//	"ProfessionsLeadershipManAtArmsTileLarge", 
+		//	"ProfessionsLeadershipAdventurerTileLarge", 
+		//	"ProfessionsLeadershipHeroTileLarge"};
+
+		public static LeadershipAsset[] leadershipAssets = {
+			new LeadershipAsset(ProfessionAssetId.Mercenary, 0.95f),
+			new LeadershipAsset(ProfessionAssetId.Guard, 0.95f),
+			new LeadershipAsset(ProfessionAssetId.Footman, 0.95f),
+			new LeadershipAsset(ProfessionAssetId.ManAtArms, 0.90f),
+			new LeadershipAsset(ProfessionAssetId.Adventurer, 0.75f),
+			new LeadershipAsset(ProfessionAssetId.Hero, 0.50f),
+		};
+		
+
 		private static bool CollectCompleted(Interactor intr) {
 			var resultAvailable = Screen.ImageSearch(intr, "ProfessionsCollectResult");
 
-			//if (Mouse.ClickImage(intr, "ProfessionsCollectResult")) {
 			if (resultAvailable.Found) {
 				Mouse.Click(intr, resultAvailable.Point);
 				intr.Wait(500);
@@ -49,66 +115,54 @@ namespace NeverClicker.Interactions {
 			}
 		}
 
-		private static string[] LeadershipIconsSmall = {
-			"ProfessionsLeadershipMercenaryIcon", 
-			"ProfessionsLeadershipGuardIcon",
-			"ProfessionsLeadershipFootmanIcon",
-			"ProfessionsLeadershipManAtArmsIcon", 
-			"ProfessionsLeadershipAdventurerIcon", 
-			"ProfessionsLeadershipHeroIcon"};
-
-		private static string[] LeadershipTilesLarge = {
-			"ProfessionsLeadershipMercenaryTileLarge", 
-			"ProfessionsLeadershipGuardTileLarge",
-			"ProfessionsLeadershipFootmanTileLarge",
-			"ProfessionsLeadershipManAtArmsTileLarge", 
-			"ProfessionsLeadershipAdventurerTileLarge", 
-			"ProfessionsLeadershipHeroTileLarge"};
 
 		// Actually queues a profession task:
 		private static void ContinueTask(Interactor intr, Point continueButton) {
 			Mouse.Click(intr, continueButton);
 			intr.Wait(100);
 
-			Mouse.ClickImage(intr, "ProfessionsAssetButton");
-			intr.Wait(50);
+			// Detect currently selected asset:
+			LeadershipAsset primaryAsset = new LeadershipAsset(ProfessionAssetId.None, 1.00f);
 
-			//// <<<<< TODO: ADD DETECTION FOR OTHER SECONDARY ASSETS >>>>>
-			//if (!Mouse.ClickImage(intr, "ProfessionsMercenaryIcon")) {
-			//	if (!Mouse.ClickImage(intr, "ProfessionsManAtArmsIcon")) {
-			//		if (!Mouse.ClickImage(intr, "ProfessionsGuardIcon")) {
-			//			if (!Mouse.ClickImage(intr, "ProfessionsLeadershipAdventurerIcon")) {
-			//				if (!Mouse.ClickImage(intr, "ProfessionsLeadershipHeroIcon")) {
-			//					intr.Log(LogEntryType.Debug, "No optional professions assets found.");
-			//				}
-			//			}
-			//		}
-			//	}
-			//}		
-
-			// Attempt to add optional assets:
-			string assetLabel = null;
-
-			foreach (var iconLabel in LeadershipIconsSmall) {
-				if (Mouse.ClickImage(intr, iconLabel)) {
-					assetLabel = iconLabel;
+			foreach (var asset in leadershipAssets) {
+				if (Screen.ImageSearch(intr, asset.SmallIconImageLabel).Found) {
+					primaryAsset = asset;
 					break;
 				}
 			}
 
-			if (string.IsNullOrWhiteSpace(assetLabel)) {
+			if (primaryAsset.AssetId == ProfessionAssetId.None) {
+				intr.Log(LogEntryType.Error, "Primary profession asset not detected.");
+			} else {
+				intr.Log(LogEntryType.Debug, "Using primary profession asset: '{0}'.", primaryAsset.Label);
+			}
+
+			// Attempt to add optional assets:
+			Mouse.ClickImage(intr, "ProfessionsAssetButton");
+			intr.Wait(50);
+			
+			LeadershipAsset optionalAsset = new LeadershipAsset(ProfessionAssetId.None, 1.00f);
+
+			foreach (var asset in leadershipAssets) {
+				if (Mouse.ClickImage(intr, asset.LargeTileImageLabel)) {
+					optionalAsset = asset;
+					break;
+				}
+			}
+
+			if (optionalAsset.AssetId == ProfessionAssetId.None) {
 				intr.Log(LogEntryType.Debug, "No optional professions assets found.");
 			} else {
-				intr.Log(LogEntryType.Debug, "Using optional profession asset with label: {0}", assetLabel);
+				intr.Log(LogEntryType.Debug, "Using optional profession asset: '{0}'.", optionalAsset.Label);
 			}			
 
 			intr.Wait(50);
 
+			// Enqueue the profession task:
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
 			intr.Wait(500);
-
-			//Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 		}
+
 
 		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	

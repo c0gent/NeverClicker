@@ -6,6 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NeverClicker {
+	public enum TaskKind {
+		Invocation,
+		Profession,
+	}
+
 	[Serializable]
 	public struct GameTask : IComparable<GameTask>, ISerializable {
 		public readonly DateTime MatureTime; /*{ get; private set; }*/
@@ -36,10 +41,5 @@ namespace NeverClicker {
 			//this.MatureTime = this.MatureTime.AddTicks(ticks);
 			return new GameTask(this.MatureTime.AddTicks(ticks), this.CharIdx, this.Kind, this.TaskId);
         }
-	}
-
-	public enum TaskKind {
-		Invocation,
-		Profession,
-	}
+	}	
 }
