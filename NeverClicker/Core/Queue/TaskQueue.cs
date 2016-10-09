@@ -65,7 +65,8 @@ namespace NeverClicker {
 			}
 		}
 
-		private void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId, bool incrementTaskId) {
+		private void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId, 
+						float bonusFactor, bool incrementTaskId) {
 			// CHECK TO SEE IF THAT TASK IS ALREADY IN QUEUE, 
 			// IF NOT ADD
 			// IF SO, CHECK TO SEE IF THAT TASK HAS MATURED
@@ -99,7 +100,7 @@ namespace NeverClicker {
 						this.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 					} else if (taskKind == TaskKind.Profession) {
 						intr.Log(LogEntryType.Debug, "Queuing subsequent professions task.");
-						this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
+						this.QueueSubsequentProfessionTask(intr, charIdx, taskId, bonusFactor);
 					}					
 				} else { // NOT MATURE
 					intr.Log(LogEntryType.Debug, "Task is not mature: taskKey: " + taskKey + 
@@ -111,7 +112,7 @@ namespace NeverClicker {
 				if (taskKind == TaskKind.Invocation) {
 					this.QueueSubsequentInvocationTask(intr, charIdx, 1);
 				} else if (taskKind == TaskKind.Profession) {
-					this.QueueSubsequentProfessionTask(intr, charIdx, taskId);
+					this.QueueSubsequentProfessionTask(intr, charIdx, taskId, bonusFactor);
 				}
 			}
 		}
@@ -124,11 +125,11 @@ namespace NeverClicker {
 			//	this.AdvanceTask(intr, charIdx, taskKind, invokesToday, incrementInvokes);
 			//}
 
-			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, incrementInvokes);
+			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, 1.0f, incrementInvokes);
 		}
 
 		// FOR PROFESSIONS
-		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId) {
+		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId, float bonusFactor) {
 			//if (taskKind == TaskKind.Invocation) {
 			//	throw new Exception("TaskQueue::AdvanceTask(): Invocation tasks must specify 
 			// whether or not to increment daily invokes as fourth parameter.");
@@ -136,7 +137,7 @@ namespace NeverClicker {
 			//	this.AdvanceTask(intr, charIdx, taskKind, taskId, false);
 			//}
 
-			this.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId, false);
+			this.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId, bonusFactor, false);
 		}
 
 
@@ -195,7 +196,7 @@ namespace NeverClicker {
 
 
 		// QUEUESUBSEQUENTPROFESSIONTASK(): QUEUE FOLLOW UP TASK
-		private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId) {
+		private void QueueSubsequentProfessionTask(Interactor intr, uint charIdx, int taskId, float bonusFactor) {
 			var now = DateTime.Now;
 			//var charLabel = "Character_" + charIdx.ToString();
 

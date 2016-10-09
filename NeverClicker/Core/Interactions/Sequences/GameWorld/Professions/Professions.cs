@@ -43,6 +43,16 @@ namespace NeverClicker.Globals {
 			return "ProfessionsLeadership" + Label + "TileLarge";
 		} }
 	}
+
+	public struct ProfessionTaskResult {
+		public int TaskId;
+		public float BonusFactor;
+
+		public ProfessionTaskResult(int taskId, float bonusFactor) {
+			TaskId = taskId;
+			BonusFactor = bonusFactor;
+		}
+	}
 }
 
 namespace NeverClicker.Interactions {
@@ -117,7 +127,7 @@ namespace NeverClicker.Interactions {
 
 
 		// Actually queues a profession task:
-		private static void ContinueTask(Interactor intr, Point continueButton) {
+		private static float ContinueTask(Interactor intr, Point continueButton) {
 			Mouse.Click(intr, continueButton);
 			intr.Wait(100);
 
@@ -125,7 +135,7 @@ namespace NeverClicker.Interactions {
 			LeadershipAsset primaryAsset = new LeadershipAsset(ProfessionAssetId.None, 1.00f);
 
 			foreach (var asset in leadershipAssets) {
-				if (Screen.ImageSearch(intr, asset.SmallIconImageLabel).Found) {
+				if (Screen.ImageSearch(intr, asset.LargeTileImageLabel).Found) {
 					primaryAsset = asset;
 					break;
 				}
@@ -144,7 +154,7 @@ namespace NeverClicker.Interactions {
 			LeadershipAsset optionalAsset = new LeadershipAsset(ProfessionAssetId.None, 1.00f);
 
 			foreach (var asset in leadershipAssets) {
-				if (Mouse.ClickImage(intr, asset.LargeTileImageLabel)) {
+				if (Mouse.ClickImage(intr, asset.SmallIconImageLabel)) {
 					optionalAsset = asset;
 					break;
 				}
@@ -161,10 +171,38 @@ namespace NeverClicker.Interactions {
 			// Enqueue the profession task:
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
 			intr.Wait(500);
+
+			return primaryAsset.BonusFactor * optionalAsset.BonusFactor;
 		}
 
 
-		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, List<int> completionList) {
+		// Combines tasks with the same id into one task, preserving the worst (highest) bonus factor.
+		public static void CondenseTasks(List<ProfessionTaskResult> completionList) {
+			//var unconden = new List<ProfessionTaskResult>(completionList);			
+			var buckets = new Dictionary<int, ProfessionTaskResult>(9);
+
+			foreach (ProfessionTaskResult taskResult in completionList) {
+				int bucket_id = taskResult.TaskId;
+				ProfessionTaskResult peerTask;
+				bool peerExists = buckets.TryGetValue(bucket_id, out peerTask);
+				
+				if (peerExists) {
+					buckets[bucket_id] = (taskResult.BonusFactor > peerTask.BonusFactor) ? taskResult : peerTask;
+				} else {
+					buckets.Add(bucket_id, taskResult);
+				}
+			}
+
+			completionList.Clear();
+
+			foreach (ProfessionTaskResult taskResult in buckets.Values) {
+				completionList.Add(taskResult);
+			}
+		}
+
+
+		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, 
+						List<ProfessionTaskResult> completionList) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
 
 			string profsWinKey = intr.AccountSettings.GetSettingValOr("Professions", "GameHotkeys", Global.Default.ProfessionsWindowKey);
@@ -235,9 +273,10 @@ namespace NeverClicker.Interactions {
 				intr.Wait(200);
 				
 				var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
+				float bonusFactor = 1.0f;
 
 				if (i > 0 && taskContinueResult.Found) {
-					ContinueTask(intr, taskContinueResult.Point);
+					bonusFactor = ContinueTask(intr, taskContinueResult.Point);
 					success = true;
 				} else {
 					while(true) {
@@ -259,10 +298,13 @@ namespace NeverClicker.Interactions {
 				}
 
 				if (success && currentTask < ProfessionTasksRef.ProfessionTaskNames.Length) {
-					completionList.Add(currentTask);
+					completionList.Add(new ProfessionTaskResult(currentTask, bonusFactor));
 					anySuccess = true;
 				} 
 			}
+
+			// Condense tasks into groups (of 3 generally) using worst (highest) bonus factor:
+			CondenseTasks(completionList);
 
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 

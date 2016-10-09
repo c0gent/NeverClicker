@@ -123,8 +123,8 @@ namespace NeverClicker.Interactions {
 
 			// ################################### PROFESSIONS ####################################
 			intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...");
-			var professionsCompleted = new List<int>(9);
-			professionsStatus = MaintainProfs(intr, charLabel, professionsCompleted);
+			var professionTasksProcessed = new List<ProfessionTaskResult>(9);
+			professionsStatus = MaintainProfs(intr, charLabel, professionTasksProcessed);
 			intr.Log(LogEntryType.Info, "ProcessCharacter(): Professions status: " + professionsStatus.ToString());
 
 
@@ -153,10 +153,10 @@ namespace NeverClicker.Interactions {
 
 			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
 			intr.Log(LogEntryType.Normal, "Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString()
-					+ ", items complete: " + professionsCompleted.Count);
+					+ ", items complete: " + professionTasksProcessed.Count);
 			if (professionsStatus == CompletionStatus.Complete) {
-				foreach (int taskId in professionsCompleted) {
-					queue.AdvanceProfessionsTask(intr, charIdx, taskId);
+				foreach (ProfessionTaskResult taskResult in professionTasksProcessed) {
+					queue.AdvanceProfessionsTask(intr, charIdx, taskResult.TaskId, taskResult.BonusFactor);
 				}
 
 				if (queue.NextTask.Kind == TaskKind.Profession) {
