@@ -76,14 +76,14 @@ namespace NeverClicker {
 			bool keyExists = this.TryGetTaskKey(charIdx, taskKind, taskId, out taskKey);
 
 			if (keyExists) {
-				intr.Log(LogEntryType.Debug, "Key found for task: " + 
+				intr.Log(LogEntryType.Debug, "Queue entry found for task: " + 
 					"taskId: " + taskId.ToString() + ", " + 
 					"taskKind: " + taskKind.ToString() + ", " +
 					"charIdx: " + charIdx.ToString() + ". ");
 
 				if (taskKey < nowTicks) { // MATURE
-					intr.Log(LogEntryType.Debug, "Task is mature.");
-					intr.Log(LogEntryType.Debug, "Removing old task.");
+					intr.Log(LogEntryType.Debug, "Task is mature. Removing...");
+					//intr.Log(LogEntryType.Debug, "Removing old task.");
 					Queue.Remove(taskKey); 
 
 					if (taskKind == TaskKind.Invocation) {

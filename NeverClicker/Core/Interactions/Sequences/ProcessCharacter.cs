@@ -29,12 +29,14 @@ namespace NeverClicker.Interactions {
 			if (invokesCompletedForDay == TaskQueue.TodaysGameDate) {
 				// Skip invocation if it's already done.
 				skipInvocation = true;
-			} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate && invokesToday < 5 && 
+			} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate && invokesToday < 2 && 
 							queue.NextTask.Kind == TaskKind.Invocation) {
 				// Skip professions for the first few invokes of the day and inventory for some of the middle ones:
+				intr.Log(LogEntryType.Info, "Skipping profession processing this round.");
 				skipProfessions = true;
 
-				if (invokesToday != 0) { 
+				if (invokesToday != 0) {
+					intr.Log(LogEntryType.Info, "Skipping inventory processing this round.");
 					skipMaintInven = true;
 				}				
 			}
@@ -194,10 +196,11 @@ namespace NeverClicker.Interactions {
 				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
 			}
 
-			if (!processingIncomplete) {
-				intr.Log("Advancing all matured tasks for character " + charIdx.ToString() + ".");
-				queue.AdvanceMatured(intr, charIdx);
-			}
+			//// [TODO]: CONSIDER REMOVAL
+			//if (!processingIncomplete && !skipProfessions && !skipInvocation) {
+			//	intr.Log(LogEntryType.Normal, "Advancing all matured tasks for character {0}.", charIdx.ToString());
+			//	queue.AdvanceMatured(intr, charIdx);
+			//}
 
 			intr.Log(LogEntryType.Normal, "Processing complete for character " + charIdx + ".");
 		}		

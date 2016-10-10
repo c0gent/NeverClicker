@@ -71,9 +71,9 @@ namespace NeverClicker.Interactions {
 			var resultAvailable = Screen.ImageSearch(intr, "ProfessionsCollectResult");
 
 			if (resultAvailable.Found) {
-				Mouse.Click(intr, resultAvailable.Point);
-				intr.Wait(500);
-				Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton");
+				Mouse.Click(intr, resultAvailable.Point, 15, 5);
+				intr.Wait(900);
+				Mouse.ClickImage(intr, "ProfessionsTakeRewardsButton", 21, 5);
 				intr.Wait(1500);
 				return true;
 			} else {
@@ -194,7 +194,7 @@ namespace NeverClicker.Interactions {
 
 			string profsWinKey = intr.AccountSettings.GetSettingValOr("Professions", "GameHotkeys", Global.Default.ProfessionsWindowKey);
 
-			intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Opening professions window for character " + charZeroIdxLabel + ".");
+			intr.Log(LogEntryType.Debug, "Opening professions window for character " + charZeroIdxLabel + ".");
 
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
@@ -205,7 +205,7 @@ namespace NeverClicker.Interactions {
 				intr.Wait(200);
 
 				if (!Screen.ImageSearch(intr, "ProfessionsWindowTitle").Found) {
-					intr.Log(LogEntryType.FatalWithScreenshot, "Professions::MaintainProfs(): Unable to open professions window");
+					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to open professions window");
 					return CompletionStatus.Failed;
 				}
 			}
@@ -225,7 +225,7 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Collected " + profResultsCollected + " profession results for character + " 
+				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for character + " 
 					+ charZeroIdxLabel + ".");
 			}
 
@@ -265,7 +265,7 @@ namespace NeverClicker.Interactions {
 							taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
 
 							if (taskContinueResult.Found) {
-								intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Profession task: '{0}' has been selected.", 
+								intr.Log(LogEntryType.Debug, "Profession task: '{0}' has been selected.", 
 									ProfessionTasksRef.ProfessionTaskNames[currentTaskId]);
 								break;								
 							} else {
@@ -273,7 +273,7 @@ namespace NeverClicker.Interactions {
 								continue;
 							}
 						} else {
-							intr.Log(LogEntryType.Normal, "Professions::MaintainProfs(): Could not find valid professions task.");
+							intr.Log(LogEntryType.Normal, "Could not find valid professions task.");
 							CollectCompleted(intr);
 							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 							break;
@@ -286,7 +286,7 @@ namespace NeverClicker.Interactions {
 
 					// Start the in-game task:
 					if (ContinueTask(intr, taskContinueResult.Point, out bonusFactor)) {
-						intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Profession task '{0}' (id: {1}, bf: {2}) started.", 
+						intr.Log(LogEntryType.Debug, "Profession task '{0}' (id: {1}, bf: {2}) started.", 
 							ProfessionTasksRef.ProfessionTaskNames[currentTaskId], currentTaskId, bonusFactor);		
 								
 						completionList.Add(new ProfessionTaskResult(currentTaskId, bonusFactor));

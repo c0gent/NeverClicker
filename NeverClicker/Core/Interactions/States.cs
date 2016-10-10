@@ -208,7 +208,9 @@ namespace NeverClicker.Interactions {
 		public static bool IsInventoryState(Interactor intr, InventoryState desiredState) {
 			switch (desiredState) {
 				case InventoryState.Vip:
-					return (Screen.ImageSearch(intr, "InventoryTabActiveVip").Found );
+					return Screen.ImageSearch(intr, "InventoryTabActiveVip").Found;
+				case InventoryState.Bags:
+					return Screen.ImageSearch(intr, "InventoryTabActiveBags").Found;				
 				default:
 					return false;
 			}
@@ -217,7 +219,7 @@ namespace NeverClicker.Interactions {
 		// INVENTORY:
 		public static InventoryState DetermineInventoryState(Interactor intr) {
 			if (IsWorldWindowState(intr, WorldWindowState.Inventory)) {
-				if (Screen.ImageSearch(intr, "InventoryTabActiveBags").Found) {
+				if (IsInventoryState(intr, InventoryState.Bags)) {
 					return InventoryState.Bags;
 				} else if (IsInventoryState(intr, InventoryState.Vip)) {
 					return InventoryState.Vip;

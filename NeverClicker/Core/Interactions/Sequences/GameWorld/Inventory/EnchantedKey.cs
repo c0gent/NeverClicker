@@ -9,7 +9,7 @@ namespace NeverClicker.Interactions {
 		public static bool IsEnchantedKeyTimerExpired(Interactor intr) {
 			DateTime KeyLastReceived;
 			if (DateTime.TryParse(intr.AccountStates.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
-				if (KeyLastReceived >= DateTime.Now) {
+				if (KeyLastReceived.AddDays(1) >= DateTime.Now) {
 					return false;
 				}
 			} else {
@@ -128,7 +128,7 @@ namespace NeverClicker.Interactions {
 					return false;
 				} else {
 					intr.Log(LogEntryType.Normal, "Enchanted key collected on character " + charIdx + ".");
-					intr.AccountStates.SaveSetting(DateTime.Now.ToString(), "EnchKeyLastReceived", "Invocation");
+					intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "Invocation");
 					return true;
 				}
 
@@ -148,7 +148,7 @@ namespace NeverClicker.Interactions {
 				// If things didn't work, just advance it anyway with an error message.
 				intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character " + charIdx + ".");
 				intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
-				intr.AccountStates.SaveSetting(TaskQueue.TodaysGameDate.ToString("o"), "EnchKeyLastReceived", "Invocation");
+				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "Invocation");
 
 				return false;
 			}

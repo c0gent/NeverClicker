@@ -81,7 +81,8 @@ namespace NeverClicker.Interactions {
 
 			intr.Wait(3000);
 
-			ClearDialogues(intr);
+			// [TODO]: THIS NEEDS TO CLEAR VERIFY? DIALOGUE
+			//ClearDialogues(intr);
 
 			return true;
 

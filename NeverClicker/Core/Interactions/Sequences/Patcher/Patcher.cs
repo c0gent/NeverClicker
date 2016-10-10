@@ -78,6 +78,8 @@ namespace NeverClicker.Interactions {
 			Keyboard.SendInput(intr, "{Enter}");
 			intr.Wait(10000);
 
+			Screen.WindowKillTitle(intr, "Verify?");
+
 			// // Set focus on patcher:
 			//Screen.WindowActivate(intr, Game.GAMEPATCHEREXE);
 

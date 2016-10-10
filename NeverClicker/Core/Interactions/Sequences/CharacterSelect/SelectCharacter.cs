@@ -79,7 +79,7 @@ namespace NeverClicker.Interactions {
 			Mouse.DoubleClick(intr, charSlotX, clickY);
 
 			ClearSafeLogin(intr);
-			ClearDialogues(intr);
+			//ClearDialogues(intr);
 			intr.Wait(3000);
 
 			// Determine if login has been a success:

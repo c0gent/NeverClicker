@@ -19,6 +19,8 @@ namespace NeverClicker.Interactions {
 
 			intr.Wait(2000);
 
+			Screen.WindowKillTitle(intr, "Verify?");
+
 			KillAll(intr);
 
 			return true;

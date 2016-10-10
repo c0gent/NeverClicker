@@ -22,6 +22,7 @@ namespace NeverClicker.Interactions {
 			string openInventoryKey = intr.AccountSettings.GetSettingValOr("Inventory", "GameHotkeys", Global.Default.InventoryKey);
 			MoveAround(intr);
 			Keyboard.SendKey(intr, openInventoryKey);
+			intr.Wait(100);
 
 			if (intr.WaitUntil(8, WorldWindowState.Inventory, States.IsWorldWindowState, null, 1)) {
 				intr.Log(LogEntryType.Debug, "Inventory is open.");
@@ -49,8 +50,9 @@ namespace NeverClicker.Interactions {
 				}
 			}
 
-			Mouse.ClickImage(intr, "InventoryOverflowTransferButton");
-			intr.WaitRand(500, 800);
+			if (Mouse.ClickImage(intr, "InventoryOverflowTransferButton")) {
+				intr.WaitRand(500, 800);
+			}
 		}
 
 
@@ -72,7 +74,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			// If bags tab is not active, click it's icon.
-			if (!(States.DetermineInventoryState(intr) == InventoryState.Bags)) {
+			if (!(States.IsInventoryState(intr, InventoryState.Bags))) {
 				var iconBags = Screen.ImageSearch(intr, "InventoryTabIconBags");
 				//Mouse.ClickImage(intr, "InventoryTabIconBags");
 				if (iconBags.Found) {
@@ -139,8 +141,10 @@ namespace NeverClicker.Interactions {
 
 			// Collect Enchanted Key:
 			if (IsEnchantedKeyTimerExpired(intr)) {
+				intr.Log(LogEntryType.Debug, "Enchanted key timer has expired. Attempting to collect...");
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);
 			} else if (enchKeyAvailable) {
+				intr.Log(LogEntryType.Debug, "Enchanted key detected as awaiting collection. Attempting to collect...");
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);
 			}
 

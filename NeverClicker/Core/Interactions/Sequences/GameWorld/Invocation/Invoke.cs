@@ -46,7 +46,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
-				intr.Wait(900);
+				intr.Wait(200);
 
 				if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionInvokeReady").Found) {
 					intr.Wait(2000);
@@ -85,9 +85,9 @@ namespace NeverClicker.Interactions {
             }
 
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
-			intr.Wait(3500);			
+			intr.Wait(2800);			
 
-			if (!intr.WaitUntil(3, DialogueBoxState.InvocationSuccess, States.IsDialogueBoxState, null, 0)) {
+			if (!intr.WaitUntil(5, DialogueBoxState.InvocationSuccess, States.IsDialogueBoxState, null, 0)) {
 				// Invocation Attempt:
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);

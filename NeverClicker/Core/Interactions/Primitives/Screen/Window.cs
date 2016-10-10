@@ -62,7 +62,7 @@ namespace NeverClicker.Interactions {
 		}
 
 		public static void WindowKillTitle(Interactor intr, string windowTitle) {
-			string param = string.Format("ahk_class {0}", windowTitle);
+			string param = windowTitle;
 			intr.ExecuteStatement("WinClose, " + param);
 			intr.ExecuteStatement("WinClose, " + windowTitle);
 			intr.ExecuteStatement("WinKill, " + param);
