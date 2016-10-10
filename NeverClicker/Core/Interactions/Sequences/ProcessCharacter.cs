@@ -159,12 +159,17 @@ namespace NeverClicker.Interactions {
 					queue.AdvanceProfessionsTask(intr, charIdx, taskResult.TaskId, taskResult.BonusFactor);
 				}
 
-				if (queue.NextTask.Kind == TaskKind.Profession) {
-					queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);  // SAME
-				}
-			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) { // UNUSED
-				queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);      // SAME
-			} else if (queue.NextTask.Kind == TaskKind.Profession) {
+				// SHOULD BE HANDLED BY `ADVANCEMATURED()` AND SEEMS BUGGY ANYWAY:
+				//if (queue.NextTask.Kind == TaskKind.Profession) {
+				//	queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);  // SAME
+				//}
+			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) {
+				// UNUSED?
+				// [TODO]: Remove this section.
+				// SHOULD BE HANDLED BY `ADVANCEMATURED()` AND SEEMS BUGGY ANYWAY:
+				//queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);      // SAME
+			} else if (queue.NextTask.Kind == TaskKind.Profession && queue.NextTask.CharIdx == charIdx) {
+				// IF the status was NOT `CompletionStatus.Complete` AND the next task is a profession task for this character:
 				processingIncomplete = true;
 				// CANCELLED OR FAILED
 				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
@@ -176,8 +181,6 @@ namespace NeverClicker.Interactions {
 			}
 
 			intr.Log(LogEntryType.Normal, "Processing complete for character " + charIdx + ".");
-		}
-
-		
+		}		
 	}
 }

@@ -45,7 +45,7 @@ namespace NeverClicker.Interactions {
 				imageFilePath = SettingsForm.ProgramRootFolder + SettingsForm.BUILTIN_IMAGES_SUBPATH + "\\" + imageFileName;
 			}
 
-			intr.Log(new LogMessage(LogEntryType.Debug, "ImageSearch({0}): Searching for image: '{1}'"
+			intr.Log(new LogMessage(LogEntryType.Trace, "ImageSearch({0}): Searching for image: '{1}'"
 				+ " [TopLeft:{2} BotRight:{3}]",
 				imgCode,
 				imageFilePath,
@@ -81,13 +81,10 @@ namespace NeverClicker.Interactions {
 					intr.Log(LogEntryType.Trace, "ImageSearch({0}): Not Found.", imgCode);
 					return new ImageSearchResult(false, new Point(outX, outY));
 				case 2:
-					intr.Log(new LogMessage(
-							"ImageSearch(" + imgCode + "): Results: "
-							+ " OutputVarX:" + intr.GetVar(OUTPUT_VAR_X)
-							+ " OutputVarY:" + intr.GetVar(OUTPUT_VAR_Y)
-							+ " ErrorLevel:" + intr.GetVar(ERROR_LEVEL),
-							LogEntryType.Debug					
-					));
+					intr.Log(LogEntryType.Info, "ImageSearch(" + imgCode + "): Results: " +
+							" OutputVarX:" + intr.GetVar(OUTPUT_VAR_X) + 
+							" OutputVarY:" + intr.GetVar(OUTPUT_VAR_Y) + 
+							" ErrorLevel:" + intr.GetVar(ERROR_LEVEL));
 					intr.Log(LogEntryType.Fatal, "ImageSearch(" + imgCode + "): FATAL ERROR. INVALID IMAGE FILE OR OPTION FORMAT. " +
 						"(Path: " + imageFilePath + ")");
 					return new ImageSearchResult(false, new Point(outX, outY));

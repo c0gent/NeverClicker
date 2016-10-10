@@ -23,8 +23,9 @@ Automated invocation. May eat your laundry.
 - You apparently can't have a character on your account which is unable to invoke because they are too low level (this should be fixed now but who knows).
 
 ## Professions
-- Sort your profession assets in your inventory so that the optional assets you want to use are **above** all other assets. 
-- The profession system will first choose assets from the top of the bag to the bottom, then from the weakest asset (Mercenary) to the strongest (Hero). Remove any weak assets you don't want used from your inventory.
+- Sort your profession assets in your inventory so that the optional assets you want to use are **above** all other assets. A rule of thumb is simply to sort all of your profession assets from lowest quality (top) to highest quality (bottom) in the bag.
+- The profession system will first choose assets from the top of the bag to the bottom, then from the weakest asset (Mercenary) to the strongest (Hero). Remove any weak assets you don't want used from your inventory (or bury them somewhere at the bottom).
+- Tasks are grouped together in the queue. For example, all "Guard Clerics" will be grouped together and the **slowest** one of the three tasks will be used for the queue timer. This means that it's pointless to have all Hero (purple) assets for two "Guard Clerics" tasks and a Footman and Mercenary for the third. In this case, the task group for "Guard Clerics" won't be re-processed until the footman and mercenary task is complete (unless another task happens to be processed in the interim). Try to even out your assets for each character, try to have 9 Mercenary & 9 Footman, or 9 Man-at-arms & 9 Hero, or 18 Adventurer or whatever. Be sure the weaker ones are sorted together at the top of the inventory as described above or else the tasks will be timed inefficently.
 
 
 ## Issues? Ideas?

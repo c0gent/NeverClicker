@@ -57,29 +57,12 @@ namespace NeverClicker.Globals {
 
 namespace NeverClicker.Interactions {
 	public static partial class Sequences {
-
-		//private static string[] LeadershipIconsSmall = {
-		//	"ProfessionsLeadershipMercenaryIcon", 
-		//	"ProfessionsLeadershipGuardIcon",
-		//	"ProfessionsLeadershipFootmanIcon",
-		//	"ProfessionsLeadershipManAtArmsIcon", 
-		//	"ProfessionsLeadershipAdventurerIcon", 
-		//	"ProfessionsLeadershipHeroIcon"};
-
-		//private static string[] LeadershipTilesLarge = {
-		//	"ProfessionsLeadershipMercenaryTileLarge", 
-		//	"ProfessionsLeadershipGuardTileLarge",
-		//	"ProfessionsLeadershipFootmanTileLarge",
-		//	"ProfessionsLeadershipManAtArmsTileLarge", 
-		//	"ProfessionsLeadershipAdventurerTileLarge", 
-		//	"ProfessionsLeadershipHeroTileLarge"};
-
 		public static LeadershipAsset[] leadershipAssets = {
-			new LeadershipAsset(ProfessionAssetId.Mercenary, 0.95f),
-			new LeadershipAsset(ProfessionAssetId.Guard, 0.95f),
-			new LeadershipAsset(ProfessionAssetId.Footman, 0.95f),
-			new LeadershipAsset(ProfessionAssetId.ManAtArms, 0.90f),
-			new LeadershipAsset(ProfessionAssetId.Adventurer, 0.75f),
+			new LeadershipAsset(ProfessionAssetId.Mercenary, 0.05f),
+			new LeadershipAsset(ProfessionAssetId.Guard, 0.05f),
+			new LeadershipAsset(ProfessionAssetId.Footman, 0.05f),
+			new LeadershipAsset(ProfessionAssetId.ManAtArms, 0.10f),
+			new LeadershipAsset(ProfessionAssetId.Adventurer, 0.25f),
 			new LeadershipAsset(ProfessionAssetId.Hero, 0.50f),
 		};
 		
@@ -99,7 +82,8 @@ namespace NeverClicker.Interactions {
 		}
 
 
-		private static bool SelectProfTask(Interactor intr, string taskName) {
+		private static void SelectProfTask(Interactor intr, string taskName) {
+			intr.Log(LogEntryType.Debug, "Attempting to select profession task: '{0}'.", taskName);
 			var searchButton = Screen.ImageSearch(intr, "ProfessionsSearchButton");
 			intr.Wait(50);
 
@@ -114,20 +98,11 @@ namespace NeverClicker.Interactions {
 
 			Keyboard.SendKey(intr, "Enter");
 			intr.Wait(100);
-
-			var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
-
-			if (taskContinueResult.Found) {
-				ContinueTask(intr, taskContinueResult.Point);
-				return true;
-			} else {
-				return false;
-			}
 		}
 
 
 		// Actually queues a profession task:
-		private static float ContinueTask(Interactor intr, Point continueButton) {
+		private static bool ContinueTask(Interactor intr, Point continueButton, out float bonusFactor) {
 			Mouse.Click(intr, continueButton);
 			intr.Wait(100);
 
@@ -143,6 +118,8 @@ namespace NeverClicker.Interactions {
 
 			if (primaryAsset.AssetId == ProfessionAssetId.None) {
 				intr.Log(LogEntryType.Error, "Primary profession asset not detected.");
+				bonusFactor = 0.0f;
+				return false;
 			} else {
 				intr.Log(LogEntryType.Debug, "Using primary profession asset: '{0}'.", primaryAsset.Label);
 			}
@@ -172,23 +149,30 @@ namespace NeverClicker.Interactions {
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
 			intr.Wait(500);
 
-			return primaryAsset.BonusFactor * optionalAsset.BonusFactor;
+			bonusFactor = primaryAsset.BonusFactor + optionalAsset.BonusFactor;
+			return true;
 		}
 
 
 		// Combines tasks with the same id into one task, preserving the worst (highest) bonus factor.
-		public static void CondenseTasks(List<ProfessionTaskResult> completionList) {
+		public static void CondenseTasks(Interactor intr, List<ProfessionTaskResult> completionList) {
 			//var unconden = new List<ProfessionTaskResult>(completionList);			
 			var buckets = new Dictionary<int, ProfessionTaskResult>(9);
 
 			foreach (ProfessionTaskResult taskResult in completionList) {
+				//intr.Log(LogEntryType.Debug, "Professions::CondenseTasks(): Attempting to condense list task (id: {0}, bf: {1})...", 
+				//	taskResult.TaskId, taskResult.BonusFactor);
 				int bucket_id = taskResult.TaskId;
-				ProfessionTaskResult peerTask;
-				bool peerExists = buckets.TryGetValue(bucket_id, out peerTask);
+				ProfessionTaskResult peerTaskResult;
+				bool peerExists = buckets.TryGetValue(bucket_id, out peerTaskResult);
 				
 				if (peerExists) {
-					buckets[bucket_id] = (taskResult.BonusFactor > peerTask.BonusFactor) ? taskResult : peerTask;
+					//intr.Log(LogEntryType.Debug, "Professions::CondenseTasks(): Pre-existing peer found (id: {0}, bf: {1}).", 
+					//	peerTaskResult.TaskId, peerTaskResult.BonusFactor);
+					buckets[bucket_id] = (taskResult.BonusFactor >= peerTaskResult.BonusFactor) ? taskResult : peerTaskResult;
 				} else {
+					//intr.Log(LogEntryType.Debug, "Professions::CondenseTasks(): No peer found, adding task (id: {0}, bf: {1}).", 
+					//	taskResult.TaskId, taskResult.BonusFactor);
 					buckets.Add(bucket_id, taskResult);
 				}
 			}
@@ -196,6 +180,8 @@ namespace NeverClicker.Interactions {
 			completionList.Clear();
 
 			foreach (ProfessionTaskResult taskResult in buckets.Values) {
+				intr.Log(LogEntryType.Debug, "Professions::CondenseTasks(): Profession completion list task: '{0}' has been " +
+					"condensed with a bonus factor of: '{1}'.", taskResult.TaskId, taskResult.BonusFactor);
 				completionList.Add(taskResult);
 			}
 		}
@@ -207,7 +193,7 @@ namespace NeverClicker.Interactions {
 
 			string profsWinKey = intr.AccountSettings.GetSettingValOr("Professions", "GameHotkeys", Global.Default.ProfessionsWindowKey);
 
-			intr.Log(LogEntryType.Debug, "Opening professions window for character " + charZeroIdxLabel + ".");
+			intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Opening professions window for character " + charZeroIdxLabel + ".");
 
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
@@ -218,7 +204,7 @@ namespace NeverClicker.Interactions {
 				intr.Wait(200);
 
 				if (!Screen.ImageSearch(intr, "ProfessionsWindowTitle").Found) {
-					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to open professions window");
+					intr.Log(LogEntryType.FatalWithScreenshot, "Professions::MaintainProfs(): Unable to open professions window");
 					return CompletionStatus.Failed;
 				}
 			}
@@ -238,18 +224,18 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for character + " 
+				intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Collected " + profResultsCollected + " profession results for character + " 
 					+ charZeroIdxLabel + ".");
 			}
 
-			int currentTask = 0;
-			var success = false;
+			int currentTaskId = 0;
+			//var success = false;
 			var anySuccess = false;
 
 			for (int i = 0; i < 9; i++) {
 				if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; };
 
-				success = false;
+				//success = false;
 				
 				if (Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile")) {
 					intr.Wait(400);
@@ -273,23 +259,26 @@ namespace NeverClicker.Interactions {
 				intr.Wait(200);
 				
 				var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
-				float bonusFactor = 1.0f;
+				
 
-				if (i > 0 && taskContinueResult.Found) {
-					bonusFactor = ContinueTask(intr, taskContinueResult.Point);
-					success = true;
-				} else {
+				//if (i > 0 && taskContinueResult.Found) {
+				if (i == 0 || !taskContinueResult.Found) {
 					while(true) {
-						if (currentTask < ProfessionTasksRef.ProfessionTaskNames.Length) {
-							if (SelectProfTask(intr, ProfessionTasksRef.ProfessionTaskNames[currentTask])) {
-								success = true;
+						if (currentTaskId < ProfessionTasksRef.ProfessionTaskNames.Length) {
+							SelectProfTask(intr, ProfessionTasksRef.ProfessionTaskNames[currentTaskId]);
+							taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
+
+							if (taskContinueResult.Found) {
+								intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Profession task: '{0}' has been selected.", 
+									ProfessionTasksRef.ProfessionTaskNames[currentTaskId]);
+								//success = true;
 								break;								
 							} else {
-								currentTask += 1;
+								currentTaskId += 1;
 								continue;
 							}
 						} else {
-							intr.Log(LogEntryType.Normal, "Could not find valid professions task.");
+							intr.Log(LogEntryType.Normal, "Professions::MaintainProfs(): Could not find valid professions task.");
 							CollectCompleted(intr);
 							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 							break;
@@ -297,14 +286,22 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				if (success && currentTask < ProfessionTasksRef.ProfessionTaskNames.Length) {
-					completionList.Add(new ProfessionTaskResult(currentTask, bonusFactor));
-					anySuccess = true;
+				if (taskContinueResult.Found && currentTaskId < ProfessionTasksRef.ProfessionTaskNames.Length) {
+					float bonusFactor = 0.0f;
+
+					// Start the in-game task:
+					if (ContinueTask(intr, taskContinueResult.Point, out bonusFactor)) {
+						intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Profession task '{0}' (id: {1}, bf: {2}) started.", 
+							ProfessionTasksRef.ProfessionTaskNames[currentTaskId], currentTaskId, bonusFactor);		
+								
+						completionList.Add(new ProfessionTaskResult(currentTaskId, bonusFactor));
+						anySuccess = true;
+					}
 				} 
 			}
 
 			// Condense tasks into groups (of 3 generally) using worst (highest) bonus factor:
-			CondenseTasks(completionList);
+			CondenseTasks(intr, completionList);
 
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 

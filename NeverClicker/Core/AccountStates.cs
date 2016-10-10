@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace NeverClicker {
 	public class AccountStates : XmlSettingsFile {
+		public static string TasksNodeName = "Tasks";
 		public AccountStates() : base("AccountStates") {
 			base.SaveFile();
 		}
@@ -21,16 +23,31 @@ namespace NeverClicker {
 			base.SaveFile();
 		}
 
+		public XmlElement CharNode(uint charIdx) {
+			var charsNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
+			return GetOrCreateSettingNode(charsNodeName, "Characters");
+		}
+
+		public XmlElement CharTasksNode(uint charIdx) {
+			var charsNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
+			var charNode = GetOrCreateSettingNode(charsNodeName, "Characters");
+			var charTasksNode = charNode.SelectSingleNode(TasksNodeName);
+
+			if (charTasksNode == null) {
+				charTasksNode = charNode.AppendChild(Doc.CreateElement(TasksNodeName));
+			}
+
+			return (XmlElement)charTasksNode;
+		}
+
 		// Gets a `String` state value.
 		public string GetCharState(uint charIdx, string settingName) {
-			var charNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
-			var charNode = GetOrCreateSettingNode(charNodeName, "Characters");
+			var charNode = CharNode(charIdx);
 
 			var charSettingNode = charNode.SelectSingleNode(settingName);
 
 			if (charSettingNode == null) {
-				charSettingNode = Doc.CreateElement(settingName);
-				charNode.AppendChild(charSettingNode);
+				charSettingNode = charNode.AppendChild(Doc.CreateElement(settingName));
 			}
 
 			return charSettingNode.InnerText;
@@ -76,14 +93,12 @@ namespace NeverClicker {
 
 		// Saves a `String` state value.
 		public void SaveCharState(string settingVal, uint charIdx, string settingName) {
-			var charNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
-			var charNode = GetOrCreateSettingNode(charNodeName, "Characters");
+			var charNode = CharNode(charIdx);
 
 			var charSettingNode = charNode.SelectSingleNode(settingName);
 
 			if (charSettingNode == null) {
-				charSettingNode = Doc.CreateElement(settingName);
-				charNode.AppendChild(charSettingNode);
+				charSettingNode = charNode.AppendChild(Doc.CreateElement(settingName));
 			}
 
 			charSettingNode.InnerText = settingVal;
@@ -99,6 +114,39 @@ namespace NeverClicker {
 		public void SaveCharState(DateTime settingVal, uint charIdx, string settingName) {
 			SaveCharState(settingVal.ToString(), charIdx, settingName);
 		}
+
+		public bool TryGetCharTask(uint charIdx, TaskKind kind, int taskId, out GameTask task) {
+			//var charTasksNode = (XmlElement)CharNode(charIdx).SelectSingleNode("Tasks");
+			var charTasksNode = CharTasksNode(charIdx);
+			var taskNodeName = GameTask.GenXmlNodeName(kind, taskId);
+			var taskNode = (XmlElement)charTasksNode.SelectSingleNode(taskNodeName);
+
+			if (taskNode != null) {
+				try {
+					task = GameTask.FromXmlElement(taskNode);
+					return true;
+				} catch (Exception) { }
+			} 
+
+			task = new GameTask();
+			return false;
+		}
+
+		public void SaveCharTask(GameTask task) {
+			//var charTasksNode = (XmlElement)CharNode(task.CharIdx).SelectSingleNode("Tasks");
+			var charTasksNode = CharTasksNode(task.CharIdx);
+			var taskNodeName = task.XmlNodeName;
+
+			var taskNode = (XmlElement)charTasksNode.SelectSingleNode(taskNodeName);
+
+			if (taskNode == null) {
+				task.AppendXmlElement(charTasksNode);
+			} else {
+				task.SetXmlAttribs(taskNode);
+			}
+
+			SaveFile();
+		}		
 
 		// Migrates old ini settings.
 		private void MigrateIniSettings(string oldIniFileName) {
