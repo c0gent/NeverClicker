@@ -23,8 +23,8 @@ namespace NeverClicker.Interactions {
 			intr.Wait(100);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
-				intr.Log(LogEntryType.Info, "Maximum blessings reached for character " + charIdx 
-					+ ". Redeeming through Vault of Piety...");
+				intr.Log(LogEntryType.Info, "Maximum blessings reached for character [" + charIdx 
+					+ "]. Redeeming through Vault of Piety...");
 
 				VaultOfPietyItem vopItem;
 
@@ -40,7 +40,7 @@ namespace NeverClicker.Interactions {
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log(LogEntryType.Error, "Unable to invoke: Error collecting Vault of Piety rewards for character " + charIdx + ".");
+					intr.Log(LogEntryType.Error, "Unable to invoke: Error collecting Vault of Piety rewards for character [" + charIdx + "].");
 					return CompletionStatus.Failed;
 				}
 			}
@@ -53,13 +53,13 @@ namespace NeverClicker.Interactions {
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
-					intr.Log("Unable to invoke: Invocation already finished for the day on character " + charIdx + ".");
+					intr.Log("Unable to invoke: Invocation already finished for the day on character [" + charIdx + "].");
 					return CompletionStatus.DayComplete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
-					intr.Log("Unable to invoke: Still waiting to invoke on character " + charIdx + ".");
+					intr.Log("Unable to invoke: Still waiting to invoke on character [" + charIdx + "].");
 					return CompletionStatus.Immature;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
-					intr.Log(LogEntryType.Error, "Unable to invoke: Character " + charIdx + " not in rest zone.");
+					intr.Log(LogEntryType.Error, "Unable to invoke: Character [" + charIdx + "] not in rest zone.");
 					return CompletionStatus.Complete;			
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
 					intr.Log(LogEntryType.Error, "Unable to invoke: Items in overflow bag are preventing invocation for character " 
@@ -77,8 +77,8 @@ namespace NeverClicker.Interactions {
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character " + charIdx 
-						+ "." + "[IN0]");
+					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character " + charIdx +
+						"." + "[IN0]");
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
 				}
@@ -105,8 +105,8 @@ namespace NeverClicker.Interactions {
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
 
-				intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character " + charIdx 
-						+ "." + "[FN1]");
+				intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character [" + charIdx +
+						"]." + "[FN1]");
 
 				intr.Wait(30000);
 				MoveAround(intr);	

@@ -163,7 +163,7 @@ namespace NeverClicker {
 				intr.Log(LogEntryType.Error, "Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
 			}
 						
-			intr.Log("Next invocation task for character " + charIdx + " at: " + taskMatureTime.ToString() + ".");
+			intr.Log("Next invocation task for character [" + charIdx + "] at: " + taskMatureTime.ToString() + ".");
 			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f));
 			intr.AccountStates.SaveCharTask(newTask);
 			intr.UpdateQueueList(this.ListClone());
@@ -233,7 +233,7 @@ namespace NeverClicker {
 				}
 			} else {
 				intr.Log(LogEntryType.Fatal, "TaskQueue::DelayUntilNextInvoke(): Error retrieving next invocation " + 
-					"task item for character " + charIdx + ".");
+					"task item for character [" + charIdx + "].");
 			}
 		}
 
@@ -330,7 +330,7 @@ namespace NeverClicker {
 					tasksQueued += 1;
 				}
 
-				intr.Log(LogEntryType.Info, "[" + tasksQueued.ToString() + "] profession tasks queued for character " + charIdx + ".");
+				intr.Log(LogEntryType.Info, "[" + tasksQueued.ToString() + "] profession tasks queued for character [" + charIdx + "].");
 			}
 		}
 

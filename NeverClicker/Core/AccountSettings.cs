@@ -95,8 +95,8 @@ namespace NeverClicker {
 					//MostRecentProfTime_0 = 10/1/2016 05:44:26
 
 					var charLabelZero = "Character " + charIdx.ToString();
-					var charLabelOne = "Character " + (charIdx + 1).ToString();
-					SaveCharSetting(charLabelOne, charIdx, "CharacterName");
+					//var charLabelOne = "Character " + (charIdx + 1).ToString();
+					SaveCharSetting(charLabelZero, charIdx, "CharacterName");
 
 					var vopItem = oldIni.GetSettingOr("VaultPurchase", charLabelZero, Global.Default.VaultPurchase);
 					if (vopItem > 4) { vopItem = 4; };
