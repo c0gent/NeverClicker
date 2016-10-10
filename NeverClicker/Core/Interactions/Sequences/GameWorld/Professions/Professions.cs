@@ -188,13 +188,13 @@ namespace NeverClicker.Interactions {
 		}
 
 
-		public static CompletionStatus MaintainProfs (Interactor intr, string charZeroIdxLabel, 
+		public static CompletionStatus MaintainProfs (Interactor intr, uint charIdx, 
 						List<ProfessionTaskResult> completionList) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
 
 			string profsWinKey = intr.AccountSettings.GetSettingValOr("Professions", "GameHotkeys", Global.Default.ProfessionsWindowKey);
 
-			intr.Log(LogEntryType.Debug, "Opening professions window for character " + charZeroIdxLabel + ".");
+			intr.Log(LogEntryType.Debug, "Opening professions window for character [" + charIdx + "].");
 
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
@@ -225,14 +225,16 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for character + " 
-					+ charZeroIdxLabel + ".");
+				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for character [" +
+					charIdx + "].");
 			}
 
+			int noValidTaskSlotId = 0;
+			int noValidTaskCounter = 0;
 			int currentTaskId = 0;
 			var anySuccess = false;
 
-			for (int i = 0; i < 9; i++) {
+			for (int slotId = 0; slotId < 9; slotId++) {
 				if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; };
 				
 				if (Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile")) {
@@ -258,7 +260,7 @@ namespace NeverClicker.Interactions {
 				
 				var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
 				
-				if (i == 0 || !taskContinueResult.Found) {
+				if (slotId == 0 || !taskContinueResult.Found) {
 					while(true) {
 						if (currentTaskId < ProfessionTasksRef.ProfessionTaskNames.Length) {
 							SelectProfTask(intr, ProfessionTasksRef.ProfessionTaskNames[currentTaskId]);
@@ -273,10 +275,24 @@ namespace NeverClicker.Interactions {
 								continue;
 							}
 						} else {
+							// If we've been stuck 
+							if (noValidTaskSlotId == slotId) {
+								if (noValidTaskCounter >= ProfessionTasksRef.ProfessionTaskNames.Length) {
+									intr.Log(LogEntryType.Error, "Error starting profession task on character [" + charIdx + "]:");
+									intr.Log(LogEntryType.Error, "- Ensure that profession assets are sorted correctly in inventory.");
+									return CompletionStatus.Complete;
+								} else {
+									noValidTaskCounter += 1;
+									break;
+								}
+							} else {
+								noValidTaskSlotId = slotId;
+								noValidTaskCounter = 1;
+							}
+							
 							intr.Log(LogEntryType.Normal, "Could not find valid professions task.");
 							CollectCompleted(intr);
-							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
-							break;
+							Mouse.ClickImage(intr, "ProfessionsWindowTitle");							
 						}
 					}
 				}

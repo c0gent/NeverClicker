@@ -218,6 +218,9 @@
     </Compile>
     <None Include="app.manifest" />
     <None Include="NeverClicker_Key.pfx" />
+    <Content Include="Assets\Default\Images\InventoryRewardWindowOpenAnotherButton_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Default\Images\InventoryVipAccountRewardBag.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

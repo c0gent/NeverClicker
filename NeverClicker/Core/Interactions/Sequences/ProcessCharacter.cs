@@ -16,8 +16,9 @@ namespace NeverClicker.Interactions {
 					Interactor intr,
 					TaskQueue queue
 		) {			
-			uint charIdx = queue.NextTask.CharIdx;
-			string charLabel = queue.NextTask.CharIdxLabel;
+			var currentTask = queue.NextTask;
+			uint charIdx = currentTask.CharIdx;
+			//string charLabel = queue.NextTask.CharIdxLabel;
 			int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesToday", 0);
 			bool skipInvocation = false;
 			bool skipMaintInven = false;
@@ -30,7 +31,7 @@ namespace NeverClicker.Interactions {
 				// Skip invocation if it's already done.
 				skipInvocation = true;
 			} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate && invokesToday < 2 && 
-							queue.NextTask.Kind == TaskKind.Invocation) {
+							currentTask.Kind == TaskKind.Invocation) {
 				// Skip professions for the first few invokes of the day and inventory for some of the middle ones:
 				intr.Log(LogEntryType.Info, "Skipping profession processing this round.");
 				skipProfessions = true;
@@ -50,20 +51,21 @@ namespace NeverClicker.Interactions {
 
 			// Reset `invokesToday` if `invokesCompletedOn` is 
 			if (invokesToday >= 6) {
-				if (queue.NextTask.Kind == TaskKind.Invocation) {
+				if (currentTask.Kind == TaskKind.Invocation) {
 					if (invokesCompletedForDay == TaskQueue.TodaysGameDate) {
-						intr.Log(LogEntryType.Info, charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow");
+						intr.Log(LogEntryType.Info, "Character [" + charIdx + 
+							"] has already invoked 6 times today. Queuing invocation for tomorrow");
 						queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 						skipInvocation = true;
 						skipMaintInven = true;
 						//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 						return;
 					} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate) {
-						intr.Log(LogEntryType.Info, charLabel + ": Resetting InvokesToday to 0.");
+						intr.Log(LogEntryType.Info, "Character [" + charIdx +  "]: Resetting InvokesToday to 0.");
 						invokesToday = 0;
 						intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
 					} else {
-						var errMsg = charLabel + ": Internal error. `invokesCompletedOn` is in the future.";
+						var errMsg = "Character [" + charIdx +  "]: Internal error. `invokesCompletedOn` is in the future.";
 						intr.Log(LogEntryType.Fatal, errMsg);
 						throw new Exception(errMsg);
 					}
@@ -144,7 +146,7 @@ namespace NeverClicker.Interactions {
 
 			if (!skipProfessions) {
 				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for character [" + charIdx + "] ...");				
-				professionsStatus = MaintainProfs(intr, charLabel, professionTasksProcessed);
+				professionsStatus = MaintainProfs(intr, charIdx, professionTasksProcessed);
 				intr.Log(LogEntryType.Info, "ProcessCharacter(): Professions status: " + professionsStatus.ToString());
 			}
 
@@ -159,15 +161,15 @@ namespace NeverClicker.Interactions {
 			} else if (invocationStatus == CompletionStatus.DayComplete) {
 				intr.Log(LogEntryType.Normal, "Daily invocations for character [" + charIdx.ToString() + "]: Complete for day.");
 				queue.AdvanceInvocationTask(intr, charIdx, 6, true);
-			} else if (invocationStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Invocation) {
+			} else if (invocationStatus == CompletionStatus.Immature && currentTask.Kind == TaskKind.Invocation) {
 				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Immature.");
 				intr.Log(LogEntryType.Info, "Re-queuing task for character [" + charIdx.ToString() + "].");
 				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);				
-			} else if (invocationStatus == CompletionStatus.Failed && queue.NextTask.Kind == TaskKind.Invocation) {
+			} else if (invocationStatus == CompletionStatus.Failed && currentTask.Kind == TaskKind.Invocation) {
 				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Failed.");				
 				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 				//processingIncomplete = true;
-			} else if (invocationStatus == CompletionStatus.Cancelled && queue.NextTask.Kind == TaskKind.Invocation) {
+			} else if (invocationStatus == CompletionStatus.Cancelled && currentTask.Kind == TaskKind.Invocation) {
 				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Cancelled.");
 				//processingIncomplete = true;
 			}
@@ -181,22 +183,22 @@ namespace NeverClicker.Interactions {
 				}
 
 				// SHOULD BE HANDLED BY `ADVANCEMATURED()` AND SEEMS BUGGY ANYWAY:
-				//if (queue.NextTask.Kind == TaskKind.Profession) {
-				//	queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);  // SAME
+				//if (currentTask.Kind == TaskKind.Profession) {
+				//	queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId);  // SAME
 				//}
-			} else if (professionsStatus == CompletionStatus.Immature && queue.NextTask.Kind == TaskKind.Profession) {
+			} else if (professionsStatus == CompletionStatus.Immature && currentTask.Kind == TaskKind.Profession) {
 				// UNUSED?
 				// [TODO]: Remove this section.
 				// SHOULD BE HANDLED BY `ADVANCEMATURED()` AND SEEMS BUGGY ANYWAY:
-				//queue.AdvanceProfessionsTask(intr, queue.NextTask.CharIdx, queue.NextTask.TaskId);      // SAME
-			} else if (queue.NextTask.Kind == TaskKind.Profession && queue.NextTask.CharIdx == charIdx) {
+				queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId, currentTask.BonusFactor);
+			} else if (currentTask.Kind == TaskKind.Profession) {
 				// IF the status was NOT `CompletionStatus.Complete` AND the next task is a profession task for this character:
 				processingIncomplete = true;
 				// CANCELLED OR FAILED
-				//queue.AdvanceTask(intr, queue.NextTask.CharIdx, TaskKind.Profession, queue.NextTask.TaskId);		// SAME
+				//queue.AdvanceTask(intr, currentTask.CharIdx, TaskKind.Profession, currentTask.TaskId);		// SAME
 			}
 
-			//// [TODO]: CONSIDER REMOVAL
+			//// EVALUATE WHETHER OR NOT TO BRING THIS BACK:
 			//if (!processingIncomplete && !skipProfessions && !skipInvocation) {
 			//	intr.Log(LogEntryType.Normal, "Advancing all matured tasks for character {0}.", charIdx.ToString());
 			//	queue.AdvanceMatured(intr, charIdx);

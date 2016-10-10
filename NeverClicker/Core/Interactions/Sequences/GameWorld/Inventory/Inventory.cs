@@ -22,13 +22,13 @@ namespace NeverClicker.Interactions {
 			string openInventoryKey = intr.AccountSettings.GetSettingValOr("Inventory", "GameHotkeys", Global.Default.InventoryKey);
 			MoveAround(intr);
 			Keyboard.SendKey(intr, openInventoryKey);
-			intr.Wait(200);
+			intr.Wait(300);
 
 			if (intr.WaitUntil(8, WorldWindowState.Inventory, States.IsWorldWindowState, null, 1)) {
 				intr.Log(LogEntryType.Debug, "Inventory is open.");
 				return true;
 			} else {
-				intr.Log(LogEntryType.Fatal, "Unable to open inventory.");
+				intr.Log(LogEntryType.Info, "Unable to open inventory. Could be a random glitch.");
 				return false;
 			}
 		}
@@ -82,13 +82,14 @@ namespace NeverClicker.Interactions {
 					Mouse.Move(intr, iconBags.Point.X - 30, iconBags.Point.Y);
 					intr.WaitRand(50, 100);
 				} else {
-					intr.Log(LogEntryType.Fatal, "Unable to find inventory tab: 'Bags'.");
+					intr.Log(LogEntryType.Info, "Unable to find inventory tab: 'Bags'. Probably just a random timing error.");
 					return CompletionStatus.Failed;
 				}
 			}			
 
 			//
 			//var imgCode = "InventoryCelestialBagOfRefinement";
+			int afterSearchDelay = 3200;
 
 			// Determine if any reward bags are present:
 			// First Search:
@@ -96,13 +97,23 @@ namespace NeverClicker.Interactions {
 			//var openAnotherBtnLoc = new Point();			
 
 			if (bagSearchResult.Found) {
+				intr.Log(LogEntryType.Debug, "Found reward icon with image code: '{0}'.", RewardIconImgCode);
+
+				// Find a place to move the mouse out of the way to:
+				var iconBags = Screen.ImageSearch(intr, "InventoryTabIconBags");
+				if (!iconBags.Found) { intr.Log(LogEntryType.Error, "Error determining inventory state."); }
+
 				intr.Log(LogEntryType.Debug, "Opening reward bags...");
 				OpenRewardBag(intr, bagSearchResult);
+				intr.Wait(100);
 
-				intr.Wait(2600);
+				// Move mouse out of the way:
+				Mouse.Move(intr, iconBags.Point.X - 30, iconBags.Point.Y);
+				intr.Wait(afterSearchDelay);
 
 				// Determine 'Open Another' button location for future presses:
-				var openAnotherBtnSearchResult = Screen.ImageSearch(intr, "InventoryRewardWindowOpenAnotherButton");
+				var openAnotherBtnSearchResult = Screen.ImageSearch(intr, 
+					"InventoryRewardWindowOpenAnotherButton_2", "InventoryRewardWindowOpenAnotherButton");
 
 				if (openAnotherBtnSearchResult.Found) {					
 					var randOfs = new Point(intr.Rand(1, 60), intr.Rand(1, 10));
@@ -111,10 +122,14 @@ namespace NeverClicker.Interactions {
 					int bagsOpened = 0;
 
 					// Open remaining bags:
-					while (Screen.ImageSearch(intr, RewardIconImgCode).Found) {
-						intr.WaitRand(20, 40);				
+					while (true) {						
 						Mouse.Click(intr, openAnotherBtnLoc);
+						intr.WaitRand(20, 40);
 						bagsOpened += 1;
+
+						if (!Screen.ImageSearch(intr, RewardIconImgCode).Found) {
+							break;
+						}
 
 						// Something is probably stuck:
 						if (bagsOpened >= 100) {
@@ -124,11 +139,6 @@ namespace NeverClicker.Interactions {
 					}
 				} else {
 					// 'Open Another' button not found, just click them individually:
-
-					// Find a place to move the mouse out of the way:
-					var iconBags = Screen.ImageSearch(intr, "InventoryTabIconBags");
-					if (!iconBags.Found) { intr.Log(LogEntryType.Error, "Error determining inventory state."); }
-
 					while (true) {
 						// Move mouse out of the way:
 						Mouse.Move(intr, iconBags.Point.X - 30, iconBags.Point.Y);
@@ -138,11 +148,13 @@ namespace NeverClicker.Interactions {
 						if (!bagSearchResult.Found) { break; }					
 
 						// Open bag:
-						Mouse.Click(intr, bagSearchResult.Point);
-						intr.Wait(2600);				
+						OpenRewardBag(intr, bagSearchResult);
+						intr.Wait(afterSearchDelay);
 					}
 
 				}
+			} else {
+				intr.Log(LogEntryType.Debug, "No reward icons with image code: '{0}' detected.", RewardIconImgCode);
 			}
 
 			return CompletionStatus.Complete;
@@ -175,15 +187,21 @@ namespace NeverClicker.Interactions {
 			// Open Celestial Bags of Refinement:
 			var ocbStatus = OpenRewardBags(intr, "InventoryCelestialBagOfRefinement", true);
 
+			if (ocbStatus != CompletionStatus.Complete) {
+				intr.Log(LogEntryType.Error, "Unable to open celestial bags of refinement.");
+				return ocbStatus;
+			}
+
 			// Open VIP Account Reward bags:
 			var varStatus = OpenRewardBags(intr, "InventoryVipAccountRewardBag", true);
 
-			// Attempt to transfer any overflow items again just in case:
-			TransferOverflow(intr, true, true);
-
-			if (ocbStatus != CompletionStatus.Complete) {
-				return ocbStatus;
+			if (varStatus != CompletionStatus.Complete) {
+				intr.Log(LogEntryType.Error, "Unable to open vip account reward bags.");
+				return varStatus;
 			}
+
+			// Attempt to transfer any overflow items again just in case:
+			TransferOverflow(intr, true, true);			
 
 			// Finish up:
 			MoveAround(intr);
