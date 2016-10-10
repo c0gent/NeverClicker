@@ -137,7 +137,7 @@ namespace NeverClicker {
 				if (invokesToday == 0) {
 					extraDelay = TimeSpan.FromMinutes(15);
 				}
-				taskMatureTime = CalculateTaskMatureTime(now + extraDelay, charIdx, TaskKind.Invocation, invokesToday);
+				taskMatureTime = CalculateTaskMatureTime(now + extraDelay, charIdx, TaskKind.Invocation, invokesToday, 0.0f);
 				// IF NEXT SCHEDULED TASK IS BEYOND THE 3:30 CURFEW, RESET FOR NEXT DAY
 				if (taskMatureTime > nextThreeThirty) {
 					invokesToday = 6;
@@ -164,7 +164,8 @@ namespace NeverClicker {
 			}
 						
 			intr.Log("Next invocation task for character " + charIdx + " at: " + taskMatureTime.ToString() + ".");
-			this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f));
+			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f));
+			intr.AccountStates.SaveCharTask(newTask);
 			intr.UpdateQueueList(this.ListClone());
 		}
 
@@ -178,16 +179,16 @@ namespace NeverClicker {
 			var taskMatureTime = now;
 
 			if (mostRecentProfTime.AddMinutes(ProfessionTasksRef.ProfessionTaskDurationMinutes[taskId]) < now) {
-				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Profession, taskId);
+				taskMatureTime = CalculateTaskMatureTime(now, charIdx, TaskKind.Profession, taskId, bonusFactor);
 			} else {
-				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Profession, taskId);
+				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Profession, taskId, bonusFactor);
 			}
 
 			intr.Log("Next profession task (" + ProfessionTasksRef.ProfessionTaskNames[taskId] + ") for character " + charIdx
 				+ " at: " + taskMatureTime.ToString() + ".");
 
 			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Profession, taskId, bonusFactor));
-			intr.AccountStates.SaveCharState(now, charIdx, "MostRecentProfTime_" + taskId);
+			//intr.AccountStates.SaveCharState(now, charIdx, "MostRecentProfTime_" + taskId);
 			intr.AccountStates.SaveCharTask(newTask);
 			intr.UpdateQueueList(this.ListClone());
 		}
@@ -258,13 +259,13 @@ namespace NeverClicker {
 					now.AddHours(-24));
 
 				var invTaskMatureTime = CalculateTaskMatureTime(mostRecentInvoke, charIdx, 
-					TaskKind.Invocation, invokesToday);
+					TaskKind.Invocation, invokesToday, 0.0f);
 
 				if (invokesToday >= 6) {
 					if (invokesCompletedOn < TodaysGameDate) { // START FRESH DAY
-						intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");
+						intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");						
 						invokesToday = 0;
-						invTaskMatureTime = now;
+						invTaskMatureTime = now;						
 					} else { // DONE FOR THE DAY
 						invTaskMatureTime = NextThreeAmPst;
 					}
@@ -272,7 +273,7 @@ namespace NeverClicker {
 
 				if (resetDay) {
 					intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");
-					intr.AccountStates.SaveCharState(TodaysGameDate.AddDays(-1).ToString(), charIdx,
+					intr.AccountStates.SaveCharState(TodaysGameDate.AddDays(-1), charIdx,
 						"MostRecentInvocationTime");
 					invokesToday = 0;
 					invTaskMatureTime = now;
@@ -280,7 +281,10 @@ namespace NeverClicker {
 
 				intr.Log(LogEntryType.Debug, "Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + 
 					invTaskMatureTime.ToString());
-				this.Add(new GameTask(mostRecentInvoke, invTaskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f));
+
+				var invTask = new GameTask(mostRecentInvoke, invTaskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f);
+				intr.AccountStates.SaveCharTask(invTask);
+				this.Add(invTask);
 
 
 				// ################################## PROFESSIONS #####################################
@@ -309,26 +313,20 @@ namespace NeverClicker {
 				// ################ Add Tasks to Queue ################
 				int tasksQueued = 0;
 
-				for (var taskId = 0; taskId < ProfessionTasksRef.ProfessionTaskNames.Length; taskId++) {
-					var settingKey = "MostRecentProfTime_" + taskId;
-					//var mostRecentTask = now.AddDays(-1);					
+				for (var taskId = 0; taskId < ProfessionTasksRef.ProfessionTaskNames.Length; taskId++) {					
+					GameTask profTask;
 
-					var mostRecentTaskTime = intr.AccountStates.GetCharStateOr(charIdx, settingKey, Global.Default.SomeOldDate);					
-
-					DateTime profTaskMatureTime = CalculateTaskMatureTime(mostRecentTaskTime, charIdx, TaskKind.Profession, taskId);
-					//profTaskMatureTime = (profTaskMatureTime < now) ? now : profTaskMatureTime;
-
-					intr.Log(LogEntryType.Info, "Adding profession task to queue for character " + charIdx
-						+ ", matures: " + mostRecentTaskTime.ToString() + ", taskId: " + taskId.ToString() + ".");
-
-					GameTask task;
-
-					if (!intr.AccountStates.TryGetCharTask(charIdx, TaskKind.Profession, taskId, out task)) {
-						task = new GameTask(mostRecentTaskTime, profTaskMatureTime, charIdx, TaskKind.Profession, taskId, 0.0f);
+					// Attempt to load from new task persistence system:
+					if (!intr.AccountStates.TryGetCharTask(charIdx, TaskKind.Profession, taskId, out profTask)) {
+						// Use old school system:
+						var mostRecentTaskTime = intr.AccountStates.GetCharStateOr(charIdx, "MostRecentProfTime_" + taskId, Global.Default.SomeOldDate);
+						DateTime profTaskMatureTime = CalculateTaskMatureTime(mostRecentTaskTime, charIdx, TaskKind.Profession, taskId, 0.0f);
+						profTask = new GameTask(mostRecentTaskTime, profTaskMatureTime, charIdx, TaskKind.Profession, taskId, 0.0f);
 					}
 
-					this.Add(task);
-
+					intr.Log(LogEntryType.Info, "Adding profession task to queue for character " + charIdx
+						+ ", matures: " + profTask.MatureTime.ToString() + ", taskId: " + taskId.ToString() + ".");
+					this.Add(profTask);
 					tasksQueued += 1;
 				}
 
@@ -337,21 +335,25 @@ namespace NeverClicker {
 		}
 
 
-		public DateTime CalculateTaskMatureTime(DateTime startTime, uint charIdx, TaskKind kind, int taskId) {
-			DateTime taskMatureTime;
+		public DateTime CalculateTaskMatureTime(DateTime startTime, uint charIdx, TaskKind kind, int taskId, float bonusFactor) {
+			int durationMins = 0;
 
 			switch (kind) {
 				case TaskKind.Invocation:
-					taskMatureTime = startTime.AddMinutes(InvokeDelayMinutes[taskId]);
+					durationMins = InvokeDelayMinutes[taskId];
 					break;
 				case TaskKind.Profession:
-					taskMatureTime = startTime.AddMinutes(ProfessionTasksRef.ProfessionTaskDurationMinutes[taskId]);
+					float timeFactor = 1.0f / (1.0f + bonusFactor);
+					durationMins = (int)(ProfessionTasksRef.ProfessionTaskDurationMinutes[taskId] * timeFactor);
 					break;
 				default:
 					return DateTime.Now;
 			}
 
-			taskMatureTime = taskMatureTime.AddTicks(10000 * charIdx).AddTicks(10 * taskId);
+			DateTime taskMatureTime = startTime
+				.AddMinutes(durationMins)
+				.AddTicks(10000 * charIdx)
+				.AddTicks(10 * taskId);
 			return taskMatureTime;
 		}
 

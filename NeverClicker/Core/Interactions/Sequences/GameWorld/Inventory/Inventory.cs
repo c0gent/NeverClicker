@@ -138,7 +138,7 @@ namespace NeverClicker.Interactions {
 			var enchKeyAvailable = DetectEnchantedKeyAwaitingCollection(intr);
 
 			// Collect Enchanted Key:
-			if (IsEnchantedKeyPending(intr)) {
+			if (IsEnchantedKeyTimerExpired(intr)) {
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);
 			} else if (enchKeyAvailable) {
 				ClaimEnchantedKey(intr, charIdx, InventoryOpened);

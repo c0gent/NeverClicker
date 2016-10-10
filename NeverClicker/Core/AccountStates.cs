@@ -112,7 +112,7 @@ namespace NeverClicker {
 
 		// Saves a `DateTime` state value.
 		public void SaveCharState(DateTime settingVal, uint charIdx, string settingName) {
-			SaveCharState(settingVal.ToString(), charIdx, settingName);
+			SaveCharState(settingVal.ToString("o"), charIdx, settingName);
 		}
 
 		public bool TryGetCharTask(uint charIdx, TaskKind kind, int taskId, out GameTask task) {

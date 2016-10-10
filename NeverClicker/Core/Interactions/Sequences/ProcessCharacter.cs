@@ -19,32 +19,44 @@ namespace NeverClicker.Interactions {
 			uint charIdx = queue.NextTask.CharIdx;
 			string charLabel = queue.NextTask.CharIdxLabel;
 			int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesToday", 0);
+			bool skipInvocation = false;
+			bool skipMaintInven = false;
+			bool skipProfessions = false;
 
-			//DateTime invokesCompletedOn;
-
-			//if (!DateTime.TryParse(intr.AccountStates.GetCharState(charIdx, "InvokesCompleteFor"), out invokesCompletedOn)) {
-			//	invokesCompletedOn = DateTime.Parse(Global.Default.SomeOldDateString);
-			//}
-
-			DateTime invokesCompletedOn = intr.AccountStates.GetCharStateOr(charIdx, 
+			DateTime invokesCompletedForDay = intr.AccountStates.GetCharStateOr(charIdx, 
 				"InvokesCompleteFor", Global.Default.SomeOldDate);
+
+			if (invokesCompletedForDay == TaskQueue.TodaysGameDate) {
+				// Skip invocation if it's already done.
+				skipInvocation = true;
+			} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate && invokesToday < 5 && 
+							queue.NextTask.Kind == TaskKind.Invocation) {
+				// Skip professions for the first few invokes of the day and inventory for some of the middle ones:
+				skipProfessions = true;
+
+				if (invokesToday != 0) { 
+					skipMaintInven = true;
+				}				
+			}
 
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
 			CompletionStatus maintStatus = CompletionStatus.None;			
-			bool processingIncomplete = false;
+			bool processingIncomplete = false;			
 
 			intr.Log("Starting processing for character " + charIdx + " ...");
 
 			// Reset `invokesToday` if `invokesCompletedOn` is 
 			if (invokesToday >= 6) {
 				if (queue.NextTask.Kind == TaskKind.Invocation) {
-					if (invokesCompletedOn == TaskQueue.TodaysGameDate) {
+					if (invokesCompletedForDay == TaskQueue.TodaysGameDate) {
 						intr.Log(LogEntryType.Info, charLabel + " has already invoked 6 times today. Queuing invocation for tomorrow");
 						queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
+						skipInvocation = true;
+						skipMaintInven = true;
 						//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 						return;
-					} else if (invokesCompletedOn < TaskQueue.TodaysGameDate) {
+					} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate) {
 						intr.Log(LogEntryType.Info, charLabel + ": Resetting InvokesToday to 0.");
 						invokesToday = 0;
 						intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
@@ -112,20 +124,27 @@ namespace NeverClicker.Interactions {
 			MoveAround(intr);
 
 			// ############################### INVENTORY MAINTENANCE ##############################
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining inventory for character " + charIdx + " ...");
-			maintStatus = MaintainInventory(intr, charIdx);
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Inventory maintenance status: " + maintStatus.ToString());
+			if (!skipMaintInven) {
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining inventory for character " + charIdx + " ...");
+				maintStatus = MaintainInventory(intr, charIdx);
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Inventory maintenance status: " + maintStatus.ToString());
+			}
 
 			// #################################### INVOCATION ####################################
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Invoking for character " + charIdx + " ...");
-			invocationStatus = Invoke(intr, charIdx);
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Invocation status: " + invocationStatus.ToString());
+			if (!skipInvocation) {
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Invoking for character " + charIdx + " ...");
+				invocationStatus = Invoke(intr, charIdx);
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Invocation status: " + invocationStatus.ToString());
+			}
 
 			// ################################### PROFESSIONS ####################################
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...");
 			var professionTasksProcessed = new List<ProfessionTaskResult>(9);
-			professionsStatus = MaintainProfs(intr, charLabel, professionTasksProcessed);
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Professions status: " + professionsStatus.ToString());
+
+			if (!skipProfessions) {
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for character " + charIdx + " ...");				
+				professionsStatus = MaintainProfs(intr, charLabel, professionTasksProcessed);
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Professions status: " + professionsStatus.ToString());
+			}
 
 
 			// ##################################### LOG OUT ######################################
@@ -150,11 +169,11 @@ namespace NeverClicker.Interactions {
 				intr.Log(LogEntryType.Normal, "Invocation task for character " + charIdx.ToString() + ": Cancelled.");
 				//processingIncomplete = true;
 			}
-
-			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################
+			
+			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################			
 			intr.Log(LogEntryType.Normal, "Profession task for character " + charIdx.ToString() + ": " + professionsStatus.ToString()
 					+ ", items complete: " + professionTasksProcessed.Count);
-			if (professionsStatus == CompletionStatus.Complete) {
+			if (professionsStatus == CompletionStatus.Complete) {				
 				foreach (ProfessionTaskResult taskResult in professionTasksProcessed) {
 					queue.AdvanceProfessionsTask(intr, charIdx, taskResult.TaskId, taskResult.BonusFactor);
 				}

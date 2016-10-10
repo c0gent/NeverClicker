@@ -154,9 +154,8 @@ namespace NeverClicker.Interactions {
 		}
 
 
-		// Combines tasks with the same id into one task, preserving the worst (highest) bonus factor.
+		// Combines tasks with the same id into one task, preserving the worst (lowest) bonus factor.
 		public static void CondenseTasks(Interactor intr, List<ProfessionTaskResult> completionList) {
-			//var unconden = new List<ProfessionTaskResult>(completionList);			
 			var buckets = new Dictionary<int, ProfessionTaskResult>(9);
 
 			foreach (ProfessionTaskResult taskResult in completionList) {
@@ -169,7 +168,9 @@ namespace NeverClicker.Interactions {
 				if (peerExists) {
 					//intr.Log(LogEntryType.Debug, "Professions::CondenseTasks(): Pre-existing peer found (id: {0}, bf: {1}).", 
 					//	peerTaskResult.TaskId, peerTaskResult.BonusFactor);
-					buckets[bucket_id] = (taskResult.BonusFactor >= peerTaskResult.BonusFactor) ? taskResult : peerTaskResult;
+					if (taskResult.BonusFactor < peerTaskResult.BonusFactor) {
+						buckets[bucket_id] = taskResult;
+					}
 				} else {
 					//intr.Log(LogEntryType.Debug, "Professions::CondenseTasks(): No peer found, adding task (id: {0}, bf: {1}).", 
 					//	taskResult.TaskId, taskResult.BonusFactor);
@@ -229,13 +230,10 @@ namespace NeverClicker.Interactions {
 			}
 
 			int currentTaskId = 0;
-			//var success = false;
 			var anySuccess = false;
 
 			for (int i = 0; i < 9; i++) {
 				if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; };
-
-				//success = false;
 				
 				if (Mouse.ClickImage(intr, "ProfessionsOverviewInactiveTile")) {
 					intr.Wait(400);
@@ -260,8 +258,6 @@ namespace NeverClicker.Interactions {
 				
 				var taskContinueResult = Screen.ImageSearch(intr, "ProfessionsTaskContinueButton");
 				
-
-				//if (i > 0 && taskContinueResult.Found) {
 				if (i == 0 || !taskContinueResult.Found) {
 					while(true) {
 						if (currentTaskId < ProfessionTasksRef.ProfessionTaskNames.Length) {
@@ -271,7 +267,6 @@ namespace NeverClicker.Interactions {
 							if (taskContinueResult.Found) {
 								intr.Log(LogEntryType.Debug, "Professions::MaintainProfs(): Profession task: '{0}' has been selected.", 
 									ProfessionTasksRef.ProfessionTaskNames[currentTaskId]);
-								//success = true;
 								break;								
 							} else {
 								currentTaskId += 1;
@@ -300,7 +295,7 @@ namespace NeverClicker.Interactions {
 				} 
 			}
 
-			// Condense tasks into groups (of 3 generally) using worst (highest) bonus factor:
+			// Condense tasks into groups (of 3 generally):
 			CondenseTasks(intr, completionList);
 
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
@@ -313,45 +308,3 @@ namespace NeverClicker.Interactions {
 		}
 	}
 }
-
-
-
-				// SEARCH BUTTON: ProfessionsSearchButton
-				// ProfessionsTaskContinueButton
-
-				//// SCROLL DOWN
-				//Mouse.ClickRepeat(intr, 1387, 860, 6);
-				//intr.Wait(1000);
-				//Mouse.WheelUp(intr, 6);
-				//intr.Wait(500);
-
-				//// SCROLL UP A BIT
-				//Mouse.Move(intr, 1200, 800);
-				//intr.Wait(500);
-				//Mouse.WheelUp(intr, 6);
-				//intr.Wait(500);
-
-				//// GET MOUSE OUT OF THE WAY
-				//Mouse.Move(intr, 1400, 900);
-				//intr.Wait(1000);								
-
-				//// SCAN FOR VALID TASKS
-				//var protectMarketResult = Screen.ImageSearch(intr, "ProfessionsProtectMarketRewardIcon");
-				//// PRIORITY 1
-				//if (protectMarketResult.Found) {
-				//	Mouse.Click(intr, protectMarketResult.Point, 228, 25);				
-				//} else {
-				//	var destroyCampResult = Screen.ImageSearch(intr, "ProfessionsDestroyCampRewardIcon");
-				//	// PRIORITY 2					
-				//	if (destroyCampResult.Found) {
-				//		Mouse.Click(intr, destroyCampResult.Point, 228, 25);					
-				//	} else { // PRIORITY 3
-				//		// SCROLL BACK DOWN TO BOTTOM
-				//		Mouse.Move(intr, 1200, 800);
-				//		intr.Wait(100);
-				//		Mouse.WheelDown(intr, 6);
-				//		intr.Wait(100);
-				//		// CLICK WHERE BATTLE ELEMENTAL CULTISTS 'CONTINUE' BUTTON SHOULD BE
-				//		Mouse.Click(intr, 1330, 847);
-				//	}
-				//} 
