@@ -18,14 +18,15 @@ namespace NeverClicker.Interactions {
 		) {			
 			var currentTask = queue.NextTask;
 			uint charIdx = currentTask.CharIdx;
+			string charLabel = intr.AccountSettings.CharNode(charIdx).GetAttribute("Name");
 			//string charLabel = queue.NextTask.CharIdxLabel;
-			int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesToday", 0);
+			int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "invokesToday", 0);
 			bool skipInvocation = false;
 			bool skipMaintInven = false;
 			bool skipProfessions = false;
 
 			DateTime invokesCompletedForDay = intr.AccountStates.GetCharStateOr(charIdx, 
-				"InvokesCompleteFor", Global.Default.SomeOldDate);
+				"invokesCompleteFor", Global.Default.SomeOldDate);
 
 			if (invokesCompletedForDay == TaskQueue.TodaysGameDate) {
 				// Skip invocation if it's already done.
@@ -63,7 +64,7 @@ namespace NeverClicker.Interactions {
 					} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate) {
 						intr.Log(LogEntryType.Info, "Character [" + charIdx +  "]: Resetting InvokesToday to 0.");
 						invokesToday = 0;
-						intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
+						intr.AccountStates.SaveCharState(invokesToday, charIdx, "invokesToday");
 					} else {
 						var errMsg = "Character [" + charIdx +  "]: Internal error. `invokesCompletedOn` is in the future.";
 						intr.Log(LogEntryType.Fatal, errMsg);

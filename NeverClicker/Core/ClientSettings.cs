@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace NeverClicker {
 	public class ClientSettings : XmlSettingsFile {
-		public ClientSettings() : base("ClientSettings") {
+		public ClientSettings() : base("clientSettings") {
 			base.SaveFile();
 		}
 
-		public ClientSettings(string oldIniFileName) : base("ClientSettings") {
+		public ClientSettings(string oldIniFileName) : base("clientSettings") {
 			if (File.Exists(oldIniFileName)) {
 				MigrateSettings(oldIniFileName);
 			}
@@ -27,17 +27,17 @@ namespace NeverClicker {
 				var charSel = new Global.ClientCharSelectDefaults(new Point(1920, 1080));
 
 				SaveSetting(oldIni.GetSettingOr("CharacterSelectScrollBarTopX", "ClickLocations", charSel.ScrollBarTopX),
-					"ScrollBarTopX", "CharacterSelect");
+					"scrollBarTopX", "characterSelect");
 				SaveSetting(oldIni.GetSettingOr("CharacterSelectScrollBarTopY", "ClickLocations", charSel.ScrollBarTopY),
-					"ScrollBarTopY", "CharacterSelect");
+					"scrollBarTopY", "characterSelect");
 				SaveSetting(oldIni.GetSettingOr("CharSlotX", "ClickLocations", charSel.CharSlotX),
-					"CharSlotX", "CharacterSelect");
+					"charSlotX", "characterSelect");
 				SaveSetting(oldIni.GetSettingOr("TopSlotY", "ClickLocations", charSel.TopSlotY),
-					"TopSlotY", "CharacterSelect");
+					"topSlotY", "characterSelect");
 				SaveSetting(oldIni.GetSettingOr("VisibleCharacterSelectSlots", "KeyBindAndUi", charSel.VisibleSlots),
-					"VisibleSlots", "CharacterSelect");
+					"visibleSlots", "characterSelect");
 				SaveSetting(oldIni.GetSettingOr("ScrollsToAlignBottomSlot", "KeyBindAndUi", charSel.ScrollsToAlignBottomSlot),
-					"ScrollsToAlignBottomSlot", "CharacterSelect");
+					"scrollsToAlignBottomSlot", "characterSelect");
 			}			
 		}
 	}

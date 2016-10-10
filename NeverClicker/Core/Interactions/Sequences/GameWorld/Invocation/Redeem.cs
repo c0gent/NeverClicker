@@ -15,14 +15,20 @@ namespace NeverClicker.Interactions {
 			CofferOfCelestialArtifactEquipment = 4,
 		}
 
-		public static bool Redeem(Interactor intr, VaultOfPietyItem item) {
-			// Clamp `item` to 4.
-			if ((int)item > 4 || (int)item < 0) {
-				item = VaultOfPietyItem.CofferOfCelestialArtifactEquipment;
+		public static bool Redeem(Interactor intr, uint charIdx) {
+			VaultOfPietyItem item;
+
+			try {
+				item = (VaultOfPietyItem)Enum.Parse(typeof(VaultOfPietyItem), 
+					intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), true);
+			} catch (Exception) {
+				item = DEFAULT_REDEMPTION_ITEM;
 			}
 
+			intr.Log(LogEntryType.Debug, "VaultOfPietyItem: " + item.ToString());
+
 			intr.Wait(500);
-			string cursorModeKey = intr.AccountSettings.GetSettingValOr("ToggleMouseCursor", "GameHotkeys", 
+			string cursorModeKey = intr.AccountSettings.GetSettingValOr("toggleMouseCursor", "gameHotkeys", 
 				Global.Default.ToggleMouseCursor);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found) {
@@ -47,34 +53,69 @@ namespace NeverClicker.Interactions {
 				return false;
 			}
 
-			Mouse.ClickImage(intr, "VaultOfPietyCelestialSynergyTabButton");
+			Mouse.ClickImage(intr, "VaultOfPietyCelestialSynergyTabTitle");
 			intr.Wait(2000);
 
+			string panelImage;
+			string purchaseConfirmImage;
+
+			//if (item == VaultOfPietyItem.ElixirOfFate) {
+			//	var panel = Screen.ImageSearch(intr, "VaultOfPietyCelestialSynergyElixirOfFate");
+
+			//	if (panel.Found) {
+			//		Mouse.DoubleClick(intr, panel.Point);
+			//		intr.Wait(500);					
+			//		Mouse.ClickImage(intr, "VaultOfPietyElixirOfFateSelectAmountOkButton");
+			//		intr.Log(LogEntryType.Info, "Vault of Piety: 'Elixir of Fate' purchased successfully.");
+			//	} else {
+			//		intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find 'Elixir of Fate' icon/tile.");
+			//		return false;
+			//	}
+			//} else if (item == VaultOfPietyItem.CofferOfCelestialArtifactEquipment) {
+			//	var panel = Screen.ImageSearch(intr, "VaultOfPietyCelestialSynergyCofferOfCelestialArtifactEquipment");
+
+			//	if (panel.Found) {
+			//		Mouse.DoubleClick(intr, panel.Point);
+			//		intr.Wait(500);					
+			//		Mouse.ClickImage(intr, "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton");
+			//		intr.Log(LogEntryType.Info, "Vault of Piety: 'Coffer of Celestial Artifact Equipment' purchased successfully.");
+			//	} else {
+			//		intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find 'Coffer of Celestial Artifact Equipment' icon/tile.");
+			//		return false;
+			//	}				
+			//}
+
 			if (item == VaultOfPietyItem.ElixirOfFate) {
-				var panel = Screen.ImageSearch(intr, "VaultOfPietyElixirOfFatePanel");
-
-				if (panel.Found) {
-					Mouse.DoubleClick(intr, panel.Point);
-					intr.Wait(500);					
-					Mouse.ClickImage(intr, "VaultOfPietyElixirOfFateSelectAmountOkButton");
-					intr.Log(LogEntryType.Info, "Vault of Piety: 'Elixir of Fate' purchased successfully.");
-				} else {
-					intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find 'Elixir of Fate' icon/tile.");
-					return false;
-				}
+				panelImage = "VaultOfPietyCelestialSynergyElixirOfFate";
+				purchaseConfirmImage = "VaultOfPietyElixirOfFateSelectAmountOkButton";			
+			} else if (item == VaultOfPietyItem.BlessedProfessionsElementalPack) {
+				panelImage = "VaultOfPietyCelestialSynergyBlessedProfessionsElementalPack";
+				purchaseConfirmImage = "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton";
+			} else if (item == VaultOfPietyItem.CofferOfCelestialEnchantments) {
+				panelImage = "VaultOfPietyCelestialSynergyCofferOfCelestialEnchantments";
+				purchaseConfirmImage = "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton";
+			} else if (item == VaultOfPietyItem.CofferOfCelestialArtifacts) {
+				panelImage = "VaultOfPietyCelestialSynergyCofferOfCelestialArtifacts";
+				purchaseConfirmImage = "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton";
 			} else if (item == VaultOfPietyItem.CofferOfCelestialArtifactEquipment) {
-				var panel = Screen.ImageSearch(intr, "VaultOfPietyCofferOfCelestialArtifactEquipmentPanel");
+				panelImage = "VaultOfPietyCelestialSynergyCofferOfCelestialArtifactEquipment";
+				purchaseConfirmImage = "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton";
+			} else {
+				intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Unknown item: '{0:G}'.", item);
+				return false;
+			}
 
-				if (panel.Found) {
-					Mouse.DoubleClick(intr, panel.Point);
-					intr.Wait(500);					
-					Mouse.ClickImage(intr, "VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton");
-					intr.Log(LogEntryType.Info, "Vault of Piety: 'Coffer of Celestial Artifact Equipment' purchased successfully.");
-				} else {
-					intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find 'Coffer of Celestial Artifact Equipment' icon/tile.");
-					return false;
-				}				
-			} 
+			var panel = Screen.ImageSearch(intr, panelImage);
+
+			if (panel.Found) {
+				Mouse.DoubleClick(intr, panel.Point);
+				intr.Wait(500);					
+				Mouse.ClickImage(intr, purchaseConfirmImage);
+				intr.Log(LogEntryType.Info, "Vault of Piety: '{0:G}' purchased successfully.", item);
+			} else {
+				intr.Log(LogEntryType.Fatal, "Vault of Piety Error: Could not find '{0:G}' icon/panel.", item);
+				return false;
+			}
 
 			// [FIXME]: Handle the fact that the VaultOfPietyItem is:  `5`
 			// [FIX THE HELL OUT OF ME][FIX THE HELL OUT OF ME]

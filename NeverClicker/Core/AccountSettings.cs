@@ -5,14 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace NeverClicker {
 	public class AccountSettings : XmlSettingsFile {
-		public AccountSettings() : base("AccountSettings") {
+		public static string CharactersNodeName = "characters";
+
+		public AccountSettings() : base("accountSettings") {
 			base.SaveFile();
 		}
 
-		public AccountSettings(string oldIniFileName) : base("AccountSettings") {
+		public AccountSettings(string oldIniFileName) : base("accountSettings") {
 			if (File.Exists(oldIniFileName)) {
 				MigrateIniSettings(oldIniFileName);
 			}
@@ -20,9 +23,14 @@ namespace NeverClicker {
 			base.SaveFile();
 		}
 
+		public XmlElement CharNode(uint charIdx) {
+			var charsNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
+			return GetOrCreateSettingNode(charsNodeName, CharactersNodeName);
+		}
+
 		public string GetCharSetting(uint charIdx, string settingName) {
 			var charNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
-			var charNode = GetOrCreateSettingNode(charNodeName, "Characters");
+			var charNode = GetOrCreateSettingNode(charNodeName, CharactersNodeName);
 
 			var charSettingNode = charNode.SelectSingleNode(settingName);
 
@@ -36,7 +44,7 @@ namespace NeverClicker {
 
 		public void SaveCharSetting(string settingVal, uint charIdx, string settingName) {
 			var charNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
-			var charNode = GetOrCreateSettingNode(charNodeName, "Characters");
+			var charNode = GetOrCreateSettingNode(charNodeName, CharactersNodeName);
 
 			var charSettingNode = charNode.SelectSingleNode(settingName);
 
@@ -58,31 +66,31 @@ namespace NeverClicker {
 				var oldIni = new IniFile(oldIniFileName);
 
 				SaveSetting(oldIni.GetSettingOr("CharCount", "NwAct", Global.Default.CharacterCount),
-					"CharacterCount", "General");
+					"characterCount", "general");
 				SaveSetting(oldIni.GetSettingOr("NwUserName", "NwAct", ""),
-					"AccountName", "General");
+					"accountName", "general");
 				SaveSetting(oldIni.GetSettingOr("NwActPwd", "NwAct", ""),
-					"Password", "General");
+					"password", "general");
 				SaveSetting(oldIni.GetSettingOr("NwInvokeKey", "GameHotkeys", Global.Default.InvokeKey),
-					"Invoke", "GameHotkeys");
+					"invoke", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwLogoutKey", "GameHotkeys", Global.Default.LogoutKey),
-					"Logout", "GameHotkeys");
+					"logout", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwMoveLeftKey", "GameHotkeys", Global.Default.MoveLeftKey), 
-					"MoveLeft", "GameHotkeys");
+					"moveLeft", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwMoveRightKey", "GameHotkeys", Global.Default.MoveRightKey),
-					"MoveRight", "GameHotkeys");
+					"moveRight", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwMoveForeKey", "GameHotkeys", Global.Default.MoveForwardKey),
-					"MoveForward", "GameHotkeys");
+					"moveForward", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwMoveBackKey", "GameHotkeys", Global.Default.MoveBackwardKey),
-					"MoveBackward", "GameHotkeys");
+					"moveBackward", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwCursorMode", "GameHotkeys", Global.Default.ToggleMouseCursor),
-					"ToggleMouseCursor", "GameHotkeys");
+					"toggleMouseCursor", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwInventoryKey", "GameHotkeys", Global.Default.InventoryKey),
-					"Inventory", "GameHotkeys");
+					"inventory", "gameHotkeys");
 				SaveSetting(oldIni.GetSettingOr("NwProfessionsWindowKey", "GameHotkeys", Global.Default.ProfessionsWindowKey),
-					"Professions", "GameHotkeys");
+					"professions", "gameHotkeys");
 
-				var charCount = GetSettingValOr("CharacterCount", "General", Global.Default.MaxCharacterCount);
+				var charCount = GetSettingValOr("characterCount", "general", Global.Default.MaxCharacterCount);
 
 				for (uint charIdx = 0; charIdx < charCount; charIdx++) {
 					//[Character 48]
@@ -95,12 +103,13 @@ namespace NeverClicker {
 					//MostRecentProfTime_0 = 10/1/2016 05:44:26
 
 					var charLabelZero = "Character " + charIdx.ToString();
-					//var charLabelOne = "Character " + (charIdx + 1).ToString();
-					SaveCharSetting(charLabelZero, charIdx, "CharacterName");
+					var charLabelOne = "Character #" + (charIdx + 1).ToString();
+					//SaveCharSetting(charLabelOne, charIdx, "CharacterName");
+					CharNode(charIdx).SetAttribute("name", charLabelOne);
 
 					var vopItem = oldIni.GetSettingOr("VaultPurchase", charLabelZero, Global.Default.VaultPurchase);
 					if (vopItem > 4) { vopItem = 4; };
-					SaveCharSetting(vopItem, charIdx, "VaultOfPietyItem");
+					SaveCharSetting(vopItem, charIdx, "vaultOfPietyItem");
 				}
 			}
 		}

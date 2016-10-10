@@ -16,7 +16,7 @@ namespace NeverClicker.Interactions {
 		public static CompletionStatus Invoke(Interactor intr, uint charIdx) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
 
-			string invokeKey = intr.AccountSettings.GetSettingValOr("Invoke", "GameHotkeys", Global.Default.InvokeKey);
+			string invokeKey = intr.AccountSettings.GetSettingValOr("invoke", "gameHotkeys", Global.Default.InvokeKey);
 
 			// Invocation Attempt (first):
 			Keyboard.SendKey(intr, invokeKey);
@@ -24,17 +24,9 @@ namespace NeverClicker.Interactions {
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
 				intr.Log(LogEntryType.Info, "Maximum blessings reached for character [" + charIdx 
-					+ "]. Redeeming through Vault of Piety...");
+					+ "]. Redeeming through Vault of Piety...");				
 
-				VaultOfPietyItem vopItem;
-
-				if (!Enum.TryParse(intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), out vopItem)) {					
-					vopItem = DEFAULT_REDEMPTION_ITEM;
-				}
-
-				intr.Log(LogEntryType.Debug, "VaultOfPietyItem: " + vopItem.ToString());
-
-				if (Redeem(intr, vopItem)) {
+				if (Redeem(intr, charIdx)) {
 					MoveAround(intr);
 					intr.Log(LogEntryType.Debug, "Redeeming Vault of Piety...");
 					// Invocation Attempt:

@@ -192,7 +192,7 @@ namespace NeverClicker.Interactions {
 						List<ProfessionTaskResult> completionList) {
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
 
-			string profsWinKey = intr.AccountSettings.GetSettingValOr("Professions", "GameHotkeys", Global.Default.ProfessionsWindowKey);
+			string profsWinKey = intr.AccountSettings.GetSettingValOr("professions", "gameHotkeys", Global.Default.ProfessionsWindowKey);
 
 			intr.Log(LogEntryType.Debug, "Opening professions window for character [" + charIdx + "].");
 
@@ -229,7 +229,7 @@ namespace NeverClicker.Interactions {
 					charIdx + "].");
 			}
 
-			int noValidTaskSlotId = 0;
+			int noValidTaskId = 0;
 			int noValidTaskCounter = 0;
 			int currentTaskId = 0;
 			var anySuccess = false;
@@ -276,17 +276,16 @@ namespace NeverClicker.Interactions {
 							}
 						} else {
 							// If we've been stuck 
-							if (noValidTaskSlotId == slotId) {
-								if (noValidTaskCounter >= ProfessionTasksRef.ProfessionTaskNames.Length) {
+							if (noValidTaskId == currentTaskId) {
+								if (noValidTaskCounter > 1) {
 									intr.Log(LogEntryType.Error, "Error starting profession task on character [" + charIdx + "]:");
 									intr.Log(LogEntryType.Error, "- Ensure that profession assets are sorted correctly in inventory.");
 									return CompletionStatus.Complete;
 								} else {
 									noValidTaskCounter += 1;
-									break;
 								}
 							} else {
-								noValidTaskSlotId = slotId;
+								noValidTaskId = currentTaskId;
 								noValidTaskCounter = 1;
 							}
 							

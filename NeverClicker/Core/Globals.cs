@@ -16,8 +16,8 @@ namespace NeverClicker.Global {
 		public static string MoveRightKey = "d";
 		public static string ToggleMouseCursor = "ALT";
 
-		public static string CharLabelPrefix = "C";
-		public static string SomeOldDateString = "1/1/2016 00:00:00";
+		public static string CharLabelPrefix = "c";
+		public static string SomeOldDateString = "1/1/2013 00:00:00";
 		public static DateTime SomeOldDate = DateTime.Parse(SomeOldDateString);
 	}
 

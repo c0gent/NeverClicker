@@ -10,12 +10,14 @@ using System.Xml;
 
 namespace NeverClicker {
 	public class AccountStates : XmlSettingsFile {
-		public static string TasksNodeName = "Tasks";
-		public AccountStates() : base("AccountStates") {
+		public static string TasksNodeName = "tasks";
+		public static string CharactersNodeName = "characters";
+
+		public AccountStates() : base("accountStates") {
 			base.SaveFile();
 		}
 
-		public AccountStates(string oldIniFileName) : base("AccountStates") {
+		public AccountStates(string oldIniFileName) : base("accountStates") {
 			if (File.Exists(oldIniFileName)) {
 				MigrateIniSettings(oldIniFileName);
 			}
@@ -24,13 +26,13 @@ namespace NeverClicker {
 		}
 
 		public XmlElement CharNode(uint charIdx) {
-			var charsNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
-			return GetOrCreateSettingNode(charsNodeName, "Characters");
+			var charNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
+			return GetOrCreateSettingNode(charNodeName, CharactersNodeName);
 		}
 
 		public XmlElement CharTasksNode(uint charIdx) {
-			var charsNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
-			var charNode = GetOrCreateSettingNode(charsNodeName, "Characters");
+			var charNodeName = Global.Default.CharLabelPrefix + charIdx.ToString();
+			var charNode = GetOrCreateSettingNode(charNodeName, CharactersNodeName);
 			var charTasksNode = charNode.SelectSingleNode(TasksNodeName);
 
 			if (charTasksNode == null) {
@@ -158,11 +160,11 @@ namespace NeverClicker {
 
 					if (oldIni.SectionExists(charLabelZero)) {
 						SaveCharState(oldIni.GetSettingOr("InvokesToday", charLabelZero, 0),
-							charIdx, "InvokesToday");
+							charIdx, "invokesToday");
 						SaveCharState(oldIni.GetSettingOr("InvokesCompleteFor", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "InvokesCompleteFor");
+							charIdx, "invokesCompleteFor");
 						SaveCharState(oldIni.GetSettingOr("MostRecentInvocationTime", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "MostRecentInvocationTime");
+							charIdx, "mostRecentInvocationTime");
 						SaveCharState(oldIni.GetSettingOr("MostRecentProfTime_0", charLabelZero, Global.Default.SomeOldDateString),
 							charIdx, "MostRecentProfTime_0");
 						SaveCharState(oldIni.GetSettingOr("MostRecentProfTime_1", charLabelZero, Global.Default.SomeOldDateString),

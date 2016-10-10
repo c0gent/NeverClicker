@@ -147,8 +147,8 @@ namespace NeverClicker {
 				try {
 					intr.Log(LogEntryType.Debug, "Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
 						+ charIdx + " on: " + todaysInvokeDate);
-					intr.AccountStates.SaveCharState(todaysInvokeDate, charIdx, "InvokesCompleteFor");
-					intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
+					intr.AccountStates.SaveCharState(todaysInvokeDate, charIdx, "invokesCompleteFor");
+					intr.AccountStates.SaveCharState(invokesToday, charIdx, "invokesToday");
 					taskMatureTime = nextThreeThirty;
 				} catch (Exception ex) {
                     intr.Log(LogEntryType.Error, "Error saving InvokesCompleteFor" + ex.ToString());
@@ -156,8 +156,8 @@ namespace NeverClicker {
 			}
 
 			try {
-				intr.AccountStates.SaveCharState(invokesToday, charIdx, "InvokesToday");
-				intr.AccountStates.SaveCharState(now, charIdx, "MostRecentInvocationTime");
+				intr.AccountStates.SaveCharState(invokesToday, charIdx, "invokesToday");
+				intr.AccountStates.SaveCharState(now, charIdx, "mostRecentInvocationTime");
 				intr.Log(LogEntryType.Debug, "Settings saved to ini for: " + charLabel + ".");
 			} catch (Exception ex) {
 				intr.Log(LogEntryType.Error, "Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
@@ -245,17 +245,17 @@ namespace NeverClicker {
 			for (uint charIdx = 0; charIdx < charsMax; charIdx++) {
 
 				// ################################### INVOCATION #####################################
-				int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "InvokesToday", 0);
+				int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "invokesToday", 0);
 
 				DateTime invokesCompletedOn = intr.AccountStates.GetCharStateOr(charIdx, 
-					"InvokesCompleteFor", Global.Default.SomeOldDate);
+					"invokesCompleteFor", Global.Default.SomeOldDate);
 
 				// Clear any stale invoke count:
 				if (invokesCompletedOn < TodaysGameDate.AddDays(-1)) {
 					invokesToday = 0;
 				}
 
-				DateTime mostRecentInvoke = intr.AccountStates.GetCharStateOr(charIdx, "MostRecentInvocationTime", 
+				DateTime mostRecentInvoke = intr.AccountStates.GetCharStateOr(charIdx, "mostRecentInvocationTime", 
 					now.AddHours(-24));
 
 				var invTaskMatureTime = CalculateTaskMatureTime(mostRecentInvoke, charIdx, 
@@ -263,7 +263,7 @@ namespace NeverClicker {
 
 				if (invokesToday >= 6) {
 					if (invokesCompletedOn < TodaysGameDate) { // START FRESH DAY
-						intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");						
+						intr.AccountStates.SaveCharState(0, charIdx, "invokesToday");						
 						invokesToday = 0;
 						invTaskMatureTime = now;						
 					} else { // DONE FOR THE DAY
@@ -272,9 +272,9 @@ namespace NeverClicker {
 				}
 
 				if (resetDay) {
-					intr.AccountStates.SaveCharState(0, charIdx, "InvokesToday");
+					intr.AccountStates.SaveCharState(0, charIdx, "invokesToday");
 					intr.AccountStates.SaveCharState(TodaysGameDate.AddDays(-1), charIdx,
-						"MostRecentInvocationTime");
+						"mostRecentInvocationTime");
 					invokesToday = 0;
 					invTaskMatureTime = now;
 				}

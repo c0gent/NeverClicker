@@ -19,7 +19,7 @@ namespace NeverClicker.Interactions {
 
 			intr.Log(LogEntryType.Info, "Selecting character " + charIdx.ToString() + " ...");
 
-			int charCount = intr.AccountSettings.GetSettingValOr("CharacterCount", "General", 0);
+			int charCount = intr.AccountSettings.GetSettingValOr("characterCount", "general", 0);
 
 			//int scrollBarTopX = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopX", "ClickLocations");
 			//int scrollBarTopY = intr.GameClient.GetSettingOrZero("CharacterSelectScrollBarTopY", "ClickLocations");
@@ -30,12 +30,12 @@ namespace NeverClicker.Interactions {
 
 			var charSel = new Global.ClientCharSelectDefaults(new Point(1920, 1080));
 
-			int scrollBarTopX = intr.ClientSettings.GetSettingValOr("ScrollBarTopX", "CharacterSelect", charSel.ScrollBarTopX);
-			int scrollBarTopY = intr.ClientSettings.GetSettingValOr("ScrollBarTopY", "CharacterSelect", charSel.ScrollBarTopY);
-			int charSlotX = intr.ClientSettings.GetSettingValOr("CharSlotX", "CharacterSelect", charSel.CharSlotX);
-			int topSlotY = intr.ClientSettings.GetSettingValOr("TopSlotY", "CharacterSelect", charSel.TopSlotY);
-			int visibleSlots = intr.ClientSettings.GetSettingValOr("VisibleSlots", "CharacterSelect", charSel.VisibleSlots);
-			int scrollsAlignBot = intr.ClientSettings.GetSettingValOr("ScrollsToAlignBottomSlot", "CharacterSelect", charSel.ScrollsToAlignBottomSlot);
+			int scrollBarTopX = intr.ClientSettings.GetSettingValOr("scrollBarTopX", "characterSelect", charSel.ScrollBarTopX);
+			int scrollBarTopY = intr.ClientSettings.GetSettingValOr("scrollBarTopY", "characterSelect", charSel.ScrollBarTopY);
+			int charSlotX = intr.ClientSettings.GetSettingValOr("charSlotX", "characterSelect", charSel.CharSlotX);
+			int topSlotY = intr.ClientSettings.GetSettingValOr("topSlotY", "characterSelect", charSel.TopSlotY);
+			int visibleSlots = intr.ClientSettings.GetSettingValOr("visibleSlots", "characterSelect", charSel.VisibleSlots);
+			int scrollsAlignBot = intr.ClientSettings.GetSettingValOr("scrollsToAlignBottomSlot", "characterSelect", charSel.ScrollsToAlignBottomSlot);
 
 			if ((charCount == 0) || (charSlotX == 0) || (topSlotY == 0) || (visibleSlots == 0)
 						|| (scrollBarTopX == 0) || (scrollBarTopY == 0)) {
