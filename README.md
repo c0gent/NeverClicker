@@ -16,12 +16,12 @@ Automated invocation. May eat your laundry.
 ## Configuration
 - The game client should ideally be run in 'Windowed Maximized' mode at 1920x1080. If your resolution is different, see the [Screen Resolution](#screen-resolution) section below.
 - Client **must** be running DirectX 9 for image detection to work (there is little reason to run DirectX 11 anyway).
-- Keybinds can be customized in `NeverClicker_GameAccount.ini`. Key modifiers follow the autohotkey conventions (Alt: !, Ctrl: ^, Shift: +) ex. Ctrl-i (invoke) would be `'^i'` in the ini file.  
-- **You must configure the .ini configuration files manually** before activating Auto-Cycle (a friendly interface for this is coming eventually). You'll find a link to those files within the settings menu. 
-    - Set the number of characters on your account by editing the `CharCount` setting in the `[NwAct]` section of `NeverClicker_GameAccount.ini`.
-    - Enter your username and password into `NeverClicker_GameAccount.ini`. If you're not comfortable with this you can manually log into the game client before starting the NeverClicker auto cycle.
-- You apparently can't have a character on your account which is unable to invoke because they are too low level (this should be fixed now but who knows).
+- Keybinds can be customized in `AccountSettings.xml.txt`. Key modifiers follow the autohotkey conventions (Alt: !, Ctrl: ^, Shift: +) ex. Ctrl-i (invoke) would be `'^i'` in the settings file.  
+- **You must configure the settings configuration files manually** before activating Auto-Cycle (a friendly interface for this is coming eventually). You'll find a link to those files within the settings menu. 
+    - Set the number of characters on your account by editing the `<characterCount>` setting in the `<general>` section of `NeverClicker_GameAccount.ini`.
+    - Enter your username and password into `AccountSettings.xml.txt`. If you're not comfortable with this you can manually log into the game client before starting the NeverClicker auto cycle.
 
+	
 ## Professions
 - Sort your profession assets in your inventory so that the optional assets you want to use are **above** all other assets. A rule of thumb is simply to sort all of your profession assets from lowest quality (top) to highest quality (bottom) in the bag.
 - The profession system will first choose assets from the top of the bag to the bottom, then from the weakest asset (Mercenary) to the strongest (Hero). Remove any weak assets you don't want used from your inventory (or bury them somewhere at the bottom).
@@ -64,6 +64,8 @@ NeverClicker is very much a work in progress. You will run in to problems. Pleas
 Due to developer laziness, resolutions other than 1920x1080 will require some fiddling on your part to get working.
 
 Mess with the following settings in `NeverClicker_GameClient.ini`:
+
+*Note: An update to this section will be coming soon. Use ClientSettings.xml.txt instead and figure out the new settings names there.*
 
 - The "[ClickLocations]" Section:
     - "CharSlotX" and "TopSlotY": You will need a program that can tell you your mouse cursor coordinates. I use the AutoIt Window Spy included with Autohotkey, downloaded from: (http://ahkscript.org/)[http://ahkscript.org/]. There are tons of other ones. Open your coordinate program, scroll to the top of the character select list, and place your cursor in the center of the top character tile (doesn't need to be exact). "CharSlotX" (the left->right component of your coordinate) should be somewhere in the 500-900ish range. "TopSlotY" (the top->bottom component) should be 60-150ish.
