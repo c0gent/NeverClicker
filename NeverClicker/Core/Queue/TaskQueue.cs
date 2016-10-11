@@ -160,8 +160,8 @@ namespace NeverClicker {
 				}
 			} else { // (INVOKES >= 6) QUEUE FOR TOMORROW
 				try {
-					intr.Log(LogEntryType.Debug, "Interactions::Sequences::AutoCycle(): All daily invocation complete for character " 
-						+ charIdx + " on: " + todaysInvokeDate);
+					intr.Log(LogEntryType.Debug, "Interactions::Sequences::AutoCycle(): All daily invocation complete for character [" 
+						+ charIdx + "] on: " + todaysInvokeDate);
 					intr.AccountStates.SaveCharState(todaysInvokeDate, charIdx, "invokesCompleteFor");
 					intr.AccountStates.SaveCharState(invokesToday, charIdx, "invokesToday");
 					taskMatureTime = nextThreeThirty;
@@ -178,7 +178,8 @@ namespace NeverClicker {
 				intr.Log(LogEntryType.Error, "Interactions::Sequences::AutoCycle(): Problem saving settings: " + ex.ToString());
 			}
 						
-			intr.Log("Next invocation task for character [" + charIdx + "] at: " + taskMatureTime.ToString() + ".");
+			intr.Log("Next invocation task for " + intr.AccountSettings.CharNames[(int)charIdx] + 
+				" at: " + taskMatureTime.ToString() + ".");
 			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f));
 			intr.AccountStates.SaveCharTask(newTask);
 			intr.UpdateQueueList(this.ListClone(intr));
@@ -199,8 +200,8 @@ namespace NeverClicker {
 				taskMatureTime = CalculateTaskMatureTime(mostRecentProfTime, charIdx, TaskKind.Profession, taskId, bonusFactor);
 			}
 
-			intr.Log("Next profession task (" + ProfessionTasksRef.ProfessionTaskNames[taskId] + ") for character " + charIdx
-				+ " at: " + taskMatureTime.ToString() + ".");
+			intr.Log("Next profession task (" + ProfessionTasksRef.ProfessionTaskNames[taskId] + ") for " + 
+				intr.AccountSettings.CharNames[(int)charIdx] + " at: " + taskMatureTime.ToString() + ".");
 
 			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Profession, taskId, bonusFactor));
 			//intr.AccountStates.SaveCharState(now, charIdx, "MostRecentProfTime_" + taskId);
@@ -294,8 +295,8 @@ namespace NeverClicker {
 					invTaskMatureTime = now;
 				}
 
-				intr.Log(LogEntryType.Debug, "Adding invocation task to queue for character " + (charIdx - 1).ToString() + ", matures: " + 
-					invTaskMatureTime.ToString());
+				intr.Log(LogEntryType.Debug, "Adding invocation task to queue for character [{0}], matures: {1}.",
+					charIdx, invTaskMatureTime);
 
 				var invTask = new GameTask(mostRecentInvoke, invTaskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f);
 				intr.AccountStates.SaveCharTask(invTask);
@@ -339,8 +340,8 @@ namespace NeverClicker {
 						profTask = new GameTask(mostRecentTaskTime, profTaskMatureTime, charIdx, TaskKind.Profession, taskId, 0.0f);
 					}
 
-					intr.Log(LogEntryType.Info, "Adding profession task to queue for character " + charIdx
-						+ ", matures: " + profTask.MatureTime.ToString() + ", taskId: " + taskId.ToString() + ".");
+					intr.Log(LogEntryType.Info, "Adding profession task to queue for character [" + charIdx
+						+ "], matures: " + profTask.MatureTime.ToString() + ", taskId: " + taskId.ToString() + ".");
 					this.Add(profTask);
 					tasksQueued += 1;
 				}
