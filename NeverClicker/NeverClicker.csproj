@@ -254,6 +254,24 @@
     <Content Include="Assets\Default\Images\ProfessionsLeadershipMercenaryTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyBlessedProfessionsElementalPack.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyCofferOfCelestialArtifactEquipment.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyCofferOfCelestialArtifacts.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyCofferOfCelestialEnchantments.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyElixirOfFate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyTabTitle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -537,16 +555,7 @@
     <Content Include="Assets\Default\Images\ProfessionsWindowTitle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Default\Images\VaultOfPietyCelestialSynergyTabButton.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Default\Images\VaultOfPietyCofferOfCelestialArtifactEquipmentPanel.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\Default\Images\VaultOfPietyCofferOfCelestialArtifactEquipmentPurchaseConfirmOkButton.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Default\Images\VaultOfPietyElixirOfFatePanel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Default\Images\VaultOfPietyElixirOfFateSelectAmountOkButton.png">

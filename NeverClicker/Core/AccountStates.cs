@@ -159,20 +159,26 @@ namespace NeverClicker {
 					string charLabelZero = "Character " + charIdx.ToString();
 
 					if (oldIni.SectionExists(charLabelZero)) {
-						SaveCharState(oldIni.GetSettingOr("InvokesToday", charLabelZero, 0),
-							charIdx, "invokesToday");
-						SaveCharState(oldIni.GetSettingOr("InvokesCompleteFor", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "invokesCompleteFor");
-						SaveCharState(oldIni.GetSettingOr("MostRecentInvocationTime", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "mostRecentInvocationTime");
-						SaveCharState(oldIni.GetSettingOr("MostRecentProfTime_0", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "MostRecentProfTime_0");
-						SaveCharState(oldIni.GetSettingOr("MostRecentProfTime_1", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "MostRecentProfTime_1");
-						SaveCharState(oldIni.GetSettingOr("MostRecentProfTime_2", charLabelZero, Global.Default.SomeOldDateString),
-							charIdx, "MostRecentProfTime_2");
+						var invokesToday = oldIni.GetSettingOr("InvokesToday", charLabelZero, 0);
+						var invokesCompleteFor = oldIni.GetSettingOr("InvokesCompleteFor", 
+							charLabelZero, Global.Default.SomeOldDateString);
+						var mostRecentInvocationTime = oldIni.GetSettingOr("MostRecentInvocationTime", 
+							charLabelZero, Global.Default.SomeOldDateString);
+
+						SaveCharState(invokesToday, charIdx, "invokesToday");
+						SaveCharState(invokesCompleteFor,charIdx, "invokesCompleteFor");
+						SaveCharState(mostRecentInvocationTime, charIdx, "mostRecentInvocationTime");
+
+						for (int t_id = 0; t_id < 3; t_id++) {
+							DateTime task_time;
+
+							if (DateTime.TryParse(oldIni.GetSettingOr("MostRecentProfTime_" + t_id.ToString(), 
+											charLabelZero, Global.Default.SomeOldDateString), out task_time)) {
+								SaveCharTask(new GameTask(Global.Default.SomeOldDate, task_time, charIdx, 
+									TaskKind.Profession, t_id, 0.0f));
+							}
+						}
 					}
-						
 				}
 			}
 		}

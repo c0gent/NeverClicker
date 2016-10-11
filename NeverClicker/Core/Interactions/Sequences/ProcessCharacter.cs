@@ -18,7 +18,8 @@ namespace NeverClicker.Interactions {
 		) {			
 			var currentTask = queue.NextTask;
 			uint charIdx = currentTask.CharIdx;
-			string charLabel = intr.AccountSettings.CharNode(charIdx).GetAttribute("Name");
+			//string charLabel = intr.AccountSettings.CharNode(charIdx).GetAttribute("name");
+			string charLabel = intr.AccountSettings.CharNames[(int)charIdx];
 			//string charLabel = queue.NextTask.CharIdxLabel;
 			int invokesToday = intr.AccountStates.GetCharStateOr(charIdx, "invokesToday", 0);
 			bool skipInvocation = false;
@@ -48,25 +49,25 @@ namespace NeverClicker.Interactions {
 			CompletionStatus maintStatus = CompletionStatus.None;			
 			bool processingIncomplete = false;			
 
-			intr.Log("Starting processing for character [" + charIdx + "] ...");
+			intr.Log("Starting processing for " + charLabel + " ...");
 
 			// Reset `invokesToday` if `invokesCompletedOn` is 
 			if (invokesToday >= 6) {
 				if (currentTask.Kind == TaskKind.Invocation) {
 					if (invokesCompletedForDay == TaskQueue.TodaysGameDate) {
-						intr.Log(LogEntryType.Info, "Character [" + charIdx + 
-							"] has already invoked 6 times today. Queuing invocation for tomorrow");
+						intr.Log(LogEntryType.Info, charLabel + 
+							" has already invoked 6 times today. Queuing invocation for tomorrow");
 						queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 						skipInvocation = true;
 						skipMaintInven = true;
 						//queue.QueueSubsequentInvocationTask(intr, charIdx, invokesToday);
 						return;
 					} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate) {
-						intr.Log(LogEntryType.Info, "Character [" + charIdx +  "]: Resetting InvokesToday to 0.");
+						intr.Log(LogEntryType.Info, charLabel +  ": Resetting InvokesToday to 0.");
 						invokesToday = 0;
 						intr.AccountStates.SaveCharState(invokesToday, charIdx, "invokesToday");
 					} else {
-						var errMsg = "Character [" + charIdx +  "]: Internal error. `invokesCompletedOn` is in the future.";
+						var errMsg = charLabel +  ": Internal error. `invokesCompletedOn` is in the future.";
 						intr.Log(LogEntryType.Fatal, errMsg);
 						throw new Exception(errMsg);
 					}
@@ -80,7 +81,7 @@ namespace NeverClicker.Interactions {
 
 			if (!ProduceClientState(intr, ClientState.CharSelect, 0)) { return; }
 
-			intr.Log(LogEntryType.Info, "ProcessCharacter(): Selecting character [" + charIdx + "] ...");
+			intr.Log(LogEntryType.Info, "ProcessCharacter(): Selecting " + charLabel + " ...");
 
 			if (!SelectCharacter(intr, charIdx, ENTER_WORLD)) {
 				return;
@@ -102,7 +103,7 @@ namespace NeverClicker.Interactions {
 			//	selectAttemptCount += 1;
 
 			//	if (selectAttemptCount >= SELECT_ATTEMPTS_MAX) {
-			//		intr.Log("ProcessCharacter(): Fatal error selecting character [" + charIdx + "].", LogEntryType.Fatal);
+			//		intr.Log("ProcessCharacter(): Fatal error selecting " + charLabel + ".", LogEntryType.Fatal);
 			//		return;
 			//	}
 			//}
@@ -130,14 +131,14 @@ namespace NeverClicker.Interactions {
 
 			// ############################### INVENTORY MAINTENANCE ##############################
 			if (!skipMaintInven) {
-				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining inventory for character [" + charIdx + "] ...");
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining inventory for " + charLabel + " ...");
 				maintStatus = MaintainInventory(intr, charIdx);
 				intr.Log(LogEntryType.Info, "ProcessCharacter(): Inventory maintenance status: " + maintStatus.ToString());
 			}
 
 			// #################################### INVOCATION ####################################
 			if (!skipInvocation) {
-				intr.Log(LogEntryType.Info, "ProcessCharacter(): Invoking for character [" + charIdx + "] ...");
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Invoking for " + charLabel + " ...");
 				invocationStatus = Invoke(intr, charIdx);
 				intr.Log(LogEntryType.Info, "ProcessCharacter(): Invocation status: " + invocationStatus.ToString());
 			}
@@ -146,7 +147,7 @@ namespace NeverClicker.Interactions {
 			var professionTasksProcessed = new List<ProfessionTaskResult>(9);
 
 			if (!skipProfessions) {
-				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for character [" + charIdx + "] ...");				
+				intr.Log(LogEntryType.Info, "ProcessCharacter(): Maintaining profession tasks for " + charLabel + " ...");				
 				professionsStatus = MaintainProfs(intr, charIdx, professionTasksProcessed);
 				intr.Log(LogEntryType.Info, "ProcessCharacter(): Professions status: " + professionsStatus.ToString());
 			}
@@ -157,36 +158,36 @@ namespace NeverClicker.Interactions {
 
 			// ########################### INVOCATION QUEUE AND SETTINGS ##########################
 			if (invocationStatus == CompletionStatus.Complete) {
-				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Complete.");
+				intr.Log(LogEntryType.Normal, "Invocation task for " + charLabel + ": Complete.");
 				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, true);
 			} else if (invocationStatus == CompletionStatus.DayComplete) {
-				intr.Log(LogEntryType.Normal, "Daily invocations for character [" + charIdx.ToString() + "]: Complete for day.");
+				intr.Log(LogEntryType.Normal, "Daily invocations for " + charLabel + ": Complete for day.");
 				queue.AdvanceInvocationTask(intr, charIdx, 6, true);
 			} else if (invocationStatus == CompletionStatus.Immature && currentTask.Kind == TaskKind.Invocation) {
-				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Immature.");
-				intr.Log(LogEntryType.Info, "Re-queuing task for character [" + charIdx.ToString() + "].");
+				intr.Log(LogEntryType.Normal, "Invocation task for " + charLabel + ": Immature.");
+				intr.Log(LogEntryType.Info, "Re-queuing task for " + charLabel + ".");
 				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);				
 			} else if (invocationStatus == CompletionStatus.Failed && currentTask.Kind == TaskKind.Invocation) {
-				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Failed.");				
+				intr.Log(LogEntryType.Normal, "Invocation task for " + charLabel + ": Failed.");				
 				queue.AdvanceInvocationTask(intr, charIdx, invokesToday, false);
 				//processingIncomplete = true;
 			} else if (invocationStatus == CompletionStatus.Cancelled && currentTask.Kind == TaskKind.Invocation) {
-				intr.Log(LogEntryType.Normal, "Invocation task for character [" + charIdx.ToString() + "]: Cancelled.");
+				intr.Log(LogEntryType.Normal, "Invocation task for " + charLabel + ": Cancelled.");
 				//processingIncomplete = true;
 			}
 			
 			// ######################### PROFESSIONS QUEUE AND SETTINGS ###########################			
-			intr.Log(LogEntryType.Normal, "Profession task for character [" + charIdx.ToString() + "]: " + professionsStatus.ToString()
+			intr.Log(LogEntryType.Normal, "Profession task for " + charLabel + ": " + professionsStatus.ToString()
 					+ ", items complete: " + professionTasksProcessed.Count);
 			if (professionsStatus == CompletionStatus.Complete) {				
 				foreach (ProfessionTaskResult taskResult in professionTasksProcessed) {
 					queue.AdvanceProfessionsTask(intr, charIdx, taskResult.TaskId, taskResult.BonusFactor);
 				}
 
-				// SHOULD BE HANDLED BY `ADVANCEMATURED()` AND SEEMS BUGGY ANYWAY:
-				//if (currentTask.Kind == TaskKind.Profession) {
-				//	queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId);  // SAME
-				//}
+				// I guess we have to do this to progress a task which is stuck:
+				if (currentTask.Kind == TaskKind.Profession) {
+					queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId, currentTask.BonusFactor);
+				}
 			} else if (professionsStatus == CompletionStatus.Immature && currentTask.Kind == TaskKind.Profession) {
 				// UNUSED?
 				// [TODO]: Remove this section.
@@ -206,9 +207,9 @@ namespace NeverClicker.Interactions {
 			//}
 
 			if (processingIncomplete) {
-				intr.Log(LogEntryType.Normal, "Processing incomplete for character [" + charIdx + "].");
+				intr.Log(LogEntryType.Normal, "Processing incomplete for " + charLabel + ".");
 			} else {
-				intr.Log(LogEntryType.Normal, "Processing complete for character [" + charIdx + "].");
+				intr.Log(LogEntryType.Normal, "Processing complete for " + charLabel + ".");
 			}			
 		}		
 	}

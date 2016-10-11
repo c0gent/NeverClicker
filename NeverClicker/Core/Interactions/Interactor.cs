@@ -28,7 +28,8 @@ namespace NeverClicker.Interactions {
 		public AutomationState State { get; private set; } = AutomationState.Stopped;
 		public IProgress<LogMessage> ProgressLog { get; private set; }
 		public IProgress<LogMessage> ErrorLog { get; private set; }
-		public IProgress<ImmutableSortedDictionary<long, GameTask>> QueueList { get; private set; }
+		//public IProgress<ImmutableSortedDictionary<long, GameTask>> QueueList { get; private set; }
+		public IProgress<ImmutableArray<TaskDisplay>> QueueList { get; private set; }		
 		public CancellationTokenSource CancelSource { get; private set; }
 		//public IniFile GameAccount; // = new IniFile(Settings.Default["GameAccountIniPath"].ToString());
 		//public IniFile GameClient; // = new IniFile(Settings.Default["GameClientIniPath"].ToString());
@@ -99,9 +100,14 @@ namespace NeverClicker.Interactions {
 			AlibEng.Exec("SetKeyDelay, 55, 15");
 		}
 
+		//// UpdateQueueList()
+		//public void UpdateQueueList(ImmutableSortedDictionary<long, GameTask> taskListCopy) {
+		//	QueueList.Report(taskListCopy);
+		//}	
+		
 		// UpdateQueueList()
-		public void UpdateQueueList(ImmutableSortedDictionary<long, GameTask> taskListCopy) {
-			QueueList.Report(taskListCopy);
+		public void UpdateQueueList(ImmutableArray<TaskDisplay> taskListDisplay) {
+			QueueList.Report(taskListDisplay);
 		}		
 
 		public void Log(string message) {
@@ -197,9 +203,11 @@ namespace NeverClicker.Interactions {
 			return true;
 		}
 
-		public CancellationToken Start(IProgress<LogMessage> progressLog, IProgress<LogMessage> errorLog,
-					IProgress<ImmutableSortedDictionary<long, GameTask>> queueList) {
+		//public CancellationToken Start(IProgress<LogMessage> progressLog, IProgress<LogMessage> errorLog,
+		//			IProgress<ImmutableSortedDictionary<long, GameTask>> queueList) {
 		//public CancellationToken Start(IProgress<LogMessage> log) {
+		public CancellationToken Start(IProgress<LogMessage> progressLog, IProgress<LogMessage> errorLog,
+					IProgress<ImmutableArray<TaskDisplay>> queueList) {
 			if (State == AutomationState.Stopped) {
 				ProgressLog = progressLog;
 				ErrorLog = errorLog;

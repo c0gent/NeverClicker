@@ -190,11 +190,12 @@ namespace NeverClicker.Interactions {
 
 		public static CompletionStatus MaintainProfs (Interactor intr, uint charIdx, 
 						List<ProfessionTaskResult> completionList) {
-			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }	
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
+			string charLabel = intr.AccountSettings.CharNames[(int)charIdx];
 			string profsWinKey = intr.AccountSettings.GetSettingValOr("professions", "gameHotkeys", Global.Default.ProfessionsWindowKey);
 
-			intr.Log(LogEntryType.Debug, "Opening professions window for character [" + charIdx + "].");
+			intr.Log(LogEntryType.Debug, "Opening professions window for " + charLabel + ".");
 
 			Keyboard.SendKey(intr, profsWinKey);
 			intr.Wait(1000);
@@ -225,8 +226,8 @@ namespace NeverClicker.Interactions {
 					}
 				}
 
-				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for character [" +
-					charIdx + "].");
+				intr.Log(LogEntryType.Debug, "Collected " + profResultsCollected + " profession results for " +
+					charLabel + ".");
 			}
 
 			int noValidTaskId = 0;
@@ -278,7 +279,7 @@ namespace NeverClicker.Interactions {
 							// If we've been stuck 
 							if (noValidTaskId == currentTaskId) {
 								if (noValidTaskCounter > 1) {
-									intr.Log(LogEntryType.Error, "Error starting profession task on character [" + charIdx + "]:");
+									intr.Log(LogEntryType.Error, "Error starting profession task on " + charLabel + ":");
 									intr.Log(LogEntryType.Error, "- Ensure that profession assets are sorted correctly in inventory.");
 									return CompletionStatus.Complete;
 								} else {

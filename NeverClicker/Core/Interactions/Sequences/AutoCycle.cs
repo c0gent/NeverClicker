@@ -27,7 +27,7 @@ namespace NeverClicker.Interactions {
 
 				//intr.Log("Calling intr.UpdateQueueList()... " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****
 				// [NOTE]: Move this somewhere else?
-				intr.UpdateQueueList(queue.ListClone());
+				intr.UpdateQueueList(queue.ListClone(intr));
 			}
 
 			//intr.Log("End AutoCycle Init: " + DateTime.Now.ToString("HH\\:mm\\:ss\\.ff")); // ***** DEBUG *****

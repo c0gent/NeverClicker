@@ -21,8 +21,9 @@ namespace NeverClicker {
 		//string SessionElementName;
 
 		public XmlSettingsFile(string name) {
-			FileName = Settings.Default.SettingsFolderPath + "\\" + name + ".xml.txt";
-			DocumentElementName = name;
+			FileName = Settings.Default.SettingsFolderPath + "\\" + 
+				name.First().ToString().ToUpper() + name.Substring(1) + ".xml.txt";
+			DocumentElementName = name.First().ToString().ToLower() + name.Substring(1);
 			Doc = new XmlDocument();
 
 			if (!File.Exists(FileName)) {

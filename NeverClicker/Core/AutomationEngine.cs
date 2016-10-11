@@ -60,8 +60,12 @@ namespace NeverClicker {
 			return new Progress<LogMessage>(l => MainForm.AppendError(l.Text));
 		}
 
-		private Progress<ImmutableSortedDictionary<long, GameTask>> GetTaskQueueProgress() {
-			return new Progress<ImmutableSortedDictionary<long, GameTask>>(sl => MainForm.RefreshTaskQueue(sl));
+		//private Progress<ImmutableSortedDictionary<long, GameTask>> GetTaskQueueProgress() {
+		//	return new Progress<ImmutableSortedDictionary<long, GameTask>>(sl => MainForm.RefreshTaskQueue(sl));
+		//}
+
+		private Progress<ImmutableArray<TaskDisplay>> GetTaskQueueProgress() {
+			return new Progress<ImmutableArray<TaskDisplay>>(sl => MainForm.RefreshTaskQueue(sl));
 		}
 
 		public async Task<TResult> Run<TResult>(Func<TResult> action) {

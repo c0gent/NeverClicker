@@ -1,6 +1,7 @@
 ﻿using NeverClicker.Properties;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,11 @@ using System.Xml;
 namespace NeverClicker {
 	public class AccountSettings : XmlSettingsFile {
 		public static string CharactersNodeName = "characters";
+		public ImmutableArray<string> CharNames;
 
 		public AccountSettings() : base("accountSettings") {
 			base.SaveFile();
+			PopulateCharNames();
 		}
 
 		public AccountSettings(string oldIniFileName) : base("accountSettings") {
@@ -21,6 +24,18 @@ namespace NeverClicker {
 			}
 
 			base.SaveFile();
+			PopulateCharNames();
+		}
+
+		private void PopulateCharNames() {
+			var charCount = GetSettingValOr("characterCount", "general", Global.Default.MaxCharacterCount);
+			ImmutableArray<string>.Builder charNamesBuilder = ImmutableArray.CreateBuilder<string>(charCount);
+
+			for (uint i = 0; i < charCount; i++) {
+				charNamesBuilder.Add(CharNode(i).GetAttribute("name"));
+			}
+
+			this.CharNames = charNamesBuilder.ToImmutable();
 		}
 
 		public XmlElement CharNode(uint charIdx) {

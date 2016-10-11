@@ -20,7 +20,7 @@ namespace NeverClicker.Interactions {
 
 			try {
 				item = (VaultOfPietyItem)Enum.Parse(typeof(VaultOfPietyItem), 
-					intr.AccountSettings.GetCharSetting(charIdx, "VaultOfPietyItem"), true);
+					intr.AccountSettings.GetCharSetting(charIdx, "vaultOfPietyItem"), true);
 			} catch (Exception) {
 				item = DEFAULT_REDEMPTION_ITEM;
 			}

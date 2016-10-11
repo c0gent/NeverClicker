@@ -14,14 +14,21 @@ namespace NeverClicker {
 
 	[Serializable]
 	public struct GameTask : IComparable<GameTask>, ISerializable {
+		public static string NodeNameStartTime = "startTime";
+		public static string NodeNameMatureTime = "matureTime";
+		public static string NodeNameCharIdx = "charIdx";
+		public static string NodeNameKind = "kind";
+		public static string NodeNameTaskId = "taskId";
+		public static string NodeNameBonusFactor = "bonusFactor";
+		public static string NodePrefixInvocation = "i";
+		public static string NodePrefixProfession = "p";
+
 		public readonly DateTime StartTime;
 		public readonly DateTime MatureTime;	
 		public readonly uint CharIdx; 
 		public readonly TaskKind Kind; 
 		public readonly int TaskId;
 		public readonly float BonusFactor;
-
-		public string CharIdxLabel { get { return "Character_" + CharIdx.ToString(); } }
 
 		public GameTask(DateTime startTime, DateTime matureTime, uint charIdx, TaskKind kind, int taskId, float bonusFactor) {
 			this.StartTime = startTime;
@@ -37,13 +44,12 @@ namespace NeverClicker {
 		}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context) {
-			info.AddValue("MatureTime", MatureTime);
-			info.AddValue("CharacterIdx", CharIdx);
-			info.AddValue("TaskKind", Kind);
+			info.AddValue(NodeNameMatureTime, MatureTime);
+			info.AddValue(NodeNameCharIdx, CharIdx);
+			info.AddValue(NodeNameKind, Kind);
 		}
 
 		public GameTask AddTicks(int ticks) {
-			//this.MatureTime = this.MatureTime.AddTicks(ticks);
 			return new GameTask(this.StartTime, this.MatureTime.AddTicks(ticks), this.CharIdx, this.Kind, this.TaskId, this.BonusFactor);
         }
 
@@ -53,9 +59,9 @@ namespace NeverClicker {
 
 		public static string GenXmlNodeName(TaskKind kind, int taskId) {
 			if (kind == TaskKind.Invocation) {
-				return "I";
+				return NodePrefixInvocation;
 			} else if (kind == TaskKind.Profession) {
-				return "P" + taskId.ToString();
+				return NodePrefixProfession + taskId.ToString();
 			} else {
 				return "UNKNOWN";
 			}
@@ -67,34 +73,34 @@ namespace NeverClicker {
 		}
 
 		public void SetXmlAttribs(XmlElement taskNode) {
-			taskNode.SetAttribute("StartTime", this.StartTime.ToString("o"));
-			taskNode.SetAttribute("MatureTime", this.MatureTime.ToString("o"));
-			taskNode.SetAttribute("CharIdx", this.CharIdx.ToString());		
-			taskNode.SetAttribute("TaskKind", this.Kind.ToString());			
-			taskNode.SetAttribute("TaskId", this.TaskId.ToString());
-			taskNode.SetAttribute("BonusFactor", this.BonusFactor.ToString());
+			taskNode.SetAttribute(NodeNameStartTime, this.StartTime.ToString("o"));
+			taskNode.SetAttribute(NodeNameMatureTime, this.MatureTime.ToString("o"));
+			taskNode.SetAttribute(NodeNameCharIdx, this.CharIdx.ToString());		
+			taskNode.SetAttribute(NodeNameKind, this.Kind.ToString());			
+			taskNode.SetAttribute(NodeNameTaskId, this.TaskId.ToString());
+			taskNode.SetAttribute(NodeNameBonusFactor, this.BonusFactor.ToString());
 		}
 
 		public static GameTask FromXmlElement(XmlElement taskNode) {
 			TaskKind kind;
 			int taskId;
 
-			if (taskNode.Name[0] == 'I') {
+			if (taskNode.Name[0] == NodePrefixInvocation.ToCharArray()[0]) {
 				kind = TaskKind.Invocation;
-				taskId = int.Parse(taskNode.GetAttribute("TaskId"));
-			} else if (taskNode.Name[0] == 'P') {
+				taskId = int.Parse(taskNode.GetAttribute(NodeNameTaskId));
+			} else if (taskNode.Name[0] == NodePrefixProfession.ToCharArray()[0]) {
 				kind = TaskKind.Profession;
 				taskId = int.Parse(taskNode.Name[1].ToString());
 			} else {
 				throw new Exception("GameTask::FromXmlElement: Invalid xml element.");
 			}
 			
-			DateTime startTime = DateTime.Parse(taskNode.GetAttribute("StartTime"));
-			DateTime matureTime = DateTime.Parse(taskNode.GetAttribute("MatureTime"));
-			uint charIdx = uint.Parse(taskNode.GetAttribute("CharIdx"));
-			TaskKind kindCheck = (TaskKind)Enum.Parse(typeof(TaskKind), taskNode.GetAttribute("TaskKind"));
-			int taskIdCheck = int.Parse(taskNode.GetAttribute("TaskId"));
-			float bonusFactor = float.Parse(taskNode.GetAttribute("BonusFactor"));
+			DateTime startTime = DateTime.Parse(taskNode.GetAttribute(NodeNameStartTime));
+			DateTime matureTime = DateTime.Parse(taskNode.GetAttribute(NodeNameMatureTime));
+			uint charIdx = uint.Parse(taskNode.GetAttribute(NodeNameCharIdx));
+			TaskKind kindCheck = (TaskKind)Enum.Parse(typeof(TaskKind), taskNode.GetAttribute(NodeNameKind));
+			int taskIdCheck = int.Parse(taskNode.GetAttribute(NodeNameTaskId));
+			float bonusFactor = float.Parse(taskNode.GetAttribute(NodeNameBonusFactor));
 
 			if (kind != kindCheck || taskId != taskIdCheck) {
 				throw new Exception("GameTask::FromXmlElement: Error parsing xml element. Values do not check out.");

@@ -9,6 +9,19 @@ using System.Windows.Forms;
 using System.Collections.Immutable;
 
 namespace NeverClicker {
+	public struct TaskDisplay {
+		public readonly int TaskId;
+		public readonly string CharName;
+		public readonly DateTime MatureTime;
+		public readonly TaskKind Kind;
+
+		public TaskDisplay(int taskId, string charName, DateTime matureTime, TaskKind kind) {
+			this.TaskId = taskId;
+			this.CharName = charName;
+			this.MatureTime = matureTime;
+			this.Kind = kind;
+		}
+	}
 
 	[Serializable]
 	public class TaskQueue : ISerializable {
@@ -130,7 +143,9 @@ namespace NeverClicker {
 			DateTime taskMatureTime = now;
 			DateTime nextThreeThirty = NextThreeAmPst;
 			DateTime todaysInvokeDate = TodaysGameDate;
-			string charLabel = intr.AccountSettings.GetCharSetting(charIdx, "CharacterName");
+			//string charLabel = intr.AccountSettings.GetCharSetting(charIdx, "CharacterName");
+			string charLabel = intr.AccountSettings.CharNode(charIdx).GetAttribute("name");
+
 			
             if (invokesToday < 6) { // QUEUE FOR LATER
 				TimeSpan extraDelay = TimeSpan.FromMinutes(0);
@@ -166,7 +181,7 @@ namespace NeverClicker {
 			intr.Log("Next invocation task for character [" + charIdx + "] at: " + taskMatureTime.ToString() + ".");
 			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Invocation, invokesToday, 0.0f));
 			intr.AccountStates.SaveCharTask(newTask);
-			intr.UpdateQueueList(this.ListClone());
+			intr.UpdateQueueList(this.ListClone(intr));
 		}
 
 
@@ -190,7 +205,7 @@ namespace NeverClicker {
 			var newTask = this.Add(new GameTask(now, taskMatureTime, charIdx, TaskKind.Profession, taskId, bonusFactor));
 			//intr.AccountStates.SaveCharState(now, charIdx, "MostRecentProfTime_" + taskId);
 			intr.AccountStates.SaveCharTask(newTask);
-			intr.UpdateQueueList(this.ListClone());
+			intr.UpdateQueueList(this.ListClone(intr));
 		}
 
 
@@ -443,8 +458,19 @@ namespace NeverClicker {
 		}
 
 
-		public ImmutableSortedDictionary<long, GameTask> ListClone() {
-			return this.Queue.ToImmutableSortedDictionary();
+		//public ImmutableSortedDictionary<long, GameTask> ListClone() {
+		//	return this.Queue.ToImmutableSortedDictionary();
+		//}
+
+		public ImmutableArray<TaskDisplay> ListClone(Interactor intr) {
+			ImmutableArray<TaskDisplay>.Builder queueListBuilder = ImmutableArray.CreateBuilder<TaskDisplay>(this.Queue.Count);
+
+			foreach (GameTask task in Queue.Values) {
+				string charLabel = intr.AccountSettings.CharNames[(int)task.CharIdx];
+				queueListBuilder.Add(new TaskDisplay(task.TaskId, charLabel, task.MatureTime, task.Kind));
+			}
+
+			return queueListBuilder.ToImmutable();
 		}
 
 
@@ -466,7 +492,7 @@ namespace NeverClicker {
 			writer.Serialize(file, this);
 			file.Close();
 		}
-	}
+	}	
 }
 
 

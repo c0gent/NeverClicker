@@ -8,12 +8,14 @@ namespace NeverClicker.Interactions {
 	public static partial class Sequences {
 		public static bool IsEnchantedKeyTimerExpired(Interactor intr) {
 			DateTime KeyLastReceived;
-			if (DateTime.TryParse(intr.AccountStates.GetSettingValOr("EnchKeyLastReceived", "Invocation", ""), out KeyLastReceived)) {
+
+			if (DateTime.TryParse(intr.AccountStates.GetSettingValOr("EnchKeyLastReceived", "invocation", ""), out KeyLastReceived)) {
 				if (KeyLastReceived.AddDays(1) >= DateTime.Now) {
 					return false;
 				}
 			} else {
-				intr.Log(LogEntryType.Fatal, "Sequences::IsEnchantedKeyTimerExpired(): Unable to parse 'EnchKeyLastReceived'.");
+				intr.AccountStates.SaveSetting(DateTime.Now.AddDays(-1).ToString("o"), "EnchKeyLastReceived", "invocation");
+				intr.Log(LogEntryType.Debug, "Sequences::IsEnchantedKeyTimerExpired(): Unable to parse 'EnchKeyLastReceived'. Resetting.");
 			}
 
 			return true;
@@ -128,7 +130,7 @@ namespace NeverClicker.Interactions {
 					return false;
 				} else {
 					intr.Log(LogEntryType.Normal, "Enchanted key collected on character [" + charIdx + "].");
-					intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "Invocation");
+					intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
 					return true;
 				}
 
@@ -138,7 +140,7 @@ namespace NeverClicker.Interactions {
 				//if (States.DetermineInventoryState(intr) == InventoryState.Vip) {
 				//	intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character [" + charIdx + "].");
 				//	intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
-				//	intr.AccountStates.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "Invocation");
+				//	intr.AccountStates.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "invocation");
 				//}
 				//if (!inventoryOpened) {
 				//	//Keyboard.SendKey(intr, openInventoryKey);
@@ -148,7 +150,7 @@ namespace NeverClicker.Interactions {
 				// If things didn't work, just advance it anyway with an error message.
 				intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character [" + charIdx + "].");
 				intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
-				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "Invocation");
+				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
 
 				return false;
 			}

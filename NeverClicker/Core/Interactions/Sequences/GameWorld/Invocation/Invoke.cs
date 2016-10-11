@@ -14,8 +14,9 @@ namespace NeverClicker.Interactions {
 		public const VaultOfPietyItem DEFAULT_REDEMPTION_ITEM = VaultOfPietyItem.CofferOfCelestialArtifactEquipment;
 
 		public static CompletionStatus Invoke(Interactor intr, uint charIdx) {
-			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }			
+			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 
+			string charLabel = intr.AccountSettings.CharNames[(int)charIdx];
 			string invokeKey = intr.AccountSettings.GetSettingValOr("invoke", "gameHotkeys", Global.Default.InvokeKey);
 
 			// Invocation Attempt (first):
@@ -23,8 +24,14 @@ namespace NeverClicker.Interactions {
 			intr.Wait(100);
 
 			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
-				intr.Log(LogEntryType.Info, "Maximum blessings reached for character [" + charIdx 
-					+ "]. Redeeming through Vault of Piety...");				
+				intr.Log(LogEntryType.Info, "Maximum blessings reached for " + charLabel
+					+ ". Redeeming through Vault of Piety...");
+
+				if (DEBUG_ALWAYS_REDEEM) {
+					#pragma warning disable CS0162 // Unreachable code detected
+					MoveAround(intr);
+					#pragma warning restore CS0162 // Unreachable code detected
+				}
 
 				if (Redeem(intr, charIdx)) {
 					MoveAround(intr);
@@ -32,7 +39,7 @@ namespace NeverClicker.Interactions {
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log(LogEntryType.Error, "Unable to invoke: Error collecting Vault of Piety rewards for character [" + charIdx + "].");
+					intr.Log(LogEntryType.Error, "Unable to invoke: Error collecting Vault of Piety rewards for " + charLabel + ".");
 					return CompletionStatus.Failed;
 				}
 			}
@@ -45,17 +52,17 @@ namespace NeverClicker.Interactions {
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionDoneForDay").Found) {
-					intr.Log("Unable to invoke: Invocation already finished for the day on character [" + charIdx + "].");
+					intr.Log("Unable to invoke: Invocation already finished for the day on " + charLabel + ".");
 					return CompletionStatus.DayComplete;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionPatience").Found) {
-					intr.Log("Unable to invoke: Still waiting to invoke on character [" + charIdx + "].");
+					intr.Log("Unable to invoke: Still waiting to invoke on " + charLabel + ".");
 					return CompletionStatus.Immature;
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionNotInRestZone").Found) {
-					intr.Log(LogEntryType.Error, "Unable to invoke: Character [" + charIdx + "] not in rest zone.");
+					intr.Log(LogEntryType.Error, "Unable to invoke: " + charLabel + " not in rest zone.");
 					return CompletionStatus.Complete;			
 				} else if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionItemsInOverflow").Found) {
-					intr.Log(LogEntryType.Error, "Unable to invoke: Items in overflow bag are preventing invocation for character " 
-						+ charIdx + ". Attempting to move to regular inventory...");
+					intr.Log(LogEntryType.Error, "Unable to invoke: Items in overflow bag are preventing invocation for " 
+						+ charLabel + ". Attempting to move to regular inventory...");
 
 					// Attempt to transfer overflow items to regular inventory:
 					//
@@ -69,7 +76,7 @@ namespace NeverClicker.Interactions {
 					// Invocation Attempt:
 					Keyboard.SendKey(intr, invokeKey);
 				} else {
-					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character " + charIdx +
+					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for " + charLabel +
 						"." + "[IN0]");
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
@@ -97,8 +104,8 @@ namespace NeverClicker.Interactions {
 				Keyboard.SendKey(intr, invokeKey);				
 				intr.Wait(1500);
 
-				intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character [" + charIdx +
-						"]." + "[FN1]");
+				intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for character " + charLabel +
+						"." + "[FN1]");
 
 				intr.Wait(30000);
 				MoveAround(intr);	

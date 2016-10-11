@@ -54,13 +54,14 @@ namespace NeverClicker.Forms {
 			listBoxErrors.Items.Add(errMessage);
 		}
 
-		public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
+		//public void RefreshTaskQueue(ImmutableSortedDictionary<long, GameTask> taskList) {
+		public void RefreshTaskQueue(ImmutableArray<TaskDisplay> taskList) {
 			//WriteLine(new LogMessage("Refreshing task queue...", LogEntryType.Debug).Text);
 
 			try {
 				this.listBoxTaskQueue.Items.Clear();
 
-				foreach (GameTask task in taskList.Values) {
+				foreach (TaskDisplay task in taskList) {
 					string taskIdName = (task.Kind == TaskKind.Profession) 
 						? ProfessionTasksRef.ProfessionTaskNames[task.TaskId] + "\t" 
 						: task.TaskId.ToString() + "\t\t";
@@ -69,7 +70,7 @@ namespace NeverClicker.Forms {
 						task.MatureTime.ToShortTimeString().Trim() + 
 						"\t" + task.Kind.ToString() +
 						"\t" + taskIdName +
-						"\tCharacter " + task.CharIdx.ToString()
+						"\t" + task.CharName
 					);
 				}
 			} catch (Exception ex) {
