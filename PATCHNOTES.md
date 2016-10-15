@@ -1,4 +1,13 @@
-Version 0.6.0 (UNRELEASED)
+Version 0.6.1 (2016-OCT-15)
+===========================
+* Fix extraneous Enchanted Key error message.
+* Correct slight miscalculation with queue timing when using a footman,
+  Guard, or Mercenary in the primary profession asset slot.
+* Fix queue task advancement algorithm issue which was also causing problems 
+  with task timings.
+
+
+Version 0.6.0 (2016-OCT-11)
 ===========================
 
 * The logging system has been completely redesigned.

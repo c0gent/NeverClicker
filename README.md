@@ -28,6 +28,15 @@ Automated invocation. May eat your laundry.
 - Tasks are grouped together in the queue. For example, all "Guard Clerics" will be grouped together and the **slowest** one of the three tasks will be used for the queue timer. This means that it's pointless to have all Hero (purple) assets for two "Guard Clerics" tasks and a Footman and Mercenary for the third. In this case, the task group for "Guard Clerics" won't be re-processed until the footman and mercenary task is complete (unless another task happens to be processed in the interim). Try to even out your assets for each character, try to have 9 Mercenary & 9 Footman, or 9 Man-at-arms & 9 Hero, or 18 Adventurer or whatever. Be sure the weaker ones are sorted together at the top of the inventory as described above or else the tasks will be timed inefficently.
 
 
+## Vault of Piety
+- You can specify the desired Vault of Piety reward item by editing the `vaultOfPietyItem` setting for each character within `AccountSettings.xml.txt`. Valid options are:
+  - ElixirOfFate = 0
+  - BlessedProfessionsElementalPack = 1
+  - CofferOfCelestialEnchantments = 2
+  - CofferOfCelestialArtifacts = 3
+  - CofferOfCelestialArtifactEquipment = 4 (default)
+
+
 ## Issues? Ideas?
 Having a problem? Something doesn't work? Have a request for a new feature? [File an issue on the issues page](https://github.com/c0gent/NeverClicker/issues). In the case of problems, be sure to include:
 - What you were doing / trying to do
