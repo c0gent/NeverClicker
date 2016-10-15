@@ -37,7 +37,7 @@ namespace NeverClicker.Interactions {
 		public ClientSettings ClientSettings;
 		public AccountStates AccountStates;
 		//LogFile LogFile;
-		private static Logger logger = LogManager.GetLogger("Interactor");
+		public static Logger Logger = LogManager.GetLogger("Interactor");
 
 		public Interactor() {
 			//InitAlibEng(); // LOADED BELOW (LoadSettings())
@@ -125,32 +125,32 @@ namespace NeverClicker.Interactions {
 		public void Log(LogMessage logMessage) {			
 			switch (logMessage.Type) {
 				case LogEntryType.FatalWithScreenshot:					
-					logger.Fatal(logMessage.Text, logMessage.Args);
+					Logger.Fatal(logMessage.Text, logMessage.Args);
 					ProgressLog?.Report(logMessage);
 					ErrorLog?.Report(new LogMessage(logMessage.Text + " -- " + SaveErrorScreenshot()));
 					break;
 				case LogEntryType.Fatal:					
-					logger.Fatal(logMessage.Text, logMessage.Args);
+					Logger.Fatal(logMessage.Text, logMessage.Args);
 					ProgressLog?.Report(logMessage);
 					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Error:
-					logger.Error(logMessage.Text, logMessage.Args);
+					Logger.Error(logMessage.Text, logMessage.Args);
 					ErrorLog?.Report(logMessage);
 					break;
 				case LogEntryType.Warning:
 				case LogEntryType.Normal:
-					logger.Info(logMessage.Text, logMessage.Args);
+					Logger.Info(logMessage.Text, logMessage.Args);
 					ProgressLog?.Report(logMessage);
 					break;
 				case LogEntryType.Info:
-					logger.Info(logMessage.Text, logMessage.Args);
+					Logger.Info(logMessage.Text, logMessage.Args);
 					break;
 				case LogEntryType.Debug:
-					if (Settings.Default.LogDebugMessages) { logger.Debug(logMessage.Text, logMessage.Args); }	
+					if (Settings.Default.LogDebugMessages) { Logger.Debug(logMessage.Text, logMessage.Args); }	
 					break;
 				case LogEntryType.Trace:
-					if (Settings.Default.LogTraceMessages) { logger.Debug(logMessage.Text, logMessage.Args); }		
+					if (Settings.Default.LogTraceMessages) { Logger.Debug(logMessage.Text, logMessage.Args); }		
 					break;
 			}
 		}

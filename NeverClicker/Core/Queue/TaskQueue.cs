@@ -73,8 +73,18 @@ namespace NeverClicker {
 			return gameTask;
 		}
 
+		/// <summary>
+		/// Removes a task from the queue and adds a new task with the same charIdx, kind, id, and bonus for a later time.
+		/// </summary>
+		/// <param name="intr"></param>
+		/// <param name="charIdx"></param>
+		/// <param name="taskKind"></param>
+		/// <param name="taskId"></param>
+		/// <param name="bonusFactor"></param>
+		/// <param name="incrementTaskId"></param>
+		/// <param name="force">If set to true, advances a task even if it has not matured.</param>
 		private void AdvanceTask(Interactor intr, uint charIdx, TaskKind taskKind, int taskId, 
-						float bonusFactor, bool incrementTaskId) {
+						float bonusFactor, bool incrementTaskId, bool force) {
 			// CHECK TO SEE IF THAT TASK IS ALREADY IN QUEUE, 
 			// IF NOT ADD
 			// IF SO, CHECK TO SEE IF THAT TASK HAS MATURED
@@ -94,8 +104,12 @@ namespace NeverClicker {
 					"taskKind: " + taskKind.ToString() + ", " +
 					"charIdx: " + charIdx.ToString() + ". ");
 
-				if (taskKey < nowTicks) { // MATURE
-					intr.Log(LogEntryType.Debug, "Task is mature. Removing...");
+				if (taskKey < nowTicks || force) { // MATURE or FORCED
+					if (taskKey < nowTicks) {
+						intr.Log(LogEntryType.Debug, "Task is mature. Removing and adding anew ...");						
+					} else {
+						intr.Log(LogEntryType.Debug, "Forcing task advancement. Removing and adding anew ...");
+					}
 					//intr.Log(LogEntryType.Debug, "Removing old task.");
 					Queue.Remove(taskKey); 
 
@@ -110,7 +124,6 @@ namespace NeverClicker {
 				} else { // NOT MATURE
 					intr.Log(LogEntryType.Debug, "Task is not mature: taskKey: " + taskKey + 
 						", nowTicks: " + nowTicks + ".");
-					// DO NOTHING?
 				}
 			} else { // DOESN'T EXIST YET
 				intr.Log(LogEntryType.Info, "Key not found for task.");
@@ -124,12 +137,12 @@ namespace NeverClicker {
 
 		// FOR INVOCATION
 		public void AdvanceInvocationTask(Interactor intr, uint charIdx, int invokesToday, bool incrementInvokes) {
-			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, 0.0f, incrementInvokes);
+			this.AdvanceTask(intr, charIdx, TaskKind.Invocation, invokesToday, 0.0f, incrementInvokes, false);
 		}
 
 		// FOR PROFESSIONS
 		public void AdvanceProfessionsTask(Interactor intr, uint charIdx, int taskId, float bonusFactor) {
-			this.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId, bonusFactor, false);
+			this.AdvanceTask(intr, charIdx, TaskKind.Profession, taskId, bonusFactor, false, true);
 		}
 
 
@@ -370,6 +383,10 @@ namespace NeverClicker {
 				.AddMinutes(durationMins)
 				.AddTicks(10000 * charIdx)
 				.AddTicks(10 * taskId);
+
+			Interactor.Logger.Debug("Task duration (charIdx: {0}, startTime: {1}, kind: {2}, taskId: {3}, bonusFactor {4}): {5} min.",
+				charIdx, startTime, kind, taskId, bonusFactor, durationMins);
+
 			return taskMatureTime;
 		}
 

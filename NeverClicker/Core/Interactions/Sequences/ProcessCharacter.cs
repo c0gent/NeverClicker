@@ -34,15 +34,17 @@ namespace NeverClicker.Interactions {
 				skipInvocation = true;
 			} else if (invokesCompletedForDay < TaskQueue.TodaysGameDate && invokesToday < 2 && 
 							currentTask.Kind == TaskKind.Invocation) {
-				// Skip professions for the first few invokes of the day and inventory for some of the middle ones:
+				// Skip professions for the first few invokes of the day.
 				intr.Log(LogEntryType.Info, "Skipping profession processing this round.");
-				skipProfessions = true;
-
-				if (invokesToday != 0) {
-					intr.Log(LogEntryType.Info, "Skipping inventory processing this round.");
-					skipMaintInven = true;
-				}				
+				skipProfessions = true;						
 			}
+
+			// Skip inventory processing for the first two invokes [0, 1] and every non invoke task:
+			if (invokesToday < 2 || currentTask.Kind != TaskKind.Invocation) {
+				intr.Log(LogEntryType.Info, "Skipping inventory processing this round.");
+				skipMaintInven = true;
+			}		
+
 
 			CompletionStatus invocationStatus = CompletionStatus.None;
 			CompletionStatus professionsStatus = CompletionStatus.None;
