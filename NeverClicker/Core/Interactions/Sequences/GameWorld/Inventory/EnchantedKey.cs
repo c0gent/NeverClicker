@@ -39,17 +39,18 @@ namespace NeverClicker.Interactions {
 			int xOfs = 222;
 			int yOfs = 12;
 
+			string charLabel = intr.AccountSettings.CharNames[(int)charIdx];
+
 			intr.Wait(1000);
-			intr.Log(LogEntryType.Debug, "Attempting to claim Enchanted Key...");
+			intr.Log(LogEntryType.Debug, "Attempting to claim Enchanted Key for {0} ...", charLabel);
 
 			// Open inventory if it has not already been pronounced open:
 			if (!inventoryOpened) {
-				intr.Log(LogEntryType.Debug, "Opening inventory...");
+				intr.Log(LogEntryType.Debug, "Opening inventory ...");
 				if (!OpenInventory(intr)) {					
-					intr.Log(LogEntryType.Fatal, "Unable to open inventory while claiming Enchanted Key for character " 
-						+ charIdx + ".");
+					intr.Log(LogEntryType.Fatal, "Unable to open inventory while claiming Enchanted Key for {0}.", charLabel);
 				} else {
-					intr.Log(LogEntryType.Debug, "Inventory has been opened...");
+					intr.Log(LogEntryType.Debug, "Inventory has been opened ...");
 				}
 				// Sometimes takes a long time for icons to load...
 				intr.Wait(3000);
@@ -122,20 +123,22 @@ namespace NeverClicker.Interactions {
 				// Click again just to the right of the previous spot:
 				Mouse.Move(intr, iconLoc.Point.X + xOfs + 15, iconLoc.Point.Y + yOfs);
 				Mouse.Click(intr,iconLoc.Point.X + xOfs + 15, iconLoc.Point.Y + yOfs); 
-				intr.Wait(2500);
 
-				// Verify that the VIP reward icon is no longer visible:
-				if (Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon").Found) {
-					intr.Log(LogEntryType.FatalWithScreenshot, "Error clicking on claim button.");
-					return false;
-				} else {
-					intr.Log(LogEntryType.Normal, "Enchanted key collected on character [" + charIdx + "].");
-					intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
-					return true;
-				}
+				//intr.Wait(2500);
+				//// Verify that the VIP reward icon is no longer visible:
+				//if (Screen.ImageSearch(intr, "InventoryVipAccountRewardsIcon").Found) {
+				//	intr.Log(LogEntryType.FatalWithScreenshot, "Error clicking on claim button.");
+				//	return false;
+				//} else {
+				//	intr.Log(LogEntryType.Normal, "Enchanted key collected on {0}.", charLabel);
+				//	intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
+				//	return true;
+				//}
 
-				// [TODO]: Open Enchanted Key Bag
-				
+				intr.Wait(200);
+				intr.Log(LogEntryType.Normal, "Enchanted key collected on {0}.", charLabel);
+				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
+				return true;				
 			} else {
 				//if (States.DetermineInventoryState(intr) == InventoryState.Vip) {
 				//	intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character [" + charIdx + "].");
@@ -148,7 +151,7 @@ namespace NeverClicker.Interactions {
 				//}
 
 				// If things didn't work, just advance it anyway with an error message.
-				intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character [" + charIdx + "].");
+				intr.Log(LogEntryType.Error, "Failure to claim enchanted key on {0}.", charLabel);
 				intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
 				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
 
