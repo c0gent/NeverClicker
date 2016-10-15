@@ -21,28 +21,7 @@ namespace NeverClicker.Interactions {
 
 			// Invocation Attempt (first):
 			Keyboard.SendKey(intr, invokeKey);
-			intr.Wait(100);
-
-			if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
-				intr.Log(LogEntryType.Info, "Maximum blessings reached for " + charLabel
-					+ ". Redeeming through Vault of Piety...");
-
-				if (DEBUG_ALWAYS_REDEEM) {
-					#pragma warning disable CS0162 // Unreachable code detected
-					MoveAround(intr);
-					#pragma warning restore CS0162 // Unreachable code detected
-				}
-
-				if (Redeem(intr, charIdx)) {
-					MoveAround(intr);
-					intr.Log(LogEntryType.Debug, "Redeeming Vault of Piety...");
-					// Invocation Attempt:
-					Keyboard.SendKey(intr, invokeKey);
-				} else {
-					intr.Log(LogEntryType.Error, "Unable to invoke: Error collecting Vault of Piety rewards for " + charLabel + ".");
-					return CompletionStatus.Failed;
-				}
-			}
+			intr.Wait(300);
 
 			if (Screen.ImageSearch(intr, "InvocationRewardsOfDevotionWindowTitle").Found) {
 				intr.Wait(200);
@@ -74,14 +53,34 @@ namespace NeverClicker.Interactions {
 					MoveAround(intr);
 
 					// Invocation Attempt:
-					Keyboard.SendKey(intr, invokeKey);
+					Keyboard.SendKey(intr, invokeKey);				
 				} else {
 					intr.Log(LogEntryType.FatalWithScreenshot, "Unable to invoke for " + charLabel +
 						"." + "[IN0]");
 					intr.Wait(30000);
 					return CompletionStatus.Failed;
 				}
-            }
+            } else if (Screen.ImageSearch(intr, "InvocationMaximumBlessings").Found || DEBUG_ALWAYS_REDEEM) {
+				// Vault of Piety //
+				intr.Log(LogEntryType.Info, "Maximum blessings reached for " + charLabel
+					+ ". Redeeming through Vault of Piety...");
+
+				if (DEBUG_ALWAYS_REDEEM) {
+					#pragma warning disable CS0162 // Unreachable code detected
+					MoveAround(intr);
+					#pragma warning restore CS0162 // Unreachable code detected
+				}
+
+				if (Redeem(intr, charIdx)) {
+					MoveAround(intr);
+					intr.Log(LogEntryType.Debug, "Redeeming Vault of Piety...");
+					// Invocation Attempt:
+					Keyboard.SendKey(intr, invokeKey);
+				} else {
+					intr.Log(LogEntryType.Error, "Unable to invoke: Error collecting Vault of Piety rewards for " + charLabel + ".");
+					return CompletionStatus.Failed;
+				}
+			}
 
 			if (intr.CancelSource.IsCancellationRequested) { return CompletionStatus.Cancelled; }
 			intr.Wait(2800);			
