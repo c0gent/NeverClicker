@@ -140,17 +140,7 @@ namespace NeverClicker.Interactions {
 				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");
 				return true;				
 			} else {
-				//if (States.DetermineInventoryState(intr) == InventoryState.Vip) {
-				//	intr.Log(LogEntryType.Error, "Failure to claim enchanted key on character [" + charIdx + "].");
-				//	intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
-				//	intr.AccountStates.SaveSetting(TaskQueue.TodaysGameDate.ToString(), "EnchKeyLastReceived", "invocation");
-				//}
-				//if (!inventoryOpened) {
-				//	//Keyboard.SendKey(intr, openInventoryKey);
-				//	MoveAround(intr);
-				//}
-
-				// If things didn't work, just advance it anyway with an error message.
+				// If things didn't work, just advance it anyway with an error message. //
 				intr.Log(LogEntryType.Error, "Failure to claim enchanted key on {0}.", charLabel);
 				intr.Log(LogEntryType.Error, "Assuming key was manually collected and continuing.");
 				intr.AccountStates.SaveSetting(DateTime.Now.ToString("o"), "EnchKeyLastReceived", "invocation");

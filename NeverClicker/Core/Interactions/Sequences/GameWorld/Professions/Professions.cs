@@ -276,9 +276,11 @@ namespace NeverClicker.Interactions {
 								continue;
 							}
 						} else {
-							// If we've been stuck 
+							// We've been stuck //
 							if (noValidTaskId == currentTaskId) {
-								if (noValidTaskCounter > 1) {
+								// We have already set `noValidTaskId` for this task //
+								if (noValidTaskCounter >= 2) {
+									// This is the 3rd time we've been here //
 									intr.Log(LogEntryType.Error, "Error starting profession task on " + charLabel + ":");
 									intr.Log(LogEntryType.Error, "- Ensure that profession assets are sorted correctly in inventory.");
 									return CompletionStatus.Complete;
@@ -292,7 +294,8 @@ namespace NeverClicker.Interactions {
 							
 							intr.Log(LogEntryType.Normal, "Could not find valid professions task.");
 							CollectCompleted(intr);
-							Mouse.ClickImage(intr, "ProfessionsWindowTitle");							
+							//Mouse.ClickImage(intr, "ProfessionsWindowTitle");							
+							Mouse.Move(intr, Screen.ImageSearch(intr, "ProfessionsWindowTitle").Point);
 						}
 					}
 				}
