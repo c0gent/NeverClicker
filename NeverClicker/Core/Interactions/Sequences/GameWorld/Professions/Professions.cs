@@ -138,7 +138,7 @@ namespace NeverClicker.Interactions {
 			}
 
 			if (optionalAsset.AssetId == ProfessionAssetId.None) {
-				intr.Log(LogEntryType.Debug, "No optional professions assets found.");
+				intr.Log(LogEntryType.Debug, "No optional profession assets found.");
 			} else {
 				intr.Log(LogEntryType.Debug, "Using optional profession asset: '{0}'.", optionalAsset.Label);
 			}			
@@ -149,7 +149,14 @@ namespace NeverClicker.Interactions {
 			Mouse.ClickImage(intr, "ProfessionsStartTaskButton");
 			intr.Wait(500);
 
-			bonusFactor = primaryAsset.BonusFactor + optionalAsset.BonusFactor;
+			if (primaryAsset.AssetId == ProfessionAssetId.Mercenary || 
+						primaryAsset.AssetId == ProfessionAssetId.Guard ||
+						primaryAsset.AssetId == ProfessionAssetId.Footman) {
+				bonusFactor = optionalAsset.BonusFactor;
+			} else {
+				bonusFactor = primaryAsset.BonusFactor + optionalAsset.BonusFactor;
+			}
+			
 			return true;
 		}
 
@@ -283,7 +290,7 @@ namespace NeverClicker.Interactions {
 									// This is the 3rd time we've been here //
 									intr.Log(LogEntryType.Error, "Error starting profession task on " + charLabel + ":");
 									intr.Log(LogEntryType.Error, "- Ensure that profession assets are sorted correctly in inventory.");
-									return CompletionStatus.Complete;
+									return CompletionStatus.Stuck;
 								} else {
 									noValidTaskCounter += 1;
 								}

@@ -185,15 +185,11 @@ namespace NeverClicker.Interactions {
 				foreach (ProfessionTaskResult taskResult in professionTasksProcessed) {
 					queue.AdvanceProfessionsTask(intr, charIdx, taskResult.TaskId, taskResult.BonusFactor);
 				}
-
+			} else if (professionsStatus == CompletionStatus.Stuck && currentTask.Kind == TaskKind.Profession) {
 				// I guess we have to do this to progress a task which is stuck:
-				if (currentTask.Kind == TaskKind.Profession) {
-					queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId, currentTask.BonusFactor);
-				}
+				queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId, currentTask.BonusFactor);
 			} else if (professionsStatus == CompletionStatus.Immature && currentTask.Kind == TaskKind.Profession) {
-				// UNUSED?
-				// [TODO]: Remove this section.
-				// SHOULD BE HANDLED BY `ADVANCEMATURED()` AND SEEMS BUGGY ANYWAY:
+				// Pretty sure we still need this:
 				queue.AdvanceProfessionsTask(intr, currentTask.CharIdx, currentTask.TaskId, currentTask.BonusFactor);
 			} else if (currentTask.Kind == TaskKind.Profession) {
 				// IF the status was NOT `CompletionStatus.Complete` AND the next task is a profession task for this character:

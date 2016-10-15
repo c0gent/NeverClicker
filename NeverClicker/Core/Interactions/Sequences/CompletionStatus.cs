@@ -8,6 +8,7 @@ namespace NeverClicker.Interactions {
 	public enum CompletionStatus {
 		None,
 		Failed,
+		Stuck,
 		Immature,
 		Cancelled,
 		Complete,
