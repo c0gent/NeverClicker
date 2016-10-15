@@ -1,4 +1,4 @@
-Version 0.6.1 (2016-OCT-15)
+Version 0.6.1 (2016-Oct-15)
 ===========================
 * Fix extraneous Enchanted Key error message.
 * Correct slight miscalculation with queue timing when using a footman,
@@ -7,7 +7,7 @@ Version 0.6.1 (2016-OCT-15)
   with task timings.
 
 
-Version 0.6.0 (2016-OCT-11)
+Version 0.6.0 (2016-Oct-11)
 ===========================
 
 * The logging system has been completely redesigned.
