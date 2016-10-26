@@ -301,7 +301,7 @@ namespace NeverClicker.Interactions {
 							
 							intr.Log(LogEntryType.Normal, "Could not find valid professions task.");
 							CollectCompleted(intr);
-							//Mouse.ClickImage(intr, "ProfessionsWindowTitle");							
+							Mouse.ClickImage(intr, "ProfessionsWindowTitle");
 							Mouse.Move(intr, Screen.ImageSearch(intr, "ProfessionsWindowTitle").Point);
 						}
 					}
