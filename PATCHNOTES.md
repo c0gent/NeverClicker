@@ -1,9 +1,18 @@
+Version 0.6.3 (2016-Oct-15)
+===========================
+* Attempts to copy the default settings folder upon new installation 
+  have been discontinued and no longer cause an exception.
+
+Version 0.6.2 (2016-Oct-15)
+===========================
+* Fixed an issue causing profession tasks to get stuck in certain situations.
+
 Version 0.6.1 (2016-Oct-15)
 ===========================
-* Fix extraneous Enchanted Key error message.
-* Correct slight miscalculation with queue timing when using a footman,
+* Fixed extraneous Enchanted Key error message.
+* Corrected a slight miscalculation with queue timing when using a footman,
   Guard, or Mercenary in the primary profession asset slot.
-* Fix queue task advancement algorithm issue which was also causing problems 
+* Fixed queue task advancement algorithm issue which was also causing problems 
   with task timings.
 
 
