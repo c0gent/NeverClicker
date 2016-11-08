@@ -141,7 +141,7 @@ namespace NeverClicker {
 		public bool ValidateSettingsFolderPath() {
 			return this.ValidateCreateFolder(this.textBoxSettingsFolder.Text, 
 				Settings.Default.SettingsFolderPathIsDefault, 
-				true,
+				false,
 				SETTINGS_SUBPATH
             );
 		}
@@ -254,6 +254,7 @@ namespace NeverClicker {
 			openFileDialog1.Title = "Select 'Neverwinter.exe' file location";
 			//"Text files (*.txt)|*.txt|All files (*.*)|*.*"
 			openFileDialog1.Filter = "Neverwinter Patcher (Neverwinter.exe)|Neverwinter.exe";
+			openFileDialog1.FileName = "Neverwinter.exe";
 			openFileDialog1.CheckFileExists = true;
 
 			if (File.Exists(textBoxPatcherExePath.Text)) {
@@ -310,19 +311,24 @@ namespace NeverClicker {
 		}
 
 		private void linkLabelUserConfigFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-			Process.Start(Path.GetDirectoryName(linkLabelUserConfigFile.Text));
+			try {
+				Process.Start(Path.GetDirectoryName(linkLabelUserConfigFile.Text));
+			} catch (Exception) {
+				MessageBox.Show("Unable to open link file location.");
+			}
 		}
 
 		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs) {
 			// Get the subdirectories for the specified directory.
-			DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-			DirectoryInfo[] dirs = dir.GetDirectories();
+			DirectoryInfo dir = new DirectoryInfo(sourceDirName);			
 
 			if (!dir.Exists) {
 				throw new DirectoryNotFoundException(
 					"Source directory does not exist or could not be found: "
 					+ sourceDirName);
 			}
+
+			DirectoryInfo[] dirs = dir.GetDirectories();
 
 			// If the destination directory doesn't exist, create it. 
 			if (!Directory.Exists(destDirName)) {
@@ -331,6 +337,7 @@ namespace NeverClicker {
 
 			// Get the files in the directory and copy them to the new location.
 			FileInfo[] files = dir.GetFiles();
+
 			foreach (FileInfo file in files) {
 				string temppath = Path.Combine(destDirName, file.Name);
 				file.CopyTo(temppath, false);

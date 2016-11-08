@@ -4,7 +4,7 @@ using System.Drawing;
 namespace NeverClicker.Global {
 	public static class Default {		
 		public static int MaxCharacterCount = 52;
-		public static int CharacterCount = 0;
+		public static int CharacterCount = 2;
 		public static int VaultPurchase = 4;
 		public static string InvokeKey = "^i";
 		public static string LogoutKey = "=0";

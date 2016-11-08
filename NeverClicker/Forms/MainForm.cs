@@ -38,6 +38,10 @@ namespace NeverClicker.Forms {
 					int delaySecs = 10;
 					this.SetButtonStateRunning();
 					this.AutoCycleTask = AutomationEngine.AutoCycle(delaySecs);
+				} else {
+					this.SetButtonStateStopped();
+					WriteLine("Automation engine ready.");
+					WriteLine("Press 'Begin AutoCycle' above to start.");
 				}
 			}
 		}
@@ -99,8 +103,8 @@ namespace NeverClicker.Forms {
 					await this.AutoCycleTask;
 					this.Close();
 				}
-			}	
-			this.Init();
+			}
+			this.Init();			
 		}
 
 		private void OpenSettingsWindow() {

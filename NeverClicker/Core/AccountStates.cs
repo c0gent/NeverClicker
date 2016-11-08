@@ -155,7 +155,7 @@ namespace NeverClicker {
 			if (!File.Exists(base.FileName)) {
 				var oldIni = new IniFile(oldIniFileName);
 
-				for (uint charIdx = 0; charIdx < Global.Default.MaxCharacterCount; charIdx++) {
+				for (uint charIdx = 0; charIdx < Global.Default.CharacterCount; charIdx++) {
 					string charLabelZero = "Character " + charIdx.ToString();
 
 					if (oldIni.SectionExists(charLabelZero)) {

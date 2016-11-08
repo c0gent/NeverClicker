@@ -28,7 +28,7 @@ namespace NeverClicker {
 		}
 
 		private void PopulateCharNames() {
-			var charCount = GetSettingValOr("characterCount", "general", Global.Default.MaxCharacterCount);
+			var charCount = GetSettingValOr("characterCount", "general", Global.Default.CharacterCount);
 			ImmutableArray<string>.Builder charNamesBuilder = ImmutableArray.CreateBuilder<string>(charCount);
 
 			for (uint i = 0; i < charCount; i++) {
@@ -105,7 +105,7 @@ namespace NeverClicker {
 				SaveSetting(oldIni.GetSettingOr("NwProfessionsWindowKey", "GameHotkeys", Global.Default.ProfessionsWindowKey),
 					"professions", "gameHotkeys");
 
-				var charCount = GetSettingValOr("characterCount", "general", Global.Default.MaxCharacterCount);
+				var charCount = GetSettingValOr("characterCount", "general", Global.Default.CharacterCount);
 
 				for (uint charIdx = 0; charIdx < charCount; charIdx++) {
 					//[Character 48]

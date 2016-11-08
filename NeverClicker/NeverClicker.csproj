@@ -307,9 +307,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Default\Settings\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Assets\Default\Images\InventoryCelestialBagOfRefinement.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
