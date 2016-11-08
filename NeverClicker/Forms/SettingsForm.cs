@@ -124,8 +124,12 @@ namespace NeverClicker {
 
 				// If directory doesn't exist, just create it:
 				if (copyBuiltin) {
-					DirectoryCopy(ProgramRootFolder + builtinSubpath,
-					textBoxText, true);
+					try {
+						DirectoryCopy(ProgramRootFolder + builtinSubpath, textBoxText, true);
+					} catch (Exception) {
+						MessageBox.Show("Error copying built-in folder: " + builtinSubpath);
+						return false;
+					}
 				} else {
 					Directory.CreateDirectory(textBoxText);
 				}
@@ -139,7 +143,8 @@ namespace NeverClicker {
 		}
 
 		public bool ValidateSettingsFolderPath() {
-			return this.ValidateCreateFolder(this.textBoxSettingsFolder.Text, 
+			return this.ValidateCreateFolder(
+				this.textBoxSettingsFolder.Text, 
 				Settings.Default.SettingsFolderPathIsDefault, 
 				false,
 				BUILTIN_SETTINGS_SUBPATH
