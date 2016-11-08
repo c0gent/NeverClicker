@@ -142,7 +142,7 @@ namespace NeverClicker {
 			return this.ValidateCreateFolder(this.textBoxSettingsFolder.Text, 
 				Settings.Default.SettingsFolderPathIsDefault, 
 				false,
-				SETTINGS_SUBPATH
+				BUILTIN_SETTINGS_SUBPATH
             );
 		}
 
@@ -151,7 +151,7 @@ namespace NeverClicker {
 				this.textBoxImagesFolder.Text,
 				Settings.Default.ImagesFolderPathIsDefault,
 				true,
-				IMAGES_SUBPATH
+				BUILTIN_IMAGES_SUBPATH
             );
 		}
 
