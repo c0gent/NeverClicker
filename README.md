@@ -1,14 +1,14 @@
 # NeverClicker
-####[Download](https://github.com/nsan1129/NeverClicker/releases)
+#### [Download](https://github.com/nsan1129/NeverClicker/releases)
 
 Automated invocation. May eat your laundry.
 
 
 ## Installation
 1. Download the newest version of NeverClicker from [the 'Releases' page](https://github.com/nsan1129/NeverClicker/releases) (download the top NeverClicker_*.*.*.7z file).
-2. [Download 7-zip](http://www.7-zip.org/download.html) and install it. 
+2. [Download 7-zip](http://www.7-zip.org/download.html) and install it.
 3. Unzip NeverClicker to any directory you want to permanently run it from: `C:\NeverClicker\`, `C:\Program Files\NeverClicker\`, whatever.
-4. Make a shortcut for NeverClicker manually: open the folder you extracted to, right click `NeverClicker.exe` and click pin to start. 
+4. Make a shortcut for NeverClicker manually: open the folder you extracted to, right click `NeverClicker.exe` and click pin to start.
 5. The options menu will open on your first run. Do what it says.
 6. Ensure your configuration is correct by reading the following section and making any changes necessary.
 
@@ -16,12 +16,12 @@ Automated invocation. May eat your laundry.
 ## Configuration
 - The game client should ideally be run in 'Windowed Maximized' mode at 1920x1080. If your resolution is different, see the [Screen Resolution](#screen-resolution) section below.
 - Client **must** be running DirectX 9 for image detection to work (there is little reason to run DirectX 11 anyway).
-- Keybinds can be customized in `AccountSettings.xml.txt`. Key modifiers follow the autohotkey conventions (Alt: !, Ctrl: ^, Shift: +) ex. Ctrl-i (invoke) would be `'^i'` in the settings file.  
-- **You must configure the settings configuration files manually** before activating Auto-Cycle (a friendly interface for this is coming eventually). You'll find a link to those files within the settings menu. 
+- Keybinds can be customized in `AccountSettings.xml.txt`. Key modifiers follow the autohotkey conventions (Alt: !, Ctrl: ^, Shift: +) ex. Ctrl-i (invoke) would be `'^i'` in the settings file.
+- **You must configure the settings configuration files manually** before activating Auto-Cycle (a friendly interface for this is coming eventually). You'll find a link to those files within the settings menu.
     - Set the number of characters on your account by editing the `<characterCount>` setting in the `<general>` section of `NeverClicker_GameAccount.ini`.
     - Enter your username and password into `AccountSettings.xml.txt`. If you're not comfortable with this you can manually log into the game client before starting the NeverClicker auto cycle.
 
-	
+
 ## Professions
 - Sort your profession assets in your inventory so that the optional assets you want to use are **above** all other assets. A rule of thumb is simply to sort all of your profession assets from lowest quality (top) to highest quality (bottom) in the bag.
 - The profession system will first choose assets from the top of the bag to the bottom, then from the weakest asset (Mercenary) to the strongest (Hero). Remove any weak assets you don't want used from your inventory (or bury them somewhere at the bottom).
@@ -62,12 +62,12 @@ NeverClicker is very much a work in progress. You will run in to problems. Pleas
         1. The complete steps to reproduce the bug: Relevant lines from your log file (not the whole thing, you need to do some pruning)
         2. The expected behavior: What were you expecting to see happen in the game client?
         3. The observed behavior: What actually happened. 99% of the time this answer will be 'nothing' or 'an error message'. Please include this information.
-  
+
 - Other things to try:
 	- Try running without anti-aliasing.
     - Try running NeverClicker as administrator.
     - Reset all settings to default. Rename or delete the `{Your Personal Folder}/Documents/NeverClicker` folder and the `user-config` settings file located somewhere in the `AppData` folder. You can find links to each of these locations within the settings menu in NeverClicker.
-  
+
 
 ### Screen Resolution
 Due to developer laziness, resolutions other than 1920x1080 will require some fiddling on your part to get working.
